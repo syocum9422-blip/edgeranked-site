@@ -1,11 +1,8 @@
 import csv
 import json
-import logging
 import os
-import urllib.request
 from datetime import date, datetime, timedelta
 from html import escape
-from math import erf, isnan, sqrt
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -31,18 +28,8 @@ from nba_model.settings import (
 ET = ZoneInfo("America/New_York")
 MODEL_VERSION = "v2.1"
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-SPORTS_ROOT = PROJECT_ROOT.parent / "sports"
+LEGACY_MLB_BASE = PROJECT_ROOT.parent / "mlb_model_v2_working" / "mlb_model"
 DEFAULT_UFC_BASE = PROJECT_ROOT / "data" / "ufc"
-LOGGER = logging.getLogger(__name__)
-MLB_SCHEDULE_CACHE = {"date": None, "fetched_at": None, "active_matchups": None}
-MLB_INACTIVE_GAME_STATES = {
-    "final",
-    "game over",
-    "completed early",
-    "postponed",
-    "cancelled",
-    "canceled",
-}
 
 
 def _resolve_first_existing_dir(candidates):
@@ -52,55 +39,11 @@ def _resolve_first_existing_dir(candidates):
     return candidates[0]
 
 
-def _resolve_first_existing_path(candidates):
-    for candidate in candidates:
-        if candidate and candidate.exists():
-            return candidate
-    return candidates[0] if candidates else Path()
-
-
-def _unique_paths(candidates):
-    unique = []
-    seen = set()
-    for candidate in candidates:
-        if not candidate:
-            continue
-        key = str(candidate)
-        if key in seen:
-            continue
-        seen.add(key)
-        unique.append(candidate)
-    return unique
-
-
-def _mlb_base_candidates():
-    mlb_base_env = os.environ.get("EDGERANKED_MLB_BASE_DIR")
-    candidates = []
-    if mlb_base_env:
-        candidates.append(Path(mlb_base_env))
-    candidates.extend(
-        [
-            SPORTS_ROOT / "mlb" / "mlb_model",
-            PROJECT_ROOT / "mlb_model",
-            PROJECT_ROOT,
-        ]
-    )
-    return _unique_paths(candidates)
-
-
-def _mlb_mode_env(name, default="legacy"):
-    value = str(os.environ.get(name, default)).strip().lower()
-    return value if value in {"legacy", "canonical"} else default
-
-
-mlb_base_candidates = _mlb_base_candidates()
+mlb_base_env = os.environ.get("EDGERANKED_MLB_BASE_DIR")
+mlb_base_candidates = [Path(mlb_base_env)] if mlb_base_env else []
+mlb_base_candidates.extend([PROJECT_ROOT, LEGACY_MLB_BASE])
 MLB_OUTPUT_DIR = _resolve_first_existing_dir([base / "mlb" / "outputs" for base in mlb_base_candidates])
 MLB_DATA_DIR = _resolve_first_existing_dir([base / "data" / "mlb" for base in mlb_base_candidates])
-MLB_LINEUPS_FILE = _resolve_first_existing_path([base / "lineups_with_ids.csv" for base in mlb_base_candidates])
-MLB_CANONICAL_OUTPUT_DIR = _resolve_first_existing_dir([base / "outputs" / "canonical" for base in mlb_base_candidates])
-MLB_SITE_OUTPUT_DIR = _resolve_first_existing_dir([base / "outputs" / "site" for base in mlb_base_candidates])
-MLB_NORMALIZED_DATA_DIR = _resolve_first_existing_dir([base / "data" / "normalized" for base in mlb_base_candidates])
-MLB_READER_MODE = _mlb_mode_env("MLB_READER_MODE", "legacy")
 
 ufc_base_env = os.environ.get("EDGERANKED_UFC_BASE_DIR")
 ufc_base_candidates = [Path(ufc_base_env)] if ufc_base_env else []
@@ -109,78 +52,42 @@ UFC_BASE_DIR = _resolve_first_existing_dir(ufc_base_candidates)
 UFC_WEBSITE_DIR = UFC_BASE_DIR / "website"
 
 pga_base_env = os.environ.get("EDGERANKED_PGA_BASE_DIR")
-if not pga_base_env:
-    raise RuntimeError(
-        "EDGERANKED_PGA_BASE_DIR is required for PGA production routes. "
-        "Set it to /home/ubuntu/EdgeRanked/sports/pga in the Gunicorn systemd environment."
-    )
-PGA_BASE_DIR = Path(pga_base_env).expanduser().resolve()
-if not PGA_BASE_DIR.is_dir():
-    raise RuntimeError(f"EDGERANKED_PGA_BASE_DIR does not exist or is not a directory: {PGA_BASE_DIR}")
+pga_base_candidates = [Path(pga_base_env)] if pga_base_env else []
+pga_base_candidates.extend([
+    PROJECT_ROOT.parent / "Desktop" / "pga_model",
+    PROJECT_ROOT.parent / "pga_model",
+])
+PGA_BASE_DIR = _resolve_first_existing_dir(pga_base_candidates)
 PGA_OUTPUT_DIR = PGA_BASE_DIR / "outputs"
 PGA_DATA_DIR = PGA_BASE_DIR / "data"
 PGA_CONFIG_PATH = PGA_BASE_DIR / "config" / "config.json"
 PGA_TOURNAMENT_METADATA_PATH = PGA_DATA_DIR / "processed" / "current_tournament.json"
-PGA_PROCESSED_ODDS_DIR = PGA_DATA_DIR / "processed" / "odds"
-PGA_PUBLISHED_DIR = PGA_DATA_DIR / "published" / "pga"
-PGA_PUBLISHED_BEST_BETS_PATH = PGA_PUBLISHED_DIR / "best_bets.json"
-PGA_PUBLISH_STATE_PATH = PGA_PUBLISHED_DIR / "publish_state.json"
-PGA_RESULTS_PATH = PGA_PUBLISHED_DIR / "pga_simulation_results.csv"
+PGA_RESULTS_PATH = PGA_OUTPUT_DIR / "pga_simulation_results.csv"
 PGA_INVALID_PROP_TYPES = {"", "holes_played", "null", "nan", "none"}
-
-for required_path in (PGA_CONFIG_PATH, PGA_DATA_DIR):
-    if not required_path.exists():
-        raise RuntimeError(f"Invalid EDGERANKED_PGA_BASE_DIR={PGA_BASE_DIR}; missing {required_path}")
-
-LOGGER.warning("PGA_BASE_DIR=%s", PGA_BASE_DIR)
-LOGGER.warning("PGA_OUTPUT_DIR=%s", PGA_OUTPUT_DIR)
-LOGGER.warning("PGA_DATA_DIR=%s", PGA_DATA_DIR)
-LOGGER.warning("PGA_PUBLISHED_DIR=%s", PGA_PUBLISHED_DIR)
-LOGGER.warning("PGA_TOURNAMENT_METADATA_PATH=%s", PGA_TOURNAMENT_METADATA_PATH)
-LOGGER.warning("PGA_RESULTS_PATH=%s", PGA_RESULTS_PATH)
 
 BRAND_ASSETS_DIR = PROJECT_ROOT / "assets" / "brand"
 BRAND_LOGO_FILE = "edgeranked_logo.png"
 SUPPORT_EMAIL = "support@edgerankedai.com"
-WAITLIST_CONTACT_EMAIL = "info@edgerankedai.com"
+WAITLIST_CONTACT_EMAIL = "info@edgerankai.com"
 WAITLIST_DATA_PATH = PROJECT_ROOT / "data" / "waitlist.csv"
 
 MLB_FILES = {
     "best_bets": MLB_OUTPUT_DIR / "betting_sheet_today.csv",
     "pitchers": MLB_OUTPUT_DIR / "pitcher_props_today.csv",
-    "pitcher_predictions": MLB_OUTPUT_DIR / "mlb_pitcher_projections_today.csv",
     "hitters": MLB_OUTPUT_DIR / "hitter_summary_today.csv",
-    "hitters_full": MLB_CANONICAL_OUTPUT_DIR / "hitter_predictions_full.csv",
-    "hitters_site": MLB_SITE_OUTPUT_DIR / "hitter_summary_today.csv",
-    "fantasy": MLB_OUTPUT_DIR / "fantasy_projections_today.csv",
     "history": MLB_OUTPUT_DIR / "bet_history.csv",
     "record": MLB_OUTPUT_DIR / "daily_betting_summary.csv",
     "hitter_tracking": MLB_OUTPUT_DIR / "hitter_tracking.csv",
     "pitcher_tracking": MLB_OUTPUT_DIR / "pitcher_tracking.csv",
     "lines": MLB_DATA_DIR / "lines_today.csv",
-    "normalized_lines": MLB_NORMALIZED_DATA_DIR / "lines_today.csv",
-    "validation_manifest": MLB_SITE_OUTPUT_DIR / "validation_manifest.json",
-}
-MLB_REALISM_FIELD_DISPLAY = [
-    ("blended_hr_prob_v2", "Blend HR %"),
-    ("blended_hit_2plus_prob_v2", "Blend 2+ Hit %"),
-    ("blended_tb2_prob_v2", "Blend 2+ Bases %"),
-    ("sim_hr_prob_shadow_v2", "Shadow HR %"),
-    ("sim_hit_2plus_shadow_v2", "Shadow 2+ Hit %"),
-    ("sim_tb2_shadow_v2", "Shadow 2+ Bases %"),
-]
-MLB_REALISM_STAT_FIELDS = {
-    "Home Runs": ("blended_hr_prob_v2", "sim_hr_prob_shadow_v2", "hr_prob"),
-    "2+ Hits": ("blended_hit_2plus_prob_v2", "sim_hit_2plus_shadow_v2", None),
-    "Total Bases": ("blended_tb2_prob_v2", "sim_tb2_shadow_v2", "tb2_prob"),
 }
 
 NBA_PAGE_SPECS = {
-    "best_bets": {"title": "NBA Top Plays", "path": Path(BEST_BETS_OUTPUT_PATH), "route": "/nba/best-bets", "api_route": "/api/nba/best-bets", "description": "A supporting top-plays layer built from the strongest model-approved opportunities on the current slate."},
-    "projections": {"title": "NBA Projection Explorer", "path": Path(PROJECTIONS_PATH), "route": "/nba/projections", "api_route": "/api/nba/projections", "description": "Full-slate player projections with workload, distribution, matchup, and confidence context."},
+    "best_bets": {"title": "Today’s Best Bets", "path": Path(BEST_BETS_OUTPUT_PATH), "route": "/nba/best-bets", "api_route": "/api/nba/best-bets", "description": "The final top-ranked board your model is surfacing today."},
+    "projections": {"title": "Player Projections", "path": Path(PROJECTIONS_PATH), "route": "/nba/projections", "api_route": "/api/nba/projections", "description": "All saved player projections for the current slate."},
     "history": {"title": "Bet History", "path": Path(HISTORY_PATH), "route": "/nba/history", "api_route": "/api/nba/history", "description": "Your latest graded NBA card."},
     "graded": {"title": "Latest Graded Bets", "path": Path(HISTORY_PATH), "route": "/nba/graded", "api_route": "/api/nba/graded", "description": "Rows already graded in the most recent NBA history export."},
-    "record": {"title": "Verified Results", "path": Path(RECORD_SUMMARY_PATH), "route": "/nba/record", "api_route": "/api/nba/record", "description": "Tracked record, recent hit rate, and verified results from published NBA outputs."},
+    "record": {"title": "Record Summary", "path": Path(RECORD_SUMMARY_PATH), "route": "/nba/record", "api_route": "/api/nba/record", "description": "Daily performance summary from tracked bet results."},
     "injuries": {"title": "Injuries", "path": Path(INJURY_CSV_PATH), "route": "/nba/injuries", "api_route": "/api/nba/injuries", "description": "Current injury and availability inputs."},
     "system": {"title": "System Status", "path": Path(RESULTS_PAGE_PATH), "route": "/nba/system", "api_route": "/api/nba/system", "description": "Quick status view of NBA backing files."},
 }
@@ -194,9 +101,9 @@ UFC_PAGE_SPECS = {
 
 MLB_PAGE_SPECS = {
     "best_bets": {"title": "MLB Best Bets", "route": "/mlb/best-bets", "api_route": "/api/mlb/best-bets", "description": "Top Plays Today with the strongest current model edge.", "kind": "mlb_best_bets"},
-    "pitcher_strikeouts": {"title": "Pitcher Projections", "route": "/mlb/pitcher-strikeouts", "api_route": "/api/mlb/pitcher-strikeouts", "description": "Projection-first pitcher rows with strikeout and workload context.", "kind": "mlb_pitchers"},
-    "projections": {"title": "Hitter Projections", "route": "/mlb/projections", "api_route": "/api/mlb/projections", "description": "Slate-wide hitter projection board with model projections, lines, and edges.", "kind": "mlb_hitters"},
-    "two_plus_hits": {"title": "2+ Hit Targets", "route": "/mlb/two-plus-hits", "api_route": "/api/mlb/two-plus-hits", "description": "Shadow hitter realism 2+ hit leaderboard when blended fields are available.", "kind": "mlb_hit2plus"},
+    "pitcher_strikeouts": {"title": "Pitcher Strikeout Props", "route": "/mlb/pitcher-strikeouts", "api_route": "/api/mlb/pitcher-strikeouts", "description": "Pitcher strikeout plays with matchup context and recent form.", "kind": "mlb_pitchers"},
+    "projections": {"title": "Hitter Targets", "route": "/mlb/projections", "api_route": "/api/mlb/projections", "description": "Current hitter targets sorted by hit probability.", "kind": "mlb_hitters"},
+    "two_plus_hits": {"title": "2+ Hits Targets", "route": "/mlb/two-plus-hits", "api_route": "/api/mlb/two-plus-hits", "description": "Current 2+ hit targets sorted by probability.", "kind": "mlb_hit2plus"},
     "two_plus_bases": {"title": "2+ Bases Targets", "route": "/mlb/two-plus-bases", "api_route": "/api/mlb/two-plus-bases", "description": "Current 2+ bases targets sorted by probability.", "kind": "mlb_tb2"},
     "rbi_targets": {"title": "RBI Targets", "route": "/mlb/rbi-targets", "api_route": "/api/mlb/rbi-targets", "description": "Current RBI targets sorted by probability.", "kind": "mlb_rbi"},
     "hitter_strikeouts": {"title": "Hitter Strikeouts", "route": "/mlb/hitter-strikeouts", "api_route": "/api/mlb/hitter-strikeouts", "description": "Hitters most likely to strike out today.", "kind": "mlb_hitter_k"},
@@ -220,7 +127,7 @@ ROOT_NAV_ITEMS = [
     ("Waitlist", "/waitlist"),
     ("About", "/about"),
 ]
-NBA_NAV_ITEMS = [("Overview", "/nba"), ("Projections", "/nba/projections"), ("Results", "/nba/record"), ("Top Plays", "/nba/best-bets"), ("History", "/nba/history")]
+NBA_NAV_ITEMS = [("Overview", "/nba"), ("Top Plays", "/nba/best-bets"), ("Projections", "/nba/projections"), ("Results", "/nba/record"), ("History", "/nba/history")]
 UFC_NAV_ITEMS = [("Overview", "/ufc"), ("Fight Card", "/ufc/fights"), ("Props", "/ufc/props")]
 PGA_NAV_ITEMS = [("Overview", "/pga"), ("Best Bets", "/pga/best-bets"), ("Leaderboard", "/pga/leaderboard")]
 MLB_PRIMARY_NAV = [("Overview", "/mlb"), ("Top Plays", "/mlb/best-bets"), ("Pitchers", "/mlb/pitcher-strikeouts"), ("Hitters", "/mlb/projections"), ("Results", "/mlb/record")]
@@ -234,41 +141,77 @@ MLB_HITTER_NAV = [
     ("Hitter Ks", "/mlb/hitter-strikeouts"),
 ]
 MLB_HITTER_ROUTES = {href for _, href in MLB_HITTER_NAV}
-
-NBA_STAT_CONFIGS = [
-    {"key": "PTS", "label": "Points", "projection": "PTS_PROJ", "median": "SIM_PTS_P50", "floor": "SIM_PTS_P10", "ceiling": "SIM_PTS_P90", "std": "SIM_PTS_STD", "thresholds": [10, 15, 20, 25, 30, 35, 40]},
-    {"key": "REB", "label": "Rebounds", "projection": "REB_PROJ", "median": "SIM_REB_P50", "floor": "SIM_REB_P10", "ceiling": "SIM_REB_P90", "std": "SIM_REB_STD", "thresholds": [4, 6, 8, 10, 12, 14]},
-    {"key": "AST", "label": "Assists", "projection": "AST_PROJ", "median": "SIM_AST_P50", "floor": "SIM_AST_P10", "ceiling": "SIM_AST_P90", "std": "SIM_AST_STD", "thresholds": [4, 6, 8, 10, 12, 14]},
-    {"key": "3PM", "label": "3PM", "projection": "FG3M_PROJ", "median": "SIM_FG3M_P50", "floor": "SIM_FG3M_P10", "ceiling": "SIM_FG3M_P90", "std": "SIM_FG3M_STD", "thresholds": [1, 2, 3, 4, 5, 6]},
-    {"key": "STL", "label": "Steals", "projection": "STL_PROJ", "median": "SIM_STL_P50", "floor": "SIM_STL_P10", "ceiling": "SIM_STL_P90", "std": "SIM_STL_STD", "thresholds": [1, 2, 3, 4]},
-    {"key": "BLK", "label": "Blocks", "projection": "BLK_PROJ", "median": "SIM_BLK_P50", "floor": "SIM_BLK_P10", "ceiling": "SIM_BLK_P90", "std": "SIM_BLK_STD", "thresholds": [1, 2, 3, 4]},
-    {"key": "TOV", "label": "Turnovers", "projection": "TOV_PROJ", "median": "SIM_TOV_P50", "floor": "SIM_TOV_P10", "ceiling": "SIM_TOV_P90", "std": "SIM_TOV_STD", "thresholds": [2, 3, 4, 5, 6]},
-    {"key": "PRA", "label": "PRA", "projection": "PRA_PROJ", "median": "SIM_PRA_P50", "floor": "SIM_PRA_P10", "ceiling": "SIM_PRA_P90", "std": "SIM_PRA_STD", "thresholds": [20, 25, 30, 35, 40, 45, 50]},
-    {"key": "PR", "label": "PR", "projection": "PR_PROJ", "median": "SIM_PR_P50", "floor": "SIM_PR_P10", "ceiling": "SIM_PR_P90", "std": "SIM_PR_STD", "thresholds": [15, 20, 25, 30, 35, 40]},
-    {"key": "PA", "label": "PA", "projection": "PA_PROJ", "median": "SIM_PA_P50", "floor": "SIM_PA_P10", "ceiling": "SIM_PA_P90", "std": "SIM_PA_STD", "thresholds": [15, 20, 25, 30, 35, 40]},
-    {"key": "RA", "label": "RA", "projection": "RA_PROJ", "median": "SIM_RA_P50", "floor": "SIM_RA_P10", "ceiling": "SIM_RA_P90", "std": "SIM_RA_STD", "thresholds": [10, 15, 20, 25, 30]},
-    {"key": "SB", "label": "Steals + Blocks", "projection": "SB_PROJ", "median": "SIM_SB_P50", "floor": "SIM_SB_P10", "ceiling": "SIM_SB_P90", "std": "SIM_SB_STD", "thresholds": [1, 2, 3, 4, 5]},
-    {"key": "FANTASY", "label": "Fantasy Points", "projection": "FANTASY_PROJ", "median": "SIM_FANTASY_P50", "floor": "SIM_FANTASY_P10", "ceiling": "SIM_FANTASY_P90", "std": "SIM_FANTASY_STD", "thresholds": [20, 25, 30, 35, 40, 45, 50, 55]},
-    {"key": "MIN", "label": "Minutes", "projection": "MIN_PROJ", "median": "SIM_MIN_P50", "floor": "SIM_MIN_P10", "ceiling": "SIM_MIN_P90", "std": "SIM_MIN_STD", "thresholds": [20, 24, 28, 32, 36, 40]},
-]
-
-NBA_HOME_SNAPSHOT_STATS = ["PTS", "REB", "AST", "3PM", "BLK", "SB", "PRA", "FANTASY", "MIN"]
-
-NBA_LINE_STAT_MAP = {
-    "POINTS": "PTS",
-    "REBOUNDS": "REB",
-    "ASSISTS": "AST",
-    "STEALS": "STL",
-    "BLOCKED SHOTS": "BLK",
-    "3-PT MADE": "3PM",
-    "TURNOVERS": "TOV",
-    "PTS+REBS+ASTS": "PRA",
-    "PTS+REBS": "PR",
-    "PTS+ASTS": "PA",
-    "REBS+ASTS": "RA",
-    "BLKS+STLS": "SB",
-    "FANTASY SCORE": "FANTASY",
-    "MINUTES": "MIN",
+MLB_HITTER_CATEGORY_STATS = {
+    "mlb_hitters": "hit_targets",
+    "mlb_hit2plus": "two_plus_hits",
+    "mlb_tb2": "two_plus_bases",
+    "mlb_rbi": "rbi_targets",
+    "mlb_hitter_k": "hitter_strikeouts",
+    "mlb_sb": "stolen_bases",
+    "mlb_hr": "hr_targets",
+}
+MLB_HITTER_PAGE_CATEGORIES = {
+    "projections": "hit_targets",
+    "two_plus_hits": "two_plus_hits",
+    "two_plus_bases": "two_plus_bases",
+    "rbi_targets": "rbi_targets",
+    "hitter_strikeouts": "hitter_strikeouts",
+    "stolen_bases": "stolen_bases",
+    "hr_targets": "hr_targets",
+}
+MLB_HITTER_CATEGORY_LABELS = {
+    "hit_targets": "Hit Targets",
+    "two_plus_hits": "2+ Hits",
+    "two_plus_bases": "2+ Bases",
+    "rbi_targets": "RBI Targets",
+    "hr_targets": "Home Runs",
+    "stolen_bases": "Stolen Bases",
+    "hitter_strikeouts": "Hitter Ks",
+}
+MLB_HITTER_CATEGORY_SORT_FIELDS = {
+    "hit_targets": ("hit_prob",),
+    "two_plus_hits": ("MC_Hit2Plus_Prob",),
+    "two_plus_bases": ("tb2_prob",),
+    "rbi_targets": ("rbi_prob",),
+    "hr_targets": ("hr_prob",),
+    "stolen_bases": ("sb_prob",),
+    "hitter_strikeouts": ("projected_hitter_strikeouts", "hitter_strikeout_pct"),
+}
+MLB_HITTER_CATEGORY_STATS = {
+    "mlb_hitters": "Hits",
+    "mlb_hit2plus": "2+ Hits",
+    "mlb_tb2": "2+ Bases",
+    "mlb_rbi": "RBI",
+    "mlb_hitter_k": "Hitter Strikeouts",
+    "mlb_sb": "Stolen Bases",
+    "mlb_hr": "Home Runs",
+}
+MLB_HITTER_PAGE_STATS = {
+    "projections": "Hits",
+    "two_plus_hits": "2+ Hits",
+    "two_plus_bases": "2+ Bases",
+    "rbi_targets": "RBI",
+    "hitter_strikeouts": "Hitter Strikeouts",
+    "stolen_bases": "Stolen Bases",
+    "hr_targets": "Home Runs",
+}
+MLB_HITTER_STAT_SORT_FIELDS = {
+    "Hits": ("hit_prob", "MC_Mean_Hits"),
+    "2+ Hits": ("MC_Hit2Plus_Prob", "MC_Mean_Hits"),
+    "2+ Bases": ("tb2_prob", "MC_Mean_Total_Bases"),
+    "RBI": ("rbi_prob", "MC_Mean_RBI"),
+    "Home Runs": ("hr_prob", "historical_hr_game_rate"),
+    "Stolen Bases": ("sb_prob", "MC_Mean_Stolen_Bases"),
+    "Hitter Strikeouts": ("hitter_strikeout_pct", "projected_hitter_strikeouts"),
+}
+MLB_HITTER_TIEBREAKER_COLUMNS = {
+    "Hits": ("MC_Mean_Hits",),
+    "2+ Hits": ("MC_Mean_Hits",),
+    "2+ Bases": ("MC_Mean_Total_Bases",),
+    "RBI": ("MC_Mean_RBI",),
+    "Home Runs": ("historical_hr_game_rate", "historical_power_ops", "barrel_rate"),
+    "Stolen Bases": ("MC_Mean_Stolen_Bases",),
+    "Hitter Strikeouts": ("projected_hitter_strikeouts",),
 }
 
 
@@ -367,71 +310,6 @@ def today_et():
     return now_et().date()
 
 
-def mlb_matchup_key(team, opponent):
-    team_name = normalize_text(team)
-    opponent_name = normalize_text(opponent)
-    if not team_name or not opponent_name:
-        return None
-    return frozenset({team_name, opponent_name})
-
-
-def current_mlb_active_matchups():
-    slate_date = today_et().isoformat()
-    cached_at = MLB_SCHEDULE_CACHE.get("fetched_at")
-    if (
-        MLB_SCHEDULE_CACHE.get("date") == slate_date
-        and cached_at
-        and (now_et() - cached_at).total_seconds() < 120
-    ):
-        return MLB_SCHEDULE_CACHE.get("active_matchups")
-
-    url = (
-        "https://statsapi.mlb.com/api/v1/schedule"
-        f"?sportId=1&date={slate_date}&hydrate=probablePitcher,team"
-    )
-    try:
-        with urllib.request.urlopen(url, timeout=8) as response:
-            payload = json.loads(response.read().decode("utf-8"))
-    except Exception as exc:
-        print(f"WARNING: MLB schedule status fetch failed: {exc}")
-        return MLB_SCHEDULE_CACHE.get("active_matchups")
-
-    active = set()
-    for date_payload in payload.get("dates", []):
-        for game in date_payload.get("games", []):
-            status = normalize_text(game.get("status", {}).get("detailedState")).lower()
-            if status in MLB_INACTIVE_GAME_STATES:
-                continue
-            teams = game.get("teams", {})
-            away = teams.get("away", {}).get("team", {}).get("name")
-            home = teams.get("home", {}).get("team", {}).get("name")
-            key = mlb_matchup_key(away, home)
-            if key:
-                active.add(key)
-
-    MLB_SCHEDULE_CACHE.update({
-        "date": slate_date,
-        "fetched_at": now_et(),
-        "active_matchups": active,
-    })
-    return active
-
-
-def filter_mlb_frame_to_active_slate(df, team_col, opponent_col):
-    if df.empty or not team_col or not opponent_col:
-        return df
-    active_matchups = current_mlb_active_matchups()
-    if active_matchups is None:
-        return df
-    if not active_matchups:
-        return df.iloc[0:0].copy()
-
-    work = df.copy()
-    keys = work.apply(lambda row: mlb_matchup_key(row.get(team_col), row.get(opponent_col)), axis=1)
-    filtered = work[keys.isin(active_matchups)].copy()
-    return filtered
-
-
 def file_timestamp(path):
     path = Path(path)
     if not path.exists():
@@ -476,10 +354,7 @@ def safe_float(value, default=None):
     try:
         if value is None or str(value).strip() == "":
             return default
-        number = float(value)
-        if isnan(number):
-            return default
-        return number
+        return float(value)
     except Exception:
         return default
 
@@ -511,27 +386,21 @@ def metric_label(value, digits=1):
 
 
 def props_scanned_count():
-    df = read_csv_df(MLB_FILES["normalized_lines"])
-    if df.empty:
-        df = read_csv_df(MLB_FILES["lines"])
+    df = read_csv_df(MLB_FILES["lines"])
     if df.empty:
         return 0
     if "LEAGUE" in df.columns:
         df = df[df["LEAGUE"].astype(str).str.upper() == "MLB"].copy()
-    df = df[df.apply(mlb_line_is_clean_display_row, axis=1)].copy()
     return len(df)
 
 
 def pitcher_props_scanned_count():
-    df = read_csv_df(MLB_FILES["normalized_lines"])
-    if df.empty:
-        df = read_csv_df(MLB_FILES["lines"])
+    df = read_csv_df(MLB_FILES["lines"])
     if df.empty:
         return 0
     work = df.copy()
     if "LEAGUE" in work.columns:
         work = work[work["LEAGUE"].astype(str).str.upper() == "MLB"].copy()
-    work = work[work.apply(mlb_line_is_clean_display_row, axis=1)].copy()
     if "PLAYER_TYPE" in work.columns:
         work = work[work["PLAYER_TYPE"].astype(str).str.upper() == "PITCHER"].copy()
     return len(work)
@@ -610,32 +479,8 @@ def latest_rows_by_date(df, allowed_results_only=False):
 
 def latest_pitcher_tracking_snapshot():
     df = read_csv_df(MLB_FILES["pitcher_tracking"])
-    predictions_df = read_csv_df(MLB_FILES["pitcher_predictions"])
-    prediction_snapshot = {}
-
-    if not predictions_df.empty:
-        pitcher_col = find_first_column(predictions_df, ["pitcher_name", "Pitcher", "player_name"])
-        if pitcher_col:
-            for _, raw in predictions_df.iterrows():
-                pitcher_key = normalize_text(raw.get(pitcher_col)).lower()
-                if not pitcher_key:
-                    continue
-                season_k_pct = safe_float(raw.get("season_k_pct"))
-                if season_k_pct is None:
-                    pitcher_k_pct_display = safe_float(raw.get("Pitcher_K_Pct"))
-                    season_k_pct = pitcher_k_pct_display / 100.0 if pitcher_k_pct_display is not None and pitcher_k_pct_display > 1 else pitcher_k_pct_display
-                opponent_k_pct = safe_float(raw.get("opponent_k_pct"))
-                if opponent_k_pct is None:
-                    opponent_k_pct_display = safe_float(raw.get("Opponent_K_Pct"))
-                    opponent_k_pct = opponent_k_pct_display / 100.0 if opponent_k_pct_display is not None and opponent_k_pct_display > 1 else opponent_k_pct_display
-                prediction_snapshot[pitcher_key] = {
-                    "pitcher_k_percent_season": season_k_pct,
-                    "opponent_hitter_k_percent": opponent_k_pct,
-                    "estimated_innings": safe_float(raw.get("Projected_IP") or raw.get("season_ip_per_start")),
-                }
-
     if df.empty or "pitcher_name" not in df.columns:
-        return prediction_snapshot
+        return {}
     work = df.copy()
     work["pitcher_name_key"] = work["pitcher_name"].astype(str).str.strip().str.lower()
     work["parsed_date"] = pd.to_datetime(work.get("date"), errors="coerce")
@@ -646,15 +491,12 @@ def latest_pitcher_tracking_snapshot():
             continue
         latest = group.iloc[0]
         recent_actuals = pd.to_numeric(group.get("actual_strikeouts"), errors="coerce").dropna().head(3)
-        prediction_context = prediction_snapshot.get(pitcher_key, {})
         snapshot[pitcher_key] = {
-            "pitcher_k_percent_season": safe_float(latest.get("season_k_pct"), default=prediction_context.get("pitcher_k_percent_season")),
-            "opponent_hitter_k_percent": safe_float(latest.get("opponent_k_pct"), default=prediction_context.get("opponent_hitter_k_percent")),
-            "estimated_innings": safe_float(latest.get("season_ip_per_start"), default=prediction_context.get("estimated_innings")),
+            "pitcher_k_percent_season": safe_float(latest.get("season_k_pct")),
+            "opponent_hitter_k_percent": safe_float(latest.get("opponent_k_pct")),
+            "estimated_innings": safe_float(latest.get("season_ip_per_start")),
             "recent_avg_ks": float(round(recent_actuals.mean(), 2)) if not recent_actuals.empty else None,
         }
-    for pitcher_key, context in prediction_snapshot.items():
-        snapshot.setdefault(pitcher_key, context)
     return snapshot
 
 
@@ -738,87 +580,12 @@ def team_lookup_from_pitchers():
     }
 
 
-def build_mlb_hitter_context_lookup():
-    lookup = {}
-
-    lineup_df = read_csv_df(MLB_LINEUPS_FILE)
-    if not lineup_df.empty:
-        hitter_col = find_first_column(lineup_df, ["hitter_name", "player_name", "player"])
-        team_col = find_first_column(lineup_df, ["team", "TEAM"])
-        opponent_col = find_first_column(lineup_df, ["opponent", "opp", "matchup"])
-        if hitter_col:
-            for _, raw in lineup_df.iterrows():
-                player = normalize_text(raw.get(hitter_col)).lower()
-                if not player:
-                    continue
-                team = mlb_clean_text(raw.get(team_col), fallback="") if team_col else ""
-                opponent = mlb_clean_text(raw.get(opponent_col), fallback="") if opponent_col else ""
-                current = lookup.setdefault(player, {})
-                if team and not current.get("team"):
-                    current["team"] = team
-                if opponent and not current.get("opponent"):
-                    current["opponent"] = opponent
-
-    fantasy_df = read_csv_df(MLB_FILES["fantasy"])
-    if not fantasy_df.empty:
-        player_col = find_first_column(fantasy_df, ["player_name", "hitter_name", "player", "hitter"])
-        team_col = find_first_column(fantasy_df, ["team", "TEAM", "team_abbreviation", "TEAM_ABBREVIATION"])
-        opponent_col = find_first_column(fantasy_df, ["opponent", "opp", "matchup", "opposing_team"])
-        if player_col:
-            for _, raw in fantasy_df.iterrows():
-                player = normalize_text(raw.get(player_col)).lower()
-                if not player:
-                    continue
-                team = mlb_clean_text(raw.get(team_col), fallback="") if team_col else ""
-                opponent = mlb_clean_text(raw.get(opponent_col), fallback="") if opponent_col else ""
-                current = lookup.setdefault(player, {})
-                if team and not current.get("team"):
-                    current["team"] = team
-                if opponent and not current.get("opponent"):
-                    current["opponent"] = opponent
-
-    return lookup
-
-
-def build_mlb_hitter_team_lookup():
-    return {
-        player: context.get("team", "")
-        for player, context in build_mlb_hitter_context_lookup().items()
-        if context.get("team")
-    }
-
-
-def build_mlb_pitcher_context_lookup():
-    df = read_csv_df(MLB_FILES["pitchers"])
-    if df.empty:
-        return {}
-
-    pitcher_col = find_first_column(df, ["pitcher_name", "player_name", "player"])
-    team_col = find_first_column(df, ["team", "TEAM"])
-    opponent_col = find_first_column(df, ["opponent", "opp", "matchup"])
-    if not pitcher_col:
-        return {}
-
-    lookup = {}
-    for _, raw in df.iterrows():
-        pitcher = normalize_text(raw.get(pitcher_col)).lower()
-        if not pitcher:
-            continue
-        lookup[pitcher] = {
-            "pitcher_team": mlb_clean_text(raw.get(team_col), fallback="") if team_col else "",
-            "pitcher_opponent": mlb_clean_text(raw.get(opponent_col), fallback="") if opponent_col else "",
-        }
-    return lookup
-
-
 def load_mlb_best_bets():
     today_board = read_csv_df(MLB_FILES["best_bets"])
     history = read_csv_df(MLB_FILES["history"])
     tracking = latest_pitcher_tracking_snapshot()
     hitter_tracking = best_hitter_tracking_snapshot()
     team_lookup = team_lookup_from_pitchers()
-    hitter_team_lookup = build_mlb_hitter_team_lookup()
-    pitcher_context_lookup = build_mlb_pitcher_context_lookup()
 
     using_fallback = False
     source_path = MLB_FILES["best_bets"]
@@ -849,13 +616,7 @@ def load_mlb_best_bets():
             team = ""
             if market.startswith("PITCHER"):
                 team = team_lookup.get(player_key, "")
-            elif market.startswith("HITTER"):
-                pitcher_context = pitcher_context_lookup.get(normalize_text(row.get("matchup_pitcher")).lower(), {})
-                team = mlb_clean_text(hitter_team_lookup.get(player_key), fallback="") or mlb_clean_text(pitcher_context.get("pitcher_opponent"), fallback="")
             opponent = normalize_text(row.get("opponent")) or normalize_text(row.get("matchup_pitcher")) or "TBD"
-            if market.startswith("HITTER"):
-                pitcher_context = pitcher_context_lookup.get(normalize_text(row.get("matchup_pitcher")).lower(), {})
-                opponent = mlb_clean_text(pitcher_context.get("pitcher_team"), fallback="") or opponent
             enriched = {
                 "player": player,
                 "team": team or "TBD",
@@ -1133,39 +894,35 @@ def load_hitter_summary(kind):
     category_col = find_first_column(df, ["Category", "category"])
     hitter_col = find_first_column(df, ["Hitter", "hitter_name", "player_name"])
     pitcher_col = find_first_column(df, ["Pitcher", "pitcher_name", "matchup_pitcher"])
-    team_col = find_first_column(df, ["Team", "team", "TEAM"])
-    opponent_col = find_first_column(df, ["Opponent", "opponent", "opp", "matchup"])
     if kind == "mlb_hitters":
         prob_col = "Hit Probability"
         category_match = "HIT TARGETS"
-        keep = [hitter_col, pitcher_col, team_col, opponent_col, "Hit Probability", "Total Bases >= 2", "Home Run Probability", "Stolen Base Probability"]
+        keep = [hitter_col, pitcher_col, "Hit Probability", "Total Bases >= 2", "Home Run Probability", "Stolen Base Probability"]
         rename = {"Hit Probability": "Hit %", "Total Bases >= 2": "2+ Bases %", "Home Run Probability": "HR %", "Stolen Base Probability": "SB %"}
-    elif kind == "mlb_hit2plus":
-        return []
     elif kind == "mlb_tb2":
         prob_col = "Total Bases >= 2"
         category_match = "2+ TOTAL BASES TARGETS"
-        keep = [hitter_col, pitcher_col, team_col, opponent_col, "Total Bases >= 2", "Hit Probability", "Home Run Probability"]
+        keep = [hitter_col, pitcher_col, "Total Bases >= 2", "Hit Probability", "Home Run Probability"]
         rename = {"Total Bases >= 2": "2+ Bases %", "Hit Probability": "Hit %", "Home Run Probability": "HR %"}
     elif kind == "mlb_rbi":
         prob_col = "RBI Probability"
         category_match = "RBI TARGETS"
-        keep = [hitter_col, pitcher_col, team_col, opponent_col, "RBI Probability", "Hit Probability", "Home Run Probability"]
+        keep = [hitter_col, pitcher_col, "RBI Probability", "Hit Probability", "Home Run Probability"]
         rename = {"RBI Probability": "RBI %", "Hit Probability": "Hit %", "Home Run Probability": "HR %"}
     elif kind == "mlb_hitter_k":
         prob_col = "Hitter Strikeout %"
         category_match = "HITTER STRIKEOUT TARGETS"
-        keep = [hitter_col, pitcher_col, team_col, opponent_col, "Hitter Strikeout %", "Projected Hitter Strikeouts", "Hit Probability"]
+        keep = [hitter_col, pitcher_col, "Hitter Strikeout %", "Projected Hitter Strikeouts", "Hit Probability"]
         rename = {"Hitter Strikeout %": "K %", "Projected Hitter Strikeouts": "Projected K", "Hit Probability": "Hit %"}
     elif kind == "mlb_sb":
         prob_col = "Stolen Base Probability"
         category_match = "STOLEN BASE TARGETS"
-        keep = [hitter_col, pitcher_col, team_col, opponent_col, "Stolen Base Probability", "Hit Probability", "Hitter Strikeout %"]
+        keep = [hitter_col, pitcher_col, "Stolen Base Probability", "Hit Probability", "Hitter Strikeout %"]
         rename = {"Stolen Base Probability": "SB %", "Hit Probability": "Hit %", "Hitter Strikeout %": "K %"}
     else:
         prob_col = "Home Run Probability"
         category_match = "HOME RUN TARGETS"
-        keep = [hitter_col, pitcher_col, team_col, opponent_col, "Home Run Probability", "Hit Probability", "Total Bases >= 2"]
+        keep = [hitter_col, pitcher_col, "Home Run Probability", "Hit Probability", "Total Bases >= 2"]
         rename = {"Home Run Probability": "HR %", "Hit Probability": "Hit %", "Total Bases >= 2": "2+ Bases %"}
 
     if prob_col not in df.columns or not hitter_col:
@@ -1178,567 +935,145 @@ def load_hitter_summary(kind):
     work[prob_col] = pd.to_numeric(work[prob_col], errors="coerce")
     work = work.sort_values(prob_col, ascending=False, kind="stable").drop_duplicates(subset=[hitter_col], keep="first")
     keep = [column for column in keep if column and column in work.columns]
-    rename_map = {hitter_col: "Hitter", pitcher_col: "Pitcher", **rename}
-    if team_col:
-        rename_map[team_col] = "Team"
-    if opponent_col:
-        rename_map[opponent_col] = "Opponent"
-    work = work[keep].rename(columns=rename_map)
+    work = work[keep].head(25).rename(columns={hitter_col: "Hitter", pitcher_col: "Pitcher", **rename})
     return records_from_df(work)
 
 
-def load_hitter_full_projection_records(sort_by=None):
-    df = read_csv_df(MLB_FILES["hitters_full"])
-    if df.empty:
-        return []
 
-    required = [
-        "hitter_name",
-        "team",
-        "opponent",
-        "pitcher_name",
-        "hit_prob",
-        "tb2_prob",
-        "hr_prob",
-        "sb_prob",
-        "hitter_strikeout_pct",
-        "projected_hitter_strikeouts",
-    ]
-    if any(column not in df.columns for column in required):
-        return []
-
-    work = filter_mlb_frame_to_active_slate(df, "team", "opponent").copy()
-    numeric_columns = [
-        "lineup_spot",
-        "expected_pa",
-        "hit_prob",
-        "tb2_prob",
-        "hr_prob",
-        "sb_prob",
-        "hitter_strikeout_pct",
-        "projected_hitter_strikeouts",
-    ]
-    for column, _ in MLB_REALISM_FIELD_DISPLAY:
-        if column in df.columns:
-            numeric_columns.append(column)
-    for column in numeric_columns:
-        work[column] = pd.to_numeric(work.get(column), errors="coerce")
-
-    keep = [
-        "hitter_name",
-        "team",
-        "opponent",
-        "pitcher_name",
-        "lineup_spot",
-        "expected_pa",
-        "hit_prob",
-        "tb2_prob",
-        "hr_prob",
-        "sb_prob",
-        "hitter_strikeout_pct",
-        "projected_hitter_strikeouts",
-    ]
-    keep.extend([column for column, _ in MLB_REALISM_FIELD_DISPLAY if column in work.columns])
-    rename = {
-        "hitter_name": "Hitter",
-        "team": "Team",
-        "opponent": "Opponent",
-        "pitcher_name": "Pitcher",
-        "lineup_spot": "Lineup Spot",
-        "expected_pa": "Expected PA",
-        "hit_prob": "Hit %",
-        "tb2_prob": "2+ Bases %",
-        "hr_prob": "HR %",
-        "sb_prob": "SB %",
-        "hitter_strikeout_pct": "Hitter K %",
-        "projected_hitter_strikeouts": "Projected Hitter Strikeouts",
-    }
-    work = work[keep].rename(columns=rename)
-    sort_field = sort_by if sort_by in work.columns else None
-    if sort_field:
-        work = work.sort_values(
-            [sort_field, "Hit %", "2+ Bases %", "HR %"],
-            ascending=False,
-            kind="stable",
-        )
-    else:
-        work = work.sort_values(
-            ["Hit %", "2+ Bases %", "HR %", "SB %", "Projected Hitter Strikeouts"],
-            ascending=False,
-            kind="stable",
-        )
-    work = work.drop_duplicates(subset=["Hitter"], keep="first")
-    return records_from_df(work)
+MLB_HITTER_OUTPUT_CANDIDATES = [
+    Path("/home/ubuntu/EdgeRanked/sports/mlb/mlb_model/mlb/outputs/hitter_predictions_full.csv"),
+    Path("/home/ubuntu/EdgeRanked/sports/mlb/mlb_model/mlb/outputs/hitter_predictions_today.csv"),
+    Path("/home/ubuntu/mlb_model/mlb/outputs/hitter_predictions_full.csv"),
+    Path("/home/ubuntu/mlb_model/mlb/outputs/hitter_predictions_today.csv"),
+    Path("/home/ubuntu/EdgeRanked/site/mlb/outputs/hitter_predictions_full.csv"),
+    Path("/home/ubuntu/EdgeRanked/site/mlb/outputs/hitter_predictions_today.csv"),
+]
 
 
-def mlb_display_confidence(value):
-    tier = confidence_level(value)
-    return {"High": "Top", "Medium": "Strong", "Low": "Active"}.get(tier, "Active")
+def mlb_hitter_output_source():
+    valid = []
+    for candidate in MLB_HITTER_OUTPUT_CANDIDATES:
+        if not candidate.exists():
+            continue
+        df = read_csv_df(candidate)
+        hitter_col = find_first_column(df, ["hitter_name", "Hitter", "player_name"])
+        if not df.empty and hitter_col:
+            valid.append((candidate.stat().st_mtime, len(df), candidate, df))
+    if not valid:
+        fallback = MLB_FILES["hitters"]
+        return fallback, read_csv_df(fallback)
+    valid.sort(key=lambda item: (item[0], item[1]), reverse=True)
+    return valid[0][2], valid[0][3]
 
 
-def mlb_projection_confidence(value, edge=None):
-    projection = safe_float(value, default=0)
-    edge_value = abs(safe_float(edge, default=0))
-    if projection >= 58 or edge_value >= 8:
-        return "High"
-    if projection >= 54 or edge_value >= 4:
-        return "Medium"
-    return "Low"
+def mlb_numeric(row, *names):
+    for name in names:
+        value = safe_float(row.get(name), default=None)
+        if value is not None:
+            return value
+    return None
 
 
-def mlb_clean_text(value, fallback="n/a"):
-    text = normalize_text(value)
-    if not text or text.upper() == "TBD":
-        return fallback
-    return text
+def mlb_pick_text(row, *names, fallback=""):
+    for name in names:
+        value = normalize_text(row.get(name))
+        if value:
+            return value
+    return fallback
 
 
-MLB_CLEAN_STANDARD_HITTER_LINES = {
-    "K": (0.5, 2.5),
-    "HIT": (1.5, 1.5),
-    "HITS": (1.5, 1.5),
-    "TB": (1.5, 2.5),
-    "RBI": (1.5, 1.5),
-    "RUNS": (1.5, 1.5),
-    "H+R+RBI": (1.5, 2.5),
-}
-
-MLB_CLEAN_STANDARD_PITCHER_LINES = {
-    "K": (0.5, 12.5),
-    "OUTS": (9.0, 24.5),
-}
-
-
-def mlb_boolish(value):
-    if isinstance(value, bool):
+def mlb_hitter_sort_value(row, category_key):
+    for field in MLB_HITTER_CATEGORY_SORT_FIELDS.get(category_key, ("hit_prob",)):
+        value = safe_float(row.get(field), default=None)
+        if value is None:
+            continue
+        if category_key == "hitter_strikeouts" and value <= 0:
+            continue
         return value
-    return str(value or "").strip().lower() in {"1", "true", "t", "yes", "y", "on"}
+    return None
 
 
-def mlb_blankish(value):
-    if value is None:
-        return True
-    try:
-        if pd.isna(value):
-            return True
-    except Exception:
-        pass
-    return str(value).strip() == ""
-
-
-def mlb_half_step_line(value):
-    try:
-        line = float(value)
-    except Exception:
-        return False
-    return abs((line * 2.0) - round(line * 2.0)) < 1e-9
-
-
-def mlb_line_is_clean_display_row(row):
-    odds_type = normalize_text(row.get("ODDS_TYPE", row.get("odds_type", ""))).lower()
-    if odds_type and odds_type != "standard":
-        return False
-
-    if mlb_boolish(row.get("ADJUSTED_ODDS", row.get("adjusted_odds", False))):
-        return False
-    if not mlb_blankish(row.get("FLASH_SALE_LINE_SCORE", row.get("flash_sale_line_score", None))):
-        return False
-    if mlb_boolish(row.get("IS_PROMO", row.get("is_promo", False))):
-        return False
-    if mlb_boolish(row.get("IN_GAME", row.get("in_game", False))):
-        return False
-    if mlb_boolish(row.get("IS_LIVE", row.get("is_live", False))):
-        return False
-
-    status = normalize_text(row.get("STATUS", row.get("status", ""))).lower()
-    if status and status not in {"pre_game", "scheduled"}:
-        return False
-
-    player_type = normalize_text(row.get("PLAYER_TYPE", row.get("player_type", ""))).upper()
-    stat = normalize_text(row.get("STAT", row.get("stat", ""))).upper()
-    line = safe_float(row.get("LINE", row.get("line", None)))
-    if line is None or line <= 0 or not mlb_half_step_line(line):
-        return False
-
-    if player_type == "HITTER":
-        allowed = MLB_CLEAN_STANDARD_HITTER_LINES.get(stat)
-    elif player_type == "PITCHER":
-        allowed = MLB_CLEAN_STANDARD_PITCHER_LINES.get(stat)
-    else:
-        return False
-
-    if allowed is None:
-        return False
-    low, high = allowed
-    return low <= line <= high
-
-
-def build_mlb_line_lookup():
-    line_sources = [MLB_FILES["normalized_lines"], MLB_FILES["lines"]]
-    df = pd.DataFrame()
-    for source_path in line_sources:
-        candidate = read_csv_df(source_path)
-        if candidate.empty:
-            continue
-        slate_col = find_first_column(candidate, ["SLATE_DATE", "slate_date"])
-        if slate_col:
-            slate_dates = sorted(
-                set(candidate[slate_col].astype(str).str.slice(0, 10).str.strip())
-            )
-            if slate_dates != [today_et().isoformat()]:
-                continue
-        odds_col = find_first_column(candidate, ["ODDS_TYPE", "odds_type"])
-        if odds_col:
-            candidate = candidate[
-                candidate[odds_col].astype(str).str.lower().str.strip().eq("standard")
-            ].copy()
-        if not candidate.empty:
-            candidate = candidate[candidate.apply(mlb_line_is_clean_display_row, axis=1)].copy()
-        if not candidate.empty:
-            df = candidate
-            break
+def build_mlb_hitter_card_records(category_key="hit_targets"):
+    source_path, df = mlb_hitter_output_source()
     if df.empty:
-        return {}, {}
-    work = df.copy()
-    work.columns = [str(column).strip() for column in work.columns]
-    player_col = find_first_column(work, ["PLAYER_NAME", "player_name"])
-    stat_col = find_first_column(work, ["STAT", "stat"])
-    line_col = find_first_column(work, ["LINE", "line"])
-    opponent_col = find_first_column(work, ["RAW_DESCRIPTION", "RAW_OPPONENT", "opponent"])
-    board_col = find_first_column(work, ["BOARD_TIME", "board_time"])
-    regular_hint_col = find_first_column(work, ["IS_REGULAR_HINT", "is_regular_hint"])
-    goblin_col = find_first_column(work, ["IS_GOBLIN", "is_goblin"])
-    demon_col = find_first_column(work, ["IS_DEMON", "is_demon"])
-    if not player_col or not stat_col:
-        return {}, {}
-    if regular_hint_col:
-        work["_regular_hint"] = work[regular_hint_col].fillna(False).astype(bool)
-    else:
-        work["_regular_hint"] = False
-    if goblin_col:
-        work["_is_goblin"] = work[goblin_col].fillna(False).astype(bool)
-    else:
-        work["_is_goblin"] = False
-    if demon_col:
-        work["_is_demon"] = work[demon_col].fillna(False).astype(bool)
-    else:
-        work["_is_demon"] = False
-    if board_col:
-        work["_board_time"] = pd.to_datetime(work[board_col], errors="coerce", utc=True)
-    else:
-        work["_board_time"] = pd.NaT
-    line_lookup = {}
-    opponent_lookup = {}
-    for _, group in work.groupby([player_col, stat_col], dropna=False):
-        group = group.copy()
-        group = group.sort_values("_board_time", ascending=False, kind="stable", na_position="last")
-
-        regular_rows = group[group["_regular_hint"] == True]
-        if not regular_rows.empty:
-            chosen = regular_rows.iloc[0]
-        else:
-            normal_rows = group[(group["_is_goblin"] == False) & (group["_is_demon"] == False)]
-            if not normal_rows.empty:
-                chosen = normal_rows.iloc[0]
-            else:
-                # No trustworthy main line. Keep the player row on the site, but leave line blank.
-                chosen = None
-
-        if chosen is None:
-            raw_player = normalize_text(group.iloc[0].get(player_col)).lower()
-            raw_stat = normalize_text(group.iloc[0].get(stat_col)).upper()
-            if raw_player and raw_stat:
-                line_lookup.setdefault((raw_player, raw_stat), None)
-                opponent_lookup.setdefault(
-                    (raw_player, raw_stat),
-                    mlb_clean_text(group.iloc[0].get(opponent_col), fallback="Matchup pending") if opponent_col else "Matchup pending",
-                )
-            continue
-
-        raw = chosen
-        player = normalize_text(raw.get(player_col)).lower()
-        stat = normalize_text(raw.get(stat_col)).upper()
-        if not player or not stat:
-            continue
-        key = (player, stat)
-        line_lookup.setdefault(key, safe_float(raw.get(line_col)) if line_col else None)
-        opponent_lookup.setdefault(key, mlb_clean_text(raw.get(opponent_col), fallback="Matchup pending") if opponent_col else "Matchup pending")
-    return line_lookup, opponent_lookup
-
-
-def load_mlb_fantasy_projection_rows():
-    df = read_csv_df(MLB_FILES["fantasy"])
-    if df.empty:
-        return []
-
-    player_col = find_first_column(df, ["player_name", "hitter_name", "player", "hitter"])
-    if not player_col:
-        return []
-
-    team_col = find_first_column(df, ["team", "TEAM", "team_abbreviation", "TEAM_ABBREVIATION"])
-    opponent_col = find_first_column(df, ["opponent", "opp", "matchup", "opposing_team"])
-    projection_col = find_first_column(
-        df,
-        [
-            "fantasy_points",
-            "fantasy_projection",
-            "fantasy_proj",
-            "projected_fantasy",
-            "projected_fantasy_points",
-            "sim_fantasy_points",
-            "sim_fantasy",
-            "p50_fantasy_points",
-        ],
-    )
-    confidence_col = find_first_column(df, ["confidence", "confidence_tier", "fantasy_confidence"])
-    p90_col = find_first_column(df, ["fantasy_points_p90", "p90_fantasy_points", "ceiling", "fantasy_ceiling"])
-    p10_col = find_first_column(df, ["fantasy_points_p10", "p10_fantasy_points", "floor", "fantasy_floor"])
-
-    if not projection_col:
-        return []
-
-    line_lookup, opponent_lookup = build_mlb_line_lookup()
-    rows = []
-    for _, raw in df.iterrows():
-        player = normalize_text(raw.get(player_col))
-        projection = safe_float(raw.get(projection_col))
-        if not player or projection is None:
-            continue
-        player_key = player.lower()
-        line = line_lookup.get((player_key, "FANTASY"))
-        opponent = mlb_clean_text(raw.get(opponent_col), fallback="")
-        if not opponent:
-            opponent = opponent_lookup.get((player_key, "FANTASY"), "Matchup pending")
-        p90 = safe_float(raw.get(p90_col)) if p90_col else None
-        p10 = safe_float(raw.get(p10_col)) if p10_col else None
-        edge = round(projection - line, 2) if line is not None else None
-        confidence = normalize_text(raw.get(confidence_col)) if confidence_col else ""
-        if not confidence:
-            spread = None
-            if p90 is not None and p10 is not None:
-                spread = p90 - p10
-            if spread is not None and spread <= 8:
-                confidence = "High"
-            elif spread is not None and spread <= 14:
-                confidence = "Medium"
-            else:
-                confidence = mlb_projection_confidence(projection, edge)
-
-        rows.append({
-            "player": player,
-            "team": mlb_clean_text(raw.get(team_col), fallback="") if team_col else "",
-            "opponent": opponent,
-            "stat": "Fantasy Points",
-            "projection": projection,
-            "projection_display": metric_label(projection),
-            "line": line,
-            "edge": edge,
-            "confidence": confidence,
-            "lean": "Over" if edge is None or edge >= 0 else "Under",
-            "sort_projection": projection,
-            "sort_edge": abs(safe_float(edge, default=0)),
-            "sort_confidence": confidence_rank(confidence),
-        })
-    return rows
-
-
-def ensure_mlb_minimum_team_players(records, fallback_rows, min_players=3):
-    if not records:
-        return records
-
-    team_players = {}
-    for row in records:
-        team = normalize_text(row.get("team"))
-        player = normalize_text(row.get("player"))
-        if not team or not player:
-            continue
-        team_players.setdefault(team, set()).add(player.lower())
-
-    additions = []
-    for row in sorted(fallback_rows, key=lambda item: safe_float(item.get("sort_projection"), default=-9999), reverse=True):
-        team = normalize_text(row.get("team"))
-        player = normalize_text(row.get("player"))
-        if not team or not player:
-            continue
-        players = team_players.setdefault(team, set())
-        if len(players) >= min_players:
-            continue
-        player_key = player.lower()
-        if player_key in players:
-            continue
-        additions.append(row)
-        players.add(player_key)
-
-    if additions:
-        records = records + additions
-    records.sort(key=lambda item: (safe_float(item.get("sort_projection"), default=-9999), safe_float(item.get("sort_edge"), default=-9999)), reverse=True)
-    return records
-
-
-def build_mlb_hitter_projection_board():
-    summary_source = MLB_FILES["hitters_full"] if MLB_READER_MODE == "canonical" and MLB_FILES["hitters_full"].exists() else MLB_FILES["hitters"]
-    summary_df = read_csv_df(summary_source)
-    if summary_df.empty:
-        return []
-
-    hitter_col = find_first_column(summary_df, ["Hitter", "hitter_name", "player_name"])
-    pitcher_col = find_first_column(summary_df, ["Pitcher", "pitcher_name", "matchup_pitcher"])
-    team_col = find_first_column(summary_df, ["Team", "team", "TEAM"])
-    opponent_col = find_first_column(summary_df, ["Opponent", "opponent", "opp", "matchup"])
-    summary_df = filter_mlb_frame_to_active_slate(summary_df, team_col, opponent_col)
-    if summary_df.empty:
-        return []
+        return [], source_path
+    hitter_col = find_first_column(df, ["hitter_name", "Hitter", "player_name"])
     if not hitter_col:
-        return []
-
-    line_lookup, opponent_lookup = build_mlb_line_lookup()
-    hitter_context_lookup = build_mlb_hitter_context_lookup()
-    team_lookup = build_mlb_hitter_team_lookup()
-    pitcher_context_lookup = build_mlb_pitcher_context_lookup()
-
-    stat_configs = [
-        ("Hits", "Hit Probability", "HIT", None),
-        ("2+ Hits", "blended_hit_2plus_prob_v2", "HIT2", None),
-        ("Total Bases", "Total Bases >= 2", "TB", None),
-        ("RBI", "RBI Probability", "RBI", None),
-        ("Home Runs", "Home Run Probability", "HR", None),
-        ("Stolen Bases", "Stolen Base Probability", "SB", None),
-        ("Hitter Strikeouts", "Projected Hitter Strikeouts", "K", None),
-        ("Runs", "Runs Probability", "RUNS", None),
-        ("Fantasy Points", "Fantasy Points", "FANTASY", None),
-    ]
-
-    records_by_key = {}
-    for _, raw in summary_df.iterrows():
+        return [], source_path
+    records = []
+    for _, raw in df.iterrows():
         row = raw.to_dict()
         player = normalize_text(row.get(hitter_col))
         if not player:
             continue
-        player_key = player.lower()
-        opponent_pitcher = mlb_clean_text(row.get(pitcher_col), fallback="Pitcher pending") if pitcher_col else "Pitcher pending"
-        pitcher_context = pitcher_context_lookup.get(opponent_pitcher.lower(), {})
-        hitter_context = hitter_context_lookup.get(player_key, {})
-        source_team = mlb_clean_text(row.get(team_col), fallback="") if team_col else ""
-        source_opponent = mlb_clean_text(row.get(opponent_col), fallback="") if opponent_col else ""
-        for stat_label, prob_col, stat_code, default_line in stat_configs:
-            if stat_label == "2+ Hits" and prob_col not in summary_df.columns:
-                continue
-            if prob_col not in summary_df.columns:
-                canonical_map = {
-                    "Hit Probability": "hit_prob",
-                    "Total Bases >= 2": "tb2_prob",
-                    "RBI Probability": "rbi_prob",
-                    "Home Run Probability": "hr_prob",
-                    "Stolen Base Probability": "sb_prob",
-                    "Projected Hitter Strikeouts": "projected_hitter_strikeouts",
-                }
-                mapped_col = canonical_map.get(prob_col)
-                if mapped_col and mapped_col in summary_df.columns:
-                    prob_col = mapped_col
-                else:
-                    continue
-            if prob_col not in row:
-                continue
-            projection = safe_float(row.get(prob_col))
-            blend_col, shadow_col, current_col = MLB_REALISM_STAT_FIELDS.get(
-                stat_label, (None, None, None)
-            )
-            blend_value = safe_float(row.get(blend_col)) if blend_col else None
-            shadow_value = safe_float(row.get(shadow_col)) if shadow_col else None
-            current_value = safe_float(row.get(current_col)) if current_col else None
-            if blend_value is not None:
-                projection = blend_value
-            if projection is None:
-                continue
-            line = line_lookup.get((player_key, stat_code), default_line)
-            inferred_team = mlb_clean_text(pitcher_context.get("pitcher_opponent"), fallback="")
-            inferred_opponent = mlb_clean_text(pitcher_context.get("pitcher_team"), fallback="")
-            context_team = mlb_clean_text(hitter_context.get("team"), fallback="")
-            context_opponent = mlb_clean_text(hitter_context.get("opponent"), fallback="")
-            resolved_team = source_team or context_team or mlb_clean_text(team_lookup.get(player_key), fallback="") or inferred_team
-            opponent = source_opponent or context_opponent or opponent_lookup.get((player_key, stat_code), "") or inferred_opponent or opponent_pitcher
-            if stat_label == "Hitter Strikeouts":
-                edge = round(projection - line, 2) if line is not None else None
-                projection_display = metric_label(projection)
-            elif stat_label == "Fantasy Points":
-                edge = round(projection - line, 2) if line is not None else None
-                projection_display = metric_label(projection)
-            else:
-                edge = round(projection - 50.0, 1)
-                projection_display = pct_label(projection)
-            confidence = mlb_projection_confidence(projection, edge)
-            record = {
-                "player": player,
-                "team": resolved_team,
-                "opponent": opponent,
-                "stat": stat_label,
-                "projection": projection,
-                "projection_display": projection_display,
-                "line": line,
-                "edge": edge,
-                "confidence": confidence,
-                "lean": "Over" if edge is None or edge >= 0 else "Under",
-                "outcome_blend": blend_value,
-                "outcome_shadow": shadow_value,
-                "outcome_current": current_value,
-                "realism_source": "Blended shadow" if blend_value is not None else "Primary",
-                "sort_projection": projection,
-                "sort_edge": abs(safe_float(edge, default=0)),
-                "sort_confidence": confidence_rank(confidence),
-            }
-            key = (player_key, stat_label)
-            current = records_by_key.get(key)
-            if not current or record["sort_projection"] > current["sort_projection"]:
-                records_by_key[key] = record
-
-    records = list(records_by_key.values())
-    fantasy_rows = load_mlb_fantasy_projection_rows()
-    if fantasy_rows:
-        records.extend(fantasy_rows)
-        records = ensure_mlb_minimum_team_players(records, fantasy_rows, min_players=3)
-    records.sort(key=lambda item: (item["sort_projection"], item["sort_edge"]), reverse=True)
-    return records
-
-
-def build_mlb_pitcher_projection_board():
-    rows = []
-    for item in load_mlb_pitcher_board()["records"]:
-        rows.append({
-            "player": mlb_clean_text(item.get("pitcher_name"), fallback="Pitcher"),
-            "team": mlb_clean_text(item.get("team"), fallback=""),
-            "opponent": mlb_clean_text(item.get("opponent"), fallback="Matchup pending"),
-            "stat": "Strikeouts",
-            "projection": safe_float(item.get("projected_ks")),
-            "pitcher_k_percent_season": safe_float(item.get("pitcher_k_percent_season")),
-            "opponent_hitter_k_percent": safe_float(item.get("opponent_hitter_k_percent")),
-            "line": safe_float(item.get("sportsbook_line")),
-            "edge": safe_float(item.get("edge")),
-            "confidence": confidence_level(item.get("confidence")),
-            "lean": normalize_text(item.get("recommended_play")).split(" ")[0] or "Lean",
-            "sort_projection": safe_float(item.get("projected_ks"), default=0),
-            "sort_edge": abs(safe_float(item.get("edge"), default=0)),
-            "sort_confidence": confidence_rank(item.get("confidence")),
+        sort_value = mlb_hitter_sort_value(row, category_key)
+        if sort_value is None or sort_value <= 0:
+            continue
+        records.append({
+            "player": player,
+            "team": mlb_pick_text(row, "team", "Team").upper(),
+            "opponent": mlb_pick_text(row, "opponent", "Opponent", "opp", fallback="Matchup pending"),
+            "pitcher": mlb_pick_text(row, "pitcher_name", "Pitcher", "matchup_pitcher", fallback="Pitcher pending"),
+            "lineup_spot": safe_int(row.get("lineup_spot", row.get("Lineup Spot"))),
+            "hit_prob": mlb_numeric(row, "hit_prob", "Hit Probability"),
+            "two_hit_prob": mlb_numeric(row, "MC_Hit2Plus_Prob", "blended_hit_2plus_prob_v2", "hit_2plus_prob"),
+            "tb2_prob": mlb_numeric(row, "tb2_prob", "Total Bases >= 2"),
+            "rbi_prob": mlb_numeric(row, "rbi_prob", "RBI Probability"),
+            "hr_prob": mlb_numeric(row, "hr_prob", "Home Run Probability"),
+            "sb_prob": mlb_numeric(row, "sb_prob", "Stolen Base Probability"),
+            "hitter_k_projection": mlb_numeric(row, "projected_hitter_strikeouts", "Projected Hitter Strikeouts"),
+            "hitter_k_pct": mlb_numeric(row, "hitter_strikeout_pct", "Hitter Strikeout %"),
+            "category": category_key,
+            "sort_value": sort_value,
         })
-        if safe_float(item.get("estimated_innings")) is not None and safe_float(item.get("projected_ks")) is not None:
-            rows.append({
-                "player": mlb_clean_text(item.get("pitcher_name"), fallback="Pitcher"),
-                "team": mlb_clean_text(item.get("team"), fallback=""),
-                "opponent": mlb_clean_text(item.get("opponent"), fallback="Matchup pending"),
-                "stat": "Outs Recorded",
-                "projection": safe_float(item.get("estimated_innings")) * 3,
-                "pitcher_k_percent_season": safe_float(item.get("pitcher_k_percent_season")),
-                "opponent_hitter_k_percent": safe_float(item.get("opponent_hitter_k_percent")),
-                "line": None,
-                "edge": None,
-                "confidence": confidence_level(item.get("confidence")),
-                "lean": "",
-                "sort_projection": safe_float(item.get("estimated_innings"), default=0) * 3,
-                "sort_edge": 0,
-                "sort_confidence": confidence_rank(item.get("confidence")),
-            })
-    rows.sort(key=lambda item: (item["sort_projection"], item["sort_edge"]), reverse=True)
-    return rows
+    records.sort(key=lambda item: (safe_float(item.get("sort_value"), default=-9999), safe_float(item.get("hit_prob"), default=-9999), item.get("player", "")), reverse=True)
+    return records, source_path
 
+
+def render_mlb_hitter_cards(title, subtitle, rows, source_path, scope_id, category_key):
+    if not rows:
+        return render_empty_state(title, f"No {title.lower()} are currently available.", "The latest MLB hitter output file does not contain rows for this category yet.")
+    teams = sorted({row["team"] for row in rows if row.get("team")})
+    team_options = "".join(f'<option value="{escape(team)}">{escape(team)}</option>' for team in teams)
+
+    def chip(label, value, fmt="pct"):
+        if value is None:
+            return ""
+        display = pct_label(value) if fmt == "pct" else metric_label(value)
+        return f'<div class="hitter-stat"><span>{escape(label)}</span><strong>{escape(display)}</strong></div>'
+
+    cards = []
+    for row in rows:
+        lineup_html = f'<span class="meta-chip">Lineup {safe_int(row.get("lineup_spot"))}</span>' if row.get("lineup_spot") else ''
+        cards.append(
+            f'<article class="play-card mlb-hitter-card" data-team="{escape(row.get("team", ""))}" data-player="{escape(row.get("player", "").lower())}" data-sort="{safe_float(row.get("sort_value"), default=-9999)}">'
+            f'<div class="play-top"><div><div class="play-name">{escape(row.get("player") or "Hitter")}</div>'
+            f'<div class="play-sub">{escape(row.get("team") or "-")} vs {escape(row.get("opponent") or "Matchup pending")}</div></div>'
+            f'<span class="badge badge-neutral">{escape(MLB_HITTER_CATEGORY_LABELS.get(category_key, "MLB"))}</span></div>'
+            f'<div class="card-meta"><span class="meta-chip">Pitcher {escape(row.get("pitcher") or "Pending")}</span>{lineup_html}</div>'
+            '<div class="hitter-stat-grid">'
+            + chip('Hit', row.get('hit_prob'))
+            + chip('2+ Bases', row.get('tb2_prob'))
+            + chip('RBI', row.get('rbi_prob'))
+            + chip('HR', row.get('hr_prob'))
+            + chip('2+ Hits', row.get('two_hit_prob'))
+            + chip('SB', row.get('sb_prob'))
+            + chip('Hitter K', row.get('hitter_k_projection'), 'num')
+            + chip('Hitter K%', row.get('hitter_k_pct'))
+            + '</div></article>'
+        )
+    return (
+        '<section class="panel">'
+        f'<div class="panel-head"><div><div class="eyebrow">MLB</div><h2>{escape(title)}</h2></div><p class="muted">{escape(subtitle)}</p></div>'
+        f'<p class="muted projection-summary">Source: {escape(str(source_path))} | Updated: {escape(format_timestamp(file_timestamp(source_path)))} | Rows: {len(rows)}</p>'
+        '<div class="mlb-team-filter"><label class="filter-field"><span>Team</span>'
+        f'<select id="{escape(scope_id)}-team"><option value="ALL">All Teams</option>{team_options}</select></label></div>'
+        f'<p class="muted projection-summary" id="{escape(scope_id)}-summary">Showing {len(rows)} players.</p>'
+        f'<div class="play-grid-shell" id="{escape(scope_id)}-cards">{"".join(cards)}</div>'
+        '</section>'
+        '<style>.mlb-team-filter{max-width:280px;margin:14px 0 16px}.card-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.meta-chip{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;border:1px solid rgba(59,130,246,.22);background:rgba(59,130,246,.1);color:#dbeafe;font-size:11px;font-weight:700}.hitter-stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.hitter-stat{padding:9px 10px;border:1px solid rgba(30,41,59,.75);border-radius:10px;background:rgba(10,15,28,.58)}.hitter-stat span{display:block;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.hitter-stat strong{color:#fff;font-size:16px;line-height:1.25}</style>'
+        f'<script>(()=>{{const cards=Array.from(document.querySelectorAll("#{scope_id}-cards .mlb-hitter-card"));const team=document.getElementById("{scope_id}-team");const summary=document.getElementById("{scope_id}-summary");function apply(){{const active=team?.value||"ALL";let visible=0;cards.forEach((card)=>{{const show=active==="ALL"||card.dataset.team===active;card.hidden=!show;card.style.display=show?"":"none";if(show)visible+=1;}});summary.textContent=active==="ALL"?`Showing ${{visible}} players.`:`Showing ${{visible}} players | team: ${{active}}`;}}team?.addEventListener("change",apply);apply();}})();</script>'
+    )
 
 def mlb_system_rows():
     rows = []
@@ -1783,359 +1118,9 @@ def projection_view_records():
     return records_from_df(fallback)
 
 
-def nba_projection_source_df():
-    df = read_csv_df(PROJECTIONS_PATH)
-    if df.empty:
-        return pd.DataFrame()
-    work = df.copy()
-    if "TEAM_ABBREVIATION" in work.columns and Path(TEAMS_TODAY_PATH).exists():
-        teams_df = read_csv_df(TEAMS_TODAY_PATH)
-        team_col = find_first_column(teams_df, ["TEAM_ABBREVIATION", "TEAM"])
-        if team_col:
-            slate = {normalize_text(team).upper() for team in teams_df[team_col].dropna().tolist()}
-            if slate:
-                work = work[work["TEAM_ABBREVIATION"].astype(str).str.upper().isin(slate)].copy()
-    return work.reset_index(drop=True)
-
-
-def build_nba_line_lookup():
-    df = read_csv_df(LINES_PATH)
-    if df.empty:
-        return {}
-    player_col = find_first_column(df, ["PLAYER_NAME", "PLAYER", "player_name"])
-    stat_col = find_first_column(df, ["STAT", "stat"])
-    line_col = find_first_column(df, ["LINE", "line"])
-    if not player_col or not stat_col or not line_col:
-        return {}
-
-    work = df.copy()
-    board_col = find_first_column(work, ["UPDATED_AT_ET", "BOARD_TIME_ET", "updated_at", "board_time"])
-    if board_col:
-        work["_board_time"] = pd.to_datetime(work[board_col], errors="coerce")
-        work = work.sort_values("_board_time", ascending=False, kind="stable", na_position="last")
-
-    lookup = {}
-    for _, raw in work.iterrows():
-        player = normalize_text(raw.get(player_col)).lower()
-        raw_stat = normalize_text(raw.get(stat_col)).upper()
-        stat = NBA_LINE_STAT_MAP.get(raw_stat)
-        if not player or not stat:
-            continue
-        lookup.setdefault((player, stat), safe_float(raw.get(line_col)))
-    return lookup
-
-
-def nba_normal_cdf(value):
-    return 0.5 * (1.0 + erf(value / sqrt(2.0)))
-
-
-def nba_probability_at_or_above(mean, std, threshold):
-    if mean is None or threshold is None:
-        return None
-    spread = safe_float(std)
-    if spread is None or spread <= 0:
-        return 1.0 if mean >= threshold else 0.0
-    z_score = (threshold - mean) / spread
-    probability = 1.0 - nba_normal_cdf(z_score)
-    return min(max(probability, 0.0), 1.0)
-
-
-def nba_threshold_target(stat_config, projection):
-    thresholds = stat_config.get("thresholds", [])
-    if projection is None or not thresholds:
-        return None
-    eligible = [value for value in thresholds if value <= projection]
-    return eligible[-1] if eligible else thresholds[0]
-
-
-def nba_threshold_label(stat_config, threshold):
-    if threshold is None:
-        return "n/a"
-    label = stat_config["label"].lower()
-    threshold_text = metric_label(threshold, digits=0 if float(threshold).is_integer() else 1)
-    return f"{threshold_text}+ {label}"
-
-
-def nba_rotation_label(value):
-    text = normalize_text(value).strip().upper()
-    return text.title() if text else "Rotation"
-
-
-def nba_recent_minutes_delta(projected_minutes, last_five_minutes):
-    if projected_minutes is None or last_five_minutes is None:
-        return None
-    return round(projected_minutes - last_five_minutes, 1)
-
-
-def build_nba_projection_records():
-    df = nba_projection_source_df()
-    if df.empty:
-        return []
-
-    line_lookup = build_nba_line_lookup()
-    records = []
-
-    for _, raw in df.iterrows():
-        player = normalize_text(raw.get("PLAYER_NAME"))
-        team = normalize_text(raw.get("TEAM_ABBREVIATION")).upper()
-        opponent = normalize_text(raw.get("OPPONENT")).upper()
-        matchup = normalize_text(raw.get("MATCHUP"), default=f"{team} vs. {opponent}" if team and opponent else "Matchup pending")
-        confidence = confidence_level(raw.get("CONFIDENCE_LABEL") or raw.get("MODEL_CONFIDENCE") or raw.get("BET_CONFIDENCE") or raw.get("CONFIDENCE"))
-        confidence_score = safe_float(raw.get("CONFIDENCE") or raw.get("BET_CONFIDENCE"))
-        active_probability = safe_float(raw.get("ACTIVE_PROB"))
-        expected_minutes = safe_float(raw.get("MIN_PROJ") or raw.get("PRED_MIN"))
-        last_five_minutes = safe_float(raw.get("AVG_MIN_LAST_5"))
-        last_ten_minutes = safe_float(raw.get("AVG_MIN_LAST_10"))
-        fantasy_projection = safe_float(raw.get("FANTASY_PROJ"))
-        pace = safe_float(raw.get("EXPECTED_PACE"))
-        pace_multiplier = safe_float(raw.get("PACE_MULTIPLIER"))
-        margin = safe_float(raw.get("EXPECTED_TEAM_MARGIN"))
-        blowout_risk = safe_float(raw.get("BLOWOUT_RISK"))
-        market_total = safe_float(raw.get("MARKET_TOTAL"))
-        injury_status = normalize_text(raw.get("INJURY_STATUS"), default="Active")
-        rotation_tier = nba_rotation_label(raw.get("ROTATION_TIER"))
-        injury_impact = safe_float(raw.get("TEAM_INJURY_IMPACT"))
-        player_key = player.lower()
-
-        for stat_config in NBA_STAT_CONFIGS:
-            projection = safe_float(raw.get(stat_config["projection"]))
-            if projection is None:
-                continue
-            median = safe_float(raw.get(stat_config["median"]), default=projection)
-            floor = safe_float(raw.get(stat_config["floor"]))
-            ceiling = safe_float(raw.get(stat_config["ceiling"]))
-            std = safe_float(raw.get(stat_config["std"]))
-            threshold = nba_threshold_target(stat_config, projection)
-            probability = nba_probability_at_or_above(median or projection, std, threshold)
-            line_value = line_lookup.get((player_key, stat_config["key"]))
-            line_delta = round(projection - line_value, 2) if line_value is not None else None
-            recent_minutes_delta = nba_recent_minutes_delta(expected_minutes, last_five_minutes)
-
-            records.append({
-                "player": player,
-                "team": team,
-                "opponent": opponent,
-                "matchup": matchup,
-                "confidence": confidence,
-                "confidence_score": confidence_score,
-                "confidence_rank": confidence_rank(confidence),
-                "active_probability": active_probability,
-                "injury_status": injury_status,
-                "rotation_tier": rotation_tier,
-                "pace": pace,
-                "pace_multiplier": pace_multiplier,
-                "expected_margin": margin,
-                "blowout_risk": blowout_risk,
-                "market_total": market_total,
-                "team_injury_impact": injury_impact,
-                "expected_minutes": expected_minutes,
-                "last_five_minutes": last_five_minutes,
-                "last_ten_minutes": last_ten_minutes,
-                "recent_minutes_delta": recent_minutes_delta,
-                "stat_key": stat_config["key"],
-                "stat_label": stat_config["label"],
-                "projection": projection,
-                "median_projection": median,
-                "floor_projection": floor,
-                "ceiling_projection": ceiling,
-                "range_display": f"{metric_label(floor)}-{metric_label(ceiling)}" if floor is not None and ceiling is not None else "n/a",
-                "distribution_std": std,
-                "fantasy_projection": fantasy_projection,
-                "threshold": threshold,
-                "threshold_label": nba_threshold_label(stat_config, threshold),
-                "threshold_probability": probability,
-                "sportsbook_line": line_value,
-                "sportsbook_delta": line_delta,
-                "sort_projection": projection,
-                "sort_probability": probability if probability is not None else -1,
-                "sort_minutes": expected_minutes if expected_minutes is not None else -1,
-            })
-
-    records.sort(
-        key=lambda item: (
-            item["sort_projection"],
-            item["sort_probability"],
-            item["sort_minutes"],
-            item["player"],
-        ),
-        reverse=True,
-    )
-    return records
-
-
-def build_nba_projection_snapshot(records, stat_keys=None, limit=3):
-    if not records:
-        return []
-    snapshot = []
-    desired_stats = stat_keys or NBA_HOME_SNAPSHOT_STATS
-    for stat_key in desired_stats:
-        stat_rows = [row for row in records if row["stat_key"] == stat_key]
-        if not stat_rows:
-            continue
-        leaders = sorted(
-            stat_rows,
-            key=lambda item: (
-                item["projection"] if item["projection"] is not None else -1,
-                item["threshold_probability"] if item["threshold_probability"] is not None else -1,
-            ),
-            reverse=True,
-        )[:limit]
-        snapshot.append({"stat_key": stat_key, "stat_label": leaders[0]["stat_label"], "leaders": leaders})
-    return snapshot
-
-
-def build_nba_best_bets_board():
-    df = read_csv_df(BEST_BETS_OUTPUT_PATH)
-    source_path = Path(BEST_BETS_OUTPUT_PATH)
-    using_fallback = False
-
-    if df.empty and Path(HISTORY_PATH).exists():
-        history = read_csv_df(HISTORY_PATH)
-        if not history.empty:
-            latest = latest_rows_by_date(history, allowed_results_only=False)
-            if not latest.empty:
-                df = latest.copy()
-                using_fallback = True
-                source_path = Path(HISTORY_PATH)
-
-    if df.empty:
-        return {
-            "records": [],
-            "source_path": str(source_path),
-            "last_updated": file_timestamp(source_path),
-            "plays_shown": 0,
-            "recent_hit_rate": None,
-            "banner": "",
-        }
-
-    work = df.copy()
-    work["ABS_EDGE_SORT"] = pd.to_numeric(work.get("ABS_EDGE"), errors="coerce").fillna(0)
-    work["BET_CONFIDENCE_SORT"] = pd.to_numeric(work.get("BET_CONFIDENCE"), errors="coerce").fillna(0)
-    work = work.sort_values(["BET_CONFIDENCE_SORT", "ABS_EDGE_SORT"], ascending=[False, False], kind="stable")
-
-    rows = []
-    for _, raw in work.iterrows():
-        rows.append({
-            "date": normalize_text(raw.get("DATE") or raw.get("date")),
-            "player": normalize_text(raw.get("PLAYER") or raw.get("player")),
-            "team": normalize_text(raw.get("TEAM") or raw.get("team")).upper(),
-            "matchup": normalize_text(raw.get("MATCHUP") or raw.get("matchup")),
-            "stat": normalize_text(raw.get("RAW_STAT") or raw.get("STAT") or raw.get("raw_stat") or raw.get("stat")),
-            "bet": normalize_text(raw.get("BET") or raw.get("bet")),
-            "line": safe_float(raw.get("LINE") if raw.get("LINE") is not None else raw.get("line")),
-            "projection": safe_float(raw.get("PROJECTION") if raw.get("PROJECTION") is not None else raw.get("projection")),
-            "edge": safe_float(raw.get("EDGE") if raw.get("EDGE") is not None else raw.get("edge")),
-            "hit_rate": safe_float(raw.get("HIT_RATE") if raw.get("HIT_RATE") is not None else raw.get("hit_rate")),
-            "confidence": confidence_level(raw.get("CONFIDENCE_LABEL") or raw.get("MODEL_CONFIDENCE") or raw.get("BET_CONFIDENCE") or raw.get("confidence_label")),
-            "confidence_score": safe_float(raw.get("BET_CONFIDENCE")),
-            "result": grade_result_label(raw.get("RESULT")) or "Pending",
-        })
-
-    history = read_csv_df(HISTORY_PATH)
-    graded = history[history["result"].astype(str).str.upper().isin({"WIN", "LOSS"})].copy() if not history.empty and "result" in history.columns else pd.DataFrame()
-    recent_hit_rate = None
-    if not graded.empty:
-        recent = graded.tail(min(len(graded), 15))
-        wins = int((recent["result"].astype(str).str.upper() == "WIN").sum())
-        total = int(recent["result"].astype(str).str.upper().isin({"WIN", "LOSS"}).sum())
-        recent_hit_rate = (wins / total) if total else None
-
-    return {
-        "records": rows,
-        "source_path": str(source_path),
-        "last_updated": file_timestamp(source_path),
-        "plays_shown": len(rows),
-        "recent_hit_rate": recent_hit_rate,
-        "banner": "Showing the latest available published top-play board." if using_fallback else "",
-    }
-
-
-def summarize_nba_window(history_df, days):
-    if history_df.empty or "date" not in history_df.columns or "result" not in history_df.columns:
-        return {"record": "0-0", "win_rate": None}
-    cutoff = today_et() - timedelta(days=days - 1)
-    work = history_df.copy()
-    work["parsed_date"] = pd.to_datetime(work["date"], errors="coerce").dt.date
-    work = work[work["parsed_date"].notna() & (work["parsed_date"] >= cutoff)]
-    graded = work[work["result"].astype(str).str.upper().isin({"WIN", "LOSS"})].copy()
-    wins = int((graded["result"].astype(str).str.upper() == "WIN").sum())
-    losses = int((graded["result"].astype(str).str.upper() == "LOSS").sum())
-    total = wins + losses
-    return {
-        "record": f"{wins}-{losses}",
-        "win_rate": (wins / total) if total else None,
-    }
-
-
-def build_nba_record_board():
-    history = read_csv_df(HISTORY_PATH)
-    daily = read_csv_df(RECORD_SUMMARY_PATH)
-    graded = history[history["result"].astype(str).str.upper().isin({"WIN", "LOSS", "PUSH"})].copy() if not history.empty and "result" in history.columns else pd.DataFrame()
-
-    wins = int((graded["result"].astype(str).str.upper() == "WIN").sum()) if not graded.empty else 0
-    losses = int((graded["result"].astype(str).str.upper() == "LOSS").sum()) if not graded.empty else 0
-    pushes = int((graded["result"].astype(str).str.upper() == "PUSH").sum()) if not graded.empty else 0
-    decisive_total = wins + losses
-    recent7 = summarize_nba_window(history, 7)
-    recent14 = summarize_nba_window(history, 14)
-    recent30 = summarize_nba_window(history, 30)
-
-    daily_rows = []
-    if not daily.empty:
-        work = daily.copy()
-        work["parsed_date"] = pd.to_datetime(work["date"], errors="coerce")
-        work = work.sort_values("parsed_date", ascending=False, kind="stable")
-        for _, raw in work.iterrows():
-            wins_value = safe_int(raw.get("wins") if raw.get("wins") is not None else raw.get("WIN"))
-            losses_value = safe_int(raw.get("losses") if raw.get("losses") is not None else raw.get("LOSS"))
-            total_value = safe_int(raw.get("total"), default=wins_value + losses_value)
-            daily_rows.append({
-                "date": normalize_text(raw.get("date")),
-                "wins": wins_value,
-                "losses": losses_value,
-                "total": total_value,
-                "win_rate": safe_float(raw.get("win_pct")),
-            })
-
-    recent_results = []
-    if not graded.empty:
-        work = graded.copy()
-        work["parsed_date"] = pd.to_datetime(work["date"], errors="coerce")
-        work = work.sort_values(["parsed_date"], ascending=False, kind="stable")
-        for _, raw in work.head(12).iterrows():
-            recent_results.append({
-                "date": normalize_text(raw.get("date")),
-                "player": normalize_text(raw.get("player")),
-                "team": normalize_text(raw.get("team")).upper(),
-                "stat": normalize_text(raw.get("raw_stat") or raw.get("stat")),
-                "bet": normalize_text(raw.get("bet")),
-                "projection": safe_float(raw.get("projection")),
-                "actual": safe_float(raw.get("actual")),
-                "result": grade_result_label(raw.get("result")),
-            })
-
-    last_updated = max(filter(None, [file_timestamp(HISTORY_PATH), file_timestamp(RECORD_SUMMARY_PATH)]), default=None)
-    return {
-        "summary": {
-            "wins": wins,
-            "losses": losses,
-            "pushes": pushes,
-            "win_rate": (wins / decisive_total) if decisive_total else None,
-            "recent7": recent7,
-            "recent14": recent14,
-            "recent30": recent30,
-        },
-        "records": daily_rows,
-        "recent_results": recent_results,
-        "source_path": str(Path(RECORD_SUMMARY_PATH)),
-        "last_updated": last_updated,
-        "plays_tracked": len(graded),
-    }
-
-
 def read_nba_summary():
     best_bets = records_from_df(read_csv_df(BEST_BETS_OUTPUT_PATH))
-    projections = build_nba_projection_records()
+    projections = projection_view_records()
     record = read_csv_df(RECORD_SUMMARY_PATH)
     latest_record = records_from_df(record.tail(1))
     return {
@@ -2162,40 +1147,6 @@ def read_ufc_summary():
     }
 
 
-def render_ufc_finish_breakdown(fight):
-    method_probabilities = fight.get("method_probabilities") if isinstance(fight, dict) else {}
-    if not isinstance(method_probabilities, dict):
-        method_probabilities = {}
-
-    items = [
-        ("Decision", method_probabilities.get("decision_pct")),
-        ("KO / TKO", method_probabilities.get("ko_tko_pct")),
-        ("Submission", method_probabilities.get("submission_pct")),
-        ("Inside Distance", method_probabilities.get("inside_distance_pct")),
-    ]
-    cells = []
-    for label, value in items:
-        if safe_float(value) is None:
-            continue
-        cells.append(
-            "<div class='ufc-finish-cell'>"
-            f"<span>{escape(label)}</span>"
-            f"<strong>{escape(pct_label(value))}</strong>"
-            "</div>"
-        )
-
-    if not cells:
-        return ""
-
-    return (
-        "<div class='ufc-finish-block'>"
-        "<div class='ufc-finish-title'>How The Fight Ends</div>"
-        "<div class='ufc-finish-grid'>"
-        + "".join(cells)
-        + "</div></div>"
-    )
-
-
 def read_mlb_summary():
     best_bets = load_mlb_best_bets()
     pitchers = load_mlb_pitcher_board()
@@ -2210,16 +1161,11 @@ def read_mlb_summary():
 
 
 def pga_available_rounds():
-    publish_state = read_json(PGA_PUBLISH_STATE_PATH)
-    rounds = publish_state.get("available_rounds", [])
-    if isinstance(rounds, list):
-        return sorted({round_number for round_number in (safe_int(value) for value in rounds) if round_number})
-    return []
-
-
-def pga_published_round():
-    publish_state = read_json(PGA_PUBLISH_STATE_PATH)
-    return safe_int(publish_state.get("selected_round"), default=0) or None
+    rounds = []
+    for round_number in range(1, 5):
+        if (PGA_OUTPUT_DIR / f"best_bets_R{round_number}.json").exists():
+            rounds.append(round_number)
+    return sorted(rounds)
 
 
 def normalize_pga_best_bet_record(item, fallback_round=None):
@@ -2246,124 +1192,35 @@ def normalize_pga_best_bet_record(item, fallback_round=None):
     }
 
 
-def normalize_pga_available_prop(item, fallback_round=None):
-    prop_type_raw = normalize_text(item.get("prop_type")).strip()
-    prop_type_key = prop_type_raw.lower().replace(" ", "_")
-    if prop_type_key in PGA_INVALID_PROP_TYPES:
-        return None
-    line_value = safe_float(item.get("line_value"))
-    over_payout = safe_float(item.get("over_payout"))
-    under_payout = safe_float(item.get("under_payout"))
-    if line_value is None:
-        return None
-    return {
-        "golfer_name": normalize_text(item.get("golfer_name")),
-        "prop_type": prop_type_raw.replace("_", " ").title(),
-        "bet_direction": normalize_text(item.get("bet_direction")) or "Available",
-        "line_value": line_value,
-        "sim_value": None,
-        "confidence": None,
-        "payout": None,
-        "over_payout": over_payout,
-        "under_payout": under_payout,
-        "round_number": safe_int(item.get("round_number"), default=fallback_round or 0) or fallback_round,
-        "is_available_prop": True,
-    }
-
-
-def load_pga_available_props(round_number=None):
-    if not PGA_PROCESSED_ODDS_DIR.exists():
-        return []
-    leaderboard_df = read_csv_df(PGA_RESULTS_PATH)
-    if leaderboard_df.empty:
-        return []
-    sim_lookup = {}
-    for _, raw in leaderboard_df.iterrows():
-        golfer_name = normalize_text(raw.get("golfer_name"))
-        if not golfer_name:
-            continue
-        sim_lookup[golfer_name.lower()] = {
-            "avg_round_score": safe_float(raw.get("avg_round_score")),
-            "avg_birdies": safe_float(raw.get("avg_birdies")),
-        }
-    candidates = []
-    if round_number is not None:
-        candidates.extend(sorted(PGA_PROCESSED_ODDS_DIR.glob(f"pga_props_*_R{round_number}.json")))
-    candidates.extend(sorted(PGA_PROCESSED_ODDS_DIR.glob("pga_props_*.json")))
-    seen_paths = set()
-    for path in reversed(candidates):
-        if path in seen_paths:
-            continue
-        seen_paths.add(path)
-        payload = read_json(path)
-        prop_bets = payload.get("prop_bets", []) if isinstance(payload, dict) else []
-        records = []
-        for item in prop_bets:
-            record = normalize_pga_available_prop(item, fallback_round=round_number)
-            if not record:
-                continue
-            sim_data = sim_lookup.get(normalize_text(record.get("golfer_name")).lower(), {})
-            prop_type = normalize_text(record.get("prop_type")).lower()
-            sim_value = None
-            if prop_type == "Total Score".lower():
-                avg_round_score = sim_data.get("avg_round_score")
-                sim_value = avg_round_score + 72 if avg_round_score is not None else None
-            elif prop_type == "Birdies Or Better".lower():
-                sim_value = sim_data.get("avg_birdies")
-            if sim_value is None:
-                continue
-            edge = round(sim_value - record["line_value"], 2)
-            direction = "Over" if edge > 0 else "Under"
-            confidence_score = abs(edge)
-            confidence = "High" if confidence_score >= 1.0 else "Medium" if confidence_score >= 0.5 else "Low"
-            records.append({
-                "prop": f"{record['golfer_name']} {direction} {metric_label(record['line_value'])} {record['prop_type']}",
-                "confidence": confidence,
-                "_confidence_score": confidence_score,
-                "_prop": record["prop_type"],
-            })
-        if records:
-            records.sort(key=lambda item: (item["_confidence_score"], item["prop"]), reverse=True)
-            return records[:20]
-    return []
-
-
 def load_pga_best_bets(round_number=None, round_only=False):
     available_rounds = pga_available_rounds()
-    published_round = pga_published_round()
-    selected_round = round_number if round_number in available_rounds else published_round
-    payload = read_json(PGA_PUBLISHED_BEST_BETS_PATH)
+    selected_round = round_number if round_number in available_rounds else (max(available_rounds) if available_rounds else None)
+    candidates = []
+    if selected_round is not None:
+        candidates.append((PGA_OUTPUT_DIR / f"best_bets_R{selected_round}.json", selected_round))
+    if not round_only:
+        candidates.append((PGA_OUTPUT_DIR / "best_bets.json", None))
 
-    if isinstance(payload, list) and payload:
-        records = [record for record in (normalize_pga_best_bet_record(item, fallback_round=published_round) for item in payload) if record]
-        if records:
+    for path, fallback_round in candidates:
+        payload = read_json(path)
+        if isinstance(payload, list) and payload:
+            records = [record for record in (normalize_pga_best_bet_record(item, fallback_round=fallback_round) for item in payload) if record]
+            if not records:
+                continue
             return {
                 "records": records,
-                "source_path": str(PGA_PUBLISHED_BEST_BETS_PATH),
-                "last_updated": file_timestamp(PGA_PUBLISHED_BEST_BETS_PATH),
-                "selected_round": published_round,
-                "is_round_specific": published_round is not None,
-                "is_available_props": False,
+                "source_path": str(path),
+                "last_updated": file_timestamp(path),
+                "selected_round": selected_round if fallback_round is not None else None,
+                "is_round_specific": fallback_round is not None,
             }
-
-    empty_source = str(PGA_PUBLISHED_BEST_BETS_PATH)
-    fallback_props = load_pga_available_props(selected_round)
-    if fallback_props:
-        return {
-            "records": fallback_props,
-            "source_path": empty_source,
-            "last_updated": None,
-            "selected_round": selected_round,
-            "is_round_specific": False,
-            "is_available_props": True,
-        }
+    empty_source = str(candidates[0][0]) if candidates else str(PGA_OUTPUT_DIR / "best_bets_R1.json")
     return {
         "records": [],
         "source_path": empty_source,
         "last_updated": None,
         "selected_round": selected_round,
         "is_round_specific": False,
-        "is_available_props": False,
     }
 
 
@@ -2399,10 +1256,8 @@ def load_pga_leaderboard():
 def load_pga_summary(round_number=None):
     metadata = read_json(PGA_TOURNAMENT_METADATA_PATH)
     config = read_json(PGA_CONFIG_PATH)
-    publish_state = read_json(PGA_PUBLISH_STATE_PATH)
     available_rounds = pga_available_rounds()
-    published_round = pga_published_round()
-    selected_round = round_number if round_number in available_rounds else published_round
+    selected_round = round_number if round_number in available_rounds else (max(available_rounds) if available_rounds else None)
     best_bets = load_pga_best_bets(selected_round)
     round_best_bets = load_pga_best_bets(selected_round, round_only=True)
     leaderboard = load_pga_leaderboard()
@@ -2419,30 +1274,8 @@ def load_pga_summary(round_number=None):
         "leaderboard": leaderboard,
         "available_rounds": available_rounds,
         "selected_round": selected_round,
-        "published_round": published_round,
-        "publish_state": publish_state,
         "favorite": favorite,
         "top_bet": top_bet,
-    }
-
-
-def pga_system_status():
-    paths = {
-        "PGA_BASE_DIR": PGA_BASE_DIR,
-        "PGA_OUTPUT_DIR": PGA_OUTPUT_DIR,
-        "PGA_DATA_DIR": PGA_DATA_DIR,
-        "PGA_TOURNAMENT_METADATA_PATH": PGA_TOURNAMENT_METADATA_PATH,
-        "PGA_RESULTS_PATH": PGA_RESULTS_PATH,
-        "PGA_PUBLISHED_BEST_BETS_PATH": PGA_PUBLISHED_BEST_BETS_PATH,
-        "PGA_PUBLISH_STATE_PATH": PGA_PUBLISH_STATE_PATH,
-        "PGA_PROCESSED_ODDS_DIR": PGA_PROCESSED_ODDS_DIR,
-    }
-    return {
-        "ok": True,
-        "paths": {key: str(path) for key, path in paths.items()},
-        "exists": {key: Path(path).exists() for key, path in paths.items()},
-        "publish_state": read_json(PGA_PUBLISH_STATE_PATH),
-        "tournament_metadata": read_json(PGA_TOURNAMENT_METADATA_PATH),
     }
 
 
@@ -2461,7 +1294,7 @@ def render_footer():
         "<div class='footer-shell'>"
         "<div class='footer-brand'>"
         "<img class='footer-logo' src='/brand/logo.png' alt='EdgeRanked SportsAI logo'>"
-        "<div><span>EdgeRankedSportsAI</span><div class='footer-note'>Premium memberships coming soon</div></div>"
+        "<div><span>EdgeRanked<span class='brand-accent'>SportsAI</span></span><div class='footer-note'>Premium memberships coming soon</div></div>"
         "</div>"
         "<div class='footer-links'>"
         "<a href='/about'>About</a>"
@@ -2639,268 +1472,6 @@ def render_home_mlb_featured_panel(rows):
     )
 
 
-def render_mlb_confidence_badge(value):
-    tier = confidence_level(value)
-    label = {"High": "Elite", "Medium": "Strong", "Low": "Live"}.get(tier, "Live")
-    return f"<span class='badge mlb-confidence-badge badge-{tier.lower()}'>{escape(label)}</span>"
-
-
-def render_mlb_projection_table(title, subtitle, rows, scope_id, entity_label="Player", include_lean=True, include_search=False, extra_columns=None, initial_limit=30, default_stat=None, min_team_rows=3):
-    if not rows:
-        return render_empty_state(
-            title,
-            f"No {title.lower()} are currently available.",
-            "The latest MLB projection files are still being generated. Check back shortly.",
-        )
-    extra_columns = extra_columns or []
-
-    team_options = sorted({normalize_text(row.get("team")).upper() for row in rows if normalize_text(row.get("team"))})
-    stat_options = sorted({normalize_text(row.get("stat")) for row in rows if normalize_text(row.get("stat"))})
-    sort_options = [
-        ("projection", "Highest Projection"),
-        ("edge", "Highest Edge"),
-        ("confidence", "Confidence"),
-        ("player", entity_label),
-        ("team", "Team"),
-        ("stat", "Stat"),
-    ]
-    team_select = "".join(f"<option value='{escape(team)}'>{escape(team)}</option>" for team in team_options)
-    stat_select = "".join(f"<option value='{escape(stat)}'>{escape(stat)}</option>" for stat in stat_options)
-    sort_select = "".join(f"<option value='{escape(value)}'>{escape(label)}</option>" for value, label in sort_options)
-
-    body_rows = []
-    for row in rows:
-        player = normalize_text(row.get("player"))
-        team = normalize_text(row.get("team")).upper()
-        team_key = "".join(ch for ch in team.lower() if ch.isalnum())
-        opponent = mlb_clean_text(row.get("opponent"), fallback="Matchup pending")
-        stat = normalize_text(row.get("stat"))
-        projection = safe_float(row.get("projection"))
-        line = safe_float(row.get("line"))
-        edge = safe_float(row.get("edge"))
-        confidence = normalize_text(row.get("confidence")) or "Low"
-        lean = normalize_text(row.get("lean"))
-        cells = [
-            f"<td data-label='{escape(entity_label)}'><strong class='mlb-player-name'>{escape(player or entity_label)}</strong></td>",
-            f"<td data-label='Team'>{escape(team or '—')}</td>",
-            f"<td data-label='Opponent'>{escape(opponent)}</td>",
-            f"<td data-label='Stat'>{escape(stat or 'N/A')}</td>",
-            f"<td data-label='Projection'><strong class='mlb-projection-value'>{escape(normalize_text(row.get('projection_display')) or metric_label(projection))}</strong></td>",
-        ]
-        for label, key, render_type in extra_columns:
-            raw_value = row.get(key)
-            if render_type == "pct":
-                display_value = pct_label(raw_value)
-            elif render_type == "num":
-                display_value = metric_label(raw_value)
-            else:
-                display_value = normalize_text(raw_value, "n/a")
-            cells.append(f"<td data-label='{escape(label)}'>{escape(display_value)}</td>")
-        cells.append(f"<td data-label='Confidence'>{render_mlb_confidence_badge(confidence)}</td>")
-        if include_lean:
-            cells.append(f"<td data-label='Lean'><span class='mlb-lean-pill'>{escape(lean or 'Lean')}</span></td>")
-        body_rows.append(
-            "<tr "
-            f"data-player='{escape(player.lower())}' "
-            f"data-team='{escape(team)}' "
-            f"data-team-key='{escape(team_key)}' "
-            f"data-stat='{escape(stat.lower())}' "
-            f"data-projection='{safe_float(row.get('sort_projection'), default=-9999)}' "
-            f"data-edge='{safe_float(row.get('sort_edge'), default=0)}' "
-            f"data-confidence='{safe_float(row.get('sort_confidence'), default=0)}'>"
-            + "".join(cells)
-            + "</tr>"
-        )
-
-    lean_header = "<th>Lean</th>" if include_lean else ""
-    extra_headers = "".join(f"<th>{escape(label)}</th>" for label, _, _ in extra_columns)
-    return (
-        "<section class='panel mlb-board-panel'>"
-        f"<div class='panel-head'><div><div class='eyebrow'>MLB</div><h2>{escape(title)}</h2></div>"
-        f"<p class='muted'>{escape(subtitle)}</p></div>"
-        "<div class='filter-toolbar'>"
-        + (
-            f"<label class='filter-field'><span>Search {escape(entity_label.lower())}</span><input id='{escape(scope_id)}-search' type='search' placeholder='Search by name'></label>"
-            if include_search else ""
-        )
-        + f"<label class='filter-field'><span>Team</span><select id='{escape(scope_id)}-team'><option value='ALL'>All Teams</option>{team_select}</select></label>"
-        f"<label class='filter-field'><span>Stat</span><select id='{escape(scope_id)}-stat'><option value='ALL'>All Stats</option>{stat_select}</select></label>"
-        f"<label class='filter-field'><span>Sort By</span><select id='{escape(scope_id)}-sort'>{sort_select}</select></label>"
-        f"<label class='filter-field'><span>Direction</span><select id='{escape(scope_id)}-direction'><option value='desc'>High to Low</option><option value='asc'>Low to High</option></select></label>"
-        "</div>"
-        f"<p class='muted projection-summary' id='{escape(scope_id)}-summary'>Showing {len(rows)} rows.</p>"
-        f"<div class='table-shell mlb-table-shell'><table class='mlb-projection-table' id='{escape(scope_id)}-table'><thead><tr>"
-        f"<th>{escape(entity_label)}</th><th>Team</th><th>Opponent</th><th>Stat</th><th>Projection</th>{extra_headers}<th>Confidence</th>{lean_header}"
-        "</tr></thead><tbody>"
-        + "".join(body_rows)
-        + "</tbody></table></div></section>"
-        + f"""
-<script>
-(() => {{
-  const table = document.getElementById("{scope_id}-table");
-  if (!table) return;
-  const tbody = table.querySelector("tbody");
-  const rows = Array.from(tbody.querySelectorAll("tr"));
-  const search = document.getElementById("{scope_id}-search");
-  const team = document.getElementById("{scope_id}-team");
-  const stat = document.getElementById("{scope_id}-stat");
-  const sort = document.getElementById("{scope_id}-sort");
-  const direction = document.getElementById("{scope_id}-direction");
-  const summary = document.getElementById("{scope_id}-summary");
-  const initialLimit = {int(initial_limit)};
-  const defaultStat = {json.dumps(default_stat or "")};
-  const minTeamRows = {int(min_team_rows)};
-
-    function normalizeKey(value) {{
-      return (value || "").toString().toLowerCase().replace(/[^a-z0-9]/g, "");
-    }}
-
-    function value(row, key) {{
-      return (row.dataset[key] || "").toString();
-    }}
-
-    function numericValue(row, key) {{
-      const parsed = Number.parseFloat(value(row, key));
-      return Number.isNaN(parsed) ? -9999 : parsed;
-    }}
-
-  function apply() {{
-    const query = search ? (search.value || "").trim().toLowerCase() : "";
-    const teamValue = (team.value || "ALL").toUpperCase();
-    const teamKey = normalizeKey(teamValue);
-    const statValue = (stat.value || "ALL").toLowerCase();
-    const sortKey = sort.value || "projection";
-    const dir = direction.value === "asc" ? 1 : -1;
-
-    const matched = rows.filter((row) => {{
-      const matchesQuery = !query || value(row, "player").includes(query);
-      const rowTeam = value(row, "team").toUpperCase();
-      const rowTeamKey = value(row, "teamKey") || normalizeKey(rowTeam);
-      const matchesTeam = teamValue === "ALL" || rowTeam === teamValue || rowTeamKey === teamKey;
-      const matchesStat = statValue === "ALL" || value(row, "stat") === statValue;
-      return matchesQuery && matchesTeam && matchesStat;
-    }});
-
-    if (teamValue !== "ALL" && statValue !== "ALL" && matched.length < minTeamRows) {{
-      const seen = new Set(matched);
-      const supplemental = rows.filter((row) => {{
-        if (seen.has(row)) return false;
-        const rowTeam = value(row, "team").toUpperCase();
-        const rowTeamKey = value(row, "teamKey") || normalizeKey(rowTeam);
-        const matchesTeam = rowTeam === teamValue || rowTeamKey === teamKey;
-        const matchesQuery = !query || value(row, "player").includes(query);
-        return matchesTeam && matchesQuery;
-      }});
-      for (const row of supplemental) {{
-        matched.push(row);
-        if (matched.length >= minTeamRows) break;
-      }}
-    }}
-
-    matched.sort((a, b) => {{
-      if (sortKey === "player" || sortKey === "team" || sortKey === "stat") {{
-        const primary = value(a, sortKey).localeCompare(value(b, sortKey)) * dir;
-        if (primary !== 0) return primary;
-        return value(a, "player").localeCompare(value(b, "player"));
-      }}
-      const primary = (numericValue(a, sortKey) - numericValue(b, sortKey)) * dir;
-      if (primary !== 0) return primary;
-      return value(a, "player").localeCompare(value(b, "player"));
-    }});
-
-    const limitApplies = !query && teamValue === "ALL" && statValue === "ALL" && initialLimit > 0;
-    const visible = limitApplies ? matched.slice(0, initialLimit) : matched;
-
-    rows.forEach((row) => {{
-      const show = visible.includes(row);
-      row.hidden = !show;
-      row.style.display = show ? "" : "none";
-    }});
-
-    visible.forEach((row) => tbody.appendChild(row));
-
-    const parts = [limitApplies ? `Showing ${{visible.length}} of ${{matched.length}} rows` : `Showing ${{visible.length}} rows`];
-    if (query) parts.push(`search: ${{query}}`);
-    if (teamValue !== "ALL") parts.push(`team: ${{teamValue}}`);
-    if (statValue !== "ALL" && stat.selectedIndex >= 0) parts.push(`stat: ${{stat.options[stat.selectedIndex].text}}`);
-    if (sort.selectedIndex >= 0) parts.push(`sorted by ${{sort.options[sort.selectedIndex].text.toLowerCase()}}`);
-    if (limitApplies) parts.push("top rows shown by default");
-    summary.textContent = parts.join(" | ");
-  }}
-
-  [search, team, stat, sort, direction].filter(Boolean).forEach((control) => {{
-    control.addEventListener("input", apply);
-    control.addEventListener("change", apply);
-  }});
-
-  if (defaultStat && stat) {{
-    const option = Array.from(stat.options).find((item) => item.text.toLowerCase() === defaultStat.toLowerCase() || item.value.toLowerCase() === defaultStat.toLowerCase());
-    if (option) {{
-      stat.value = option.value;
-    }}
-  }}
-
-  apply();
-}})();
-</script>
-	"""
-    )
-
-
-def mlb_hitter_realism_columns(rows):
-    if not rows:
-        return []
-    return [
-        ("Blend", "outcome_blend", "pct"),
-        ("Shadow", "outcome_shadow", "pct"),
-        ("Current", "outcome_current", "pct"),
-        ("Realism", "realism_source", "text"),
-    ]
-
-
-def render_mlb_projection_snapshot(hitter_rows, pitcher_rows):
-    broad_hitter_count = len({normalize_text(row.get("player")) for row in hitter_rows if normalize_text(row.get("player"))})
-    pitcher_count = len({normalize_text(row.get("player")) for row in pitcher_rows if normalize_text(row.get("player"))})
-    stat_mix = len({normalize_text(row.get("stat")) for row in hitter_rows if normalize_text(row.get("stat"))})
-    top_projection = max((safe_float(row.get("projection"), default=0) for row in hitter_rows), default=0)
-    return render_stat_cards([
-        ("Hitters Modeled", broad_hitter_count, "Valid hitter projections currently surfaced from today's MLB export."),
-        ("Pitchers Modeled", pitcher_count, "Pitcher projection rows currently available on the live board."),
-        ("Hitter Stats", stat_mix, "Distinct hitter stat markets currently exposed on the page."),
-        ("Top Hitter Projection", pct_label(top_projection), "Highest active hitter projection currently displayed on the slate."),
-    ], compact=True)
-
-
-def render_mlb_compact_top_plays(rows):
-    compact_rows = []
-    for row in rows[:6]:
-        compact_rows.append({
-            "player": normalize_text(row.get("player")),
-            "stat_type": normalize_text(row.get("stat_type")),
-            "projection": safe_float(row.get("projection")),
-            "sportsbook_line": safe_float(row.get("sportsbook_line")),
-            "edge": safe_float(row.get("edge")),
-            "confidence": normalize_text(row.get("confidence")),
-            "recommended_play": normalize_text(row.get("recommended_play")),
-        })
-    return render_data_table(
-        "Top Plays Summary",
-        "A smaller edge snapshot kept below the full projection boards.",
-        compact_rows,
-        [
-            ("Player", "player", "text"),
-            ("Stat", "stat_type", "text"),
-            ("Projection", "projection", "num"),
-            ("Line", "sportsbook_line", "num"),
-            ("Edge", "edge", "num"),
-            ("Confidence", "confidence", "badge"),
-            ("Play", "recommended_play", "text"),
-        ],
-        "No MLB top plays are currently available.",
-        "Today's best-bet summary is still being generated. Check back shortly.",
-    )
-
-
 def render_performance_summary(summary, title="Performance Snapshot", body="Tracked MLB performance across the full graded history."):
     cards = [
         ("Total Wins", summary.get("total_wins", 0), "All graded MLB wins tracked so far."),
@@ -2976,7 +1547,7 @@ def render_marketing_card(title, description, bullets, button_label="Join Waitli
         f"<h2>{escape(title)}</h2>"
         f"<p class='muted pricing-copy'>{escape(description)}</p>"
         "<article class='pricing-card pricing-card-featured pricing-card-single'>"
-        "<div class='pricing-name'>Join the EdgeRankedAI Waitlist</div>"
+        "<div class='pricing-name'>Join the EdgeRank AI Waitlist</div>"
         "<div class='waitlist-free-label'>Free public access is live during beta testing.</div>"
         "<ul class='pricing-list'>"
         f"{bullet_html}"
@@ -3024,7 +1595,7 @@ def build_waitlist_page(form_values=None, submit_state=None):
     body = (
         render_waitlist_status(submit_state.get("kind"), submit_state.get("message"))
         + render_marketing_card(
-            "Join the EdgeRankedAI Waitlist",
+            "Join the EdgeRank AI Waitlist",
             "Join the waitlist for early access, launch updates, and premium subscriber tools.",
             [
                 "Free public access during beta testing for NBA, MLB, PGA, and UFC dashboards",
@@ -3035,7 +1606,7 @@ def build_waitlist_page(form_values=None, submit_state=None):
         )
     )
     return render_layout(
-        "Join the EdgeRankedAI Waitlist",
+        "Join the EdgeRank AI Waitlist",
         "Join the waitlist for early access, launch updates, and premium subscriber tools.",
         body,
         "/waitlist",
@@ -3100,26 +1671,9 @@ def render_ufc_fight_cards(fights):
             "<div><span>Prop</span><strong>Win</strong></div>"
             f"<div><span>Probability</span><strong>{escape(pct_label(probability))}</strong></div>"
             "</div>"
-            f"{render_ufc_finish_breakdown(fight)}"
             "</article>"
         )
     return "<section class='panel'><div class='panel-head'><div><div class='eyebrow'>Fight Card</div><h2>Current UFC card</h2></div><p class='muted'>Simple model probabilities for the current published card.</p></div><div class='play-grid-shell'>" + "".join(cards) + "</div></section>"
-
-
-def build_ufc_max_round_lookup():
-    payload = read_json(UFC_PAGE_SPECS["fights"]["path"])
-    fights = payload.get("fights", []) if isinstance(payload, dict) else []
-    lookup = {}
-    for fight in fights:
-        if not isinstance(fight, dict):
-            continue
-        fight_id = normalize_text(fight.get("fight_id"))
-        if not fight_id:
-            continue
-        card_label = normalize_text(fight.get("card_label")).lower()
-        max_rounds = 5 if card_label == "main event" else 3
-        lookup[fight_id] = max_rounds
-    return lookup
 
 
 def ufc_prop_fighter_name(row):
@@ -3150,36 +1704,21 @@ def ufc_prop_label(row):
 
 
 def render_ufc_props_table(rows):
-    preferred = []
-    fallback = []
-    max_round_lookup = build_ufc_max_round_lookup()
+    cleaned = []
     for row in rows:
-        source = normalize_text(row.get("source")).lower()
-        market_type = normalize_text(row.get("market_type")).lower()
-        line_value = safe_float(row.get("line"))
-        if market_type == "total_rounds" and line_value is not None:
-            fight_id = normalize_text(row.get("fight_id"))
-            max_rounds = max_round_lookup.get(fight_id, 3)
-            if line_value > max_rounds:
-                continue
-        normalized = {
+        cleaned.append({
             "fighter_name": ufc_prop_fighter_name(row),
             "prop": ufc_prop_label(row),
             "probability": row.get("probability"),
-        }
-        if "prize" in source:
-            preferred.append(normalized)
-        else:
-            fallback.append(normalized)
-    cleaned = preferred or fallback
+        })
     cleaned.sort(key=lambda item: safe_float(item.get("probability")) or 0, reverse=True)
     return render_data_table(
         "UFC Props",
-        "Published PrizePicks props are shown when available. Simulation props are used as a fallback.",
+        "Published UFC props with a cleaner public-facing layout.",
         cleaned,
         [("Fighter Name", "fighter_name", "text"), ("Prop", "prop", "text"), ("Probability", "probability", "pct")],
-        "No UFC PrizePicks props are currently available.",
-        "The current UFC export does not include any live PrizePicks or simulation props yet.",
+        "No UFC props are currently available.",
+        "The latest UFC prop export has not been loaded yet.",
     )
 
 
@@ -3190,101 +1729,96 @@ def render_path_panel(path):
 def render_nba_projection_table(rows):
     if not rows:
         return render_empty_state(
-            "Projection Explorer",
+            "Player Projections",
             "No NBA projections are currently available.",
             "The current NBA projection file has not been loaded yet.",
         )
 
-    stat_options = sorted({row["stat_key"]: row["stat_label"] for row in rows}.items(), key=lambda item: item[1])
-    team_options = sorted({row["team"] for row in rows if row["team"]})
-    header_cells = [
-        "<th>Player</th>",
-        "<th>Stat</th>",
-        "<th>Projection</th>",
-        "<th>Probability</th>",
-        "<th>Minutes</th>",
-        "<th>Context</th>",
-    ]
+    stat_labels = {
+        "PTS": "Points",
+        "REB": "Rebounds",
+        "AST": "Assists",
+        "3PM": "3PM",
+        "STL": "Steals",
+        "BLK": "Blocks",
+        "PRA": "PRA",
+        "RA": "RA",
+        "PA": "PA",
+        "PR": "PR",
+        "SB": "Stocks",
+        "FANTASY": "Fantasy",
+        "MIN": "Minutes",
+        "TOV": "Turnovers",
+    }
+    all_columns = ["PLAYER", "TEAM", "MATCHUP", "CONFIDENCE", "MIN", "PTS", "REB", "AST", "STL", "BLK", "3PM", "TOV", "PRA", "PR", "PA", "RA", "SB", "FANTASY"]
+    available_columns = [column for column in all_columns if column in rows[0]]
+    focusable_stats = [column for column in ["PTS", "REB", "AST", "3PM", "STL", "BLK", "PRA", "RA", "PA", "PR", "SB", "FANTASY", "MIN", "TOV"] if column in available_columns]
+    team_options = sorted({normalize_text(row.get("TEAM")).upper() for row in rows if normalize_text(row.get("TEAM"))})
+
+    header_cells = []
+    for column in available_columns:
+        header_class = "projection-stat-col" if column in focusable_stats else ""
+        stat_attr = f" data-stat-key='{escape(column)}'" if column in focusable_stats else ""
+        header_cells.append(f"<th class='{header_class}' data-key='{escape(column)}'{stat_attr}>{escape(stat_labels.get(column, column.title()))}</th>")
 
     body_rows = []
     for row in rows:
-        probability = pct_label(row["threshold_probability"]) if row["threshold_probability"] is not None else "n/a"
-
+        team = normalize_text(row.get("TEAM")).upper()
+        confidence = confidence_level(row.get("CONFIDENCE"))
+        cells = []
+        for column in available_columns:
+            label = stat_labels.get(column, column.title())
+            value = row.get(column)
+            if column == "CONFIDENCE":
+                rendered = render_badge(value, "confidence")
+            elif column in focusable_stats:
+                rendered = escape(metric_label(value))
+            else:
+                rendered = escape(normalize_text(value) or "n/a")
+            cell_class = "projection-stat-col" if column in focusable_stats else ""
+            stat_attr = f" data-stat-key='{escape(column)}'" if column in focusable_stats else ""
+            raw_value = metric_label(value) if column in focusable_stats else normalize_text(value)
+            cells.append(
+                f"<td class='{cell_class}' data-label='{escape(label)}' data-key='{escape(column)}' data-raw='{escape(raw_value)}'{stat_attr}>{rendered}</td>"
+            )
         body_rows.append(
             "<tr "
-            f"data-player='{escape(row['player'].lower())}' "
-            f"data-team='{escape(row['team'])}' "
-            f"data-stat='{escape(row['stat_key'])}' "
-            f"data-matchup='{escape(row['matchup'].lower())}' "
-            f"data-opponent='{escape(row['opponent'].lower())}' "
-            f"data-projection='{row['projection'] if row['projection'] is not None else ''}' "
-            f"data-probability='{row['threshold_probability'] if row['threshold_probability'] is not None else ''}' "
-            f"data-minutes='{row['expected_minutes'] if row['expected_minutes'] is not None else ''}' "
-            f"data-confidence-rank='{row['confidence_rank']}'>"
-            + "<td data-label='Player'><div class='player-cell'><div class='player-main'>"
-            + escape(row["player"])
-            + "</div></div></td>"
-            + "<td data-label='Stat'><div class='stat-chip'>"
-            + escape(row["stat_label"])
-            + "</div></td>"
-            + "<td data-label='Projection'><div class='projection-main'>"
-            + escape(metric_label(row["projection"]))
-            + "</td>"
-            + "<td data-label='Probability'><div class='projection-main'>"
-            + escape(probability)
-            + "</div></td>"
-            + "<td data-label='Minutes'><div class='projection-main'>"
-            + escape(metric_label(row["expected_minutes"]))
-            + "</div></td>"
-            + "<td data-label='Context'>"
-            + render_badge(row["confidence"], "confidence")
-            + "</td>"
+            f"data-player='{escape(normalize_text(row.get('PLAYER')).lower())}' "
+            f"data-team='{escape(team)}' "
+            f"data-confidence='{escape(confidence)}' "
+            f"data-confidence-rank='{confidence_rank(confidence)}'>"
+            + "".join(cells)
             + "</tr>"
         )
 
     team_select = "".join(f"<option value='{escape(team)}'>{escape(team)}</option>" for team in team_options)
-    stat_select = "".join(f"<option value='{escape(key)}'>{escape(label)}</option>" for key, label in stat_options)
-    sort_select = "".join(
-        f"<option value='{escape(value)}'>{escape(label)}</option>"
-        for value, label in [
-            ("projection", "Projection"),
-            ("probability", "Probability"),
-            ("confidence", "Confidence"),
-            ("minutes", "Minutes"),
-            ("player", "Player"),
-            ("team", "Team"),
-        ]
-    )
-
-    total_players = len({row["player"] for row in rows})
-    total_teams = len({row["team"] for row in rows})
-    total_stats = len({row["stat_key"] for row in rows})
+    stat_select = "".join(f"<option value='{escape(stat)}'>{escape(stat_labels.get(stat, stat))}</option>" for stat in focusable_stats)
+    sort_options = [
+        ("PROJECTION", "Projection"),
+        ("PLAYER", "Player Name"),
+        ("TEAM", "Team"),
+        ("CONFIDENCE", "Confidence"),
+    ]
+    sort_select = "".join(f"<option value='{escape(value)}'>{escape(label)}</option>" for value, label in sort_options)
 
     return (
         "<section class='panel'>"
-        "<div class='panel-head'><div><div class='eyebrow'>Projection Explorer</div><h2>Full-slate player intelligence</h2></div>"
-        "<p class='muted'>This board now runs off the full NBA projection source, not the reduced app-view subset. Team filtering shows every projected player available in the underlying slate file.</p></div>"
-        + render_stat_cards([
-            ("Modeled Players", str(total_players), "Players currently included in the full simulation output."),
-            ("Projection Rows", str(len(rows)), "Player-stat combinations available for browsing and sorting."),
-            ("Teams Live", str(total_teams), "Teams active in the current slate file."),
-            ("Stats Covered", str(total_stats), "Projection markets available across the explorer."),
-        ], compact=True)
-        + "<div class='filter-toolbar five-up'>"
+        "<div class='panel-head'><div><div class='eyebrow'>NBA</div><h2>Player Projections</h2></div>"
+        "<p class='muted'>Sort by player, team, confidence, or the active stat projection. Use Stat Focus to spotlight a market without changing the underlying model output.</p></div>"
+        "<div class='filter-toolbar'>"
         "<label class='filter-field'><span>Team</span><select id='nba-team-filter'><option value='ALL'>All Teams</option>"
         + team_select
         + "</select></label>"
-        "<label class='filter-field'><span>Stat</span><select id='nba-stat-filter'><option value='ALL'>All Stats</option>"
+        "<label class='filter-field'><span>Stat Focus</span><select id='nba-stat-filter'><option value='ALL'>All Stats</option>"
         + stat_select
         + "</select></label>"
         "<label class='filter-field'><span>Sort By</span><select id='nba-sort-field'>"
         + sort_select
         + "</select></label>"
         "<label class='filter-field'><span>Direction</span><select id='nba-sort-direction'><option value='desc'>High to Low</option><option value='asc'>Low to High</option></select></label>"
-        "<div class='filter-field'><span>Reset</span><button class='cta-btn secondary filter-reset-btn' id='nba-reset-filters' type='button'>Reset Filters</button></div>"
         "</div>"
-        f"<p class='muted projection-summary' id='nba-projection-summary'>Showing {len(rows)} rows across {total_players} players.</p>"
-        "<div class='table-shell analytics-table-shell'><table id='nba-projection-table'><thead><tr>"
+        f"<p class='muted projection-summary' id='nba-projection-summary'>Showing {len(rows)} players.</p>"
+        "<div class='table-shell'><table id='nba-projection-table'><thead><tr>"
         + "".join(header_cells)
         + "</tr></thead><tbody>"
         + "".join(body_rows)
@@ -3298,74 +1832,80 @@ def render_nba_projection_table(rows):
 
   const tbody = table.querySelector("tbody");
   const rows = Array.from(tbody.querySelectorAll("tr"));
+  const summary = document.getElementById("nba-projection-summary");
   const teamFilter = document.getElementById("nba-team-filter");
   const statFilter = document.getElementById("nba-stat-filter");
   const sortField = document.getElementById("nba-sort-field");
   const sortDirection = document.getElementById("nba-sort-direction");
-  const resetButton = document.getElementById("nba-reset-filters");
-  const summary = document.getElementById("nba-projection-summary");
   let rafId = 0;
 
+  const numericFields = new Set(["PROJECTION", "CONFIDENCE", "MIN", "PTS", "REB", "AST", "STL", "BLK", "3PM", "TOV", "PRA", "PR", "PA", "RA", "SB", "FANTASY"]);
+
+  function cellFor(row, key) {
+    return row.querySelector(`[data-key="${key}"]`);
+  }
+
+  function cellValue(row, key) {
+    const cell = cellFor(row, key);
+    if (!cell) return "";
+    return (cell.dataset.raw || cell.textContent || "").trim();
+  }
+
   function numericValue(row, key) {
-    const value = Number.parseFloat(row.dataset[key] || "");
-    return Number.isNaN(value) ? -Infinity : value;
+    if (key === "CONFIDENCE") return Number(row.dataset.confidenceRank || "0");
+    const raw = cellValue(row, key);
+    const parsed = Number.parseFloat(raw);
+    return Number.isNaN(parsed) ? -Infinity : parsed;
   }
 
-  function textValue(row, key) {
-    return (row.dataset[key] || "").toLowerCase();
+  function activeProjectionKey() {
+    return statFilter.value !== "ALL" ? statFilter.value : "FANTASY";
   }
 
-  function sortValue(row, key) {
-    if (key === "player" || key === "team") return textValue(row, key);
-    if (key === "confidence") return Number.parseFloat(row.dataset.confidenceRank || "0");
-    return numericValue(row, key);
+  function applyColumnState() {
+    const focusedStat = statFilter.value;
+    table.querySelectorAll(".projection-stat-col").forEach((cell) => {
+      const statKey = cell.dataset.statKey;
+      const isActive = focusedStat !== "ALL" && statKey === focusedStat;
+      cell.classList.toggle("stat-active", isActive);
+      cell.classList.toggle("stat-hidden", focusedStat !== "ALL" && statKey && statKey !== focusedStat);
+    });
   }
 
   function applyFiltersAndSort() {
-    const team = (teamFilter.value || "ALL").toUpperCase();
-    const stat = (statFilter.value || "ALL").toUpperCase();
-    const sortKey = sortField.value || "projection";
+    const team = teamFilter.value;
+    const sortKey = sortField.value === "PROJECTION" ? activeProjectionKey() : sortField.value;
     const direction = sortDirection.value === "asc" ? 1 : -1;
 
-    const visibleRows = rows.filter((row) => {
-      const matchesTeam = team === "ALL" || (row.dataset.team || "").toUpperCase() === team;
-      const matchesStat = stat === "ALL" || (row.dataset.stat || "").toUpperCase() === stat;
-      return matchesTeam && matchesStat;
+    const visibleRows = rows.filter((row) => team === "ALL" || row.dataset.team === team);
+    rows.forEach((row) => {
+      row.hidden = !visibleRows.includes(row);
     });
 
     visibleRows.sort((a, b) => {
-      const left = sortValue(a, sortKey);
-      const right = sortValue(b, sortKey);
-      if (typeof left === "string" || typeof right === "string") {
-        const stringDelta = String(left).localeCompare(String(right)) * direction;
-        if (stringDelta !== 0) return stringDelta;
-        return textValue(a, "player").localeCompare(textValue(b, "player"));
+      if (numericFields.has(sortField.value) || sortField.value === "PROJECTION") {
+        return (numericValue(a, sortKey) - numericValue(b, sortKey)) * direction;
       }
-      const numericDelta = (left - right) * direction;
-      if (numericDelta !== 0) return numericDelta;
-      return textValue(a, "player").localeCompare(textValue(b, "player"));
+      const aValue = (sortField.value === "CONFIDENCE" ? a.dataset.confidence : cellValue(a, sortKey)).toLowerCase();
+      const bValue = (sortField.value === "CONFIDENCE" ? b.dataset.confidence : cellValue(b, sortKey)).toLowerCase();
+      return aValue.localeCompare(bValue) * direction;
     });
 
-    rows.forEach((row) => {
-      row.hidden = true;
-      row.style.display = "none";
-    });
-    visibleRows.forEach((row) => {
-      row.hidden = false;
-      row.style.display = "";
-      tbody.appendChild(row);
-    });
+    visibleRows.forEach((row) => tbody.appendChild(row));
 
-    const playerCount = new Set(visibleRows.map((row) => row.dataset.player || "")).size;
-    const summaryBits = [`Showing ${visibleRows.length} row${visibleRows.length === 1 ? "" : "s"}`, `${playerCount} player${playerCount === 1 ? "" : "s"}`];
-    if (team !== "ALL") summaryBits.push(`team ${team}`);
-    if (stat !== "ALL" && statFilter.selectedIndex >= 0) summaryBits.push(statFilter.options[statFilter.selectedIndex].text);
-    summary.textContent = summaryBits.join(" | ");
+    const parts = [`Showing ${visibleRows.length} player${visibleRows.length === 1 ? "" : "s"}`];
+    if (team !== "ALL") parts.push(`team: ${team}`);
+    if (statFilter.value !== "ALL" && statFilter.selectedIndex >= 0) parts.push(`stat focus: ${statFilter.options[statFilter.selectedIndex].text}`);
+    if (sortField.selectedIndex >= 0) parts.push(`sorted by ${sortField.options[sortField.selectedIndex].text.toLowerCase()}`);
+    summary.textContent = parts.join(" | ");
   }
 
   function scheduleApply() {
     if (rafId) window.cancelAnimationFrame(rafId);
-    rafId = window.requestAnimationFrame(applyFiltersAndSort);
+    rafId = window.requestAnimationFrame(() => {
+      applyColumnState();
+      applyFiltersAndSort();
+    });
   }
 
   [teamFilter, statFilter, sortField, sortDirection].forEach((control) => {
@@ -3373,212 +1913,11 @@ def render_nba_projection_table(rows):
     control.addEventListener("input", scheduleApply);
   });
 
-  resetButton.addEventListener("click", () => {
-    teamFilter.value = "ALL";
-    statFilter.value = "ALL";
-    sortField.value = "projection";
-    sortDirection.value = "desc";
-    scheduleApply();
-  });
-
+  applyColumnState();
   applyFiltersAndSort();
 })();
 </script>
 """
-    )
-
-
-def render_nba_projection_snapshot(snapshot_cards):
-    if not snapshot_cards:
-        return render_empty_state(
-            "Top Projection Snapshot",
-            "No projection leaders are currently available.",
-            "Snapshot cards will populate once the latest projection file is loaded.",
-        )
-
-    cards_html = []
-    for card in snapshot_cards:
-        leader_items = []
-        for index, leader in enumerate(card["leaders"], start=1):
-            leader_items.append(
-                "<li class='leader-item'>"
-                + f"<span class='leader-rank'>{index}</span>"
-                + "<div class='leader-copy'><div class='leader-name'>"
-                + escape(leader["player"])
-                + "</div><div class='leader-meta'>"
-                + escape(leader["team"])
-                + " | "
-                + escape(metric_label(leader["projection"]))
-                + " | "
-                + escape(leader["threshold_label"])
-                + " at "
-                + escape(pct_label(leader["threshold_probability"]))
-                + "</div></div>"
-                + "</li>"
-            )
-        cards_html.append(
-            "<article class='leader-card'>"
-            + "<div class='leader-card-head'><div class='eyebrow'>Snapshot</div><h3>"
-            + escape(card["stat_label"])
-            + "</h3></div><ol class='leader-list'>"
-            + "".join(leader_items)
-            + "</ol></article>"
-        )
-
-    return (
-        "<section class='panel'>"
-        "<div class='panel-head'><div><div class='eyebrow'>Top Player Projection Snapshot</div><h2>Where the slate leads by category</h2></div>"
-        "<p class='muted'>Leaders are pulled across points, rebounds, assists, 3PM, defensive events, combo stats, fantasy output, and workload so the page feels like a true projection engine instead of a single-market board.</p></div>"
-        "<div class='leader-grid'>"
-        + "".join(cards_html)
-        + "</div></section>"
-    )
-
-
-def render_nba_best_bets_summary(board, title="Supporting Top Plays Layer", subtitle="Sportsbook-facing picks remain available, but the main focus stays on projections, value, and verified results."):
-    rows = board.get("records", [])[:4]
-    if not rows:
-        return render_empty_state(
-            title,
-            "No NBA top plays are currently available.",
-            "The supporting top-plays layer will appear once the latest board is published.",
-        )
-
-    cards = []
-    for row in rows:
-        cards.append(
-            "<article class='play-card signal-card-quiet'>"
-            + "<div class='play-top'><div><div class='play-name'>"
-            + escape(row["player"])
-            + "</div><div class='play-sub'>"
-            + escape(row["team"])
-            + " | "
-            + escape(row["matchup"])
-            + "</div></div>"
-            + render_badge(row["confidence"], "confidence")
-            + "</div>"
-            + "<div class='play-grid'>"
-            + "<div><span>Model Projection</span><strong>"
-            + escape(metric_label(row["projection"]))
-            + "</strong></div>"
-            + "<div><span>Stat</span><strong>"
-            + escape(row["stat"])
-            + "</strong></div>"
-            + "<div><span>Sportsbook Line</span><strong>"
-            + escape(metric_label(row["line"]))
-            + "</strong></div>"
-            + "<div><span>Recent Hit Rate</span><strong>"
-            + escape(pct_label(row["hit_rate"]))
-            + "</strong></div>"
-            + "</div><p class='muted'>"
-            + escape(row["bet"] or "Model signal")
-            + " | Line and pick language are shown as secondary context only."
-            + "</p></article>"
-        )
-
-    summary_caption = "n/a"
-    if board.get("recent_hit_rate") is not None:
-        summary_caption = pct_label(board["recent_hit_rate"])
-
-    return (
-        "<section class='panel'>"
-        "<div class='panel-head'><div><div class='eyebrow'>Secondary Layer</div><h2>"
-        + escape(title)
-        + "</h2></div><p class='muted'>"
-        + escape(subtitle)
-        + "</p></div>"
-        + render_stat_cards([
-            ("Top Plays Published", str(board.get("plays_shown", 0)), "Top-play rows currently available from the published board."),
-            ("Recent Graded Hit Rate", summary_caption, "Computed from the most recent graded NBA history rows."),
-            ("Last Updated", format_timestamp(board.get("last_updated")), "Timestamp of the current top-plays source file."),
-        ], compact=True)
-        + "<div class='play-grid-shell'>"
-        + "".join(cards)
-        + "</div></section>"
-    )
-
-
-def render_nba_record_panel(record_data):
-    summary = record_data.get("summary", {})
-    daily_rows = record_data.get("records", [])
-    recent_rows = record_data.get("recent_results", [])
-
-    metrics_html = render_stat_cards([
-        ("All-Time Record", f"{summary.get('wins', 0)}-{summary.get('losses', 0)}", "Verified graded outcomes across the tracked NBA history file."),
-        ("Win Rate", pct_label(summary.get("win_rate")), "Calculated from graded wins and losses only."),
-        ("Last 7 Days", summary.get("recent7", {}).get("record", "0-0"), "Recent graded record."),
-        ("Last 14 Days", summary.get("recent14", {}).get("record", "0-0"), "Mid-window accountability check."),
-        ("Last 30 Days", summary.get("recent30", {}).get("record", "0-0"), "Longer trend from the tracked history export."),
-        ("Last Updated", format_timestamp(record_data.get("last_updated")), "Freshness of the record and history backing files."),
-    ])
-
-    daily_table = render_data_table(
-        "Daily Performance Ledger",
-        "Recent day-by-day tracked NBA performance from the published record summary file.",
-        daily_rows,
-        [("Date", "date", "text"), ("Wins", "wins", "text"), ("Losses", "losses", "text"), ("Tracked", "total", "text"), ("Win Rate", "win_rate", "pct")],
-        "No NBA record data is currently available.",
-        "The latest NBA record summary file has not been loaded yet.",
-    )
-
-    recent_results_table = render_data_table(
-        "Recent Verified Results",
-        "Latest graded outcomes pulled directly from NBA bet history.",
-        recent_rows,
-        [("Date", "date", "text"), ("Player", "player", "text"), ("Team", "team", "text"), ("Stat", "stat", "text"), ("Bet", "bet", "text"), ("Projection", "projection", "num"), ("Actual", "actual", "num"), ("Result", "result", "result")],
-        "No graded NBA history rows are currently available.",
-        "Verified results will appear here once graded history exists.",
-    )
-
-    return (
-        "<section class='panel'>"
-        "<div class='panel-head'><div><div class='eyebrow'>Verified Results</div><h2>Performance as a trust driver</h2></div>"
-        "<p class='muted'>Results stay visible beside the NBA projections so the board stays accountable, current, and verifiable.</p></div>"
-        + metrics_html
-        + "</section>"
-        + daily_table
-        + recent_results_table
-    )
-
-
-def render_nba_best_bets_table(board):
-    rows = board.get("records", [])
-    if not rows:
-        return render_empty_state(
-            "NBA Top Plays",
-            "No NBA top plays are currently available.",
-            "The supporting top-plays board has not been generated yet.",
-        )
-
-    table_rows = []
-    for row in rows:
-        table_rows.append({
-            "player": row["player"],
-            "team": row["team"],
-            "matchup": row["matchup"],
-            "stat": row["stat"],
-            "projection": row["projection"],
-            "line": row["line"],
-            "edge": row["edge"],
-            "hit_rate": row["hit_rate"],
-            "confidence": row["confidence"],
-            "result": row["result"],
-        })
-
-    return (
-        "<section class='panel'>"
-        "<div class='panel-head'><div><div class='eyebrow'>Top Plays</div><h2>Highest-Value Lines</h2></div>"
-        "<p class='muted'>This page displays the lines with the highest current value based on the model's pricing and confidence framework.</p></div>"
-        + (f"<section class='notice-banner'>{escape(board.get('banner'))}</section>" if board.get('banner') else "")
-        + "</section>"
-        + render_data_table(
-            "NBA Top Plays",
-            "Projection remains primary, with confidence and recent hit rate ahead of line context.",
-            table_rows,
-            [("Player", "player", "text"), ("Team", "team", "text"), ("Matchup", "matchup", "text"), ("Stat", "stat", "text"), ("Projection", "projection", "num"), ("Confidence", "confidence", "badge"), ("Hit Rate", "hit_rate", "pct"), ("Line", "line", "num"), ("Edge", "edge", "num"), ("Result", "result", "result")],
-            "No NBA top plays are currently available.",
-            "The current NBA top-plays board has not been generated yet.",
-        )
     )
 
 
@@ -4053,45 +2392,6 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       line-height: 1.2;
       color: #fff;
     }}
-    .ufc-finish-block {{
-      margin-top: 6px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(30, 41, 59, 0.85);
-    }}
-    .ufc-finish-title {{
-      margin-bottom: 10px;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }}
-    .ufc-finish-grid {{
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }}
-    .ufc-finish-cell {{
-      padding: 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(59, 130, 246, 0.16);
-      background: rgba(10, 15, 28, 0.68);
-    }}
-    .ufc-finish-cell span {{
-      display: block;
-      margin-bottom: 6px;
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      line-height: 1.35;
-    }}
-    .ufc-finish-cell strong {{
-      color: #fff;
-      font-size: 15px;
-      line-height: 1.2;
-    }}
     .empty-panel {{
       text-align: center;
       padding: 42px 26px;
@@ -4292,7 +2592,7 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       letter-spacing: 0.12em;
       text-transform: uppercase;
     }}
-    .form-field input, .form-field textarea, .filter-field select, .filter-field input {{
+    .form-field input, .form-field textarea, .filter-field select {{
       width: 100%;
       padding: 14px 16px;
       border-radius: 12px;
@@ -4302,7 +2602,7 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       font: inherit;
       resize: vertical;
     }}
-    .form-field input:focus, .form-field textarea:focus, .filter-field select:focus, .filter-field input:focus {{
+    .form-field input:focus, .form-field textarea:focus, .filter-field select:focus {{
       outline: none;
       border-color: rgba(59, 130, 246, 0.55);
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
@@ -4331,195 +2631,8 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       gap: 14px;
       margin-bottom: 16px;
     }}
-    .filter-toolbar.five-up {{
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-    }}
-    .filter-reset-btn {{
-      width: 100%;
-      min-height: 50px;
-    }}
     .projection-summary {{
       margin-bottom: 16px;
-    }}
-    .mlb-board-panel {{
-      padding: 18px;
-      background:
-        linear-gradient(180deg, rgba(15, 23, 37, 0.98), rgba(7, 12, 22, 0.98)),
-        radial-gradient(circle at top left, rgba(16, 185, 129, 0.08), transparent 30%);
-      border-color: rgba(148, 163, 184, 0.16);
-    }}
-    .mlb-board-panel .panel-head {{
-      margin-bottom: 14px;
-    }}
-    .mlb-board-panel .filter-toolbar {{
-      gap: 10px;
-      margin-bottom: 12px;
-    }}
-    .mlb-board-panel .projection-summary {{
-      margin-bottom: 10px;
-      font-size: 12px;
-    }}
-    .mlb-table-shell {{
-      background: rgba(2, 6, 15, 0.64);
-      border-color: rgba(148, 163, 184, 0.14);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
-    }}
-    .mlb-projection-table {{
-      font-size: 12px;
-    }}
-    .mlb-projection-table th {{
-      padding: 11px 12px;
-      background: rgba(3, 7, 18, 0.98);
-      color: #93a4bc;
-    }}
-    .mlb-projection-table td {{
-      padding: 11px 12px;
-      color: #dce6f3;
-      border-bottom-color: rgba(30, 41, 59, 0.58);
-      vertical-align: middle;
-    }}
-    .mlb-projection-table tbody tr {{
-      background: linear-gradient(90deg, rgba(15, 23, 42, 0.52), rgba(2, 6, 15, 0.18));
-    }}
-    .mlb-projection-table tbody tr:hover {{
-      background: linear-gradient(90deg, rgba(16, 185, 129, 0.08), rgba(59, 130, 246, 0.06));
-    }}
-    .mlb-player-name {{
-      display: inline-block;
-      color: #ffffff;
-      font-size: 13px;
-      letter-spacing: -0.01em;
-    }}
-    .mlb-projection-value {{
-      display: inline-flex;
-      min-width: 58px;
-      justify-content: center;
-      padding: 7px 10px;
-      border-radius: 12px;
-      background: linear-gradient(180deg, rgba(16, 185, 129, 0.18), rgba(16, 185, 129, 0.06));
-      border: 1px solid rgba(16, 185, 129, 0.24);
-      color: #d1fae5;
-      font-size: 15px;
-      font-weight: 900;
-      letter-spacing: -0.02em;
-    }}
-    .mlb-confidence-badge {{
-      min-width: 70px;
-      padding: 7px 10px;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    }}
-    .mlb-lean-pill {{
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 54px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: rgba(59, 130, 246, 0.10);
-      border: 1px solid rgba(59, 130, 246, 0.18);
-      color: #dbeafe;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }}
-    .analytics-table-shell table {{
-      min-width: 1060px;
-    }}
-    .player-cell, .cell-stack {{
-      display: grid;
-      gap: 6px;
-    }}
-    .player-main, .projection-main {{
-      color: #fff;
-      font-weight: 800;
-      font-size: 17px;
-      line-height: 1.1;
-    }}
-    .player-meta {{
-      color: #cbd5e1;
-      font-size: 13px;
-      line-height: 1.5;
-    }}
-    .cell-support {{
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-      white-space: normal;
-    }}
-    .subdued-line {{
-      opacity: 0.82;
-    }}
-    .stat-chip {{
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: fit-content;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(59, 130, 246, 0.12);
-      border: 1px solid rgba(59, 130, 246, 0.22);
-      color: #dbeafe;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }}
-    .leader-grid {{
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 14px;
-    }}
-    .leader-card {{
-      background: linear-gradient(180deg, rgba(18,25,41,0.98), rgba(10,15,28,0.98));
-      border: 1px solid var(--line);
-      border-radius: var(--radius-md);
-      padding: 18px;
-    }}
-    .leader-card-head {{
-      margin-bottom: 14px;
-    }}
-    .leader-list {{
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: grid;
-      gap: 12px;
-    }}
-    .leader-item {{
-      display: grid;
-      grid-template-columns: 34px minmax(0, 1fr);
-      gap: 12px;
-      align-items: start;
-    }}
-    .leader-rank {{
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      border: 1px solid rgba(59, 130, 246, 0.25);
-      background: rgba(59, 130, 246, 0.1);
-      color: #dbeafe;
-      font-weight: 800;
-    }}
-    .leader-copy {{
-      display: grid;
-      gap: 4px;
-    }}
-    .leader-name {{
-      color: #fff;
-      font-weight: 800;
-    }}
-    .leader-meta {{
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
-    }}
-    .signal-card-quiet {{
-      background: linear-gradient(180deg, rgba(16,21,35,0.98), rgba(10,15,28,0.98));
-      border-color: rgba(30, 41, 59, 0.9);
     }}
     .projection-stat-col.stat-active {{
       background: rgba(59, 130, 246, 0.12);
@@ -4640,9 +2753,6 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
         flex-direction: column;
         align-items: start;
       }}
-      .ufc-finish-grid {{
-        grid-template-columns: 1fr 1fr;
-      }}
       .table-shell {{
         overflow-x: visible;
         border: none;
@@ -4673,9 +2783,8 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       td {{
         display: flex;
         justify-content: space-between;
-        align-items: center;
         gap: 12px;
-        padding: 2px 0;
+        padding: 0;
         border: 0;
         white-space: normal;
       }}
@@ -4690,27 +2799,6 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       }}
       .play-grid {{
         grid-template-columns: 1fr;
-      }}
-      .mlb-board-panel {{
-        padding: 14px;
-      }}
-      .mlb-projection-table tbody {{
-        gap: 10px;
-      }}
-      .mlb-projection-table tr {{
-        gap: 7px;
-        padding: 13px;
-        border-color: rgba(148, 163, 184, 0.14);
-        background:
-          linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 15, 0.96)),
-          radial-gradient(circle at top right, rgba(16, 185, 129, 0.08), transparent 40%);
-      }}
-      .mlb-projection-table td::before {{
-        flex-basis: 42%;
-      }}
-      .mlb-projection-value {{
-        min-width: 64px;
-        font-size: 16px;
       }}
       .shell {{
         padding: 18px 0 44px;
@@ -4731,48 +2819,6 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       }}
       .form-grid, .filter-toolbar {{
         grid-template-columns: 1fr;
-      }}
-      .analytics-table-shell {{
-        overflow-x: auto;
-        border: 1px solid var(--line);
-        background: rgba(10, 15, 28, 0.72);
-      }}
-      .analytics-table-shell table {{
-        display: table;
-        min-width: 980px;
-      }}
-      .analytics-table-shell thead {{
-        position: static;
-        width: auto;
-        height: auto;
-        margin: 0;
-        overflow: visible;
-        display: table-header-group;
-      }}
-      .analytics-table-shell tbody {{
-        display: table-row-group;
-      }}
-      .analytics-table-shell tr {{
-        display: table-row;
-        padding: 0;
-        border-radius: 0;
-        border: 0;
-        background: transparent;
-      }}
-      .analytics-table-shell th,
-      .analytics-table-shell td {{
-        display: table-cell;
-        padding: 14px 14px;
-        border-bottom: 1px solid rgba(30, 41, 59, 0.8);
-        white-space: nowrap;
-        vertical-align: top;
-      }}
-      .analytics-table-shell td::before {{
-        content: none;
-      }}
-      .analytics-table-shell .player-cell,
-      .analytics-table-shell .cell-stack {{
-        display: grid;
       }}
       .footer-shell {{
         flex-direction: column;
@@ -4836,43 +2882,12 @@ def get_mlb_dataset(spec_key):
         data = load_mlb_record_board()
         data["kind"] = kind
         return data
-    if kind == "mlb_hitters":
-        if MLB_READER_MODE == "canonical" and MLB_FILES["hitters_full"].exists():
-            return {
-                "kind": kind,
-                "records": load_hitter_full_projection_records(),
-                "source_path": str(MLB_FILES["hitters_full"]),
-                "last_updated": file_timestamp(MLB_FILES["hitters_full"]),
-            }
-        return {"kind": kind, "records": load_hitter_summary(kind), "source_path": str(MLB_FILES["hitters"]), "last_updated": file_timestamp(MLB_FILES["hitters"])}
-    if kind == "mlb_hit2plus":
-        if MLB_READER_MODE == "canonical" and MLB_FILES["hitters_full"].exists():
-            return {
-                "kind": kind,
-                "records": load_hitter_full_projection_records(sort_by="blended_hit_2plus_prob_v2"),
-                "source_path": str(MLB_FILES["hitters_full"]),
-                "last_updated": file_timestamp(MLB_FILES["hitters_full"]),
-            }
-        return {"kind": kind, "records": load_hitter_summary(kind), "source_path": str(MLB_FILES["hitters"]), "last_updated": file_timestamp(MLB_FILES["hitters"])}
-    if kind == "mlb_tb2":
-        return {"kind": kind, "records": load_hitter_summary(kind), "source_path": str(MLB_FILES["hitters"]), "last_updated": file_timestamp(MLB_FILES["hitters"])}
-    if kind == "mlb_rbi":
-        return {"kind": kind, "records": load_hitter_summary(kind), "source_path": str(MLB_FILES["hitters"]), "last_updated": file_timestamp(MLB_FILES["hitters"])}
-    if kind == "mlb_hitter_k":
-        return {"kind": kind, "records": load_hitter_summary(kind), "source_path": str(MLB_FILES["hitters"]), "last_updated": file_timestamp(MLB_FILES["hitters"])}
-    if kind == "mlb_sb":
-        return {"kind": kind, "records": load_hitter_summary(kind), "source_path": str(MLB_FILES["hitters"]), "last_updated": file_timestamp(MLB_FILES["hitters"])}
-    if kind == "mlb_hr":
-        return {"kind": kind, "records": load_hitter_summary(kind), "source_path": str(MLB_FILES["hitters"]), "last_updated": file_timestamp(MLB_FILES["hitters"])}
+    if kind in MLB_HITTER_CATEGORY_STATS:
+        category_key = MLB_HITTER_CATEGORY_STATS[kind]
+        records, source_path = build_mlb_hitter_card_records(category_key)
+        return {"kind": kind, "records": records, "source_path": str(source_path), "last_updated": file_timestamp(source_path)}
     if kind == "mlb_lines":
-        source_path = MLB_FILES["normalized_lines"]
-        lines_df = read_csv_df(source_path)
-        if lines_df.empty:
-            source_path = MLB_FILES["lines"]
-            lines_df = read_csv_df(source_path)
-        if not lines_df.empty:
-            lines_df = lines_df[lines_df.apply(mlb_line_is_clean_display_row, axis=1)].copy()
-        return {"kind": kind, "records": records_from_df(lines_df.head(50)), "source_path": str(source_path), "last_updated": file_timestamp(source_path)}
+        return {"kind": kind, "records": records_from_df(read_csv_df(MLB_FILES["lines"]).head(50)), "source_path": str(MLB_FILES["lines"]), "last_updated": file_timestamp(MLB_FILES["lines"])}
     if kind == "mlb_tracking":
         hitter_tracking = read_csv_df(MLB_FILES["hitter_tracking"])
         pitcher_tracking = read_csv_df(MLB_FILES["pitcher_tracking"])
@@ -4889,25 +2904,11 @@ def get_mlb_dataset(spec_key):
 def get_nba_dataset(spec_key):
     spec = NBA_PAGE_SPECS[spec_key]
     if spec_key == "projections":
-        records = build_nba_projection_records()
-        return {
-            "kind": "table",
-            "records": records,
-            "title": spec["title"],
-            "description": spec["description"],
-            "source_path": str(Path(PROJECTIONS_PATH)),
-            "last_updated": file_timestamp(PROJECTIONS_PATH),
-        }
+        return {"kind": "table", "records": projection_view_records(), "title": spec["title"], "description": spec["description"]}
     if spec_key in {"history", "graded"}:
         return {"kind": "table", "records": latest_graded_nba_history(), "title": spec["title"], "description": spec["description"]}
     if spec_key == "best_bets":
-        board = build_nba_best_bets_board()
-        board.update({"kind": "table", "title": spec["title"], "description": spec["description"]})
-        return board
-    if spec_key == "record":
-        board = build_nba_record_board()
-        board.update({"kind": "table", "title": spec["title"], "description": spec["description"]})
-        return board
+        return {"kind": "table", "records": clean_nba_best_bets_records(records_from_df(read_csv_df(spec["path"]))), "title": spec["title"], "description": spec["description"]}
     if spec_key == "system":
         rows = []
         for key, item in NBA_PAGE_SPECS.items():
@@ -4955,7 +2956,7 @@ def build_home_page():
         "<div class='panel-head'><div><div class='eyebrow'>Select Dashboard</div><h2>Choose your sport</h2></div>"
         "<p class='muted'>Open the sport you want and jump straight into the latest board, projections, and results.</p></div>"
         + render_resource_cards([
-            ("NBA", "Projection explorer, matchup intelligence, verified results, and full-slate player analytics", "/nba", "Live"),
+            ("NBA", "Live player props, confidence edges, injury-adjusted projections", "/nba", "Live"),
             ("MLB", "Strikeout board, hitter targets, daily premium edges", "/mlb", "Live"),
             ("UFC", "Fight forecasts, prop edges, finish probability", "/ufc", "Live"),
             ("PGA", "Matchup edges, finishing targets, strokes gained projections", "/pga", "New"),
@@ -4964,7 +2965,7 @@ def build_home_page():
     )
     hero_media_html = "<img class='hero-emblem' src='/brand/emblem.png' alt='EdgeRanked emblem'>"
     return render_layout(
-        "EdgeRanked Open Beta",
+        "EdgeRank AI Open Beta",
         "Free public access during beta testing for NBA, MLB, PGA, and upcoming model releases.",
         body,
         "/",
@@ -4988,52 +2989,17 @@ def build_about_page():
 
 
 def build_nba_home():
-    projection_rows = build_nba_projection_records()
-    best_bets_board = build_nba_best_bets_board()
-    record_board = build_nba_record_board()
-    snapshot_cards = build_nba_projection_snapshot(projection_rows)
-    projection_updated = file_timestamp(PROJECTIONS_PATH)
-
-    unique_players = len({row["player"] for row in projection_rows})
-    unique_teams = len({row["team"] for row in projection_rows})
-    unique_stats = len({row["stat_key"] for row in projection_rows})
-
     body = (
-        render_banner("Projection-first NBA intelligence is live. This section now prioritizes model output, range, confidence, and verified accountability over sportsbook-first presentation.")
-        + render_page_actions([
-            ("Open Full Projection Explorer", "/nba/projections", "primary"),
-            ("View Verified Results", "/nba/record", "secondary"),
-        ])
-        + "<section class='panel'>"
-        "<div class='panel-head'><div><div class='eyebrow'>Daily Slate</div><h2>Premium projection board</h2></div>"
-        "<p class='muted'>The NBA experience is rebuilt around full-slate simulation output, distribution-aware probabilities, matchup context, and transparent results reporting.</p></div>"
-        + render_stat_cards([
-            ("Modeled Players", str(unique_players), "Players included in the current projection file."),
-            ("Teams Live", str(unique_teams), "Active teams in the current NBA slate."),
-            ("Markets Surfaced", str(unique_stats), "Browsable stat categories powered by the simulation output."),
-            ("Projection Update", format_timestamp(projection_updated), "Freshness of the main NBA projection source."),
-        ])
-        + "</section>"
-        + render_nba_projection_snapshot(snapshot_cards)
-        + "<section class='panel'>"
-        "<div class='panel-head'><div><div class='eyebrow'>Full Projection Access</div><h2>Explore the full player pool</h2></div>"
-        "<p class='muted'>Browse every projected team, player, and stat from the full NBA source file with search, premium filters, and probability-aware sorting. Filtered team views now use the complete underlying dataset instead of a reduced featured subset.</p></div>"
-        + render_page_actions([
-            ("Go to Projection Explorer", "/nba/projections", "primary"),
-            ("Jump to Top Plays", "/nba/best-bets", "secondary"),
-        ])
-        + "</section>"
-        + render_nba_record_panel(record_board)
-        + render_nba_best_bets_summary(best_bets_board)
+        render_data_table(
+            "Board Preview",
+            "Current NBA board preview.",
+            clean_nba_best_bets_records(records_from_df(read_csv_df(BEST_BETS_OUTPUT_PATH))[:8]),
+            [(key, key, "text") for key in (clean_nba_best_bets_records(records_from_df(read_csv_df(BEST_BETS_OUTPUT_PATH))[:1])[0].keys() if clean_nba_best_bets_records(records_from_df(read_csv_df(BEST_BETS_OUTPUT_PATH))[:1]) else ["Board"])],
+            "No NBA best bets are currently available.",
+            "The NBA board has not been generated yet.",
+        )
     )
-    return render_layout(
-        "NBA Projection Center",
-        "Daily player projections, probabilities, matchup intelligence, and verified results powered by EdgeRanked",
-        body,
-        "/nba",
-        render_subnav(NBA_NAV_ITEMS, "/nba"),
-        hero_kicker="NBA",
-    )
+    return render_layout("NBA", "AI-powered player projections, top plays, and verified results.", body, "/nba", render_subnav(NBA_NAV_ITEMS, "/nba"))
 
 
 def build_ufc_home():
@@ -5044,33 +3010,29 @@ def build_ufc_home():
 
 def build_mlb_home():
     best_bets = load_mlb_best_bets()
-    hitter_rows = build_mlb_hitter_projection_board()
-    pitcher_rows = build_mlb_pitcher_projection_board()
-    pitcher_extra_columns = [("Pitcher K%", "pitcher_k_percent_season", "pct"), ("Opponent Hitter K%", "opponent_hitter_k_percent", "pct")]
+    pitchers = load_mlb_pitcher_board()
     body = (
         render_banner(best_bets["banner"])
-        + render_mlb_projection_snapshot(hitter_rows, pitcher_rows)
-        + render_mlb_projection_table(
-            "Hitter Projection Board",
-            "Daily hitter projections across the slate, with sportsbook lines and edge context kept secondary.",
-            hitter_rows,
-            "mlb-hitters",
-            entity_label="Player",
-            include_lean=True,
-            initial_limit=40,
+        + "<div class='split'><div class='stack'>"
+        + render_mlb_top_play_cards(best_bets["top_plays"])
+        + "</div><div class='stack'>"
+        + render_data_table(
+            "Featured Pitchers",
+            "Live strikeout targets from today's MLB board.",
+            pitchers["records"][:6],
+            [
+                ("Pitcher", "pitcher_name", "text"),
+                ("Opponent", "opponent", "text"),
+                ("Proj Ks", "projected_ks", "num"),
+                ("Line", "sportsbook_line", "num"),
+                ("Confidence", "confidence", "badge"),
+            ],
+            "No pitcher props are currently available.",
+            "Today's pitcher board is still being generated. Check back shortly.",
         )
-        + render_mlb_projection_table(
-            "Pitcher Projection Board",
-            "Projection-first pitcher rows for strikeouts and workload-driven markets.",
-            pitcher_rows,
-            "mlb-pitchers",
-            entity_label="Pitcher",
-            include_lean=False,
-            extra_columns=pitcher_extra_columns,
-        )
-        + render_mlb_compact_top_plays(best_bets["top_plays"])
+        + "</div></div>"
     )
-    return render_layout("MLB Projection Center", "Daily hitter and pitcher projections powered by EdgeRanked.", body, "/mlb", render_mlb_nav("/mlb"))
+    return render_layout("MLB", "Pitcher strikeout targets, hitter edges, and daily top plays.", body, "/mlb", render_mlb_nav("/mlb"))
 
 
 def build_pricing_page(form_values=None, submit_state=None):
@@ -5107,13 +3069,6 @@ def pga_best_bets_columns():
         ("Simulation", "sim_value", "num"),
         ("Confidence", "confidence", "num"),
         ("Payout", "payout", "num"),
-    ]
-
-
-def pga_available_props_columns():
-    return [
-        ("Prop", "prop", "text"),
-        ("Confidence", "confidence", "badge"),
     ]
 
 
@@ -5188,20 +3143,19 @@ def build_pga_best_bets_page(round_number=None):
     summary = load_pga_summary(round_number)
     round_board = summary["round_best_bets"]
     round_display = f"Round {summary['selected_round']}" if summary["selected_round"] else "Round board pending"
-    showing_available_props = bool(round_board.get("is_available_props"))
     body = (
         render_pga_round_links(summary, "/pga/best-bets")
         + render_stat_cards([
             ("Tournament", summary["tournament_name"], "Current event tied to the saved PGA outputs."),
             ("Round", round_display, "The latest valid round-specific prop board currently being shown."),
-            ("Plays Shown", len(round_board["records"]), "Current PGA props available on the published board."),
+            ("Plays Shown", len(round_board["records"]), "Current saved round-specific PGA plays."),
         ], compact=True)
         + (
             render_data_table(
-                "Top PGA Props" if showing_available_props else "PGA Round Best Bets",
-                "Current PGA props ranked by simulation-based confidence." if showing_available_props else "Round-specific golf props with line, simulation value, and confidence.",
+                "PGA Round Best Bets",
+                "Round-specific golf props with line, simulation value, and confidence.",
                 round_board["records"],
-                pga_available_props_columns() if showing_available_props else pga_best_bets_columns(),
+                pga_best_bets_columns(),
                 "No PGA round props are currently available.",
                 "Publish a round-specific file such as best_bets_R1.json through best_bets_R4.json to populate this page.",
             )
@@ -5327,18 +3281,28 @@ def build_mlb_dataset_page(spec_key):
         return render_layout(title, subtitle, body, spec["route"], nav)
 
     if spec_key == "pitcher_strikeouts":
-        pitcher_rows = build_mlb_pitcher_projection_board()
-        pitcher_extra_columns = [("Pitcher K%", "pitcher_k_percent_season", "pct"), ("Opponent Hitter K%", "opponent_hitter_k_percent", "pct")]
         body = (
             render_banner(data["banner"])
-            + render_mlb_projection_table(
-                "Pitcher Projection Board",
-                "Projection-first pitcher rows for strikeouts and workload-driven markets.",
-                pitcher_rows,
-                "mlb-pitcher-projections",
-                entity_label="Pitcher",
-                include_lean=False,
-                extra_columns=pitcher_extra_columns,
+            + render_meta_strip(data)
+            + render_data_table(
+                "Pitcher Strikeout Board",
+                "Both season-level pitcher K% and opponent hitter K% are included to explain why each play stands out.",
+                data["records"],
+                [
+                    ("Pitcher", "pitcher_name", "text"),
+                    ("Team", "team", "text"),
+                    ("Opponent", "opponent", "text"),
+                    ("Projected Ks", "projected_ks", "num"),
+                    ("Sportsbook Line", "sportsbook_line", "num"),
+                    ("Edge", "edge", "num"),
+                    ("Confidence", "confidence", "badge"),
+                    ("Pitcher K% Season", "pitcher_k_percent_season", "pct"),
+                    ("Opponent Hitter K%", "opponent_hitter_k_percent", "pct"),
+                    ("Estimated Innings", "estimated_innings", "num"),
+                    ("Recent Avg Ks", "recent_avg_ks", "num"),
+                ],
+                "No pitcher props are currently available.",
+                "Today's pitcher board is still being generated. Check back shortly.",
             )
         )
         return render_layout(title, subtitle, body, spec["route"], nav)
@@ -5394,39 +3358,18 @@ def build_mlb_dataset_page(spec_key):
         return render_layout(title, subtitle, body, spec["route"], nav)
 
     if spec_key in {"projections", "two_plus_hits", "two_plus_bases", "rbi_targets", "hitter_strikeouts", "stolen_bases", "hr_targets"}:
-        hitter_rows = build_mlb_hitter_projection_board()
-        target_stat = {
-            "projections": None,
-            "two_plus_hits": "2+ Hits",
-            "two_plus_bases": "Total Bases",
-            "rbi_targets": "RBI",
-            "hitter_strikeouts": "Hitter Strikeouts",
+        category_key = MLB_HITTER_PAGE_CATEGORIES[spec_key]
+        rows, source_path = build_mlb_hitter_card_records(category_key)
+        title_map = {
+            "projections": "Hit Targets",
+            "two_plus_hits": "2+ Hits Board",
+            "two_plus_bases": "2+ Bases Board",
+            "rbi_targets": "RBI Targets",
+            "hitter_strikeouts": "Hitter Ks",
             "stolen_bases": "Stolen Bases",
             "hr_targets": "Home Runs",
-        }[spec_key]
-        rows = hitter_rows
-        title_map = {
-            "projections": "Hitter Projection Board",
-            "two_plus_hits": "2+ Hit Board",
-            "two_plus_bases": "2+ Bases Board",
-            "rbi_targets": "RBI Board",
-            "hitter_strikeouts": "Hitter Strikeout Board",
-            "stolen_bases": "Stolen Base Board",
-            "hr_targets": "Home Run Board",
         }
-        body = (
-            render_mlb_projection_table(
-                title_map[spec_key],
-                "Expanded hitter projections across the slate, with projection kept primary and lines shown as supporting context.",
-                rows,
-                f"mlb-{spec_key}",
-                entity_label="Player",
-                include_lean=True,
-                initial_limit=40 if spec_key == "projections" else 25,
-                default_stat=target_stat,
-                min_team_rows=3,
-            )
-        )
+        body = render_mlb_hitter_cards(title_map[spec_key], subtitle, rows, source_path, f"mlb-{spec_key}", category_key)
         return render_layout(title, subtitle, body, spec["route"], nav)
 
     if spec_key == "lines":
@@ -5488,11 +3431,20 @@ def build_nba_dataset_page(spec_key):
     if data["kind"] == "json":
         body = header + render_json_panel(spec["title"], spec["description"], data["data"])
     elif spec_key == "record":
-        body = header + render_nba_record_panel(data)
+        body = (
+            header
+            + render_data_table(spec["title"], "Daily NBA record summary from the tracked record file.", rows, columns, "No NBA record data is currently available.", "The latest NBA record file has not been loaded yet.")
+        )
     elif spec_key == "best_bets":
-        body = header + render_nba_best_bets_table(data)
+        body = (
+            header
+            + render_data_table(spec["title"], "Current public-facing NBA best bets in the upgraded table layout.", rows, columns, "No NBA best bets are currently available.", "The current NBA board has not been generated yet.")
+        )
     elif spec_key == "projections":
-        body = header + render_nba_projection_table(rows)
+        body = (
+            header
+            + render_nba_projection_table(rows)
+        )
     else:
         body = (
             header
@@ -5570,13 +3522,6 @@ def create_app():
     def health():
         return jsonify({"ok": True, "timestamp": now_et().isoformat()})
 
-    @flask_app.after_request
-    def add_no_cache_headers(response):
-        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
-        response.headers["Pragma"] = "no-cache"
-        response.headers["Expires"] = "0"
-        return response
-
     @flask_app.get("/")
     def root():
         return build_home_page()
@@ -5653,10 +3598,6 @@ a{color:#60a5fa!important}
     @flask_app.get("/api/pga/leaderboard")
     def pga_leaderboard_api():
         return jsonify(json_ready(load_pga_leaderboard()))
-
-    @flask_app.get("/api/pga/system")
-    def pga_system_api():
-        return jsonify(json_ready(pga_system_status()))
 
     @flask_app.get("/privacy-policy")
     @flask_app.get("/privacy")
