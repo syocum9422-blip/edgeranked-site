@@ -553,9 +553,9 @@ def market_label(row):
     return mapping.get(market, market.replace("_", " ").title() or "Prop")
 
 
-def recommended_play(row):
+def recommended_play(row, line_override=None):
     play = normalize_text(row.get("play")).upper()
-    line = safe_float(row.get("line"))
+    line = line_override if line_override is not None else standard_line_value(row)
     if play and line is not None:
         return f"{play.title()} {line:g}"
     fallback = normalize_text(row.get("recommended_play"))
@@ -625,6 +625,73 @@ def mlb_pitcher_output_source():
     )
 
 
+def mlb_pitcher_projection_context_source():
+    return freshest_valid_csv(
+        MLB_PITCHER_OUTPUT_CANDIDATES,
+        required_columns=(
+            ("pitcher", "season_k_pct", "opponent_k_pct"),
+            ("pitcher", "pitcher_k_pct", "opponent_k_pct"),
+            ("pitcher_name", "season_k_pct", "opponent_k_pct"),
+            ("pitcher_name", "pitcher_k_pct", "opponent_k_pct"),
+        ),
+        fallback=MLB_FILES["pitchers"],
+    )
+
+
+def find_first_column_ci(df, names):
+    lookup = {str(column).strip().lower(): column for column in df.columns}
+    for name in names:
+        column = lookup.get(str(name).strip().lower())
+        if column is not None:
+            return column
+    return None
+
+
+def standard_line_value(row):
+    for field in ("line", "reference_line", "sportsbook_line", "prizepicks_line", "standard_line"):
+        if field in row:
+            value = safe_float(row.get(field), default=None)
+            if value is not None and value == value:
+                return value
+    return None
+
+
+def pitcher_rate_context_lookup():
+    _, df = mlb_pitcher_projection_context_source()
+    name_col = find_first_column_ci(df, ["pitcher_name", "Pitcher", "player_name"])
+    pitcher_k_col = find_first_column_ci(df, ["season_k_pct", "pitcher_k_pct", "pitcher_k_percent", "k_pct", "K%", "pitcher_strikeout_pct", "Pitcher_K_Pct"])
+    opponent_k_col = find_first_column_ci(df, ["opponent_k_pct", "opponent_hitter_k_pct", "opp_hitter_k_pct", "opp_k_pct", "opponent_strikeout_pct", "opponent_team_k_pct", "Opponent_K_Pct"])
+    if df.empty or not name_col:
+        return {}, pitcher_k_col, opponent_k_col
+    lookup = {}
+    for _, raw in df.iterrows():
+        row = raw.to_dict()
+        name = normalize_text(row.get(name_col)).lower()
+        if not name:
+            continue
+        lookup[name] = {
+            "pitcher_k_percent_season": safe_float(row.get(pitcher_k_col), default=None) if pitcher_k_col else None,
+            "opponent_hitter_k_percent": safe_float(row.get(opponent_k_col), default=None) if opponent_k_col else None,
+        }
+    return lookup, pitcher_k_col, opponent_k_col
+
+
+def pitcher_reference_line_lookup():
+    _, df = mlb_pitcher_output_source()
+    name_col = find_first_column_ci(df, ["pitcher_name", "Pitcher", "player_name"])
+    if df.empty or not name_col:
+        return {}, None
+    line_col = find_first_column_ci(df, ["line", "reference_line", "sportsbook_line", "prizepicks_line", "standard_line"])
+    lookup = {}
+    for _, raw in df.iterrows():
+        row = raw.to_dict()
+        name = normalize_text(row.get(name_col)).lower()
+        line = safe_float(row.get(line_col), default=None) if line_col else None
+        if name and line is not None and line == line:
+            lookup[name] = line
+    return lookup, line_col
+
+
 def mlb_top_plays_output_source():
     return freshest_valid_csv(
         MLB_TOP_PLAYS_OUTPUT_CANDIDATES,
@@ -663,6 +730,7 @@ def load_mlb_best_bets():
     tracking = latest_pitcher_tracking_snapshot()
     hitter_tracking = best_hitter_tracking_snapshot()
     team_lookup = team_lookup_from_pitchers()
+    pitcher_line_lookup, top_plays_line_column = pitcher_reference_line_lookup()
 
     using_fallback = False
     source_df = pd.DataFrame()
@@ -689,6 +757,9 @@ def load_mlb_best_bets():
             player_key = player.lower()
             market = normalize_text(row.get("market")).upper()
             projection = projection_value(row)
+            line_value = pitcher_line_lookup.get(player_key) if market.startswith("PITCHER") else None
+            if line_value is None:
+                line_value = standard_line_value(row)
             team = ""
             if market.startswith("PITCHER"):
                 team = team_lookup.get(player_key, "")
@@ -698,11 +769,11 @@ def load_mlb_best_bets():
                 "team": team or "TBD",
                 "opponent": opponent,
                 "stat_type": market_label(row),
-                "sportsbook_line": safe_float(row.get("line")),
+                "reference_line": line_value,
                 "projection": projection,
                 "edge": safe_float(row.get("edge")),
                 "confidence": confidence_level(row.get("confidence") or row.get("confidence_score")),
-                "recommended_play": recommended_play(row),
+                "recommended_play": recommended_play(row, line_value),
                 "market": market,
                 "result": grade_result_label(row.get("result")),
                 "board_date": parse_date(row.get("date")),
@@ -729,6 +800,7 @@ def load_mlb_best_bets():
         "source_path": str(source_path),
         "last_updated": last_updated,
         "props_scanned": props_scanned_count(),
+        "top_plays_line_column": top_plays_line_column,
         "plays_shown": len(records),
         "model_version": MODEL_VERSION,
         "data_source_freshness": source_freshness_label(last_updated),
@@ -738,6 +810,7 @@ def load_mlb_best_bets():
 def load_mlb_pitcher_board():
     source_path, props = mlb_pitcher_output_source()
     tracking = latest_pitcher_tracking_snapshot()
+    rate_context, pitcher_k_column, opponent_k_column = pitcher_rate_context_lookup()
     using_fallback = False
 
     if props.empty:
@@ -751,9 +824,9 @@ def load_mlb_pitcher_board():
         row = raw.to_dict()
         name = normalize_text(pitcher_value(row, "pitcher_name", "Pitcher", "player_name"))
         key = name.lower()
-        line = safe_float(pitcher_value(row, "best_over_line", "Line", "line", "sportsbook_line"))
+        line = standard_line_value(row)
         projected_ks = safe_float(pitcher_value(row, "projected_strikeouts", "predicted_strikeouts", "Projected_Strikeouts", "Model_Projected_K"))
-        context = tracking.get(key, {})
+        context = {**tracking.get(key, {}), **rate_context.get(key, {})}
         est_innings = safe_float(pitcher_value(row, "projected_ip", "Estimated_IP", "estimated_innings"))
         if est_innings is None:
             est_outs = safe_float(pitcher_value(row, "projected_outs", "predicted_outs", "Projected_Outs"))
@@ -763,7 +836,7 @@ def load_mlb_pitcher_board():
             "team": normalize_text(pitcher_value(row, "team", "Team")) or "TBD",
             "opponent": normalize_text(pitcher_value(row, "opponent", "Opponent")) or "TBD",
             "projected_ks": projected_ks,
-            "sportsbook_line": line,
+            "reference_line": line,
             "edge": round(projected_ks - line, 2) if projected_ks is not None and line is not None else None,
             "confidence": confidence_level(row.get("recommendation_confidence") or row.get("confidence")),
             "pitcher_k_percent_season": context.get("pitcher_k_percent_season"),
@@ -791,6 +864,8 @@ def load_mlb_pitcher_board():
         "plays_shown": min(len(records), 25),
         "model_version": MODEL_VERSION,
         "data_source_freshness": source_freshness_label(last_updated),
+        "pitcher_k_column": pitcher_k_column,
+        "opponent_k_column": opponent_k_column,
     }
 
 
@@ -1506,7 +1581,7 @@ def render_mlb_top_play_cards(rows):
             f"<div class='play-top'><div><div class='play-name'>{escape(row['player'])}</div><div class='play-sub'>{escape(row['team'])} vs {escape(row['opponent'])}</div></div>{render_badge(row['confidence'])}</div>"
             f"<div class='play-grid'>"
             f"<div><span>Stat</span><strong>{escape(row['stat_type'])}</strong></div>"
-            f"<div><span>Line</span><strong>{escape(metric_label(row['sportsbook_line']))}</strong></div>"
+            f"<div><span>Reference</span><strong>{escape(metric_label(row.get('reference_line')))}</strong></div>"
             f"<div><span>Projection</span><strong>{escape(metric_label(row['projection']))}</strong></div>"
             f"<div><span>Play</span><strong>{escape(row['recommended_play'])}</strong></div>"
             "</div>"
@@ -3099,7 +3174,6 @@ def build_mlb_home():
                 ("Pitcher", "pitcher_name", "text"),
                 ("Opponent", "opponent", "text"),
                 ("Proj Ks", "projected_ks", "num"),
-                ("Line", "sportsbook_line", "num"),
                 ("Confidence", "confidence", "badge"),
             ],
             "No pitcher props are currently available.",
@@ -3342,7 +3416,7 @@ def build_mlb_dataset_page(spec_key):
                     ("Team", "team", "text"),
                     ("Opponent", "opponent", "text"),
                     ("Stat Type", "stat_type", "text"),
-                    ("Sportsbook Line", "sportsbook_line", "num"),
+                    ("Reference Line", "reference_line", "num"),
                     ("Projection", "projection", "num"),
                     ("Edge", "edge", "num"),
                     ("Confidence", "confidence", "badge"),
@@ -3368,13 +3442,10 @@ def build_mlb_dataset_page(spec_key):
                     ("Team", "team", "text"),
                     ("Opponent", "opponent", "text"),
                     ("Projected Ks", "projected_ks", "num"),
-                    ("Sportsbook Line", "sportsbook_line", "num"),
-                    ("Edge", "edge", "num"),
-                    ("Confidence", "confidence", "badge"),
                     ("Pitcher K% Season", "pitcher_k_percent_season", "pct"),
                     ("Opponent Hitter K%", "opponent_hitter_k_percent", "pct"),
                     ("Estimated Innings", "estimated_innings", "num"),
-                    ("Recent Avg Ks", "recent_avg_ks", "num"),
+                    ("Confidence", "confidence", "badge"),
                 ],
                 "No pitcher props are currently available.",
                 "Today's pitcher board is still being generated. Check back shortly.",
