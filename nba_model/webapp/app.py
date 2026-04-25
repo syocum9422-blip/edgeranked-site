@@ -569,26 +569,102 @@ def projection_value(row):
     return safe_float(row.get("projected_value"))
 
 
+MLB_PITCHER_OUTPUT_CANDIDATES = [
+    Path("/home/ubuntu/mlb_model/mlb/outputs/pitcher_props_today.csv"),
+    Path("/home/ubuntu/mlb_model/mlb/outputs/mlb_pitcher_projections_today.csv"),
+    Path("/home/ubuntu/mlb_model/mlb/outputs/pitcher_predictions_today.csv"),
+    Path("/home/ubuntu/mlb_model/mlb/outputs/pitcher_predictions_full.csv"),
+    Path("/home/ubuntu/EdgeRanked/sports/mlb/mlb_model/mlb/outputs/pitcher_props_today.csv"),
+    Path("/home/ubuntu/EdgeRanked/sports/mlb/mlb_model/mlb/outputs/mlb_pitcher_projections_today.csv"),
+    Path("/home/ubuntu/EdgeRanked/sports/mlb/mlb_model/mlb/outputs/pitcher_predictions_today.csv"),
+    Path("/home/ubuntu/EdgeRanked/sports/mlb/mlb_model/mlb/outputs/pitcher_predictions_full.csv"),
+    Path("/home/ubuntu/EdgeRanked/site/mlb/outputs/pitcher_props_today.csv"),
+    Path("/home/ubuntu/EdgeRanked/site/mlb/outputs/mlb_pitcher_projections_today.csv"),
+    Path("/home/ubuntu/EdgeRanked/site/mlb/outputs/pitcher_predictions_today.csv"),
+    Path("/home/ubuntu/EdgeRanked/site/mlb/outputs/pitcher_predictions_full.csv"),
+]
+
+MLB_TOP_PLAYS_OUTPUT_CANDIDATES = [
+    Path("/home/ubuntu/mlb_model/mlb/outputs/betting_sheet_today.csv"),
+    Path("/home/ubuntu/mlb_model/mlb/outputs/daily_betting_summary.csv"),
+    Path("/home/ubuntu/EdgeRanked/sports/mlb/mlb_model/mlb/outputs/betting_sheet_today.csv"),
+    Path("/home/ubuntu/EdgeRanked/sports/mlb/mlb_model/mlb/outputs/daily_betting_summary.csv"),
+    Path("/home/ubuntu/EdgeRanked/site/mlb/outputs/betting_sheet_today.csv"),
+    Path("/home/ubuntu/EdgeRanked/site/mlb/outputs/daily_betting_summary.csv"),
+]
+
+
+def freshest_valid_csv(candidates, required_columns, fallback):
+    valid = []
+    for candidate in candidates:
+        if not candidate.exists():
+            continue
+        df = read_csv_df(candidate)
+        normalized_columns = {str(column).strip().lower() for column in df.columns}
+        has_required = any(
+            all(str(column).strip().lower() in normalized_columns for column in group)
+            for group in required_columns
+        )
+        if not df.empty and has_required:
+            valid.append((candidate.stat().st_mtime, len(df), candidate, df))
+    if valid:
+        valid.sort(key=lambda item: (item[0], item[1]), reverse=True)
+        return valid[0][2], valid[0][3]
+    fallback_df = read_csv_df(fallback)
+    return fallback, fallback_df
+
+
+def mlb_pitcher_output_source():
+    return freshest_valid_csv(
+        MLB_PITCHER_OUTPUT_CANDIDATES,
+        required_columns=(
+            ("pitcher_name",),
+            ("pitcher",),
+        ),
+        fallback=MLB_FILES["pitchers"],
+    )
+
+
+def mlb_top_plays_output_source():
+    return freshest_valid_csv(
+        MLB_TOP_PLAYS_OUTPUT_CANDIDATES,
+        required_columns=(
+            ("player_name", "market"),
+            ("player", "market"),
+        ),
+        fallback=MLB_FILES["best_bets"],
+    )
+
+
+def pitcher_value(row, *fields):
+    for field in fields:
+        value = row.get(field)
+        if value is not None:
+            return value
+    return None
+
+
 def team_lookup_from_pitchers():
-    df = read_csv_df(MLB_FILES["pitchers"])
-    if df.empty or "pitcher_name" not in df.columns or "team" not in df.columns:
+    _, df = mlb_pitcher_output_source()
+    name_col = find_first_column(df, ["pitcher_name", "Pitcher", "player_name"])
+    team_col = find_first_column(df, ["team", "Team"])
+    if df.empty or not name_col or not team_col:
         return {}
     return {
-        normalize_text(row["pitcher_name"]).lower(): normalize_text(row["team"])
+        normalize_text(row[name_col]).lower(): normalize_text(row[team_col])
         for _, row in df.iterrows()
-        if normalize_text(row.get("pitcher_name"))
+        if normalize_text(row.get(name_col))
     }
 
 
 def load_mlb_best_bets():
-    today_board = read_csv_df(MLB_FILES["best_bets"])
+    source_path, today_board = mlb_top_plays_output_source()
     history = read_csv_df(MLB_FILES["history"])
     tracking = latest_pitcher_tracking_snapshot()
     hitter_tracking = best_hitter_tracking_snapshot()
     team_lookup = team_lookup_from_pitchers()
 
     using_fallback = False
-    source_path = MLB_FILES["best_bets"]
     source_df = pd.DataFrame()
     board_date = None
 
@@ -660,10 +736,9 @@ def load_mlb_best_bets():
 
 
 def load_mlb_pitcher_board():
-    props = read_csv_df(MLB_FILES["pitchers"])
+    source_path, props = mlb_pitcher_output_source()
     tracking = latest_pitcher_tracking_snapshot()
     using_fallback = False
-    source_path = MLB_FILES["pitchers"]
 
     if props.empty:
         fallback = latest_rows_by_date(read_csv_df(MLB_FILES["pitcher_tracking"]), allowed_results_only=False)
@@ -674,19 +749,19 @@ def load_mlb_pitcher_board():
     records = []
     for _, raw in props.iterrows():
         row = raw.to_dict()
-        name = normalize_text(row.get("pitcher_name"))
+        name = normalize_text(pitcher_value(row, "pitcher_name", "Pitcher", "player_name"))
         key = name.lower()
-        line = safe_float(row.get("best_over_line"))
-        projected_ks = safe_float(row.get("projected_strikeouts") or row.get("predicted_strikeouts"))
+        line = safe_float(pitcher_value(row, "best_over_line", "Line", "line", "sportsbook_line"))
+        projected_ks = safe_float(pitcher_value(row, "projected_strikeouts", "predicted_strikeouts", "Projected_Strikeouts", "Model_Projected_K"))
         context = tracking.get(key, {})
-        est_innings = safe_float(row.get("projected_ip"))
+        est_innings = safe_float(pitcher_value(row, "projected_ip", "Estimated_IP", "estimated_innings"))
         if est_innings is None:
-            est_outs = safe_float(row.get("projected_outs") or row.get("predicted_outs"))
+            est_outs = safe_float(pitcher_value(row, "projected_outs", "predicted_outs", "Projected_Outs"))
             est_innings = round(est_outs / 3, 2) if est_outs is not None else context.get("estimated_innings")
         record = {
             "pitcher_name": name,
-            "team": normalize_text(row.get("team")) or "TBD",
-            "opponent": normalize_text(row.get("opponent")) or "TBD",
+            "team": normalize_text(pitcher_value(row, "team", "Team")) or "TBD",
+            "opponent": normalize_text(pitcher_value(row, "opponent", "Opponent")) or "TBD",
             "projected_ks": projected_ks,
             "sportsbook_line": line,
             "edge": round(projected_ks - line, 2) if projected_ks is not None and line is not None else None,
