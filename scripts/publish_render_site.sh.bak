@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+PYTHON_BIN="${PYTHON_BIN:-$ROOT/.venv/bin/python}"
+if [[ ! -x "$PYTHON_BIN" ]]; then
+  PYTHON_BIN="python3"
+fi
+STAMP=$(date '+%Y-%m-%d %H:%M')
+
+cd "$ROOT"
+
+"$PYTHON_BIN" "$ROOT/scripts/publish_render_snapshot.py"
+
+git add \
+  projections.csv \
+  Projections_app_view.csv \
+  lines_today.csv \
+  injured_players.csv \
+  teams_today.csv \
+  Best_Bets/nba_best_bets_today.csv \
+  Best_Bets/record_summary.csv \
+  Best_Bets/nba_bets_history.csv \
+  Best_Bets/graded_bets.csv \
+  Best_Bets/match_audit_today.csv \
+  Best_Bets/calibration_summary.csv \
+  Best_Bets/calibration_report.txt \
+  Best_Bets/results_page.html \
+  mlb/outputs \
+  data/mlb/lines_today.csv
+
+if git diff --cached --quiet; then
+  echo "No snapshot changes to publish."
+  exit 0
+fi
+
+git commit -m "Refresh Render snapshot ${STAMP}"
+git push

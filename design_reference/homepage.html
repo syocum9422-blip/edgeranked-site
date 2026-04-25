@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdgeRanked AI | Premium Sports Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#0a0f1c',      
+                        surface: '#121929',   
+                        borderline: '#1e293b',
+                        brand: '#3b82f6',     
+                        edge: '#10b981',      
+                        confidence: '#f59e0b' 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-navy text-slate-300 font-sans antialiased selection:bg-brand selection:text-white">
+
+    <!-- GLOBAL NAVIGATION -->
+    <nav class="sticky top-0 z-50 bg-navy/90 backdrop-blur-lg border-b border-borderline">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="index.html" class="flex items-center gap-3 group">
+                    <!-- Updated: Logo Placeholder -->
+                    <img src="logo.png" alt="EdgeRanked Logo" class="h-8 w-auto">
+                    <span class="text-white font-bold text-xl tracking-tight">EdgeRanked<span class="text-brand">SportsAI</span></span>
+                </a>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="board.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface rounded-md transition">NBA</a>
+                    <a href="board.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface rounded-md transition">MLB</a>
+                    <a href="board.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface rounded-md transition">UFC</a>
+                    <a href="board.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface rounded-md transition">PGA</a>
+                    <div class="w-px h-4 bg-borderline mx-2"></div>
+                    <a href="results.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface rounded-md transition">Results</a>
+                    <a href="pricing.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface rounded-md transition">Pricing</a>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="#" class="hidden md:block text-sm font-medium text-slate-300 hover:text-white transition">Log In</a>
+                    <a href="pricing.html" class="bg-white text-navy px-4 py-2 rounded-md text-sm font-bold hover:bg-slate-200 transition shadow-lg">Get Access</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 text-center">
+        <!-- Added: Premium Emblem Placement -->
+        <div class="mb-8 flex justify-center">
+            <img src="emblem.png" alt="EdgeRanked Emblem" class="w-20 h-auto drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+        </div>
+        
+        <h1 class="text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight">
+            Sharper data.<br />Faster decisions.
+        </h1>
+        <p class="mt-4 text-xl text-slate-400 max-w-2xl mx-auto mb-10">
+            Daily AI-driven projections, top plays, and fully tracked results across MLB, NBA, UFC, and PGA.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="board.html" class="bg-brand text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-blue-600 transition shadow-lg shadow-brand/20">View Today's Board</a>
+            <a href="results.html" class="bg-surface border border-borderline text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-slate-800 transition">View Results</a>
+        </div>
+    </main>
+
+    <!-- TRUST METRICS STRIP -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-surface border border-borderline rounded-xl p-5 text-center shadow-md">
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tracked Win Rate</p>
+                <p class="text-3xl font-black text-edge mt-1">68.2%</p>
+            </div>
+            <div class="bg-surface border border-borderline rounded-xl p-5 text-center shadow-md">
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Active Streak</p>
+                <p class="text-3xl font-black text-white mt-1">W4</p>
+            </div>
+            <div class="bg-surface border border-borderline rounded-xl p-5 text-center shadow-md">
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Props Scanned Today</p>
+                <p class="text-3xl font-black text-white mt-1">1,402</p>
+            </div>
+            <div class="bg-surface border border-borderline rounded-xl p-5 text-center shadow-md">
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Models Active</p>
+                <p class="text-3xl font-black text-white mt-1">4</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SPORT SELECTION GRID -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+        <h2 class="text-xl font-bold text-white mb-6">Select Dashboard</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <a href="board.html" class="group bg-surface border border-borderline rounded-2xl p-6 hover:border-brand transition block">
+                <h3 class="text-2xl font-black text-white mb-2">NBA</h3>
+                <p class="text-sm text-slate-400 mb-6">Player props, team filters, and injuries.</p>
+                <span class="text-brand text-sm font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Enter Board &rarr;</span>
+            </a>
+            <a href="board.html" class="group bg-surface border border-borderline rounded-2xl p-6 hover:border-brand transition block">
+                <h3 class="text-2xl font-black text-white mb-2">MLB</h3>
+                <p class="text-sm text-slate-400 mb-6">Pitcher/Hitter props, HR targets, and official plays.</p>
+                <span class="text-brand text-sm font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Enter Board &rarr;</span>
+            </a>
+            <a href="board.html" class="group bg-surface border border-borderline rounded-2xl p-6 hover:border-brand transition block">
+                <h3 class="text-2xl font-black text-white mb-2">UFC</h3>
+                <p class="text-sm text-slate-400 mb-6">Fight card picks, method & round markets.</p>
+                <span class="text-brand text-sm font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Enter Board &rarr;</span>
+            </a>
+            <a href="board.html" class="group bg-surface border border-borderline rounded-2xl p-6 hover:border-brand transition block relative">
+                <span class="absolute top-4 right-4 bg-brand/20 text-brand text-[10px] uppercase font-black px-2 py-1 rounded">NEW</span>
+                <h3 class="text-2xl font-black text-white mb-2">PGA</h3>
+                <p class="text-sm text-slate-400 mb-6">Matchups, Strokes Gained, and finishing props.</p>
+                <span class="text-brand text-sm font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Enter Board &rarr;</span>
+            </a>
+        </div>
+    </section>
+
+</body>
+</html>

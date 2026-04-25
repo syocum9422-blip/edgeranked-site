@@ -1,0 +1,103 @@
+{
+  "confidence_label": {
+    "High": {
+      "bets": 56,
+      "losses": 21,
+      "win_rate": 0.6094,
+      "wins": 35
+    },
+    "Low": {
+      "bets": 14,
+      "losses": 7,
+      "win_rate": 0.5,
+      "wins": 7
+    },
+    "Medium": {
+      "bets": 22,
+      "losses": 15,
+      "win_rate": 0.3667,
+      "wins": 7
+    }
+  },
+  "hit_rate_bucket": {
+    "55-60%": {
+      "bets": 15,
+      "losses": 8,
+      "win_rate": 0.4783,
+      "wins": 7
+    },
+    "60-65%": {
+      "bets": 11,
+      "losses": 8,
+      "win_rate": 0.3684,
+      "wins": 3
+    },
+    "65-70%": {
+      "bets": 7,
+      "losses": 3,
+      "win_rate": 0.5333,
+      "wins": 4
+    },
+    "70%+": {
+      "bets": 32,
+      "losses": 11,
+      "win_rate": 0.625,
+      "wins": 21
+    },
+    "<=55%": {
+      "bets": 4,
+      "losses": 2,
+      "win_rate": 0.5,
+      "wins": 2
+    },
+    "unknown": {
+      "bets": 23,
+      "losses": 11,
+      "win_rate": 0.5161,
+      "wins": 12
+    }
+  },
+  "metadata": {
+    "graded_bets": 92
+  },
+  "side": {
+    "OVER": {
+      "bets": 48,
+      "losses": 30,
+      "win_rate": 0.3966,
+      "wins": 18
+    },
+    "UNDER": {
+      "bets": 42,
+      "losses": 13,
+      "win_rate": 0.6538,
+      "wins": 29
+    }
+  },
+  "stat_side": {
+    "AST::OVER": {
+      "bets": 3,
+      "losses": 2,
+      "win_rate": 0.4444,
+      "wins": 1
+    },
+    "PTS::OVER": {
+      "bets": 43,
+      "losses": 27,
+      "win_rate": 0.3878,
+      "wins": 16
+    },
+    "PTS::UNDER": {
+      "bets": 42,
+      "losses": 13,
+      "win_rate": 0.6667,
+      "wins": 29
+    },
+    "REB::OVER": {
+      "bets": 2,
+      "losses": 1,
+      "win_rate": 0.5,
+      "wins": 1
+    }
+  }
+}

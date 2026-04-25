@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | EdgeRanked AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#0a0f1c',      
+                        surface: '#121929',   
+                        borderline: '#1e293b',
+                        brand: '#3b82f6',     
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-navy text-slate-300 font-sans antialiased p-8">
+
+    <div class="max-w-3xl mx-auto space-y-8">
+        
+        <!-- HEADER SECTION -->
+        <div class="bg-surface border border-borderline rounded-3xl p-10">
+            <h1 class="text-4xl font-black text-white mb-4">About EdgeRanked AI</h1>
+            <p class="text-lg text-slate-400 leading-relaxed">
+                A premium sports analytics platform built around model-driven projections, transparent results, and daily decision-ready boards.
+            </p>
+        </div>
+
+        <!-- MAIN CONTENT SECTION -->
+        <div class="bg-surface border border-borderline rounded-3xl p-10">
+            <h2 class="text-3xl font-black text-white mb-6">Built for serious bettors and data-first sports fans.</h2>
+            <p class="text-slate-400 mb-10 leading-relaxed">
+                EdgeRanked AI transforms raw model output into clean, actionable boards across MLB, NBA, UFC, and PGA — with fully tracked results and daily updates.
+            </p>
+
+            <!-- CARDS GRID -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- CARD 1 -->
+                <div class="border border-borderline rounded-2xl p-6">
+                    <p class="text-xs font-bold text-brand uppercase tracking-widest mb-2">Model-Driven</p>
+                    <h3 class="text-xl font-bold text-white mb-3">Data-Backed Accuracy</h3>
+                    <p class="text-sm text-slate-400">
+                        Every board is powered by real projection models, live data inputs, and performance-based outputs.
+                    </p>
+                </div>
+
+                <!-- CARD 2 -->
+                <div class="border border-borderline rounded-2xl p-6">
+                    <p class="text-xs font-bold text-brand uppercase tracking-widest mb-2">Transparent Results</p>
+                    <h3 class="text-xl font-bold text-white mb-3">Accountable Reporting</h3>
+                    <p class="text-sm text-slate-400">
+                        Every play is backed by tracked outcomes, win-rate visibility, and accountable performance reporting.
+                    </p>
+                </div>
+
+                <!-- CARD 3 -->
+                <div class="border border-borderline rounded-2xl p-6 md:col-span-2">
+                    <p class="text-xs font-bold text-brand uppercase tracking-widest mb-2">Updated Daily</p>
+                    <h3 class="text-xl font-bold text-white mb-3">Built for Daily Use</h3>
+                    <p class="text-sm text-slate-400">
+                        The platform is built for daily use with continuously refreshed boards, top plays, and sport-specific dashboards.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,470 @@
+LINES_PLAYER,PROJECTION_PLAYER,PLAYER_KEY,RAW_STAT,NORMALIZED_STAT,LINE,PROJECTION
+Aaron Gordon,Aaron Gordon,aaron gordon,Blks+Stls,SB,0.5,1.11
+Aaron Gordon,Aaron Gordon,aaron gordon,Points,PTS,13.5,15.48
+Aaron Gordon,Aaron Gordon,aaron gordon,Pts+Asts,PA,16.5,18.61
+Aaron Gordon,Aaron Gordon,aaron gordon,Pts+Rebs,PR,19.5,20.8
+Aaron Gordon,Aaron Gordon,aaron gordon,Pts+Rebs+Asts,PRA,21.5,23.93
+Aaron Gordon,Aaron Gordon,aaron gordon,Rebs+Asts,RA,5.5,8.45
+Aaron Gordon,Aaron Gordon,aaron gordon,Steals,STL,0.5,0.66
+Ajay Mitchell,Ajay Mitchell,ajay mitchell,Assists,AST,3.5,3.75
+Ajay Mitchell,Ajay Mitchell,ajay mitchell,Points - 1st 3 Minutes,PTS_3M,0.5,1.28
+Alex Caruso,Alex Caruso,alex caruso,3-PT Attempted,FG3A,2.5,2.83
+Alex Caruso,Alex Caruso,alex caruso,Free Throws Attempted,FTA,0.5,0.62
+Alex Caruso,Alex Caruso,alex caruso,Personal Fouls,PF,1.5,1.9
+Alex Caruso,Alex Caruso,alex caruso,Rebs+Asts,RA,3.5,5.1
+Anthony Black,Anthony Black,anthony black,3-PT Attempted,FG3A,3.5,3.61
+Anthony Black,Anthony Black,anthony black,Blks+Stls,SB,1.5,1.81
+Anthony Black,Anthony Black,anthony black,Blocked Shots,BLK,0.5,0.71
+Anthony Black,Anthony Black,anthony black,Dunks,DUNKS,0.5,0.83
+Anthony Black,Anthony Black,anthony black,Free Throws Attempted,FTA,2.5,2.82
+Anthony Black,Anthony Black,anthony black,Free Throws Made,FTM,1.5,1.69
+Anthony Black,Anthony Black,anthony black,Points,PTS,8.5,8.67
+Anthony Black,Anthony Black,anthony black,Pts+Rebs,PR,11.5,11.73
+Anthony Black,Anthony Black,anthony black,Rebounds,REB,2.5,3.06
+Anthony Black,Anthony Black,anthony black,Two Pointers Attempted,FG2A,4.5,4.63
+Anthony Black,Anthony Black,anthony black,Two Pointers Made,FG2M,1.5,1.71
+Anthony Edwards,Anthony Edwards,anthony edwards,Blks+Stls,SB,1.5,1.83
+Anthony Edwards,Anthony Edwards,anthony edwards,Dunks,DUNKS,0.5,1.93
+Anthony Edwards,Anthony Edwards,anthony edwards,FG Attempted,FGA,20.5,13.72
+Anthony Edwards,Anthony Edwards,anthony edwards,Personal Fouls,PF,2.5,3.15
+Anthony Edwards,Anthony Edwards,anthony edwards,Steals,STL,0.5,1.16
+Anthony Edwards,Anthony Edwards,anthony edwards,Turnovers,TOV,2.5,2.6
+Ausar Thompson,Ausar Thompson,ausar thompson,Blks+Stls,SB,3.5,3.64
+Ausar Thompson,Ausar Thompson,ausar thompson,Dunks,DUNKS,1.5,2.32
+Ausar Thompson,Ausar Thompson,ausar thompson,Pts+Asts,PA,11.5,12.8
+Ausar Thompson,Ausar Thompson,ausar thompson,Pts+Rebs+Asts,PRA,17.5,18.27
+Ausar Thompson,Ausar Thompson,ausar thompson,Rebs+Asts,RA,8.5,9.42
+Ausar Thompson,Ausar Thompson,ausar thompson,Turnovers,TOV,1.5,1.57
+Ayo Dosunmu,Ayo Dosunmu,ayo dosunmu,3-PT Attempted,FG3A,3.5,4.59
+Ayo Dosunmu,Ayo Dosunmu,ayo dosunmu,Assists,AST,1.5,4.21
+Ayo Dosunmu,Ayo Dosunmu,ayo dosunmu,FG Attempted,FGA,8.5,11.15
+Ayo Dosunmu,Ayo Dosunmu,ayo dosunmu,Free Throws Attempted,FTA,1.5,2.44
+Ayo Dosunmu,Ayo Dosunmu,ayo dosunmu,Free Throws Made,FTM,1.5,1.78
+Ayo Dosunmu,Ayo Dosunmu,ayo dosunmu,Points,PTS,12.5,17.23
+Ayo Dosunmu,Ayo Dosunmu,ayo dosunmu,Pts+Asts,PA,15.5,21.44
+Ayo Dosunmu,Ayo Dosunmu,ayo dosunmu,Pts+Rebs,PR,15.5,22.73
+Ayo Dosunmu,Ayo Dosunmu,ayo dosunmu,Pts+Rebs+Asts,PRA,18.5,26.94
+Ayo Dosunmu,Ayo Dosunmu,ayo dosunmu,Rebounds,REB,2.5,5.5
+Ayo Dosunmu,Ayo Dosunmu,ayo dosunmu,Rebs+Asts,RA,9.5,9.71
+Ayo Dosunmu,Ayo Dosunmu,ayo dosunmu,Turnovers,TOV,0.5,1.86
+Ayo Dosunmu,Ayo Dosunmu,ayo dosunmu,Two Pointers Attempted,FG2A,6.0,8.83
+Ayo Dosunmu,Ayo Dosunmu,ayo dosunmu,Two Pointers Made,FG2M,3.0,4.39
+Bruce Brown,Bruce Brown,bruce brown,Points,PTS,5.5,10.25
+Bruce Brown,Bruce Brown,bruce brown,Pts+Rebs,PR,8.5,15.16
+CJ McCollum,CJ McCollum,c j mccollum,Blks+Stls,SB,1.5,2.42
+CJ McCollum,CJ McCollum,c j mccollum,Rebounds,REB,1.5,3.31
+CJ McCollum,CJ McCollum,c j mccollum,Rebs+Asts,RA,4.5,8.22
+CJ McCollum,CJ McCollum,c j mccollum,Steals,STL,0.5,1.6
+Cade Cunningham,Cade Cunningham,cade cunningham,Assists,AST,9.5,9.7
+Cade Cunningham,Cade Cunningham,cade cunningham,Blks+Stls,SB,1.5,1.59
+Cade Cunningham,Cade Cunningham,cade cunningham,Dunks,DUNKS,0.5,2.07
+Cade Cunningham,Cade Cunningham,cade cunningham,FG Attempted,FGA,21.5,11.93
+Cade Cunningham,Cade Cunningham,cade cunningham,Free Throws Attempted,FTA,7.5,2.41
+Cade Cunningham,Cade Cunningham,cade cunningham,Pts+Asts,PA,38.5,28.22
+Cade Cunningham,Cade Cunningham,cade cunningham,Pts+Rebs,PR,34.5,22.9
+Cade Cunningham,Cade Cunningham,cade cunningham,Pts+Rebs+Asts,PRA,43.5,32.6
+Cade Cunningham,Cade Cunningham,cade cunningham,Two Pointers Attempted,FG2A,15.5,9.19
+Cameron Johnson,Cameron Johnson,cameron johnson,3-PT Attempted,FG3A,4.5,5.49
+Cameron Johnson,Cameron Johnson,cameron johnson,3-PT Made,FG3M,1.5,2.15
+Cameron Johnson,Cameron Johnson,cameron johnson,Assists,AST,2.5,3.29
+Cameron Johnson,Cameron Johnson,cameron johnson,Blks+Stls,SB,1.5,1.67
+Cameron Johnson,Cameron Johnson,cameron johnson,Dunks,DUNKS,0.5,1.01
+Cameron Johnson,Cameron Johnson,cameron johnson,FG Attempted,FGA,8.5,8.59
+Cameron Johnson,Cameron Johnson,cameron johnson,FG Made,FGM,3.5,4.64
+Cameron Johnson,Cameron Johnson,cameron johnson,Free Throws Attempted,FTA,1.5,1.66
+Cameron Johnson,Cameron Johnson,cameron johnson,Points,PTS,10.5,15.48
+Cameron Johnson,Cameron Johnson,cameron johnson,Pts+Asts,PA,12.5,18.77
+Cameron Johnson,Cameron Johnson,cameron johnson,Pts+Rebs,PR,14.5,20.2
+Cameron Johnson,Cameron Johnson,cameron johnson,Pts+Rebs+Asts,PRA,16.5,23.49
+Cameron Johnson,Cameron Johnson,cameron johnson,Rebounds,REB,3.5,4.72
+Cameron Johnson,Cameron Johnson,cameron johnson,Rebs+Asts,RA,7.5,8.01
+Cameron Johnson,Cameron Johnson,cameron johnson,Steals,STL,0.5,1.14
+Cameron Johnson,Cameron Johnson,cameron johnson,Turnovers,TOV,0.5,0.91
+Cameron Johnson,Cameron Johnson,cameron johnson,Two Pointers Attempted,FG2A,3.5,4.4
+Cameron Johnson,Cameron Johnson,cameron johnson,Two Pointers Made,FG2M,1.5,2.83
+Cason Wallace,Cason Wallace,cason wallace,3-PT Attempted,FG3A,2.5,4.28
+Cason Wallace,Cason Wallace,cason wallace,Blks+Stls,SB,1.5,1.54
+Cason Wallace,Cason Wallace,cason wallace,FG Made,FGM,2.5,3.0
+Cason Wallace,Cason Wallace,cason wallace,Free Throws Attempted,FTA,0.5,0.94
+Cason Wallace,Cason Wallace,cason wallace,Free Throws Made,FTM,0.5,0.62
+Cason Wallace,Cason Wallace,cason wallace,Points,PTS,7.5,9.15
+Cason Wallace,Cason Wallace,cason wallace,Pts+Asts,PA,9.5,11.19
+Cason Wallace,Cason Wallace,cason wallace,Pts+Rebs,PR,10.5,12.38
+Cason Wallace,Cason Wallace,cason wallace,Pts+Rebs+Asts,PRA,12.5,14.42
+Cason Wallace,Cason Wallace,cason wallace,Rebounds,REB,1.5,3.23
+Cason Wallace,Cason Wallace,cason wallace,Turnovers,TOV,0.5,0.68
+Chet Holmgren,Chet Holmgren,chet holmgren,3-PT Attempted,FG3A,3.5,3.64
+Chet Holmgren,Chet Holmgren,chet holmgren,Assists,AST,1.5,2.03
+Chet Holmgren,Chet Holmgren,chet holmgren,Dunks,DUNKS,2.0,2.91
+Chet Holmgren,Chet Holmgren,chet holmgren,Personal Fouls,PF,2.5,3.08
+Chet Holmgren,Chet Holmgren,chet holmgren,Points,PTS,16.5,18.43
+Chet Holmgren,Chet Holmgren,chet holmgren,Pts+Asts,PA,18.5,20.46
+Chet Holmgren,Chet Holmgren,chet holmgren,Pts+Rebs,PR,26.0,27.06
+Chet Holmgren,Chet Holmgren,chet holmgren,Pts+Rebs+Asts,PRA,27.5,29.09
+Chet Holmgren,Chet Holmgren,chet holmgren,Rebounds - 1st 3 Minutes,REB_3M,0.5,0.95
+Chet Holmgren,Chet Holmgren,chet holmgren,Rebs+Asts,RA,10.5,10.66
+Christian Braun,Christian Braun,christian braun,3-PT Attempted,FG3A,2.5,4.13
+Christian Braun,Christian Braun,christian braun,3-PT Made,FG3M,0.5,1.2
+Christian Braun,Christian Braun,christian braun,Dunks,DUNKS,0.5,1.25
+Christian Braun,Christian Braun,christian braun,FG Made,FGM,4.5,4.57
+Christian Braun,Christian Braun,christian braun,Free Throws Attempted,FTA,1.5,1.6
+Christian Braun,Christian Braun,christian braun,Points,PTS,11.5,13.88
+Christian Braun,Christian Braun,christian braun,Pts+Asts,PA,13.5,16.08
+Christian Braun,Christian Braun,christian braun,Pts+Rebs,PR,16.5,18.47
+Christian Braun,Christian Braun,christian braun,Pts+Rebs+Asts,PRA,18.5,20.67
+Christian Braun,Christian Braun,christian braun,Rebounds,REB,4.5,4.59
+Christian Braun,Christian Braun,christian braun,Rebs+Asts,RA,4.5,6.79
+Christian Braun,Christian Braun,christian braun,Two Pointers Attempted,FG2A,5.5,5.57
+Christian Braun,Christian Braun,christian braun,Two Pointers Made,FG2M,3.5,3.54
+Collin Gillespie,Collin Gillespie,collin gillespie,3-PT Attempted,FG3A,5.5,5.81
+Collin Gillespie,Collin Gillespie,collin gillespie,Blks+Stls,SB,0.5,1.13
+Collin Gillespie,Collin Gillespie,collin gillespie,FG Attempted,FGA,7.5,7.64
+Collin Gillespie,Collin Gillespie,collin gillespie,Free Throws Attempted,FTA,0.5,0.79
+Collin Gillespie,Collin Gillespie,collin gillespie,Free Throws Made,FTM,0.5,0.52
+Collin Gillespie,Collin Gillespie,collin gillespie,Points,PTS,8.5,9.1
+Collin Gillespie,Collin Gillespie,collin gillespie,Points - 1st 3 Minutes,PTS_3M,0.5,0.97
+Collin Gillespie,Collin Gillespie,collin gillespie,Pts+Asts,PA,12.0,12.3
+Collin Gillespie,Collin Gillespie,collin gillespie,Pts+Rebs,PR,12.5,13.07
+Collin Gillespie,Collin Gillespie,collin gillespie,Pts+Rebs+Asts,PRA,16.0,16.27
+Collin Gillespie,Collin Gillespie,collin gillespie,Rebounds,REB,3.5,3.97
+Collin Gillespie,Collin Gillespie,collin gillespie,Steals,STL,0.5,0.88
+Collin Gillespie,Collin Gillespie,collin gillespie,Two Pointers Attempted,FG2A,1.5,2.37
+Collin Gillespie,Collin Gillespie,collin gillespie,Two Pointers Made,FG2M,0.5,1.04
+Daniss Jenkins,Daniss Jenkins,daniss jenkins,Assists,AST,4.5,7.3
+Daniss Jenkins,Daniss Jenkins,daniss jenkins,Blks+Stls,SB,0.5,1.47
+Daniss Jenkins,Daniss Jenkins,daniss jenkins,Free Throws Attempted,FTA,1.5,3.35
+Daniss Jenkins,Daniss Jenkins,daniss jenkins,Free Throws Made,FTM,1.5,2.51
+Daniss Jenkins,Daniss Jenkins,daniss jenkins,Personal Fouls,PF,0.5,1.74
+Daniss Jenkins,Daniss Jenkins,daniss jenkins,Points,PTS,6.0,13.74
+Daniss Jenkins,Daniss Jenkins,daniss jenkins,Pts+Asts,PA,8.5,21.04
+Daniss Jenkins,Daniss Jenkins,daniss jenkins,Pts+Rebs+Asts,PRA,10.5,25.02
+Daniss Jenkins,Daniss Jenkins,daniss jenkins,Rebounds,REB,1.5,3.98
+Daniss Jenkins,Daniss Jenkins,daniss jenkins,Rebs+Asts,RA,6.5,11.28
+Daniss Jenkins,Daniss Jenkins,daniss jenkins,Steals,STL,0.5,1.04
+Daniss Jenkins,Daniss Jenkins,daniss jenkins,Turnovers,TOV,1.5,2.29
+Daniss Jenkins,Daniss Jenkins,daniss jenkins,Two Pointers Attempted,FG2A,3.5,7.01
+Daniss Jenkins,Daniss Jenkins,daniss jenkins,Two Pointers Made,FG2M,1.5,2.37
+Desmond Bane,Desmond Bane,desmond bane,Blocked Shots,BLK,0.5,0.71
+Desmond Bane,Desmond Bane,desmond bane,Two Pointers Attempted,FG2A,7.5,7.89
+Desmond Bane,Desmond Bane,desmond bane,Two Pointers Made,FG2M,3.5,3.69
+Devin Booker,Devin Booker,devin booker,3-PT Attempted,FG3A,5.5,6.34
+Devin Booker,Devin Booker,devin booker,Assists,AST,5.0,6.29
+Devin Booker,Devin Booker,devin booker,Blks+Stls,SB,0.5,1.14
+Devin Booker,Devin Booker,devin booker,Points,PTS,23.5,29.67
+Devin Booker,Devin Booker,devin booker,Points - 1st 3 Minutes,PTS_3M,0.5,2.74
+Devin Booker,Devin Booker,devin booker,Pts+Asts,PA,28.5,35.96
+Devin Booker,Devin Booker,devin booker,Pts+Rebs,PR,28.0,33.62
+Devin Booker,Devin Booker,devin booker,Pts+Rebs+Asts,PRA,34.5,39.91
+Devin Booker,Devin Booker,devin booker,Rebs+Asts,RA,10.0,10.24
+Devin Booker,Devin Booker,devin booker,Steals,STL,0.5,0.88
+Devin Booker,Devin Booker,devin booker,Two Pointers Attempted,FG2A,11.5,12.45
+Devin Booker,Devin Booker,devin booker,Two Pointers Made,FG2M,5.5,5.55
+Dillon Brooks,Dillon Brooks,dillon brooks,Assists,AST,1.5,2.15
+Dillon Brooks,Dillon Brooks,dillon brooks,Blks+Stls,SB,0.5,1.06
+Dillon Brooks,Dillon Brooks,dillon brooks,Points,PTS,17.5,17.78
+Dillon Brooks,Dillon Brooks,dillon brooks,Points - 1st 3 Minutes,PTS_3M,1.5,1.92
+Dillon Brooks,Dillon Brooks,dillon brooks,Pts+Asts,PA,19.5,19.93
+Dillon Brooks,Dillon Brooks,dillon brooks,Pts+Rebs+Asts,PRA,23.5,23.6
+Dillon Brooks,Dillon Brooks,dillon brooks,Two Pointers Attempted,FG2A,9.5,9.98
+Dillon Brooks,Dillon Brooks,dillon brooks,Two Pointers Made,FG2M,3.5,4.08
+Donte DiVincenzo,Donte DiVincenzo,donte divincenzo,Free Throws Attempted,FTA,0.5,1.22
+Donte DiVincenzo,Donte DiVincenzo,donte divincenzo,Free Throws Made,FTM,0.5,0.67
+Donte DiVincenzo,Donte DiVincenzo,donte divincenzo,Two Pointers Attempted,FG2A,1.5,1.53
+Donte DiVincenzo,Donte DiVincenzo,donte divincenzo,Two Pointers Made,FG2M,0.5,0.84
+Duncan Robinson,Duncan Robinson,duncan robinson,Blks+Stls,SB,0.5,0.76
+Duncan Robinson,Duncan Robinson,duncan robinson,FG Attempted,FGA,8.5,8.7
+Duncan Robinson,Duncan Robinson,duncan robinson,FG Made,FGM,3.5,4.67
+Duncan Robinson,Duncan Robinson,duncan robinson,Free Throws Attempted,FTA,0.5,1.6
+Duncan Robinson,Duncan Robinson,duncan robinson,Free Throws Made,FTM,0.5,0.97
+Duncan Robinson,Duncan Robinson,duncan robinson,Points,PTS,10.5,13.98
+Duncan Robinson,Duncan Robinson,duncan robinson,Pts+Asts,PA,12.5,16.11
+Duncan Robinson,Duncan Robinson,duncan robinson,Pts+Rebs,PR,13.0,16.61
+Duncan Robinson,Duncan Robinson,duncan robinson,Pts+Rebs+Asts,PRA,15.5,18.74
+Duncan Robinson,Duncan Robinson,duncan robinson,Rebs+Asts,RA,4.5,4.76
+Duncan Robinson,Duncan Robinson,duncan robinson,Turnovers,TOV,0.5,0.94
+Duncan Robinson,Duncan Robinson,duncan robinson,Two Pointers Attempted,FG2A,2.5,3.25
+Duncan Robinson,Duncan Robinson,duncan robinson,Two Pointers Made,FG2M,1.5,2.4
+Dyson Daniels,Dyson Daniels,dyson daniels,3-PT Attempted,FG3A,1.5,2.41
+Dyson Daniels,Dyson Daniels,dyson daniels,Assists,AST,5.0,5.52
+Dyson Daniels,Dyson Daniels,dyson daniels,Blks+Stls,SB,1.5,2.47
+Dyson Daniels,Dyson Daniels,dyson daniels,Dunks,DUNKS,0.5,1.81
+Dyson Daniels,Dyson Daniels,dyson daniels,FG Attempted,FGA,8.5,8.68
+Dyson Daniels,Dyson Daniels,dyson daniels,Free Throws Attempted,FTA,1.5,1.8
+Dyson Daniels,Dyson Daniels,dyson daniels,Free Throws Made,FTM,0.5,1.06
+Dyson Daniels,Dyson Daniels,dyson daniels,Personal Fouls,PF,2.5,3.03
+Dyson Daniels,Dyson Daniels,dyson daniels,Points,PTS,9.5,13.1
+Dyson Daniels,Dyson Daniels,dyson daniels,Points - 1st 3 Minutes,PTS_3M,0.5,1.18
+Dyson Daniels,Dyson Daniels,dyson daniels,Pts+Asts,PA,14.5,18.62
+Dyson Daniels,Dyson Daniels,dyson daniels,Pts+Rebs,PR,16.5,21.21
+Dyson Daniels,Dyson Daniels,dyson daniels,Pts+Rebs+Asts,PRA,21.5,26.73
+Dyson Daniels,Dyson Daniels,dyson daniels,Rebounds,REB,6.5,8.11
+Dyson Daniels,Dyson Daniels,dyson daniels,Rebs+Asts,RA,11.5,13.63
+Dyson Daniels,Dyson Daniels,dyson daniels,Two Pointers Attempted,FG2A,6.5,7.31
+Dyson Daniels,Dyson Daniels,dyson daniels,Two Pointers Made,FG2M,3.5,3.64
+Franz Wagner,Franz Wagner,franz wagner,3-PT Attempted,FG3A,3.5,3.94
+Franz Wagner,Franz Wagner,franz wagner,Points,PTS,17.0,17.11
+Franz Wagner,Franz Wagner,franz wagner,Rebs+Asts,RA,5.5,5.76
+Franz Wagner,Franz Wagner,franz wagner,Steals,STL,0.5,0.52
+Gabe Vincent,Gabe Vincent,gabe vincent,3-PT Made,FG3M,0.5,1.06
+Gabe Vincent,Gabe Vincent,gabe vincent,FG Attempted,FGA,3.5,3.7
+Gabe Vincent,Gabe Vincent,gabe vincent,FG Made,FGM,1.5,1.69
+Gabe Vincent,Gabe Vincent,gabe vincent,Personal Fouls,PF,1.5,1.57
+Gabe Vincent,Gabe Vincent,gabe vincent,Pts+Rebs+Asts,PRA,5.5,9.06
+Gabe Vincent,Gabe Vincent,gabe vincent,Rebounds,REB,0.5,1.79
+Gabe Vincent,Gabe Vincent,gabe vincent,Steals,STL,0.5,0.63
+Gabe Vincent,Gabe Vincent,gabe vincent,Turnovers,TOV,0.5,0.95
+Goga Bitadze,Goga Bitadze,goga bitadze,Blks+Stls,SB,1.5,1.89
+Goga Bitadze,Goga Bitadze,goga bitadze,FG Attempted,FGA,2.5,4.97
+Goga Bitadze,Goga Bitadze,goga bitadze,Free Throws Attempted,FTA,0.5,1.95
+Goga Bitadze,Goga Bitadze,goga bitadze,Personal Fouls,PF,1.5,2.99
+Goga Bitadze,Goga Bitadze,goga bitadze,Points,PTS,3.5,7.98
+Goga Bitadze,Goga Bitadze,goga bitadze,Pts+Rebs,PR,7.5,15.95
+Goga Bitadze,Goga Bitadze,goga bitadze,Pts+Rebs+Asts,PRA,8.5,17.91
+Goga Bitadze,Goga Bitadze,goga bitadze,Rebounds,REB,3.5,7.97
+Goga Bitadze,Goga Bitadze,goga bitadze,Steals,STL,0.5,0.8
+Goga Bitadze,Goga Bitadze,goga bitadze,Turnovers,TOV,0.5,1.17
+Goga Bitadze,Goga Bitadze,goga bitadze,Two Pointers Made,FG2M,1.5,2.46
+Isaiah Hartenstein,Isaiah Hartenstein,isaiah hartenstein,Free Throws Made,FTM,0.5,0.74
+Isaiah Hartenstein,Isaiah Hartenstein,isaiah hartenstein,Pts+Rebs+Asts,PRA,19.5,13.89
+Isaiah Hartenstein,Isaiah Hartenstein,isaiah hartenstein,Rebounds - 1st 3 Minutes,REB_3M,0.5,1.26
+Isaiah Hartenstein,Isaiah Hartenstein,isaiah hartenstein,Steals,STL,0.5,0.69
+Isaiah Joe,Isaiah Joe,isaiah joe,Points,PTS,7.5,15.39
+Isaiah Stewart,Isaiah Stewart,isaiah stewart,3-PT Attempted,FG3A,0.5,1.2
+Isaiah Stewart,Isaiah Stewart,isaiah stewart,Assists,AST,0.5,1.32
+Isaiah Stewart,Isaiah Stewart,isaiah stewart,Blocked Shots,BLK,0.5,1.11
+Isaiah Stewart,Isaiah Stewart,isaiah stewart,Dunks,DUNKS,0.5,2.09
+Isaiah Stewart,Isaiah Stewart,isaiah stewart,FG Attempted,FGA,4.5,5.68
+Isaiah Stewart,Isaiah Stewart,isaiah stewart,FG Made,FGM,2.5,3.36
+Isaiah Stewart,Isaiah Stewart,isaiah stewart,Free Throws Attempted,FTA,1.5,1.95
+Isaiah Stewart,Isaiah Stewart,isaiah stewart,Points,PTS,6.5,8.68
+Isaiah Stewart,Isaiah Stewart,isaiah stewart,Pts+Asts,PA,9.5,10.0
+Isaiah Stewart,Isaiah Stewart,isaiah stewart,Pts+Rebs,PR,10.5,12.69
+Isaiah Stewart,Isaiah Stewart,isaiah stewart,Pts+Rebs+Asts,PRA,10.5,14.01
+Isaiah Stewart,Isaiah Stewart,isaiah stewart,Rebounds,REB,4.0,4.01
+Isaiah Stewart,Isaiah Stewart,isaiah stewart,Rebs+Asts,RA,4.5,5.33
+Isaiah Stewart,Isaiah Stewart,isaiah stewart,Turnovers,TOV,0.5,1.06
+Isaiah Stewart,Isaiah Stewart,isaiah stewart,Two Pointers Attempted,FG2A,2.5,4.38
+Isaiah Stewart,Isaiah Stewart,isaiah stewart,Two Pointers Made,FG2M,1.5,2.67
+Jaden McDaniels,Jaden McDaniels,jaden mcdaniels,Blks+Stls,SB,1.5,2.52
+Jaden McDaniels,Jaden McDaniels,jaden mcdaniels,Blocked Shots,BLK,0.5,1.24
+Jaden McDaniels,Jaden McDaniels,jaden mcdaniels,Dunks,DUNKS,0.5,2.89
+Jaden McDaniels,Jaden McDaniels,jaden mcdaniels,FG Made,FGM,6.0,6.26
+Jaden McDaniels,Jaden McDaniels,jaden mcdaniels,Points,PTS,15.5,17.13
+Jaden McDaniels,Jaden McDaniels,jaden mcdaniels,Pts+Asts,PA,18.5,19.39
+Jaden McDaniels,Jaden McDaniels,jaden mcdaniels,Pts+Rebs,PR,20.5,21.65
+Jaden McDaniels,Jaden McDaniels,jaden mcdaniels,Pts+Rebs+Asts,PRA,23.5,23.91
+Jaden McDaniels,Jaden McDaniels,jaden mcdaniels,Rebounds,REB,4.5,4.52
+Jaden McDaniels,Jaden McDaniels,jaden mcdaniels,Steals,STL,0.5,1.28
+Jaden McDaniels,Jaden McDaniels,jaden mcdaniels,Two Pointers Attempted,FG2A,9.5,10.43
+Jaden McDaniels,Jaden McDaniels,jaden mcdaniels,Two Pointers Made,FG2M,5.0,5.28
+Jalen Brunson,Jalen Brunson,jalen brunson,Assists - 1st 3 Minutes,AST_3M,0.5,0.55
+Jalen Brunson,Jalen Brunson,jalen brunson,FG Attempted,FGA,21.5,15.48
+Jalen Brunson,Jalen Brunson,jalen brunson,Rebs+Asts,RA,9.5,11.26
+Jalen Duren,Jalen Duren,jalen duren,Assists,AST,1.5,3.42
+Jalen Duren,Jalen Duren,jalen duren,Blks+Stls,SB,1.5,1.55
+Jalen Duren,Jalen Duren,jalen duren,Blocked Shots,BLK,0.5,0.93
+Jalen Duren,Jalen Duren,jalen duren,Dunks,DUNKS,2.5,4.19
+Jalen Duren,Jalen Duren,jalen duren,FG Attempted,FGA,9.5,9.56
+Jalen Duren,Jalen Duren,jalen duren,FG Made,FGM,5.5,5.97
+Jalen Duren,Jalen Duren,jalen duren,Free Throws Attempted,FTA,4.5,5.44
+Jalen Duren,Jalen Duren,jalen duren,Free Throws Made,FTM,3.5,3.82
+Jalen Duren,Jalen Duren,jalen duren,Points,PTS,15.5,20.13
+Jalen Duren,Jalen Duren,jalen duren,Pts+Asts,PA,18.5,23.55
+Jalen Duren,Jalen Duren,jalen duren,Pts+Rebs,PR,26.5,29.68
+Jalen Duren,Jalen Duren,jalen duren,Pts+Rebs+Asts,PRA,28.5,33.1
+Jalen Duren,Jalen Duren,jalen duren,Rebs+Asts,RA,12.5,12.97
+Jalen Duren,Jalen Duren,jalen duren,Turnovers,TOV,1.5,2.22
+Jalen Green,Jalen Green,jalen green,Assists,AST,3.5,3.52
+Jalen Green,Jalen Green,jalen green,Blocked Shots,BLK,0.5,0.84
+Jalen Green,Jalen Green,jalen green,Dunks,DUNKS,0.5,1.88
+Jalen Green,Jalen Green,jalen green,Personal Fouls,PF,1.5,1.99
+Jalen Green,Jalen Green,jalen green,Points,PTS,19.0,19.83
+Jalen Green,Jalen Green,jalen green,Pts+Asts,PA,22.5,23.35
+Jalen Green,Jalen Green,jalen green,Pts+Rebs+Asts,PRA,27.0,27.45
+Jalen Green,Jalen Green,jalen green,Rebs+Asts,RA,7.5,7.62
+Jalen Green,Jalen Green,jalen green,Steals,STL,0.5,0.91
+Jalen Johnson,Jalen Johnson,jalen johnson,3-PT Made,FG3M,1.5,1.57
+Jalen Johnson,Jalen Johnson,jalen johnson,Dunks,DUNKS,0.5,1.84
+Jalen Johnson,Jalen Johnson,jalen johnson,Personal Fouls,PF,2.5,2.52
+Jalen Johnson,Jalen Johnson,jalen johnson,Rebounds - 1st 3 Minutes,REB_3M,0.5,0.74
+Jalen Johnson,Jalen Johnson,jalen johnson,Steals,STL,0.5,0.82
+Jalen Suggs,Jalen Suggs,jalen suggs,3-PT Attempted,FG3A,7.5,8.16
+Jalen Suggs,Jalen Suggs,jalen suggs,Assists,AST,4.5,6.18
+Jalen Suggs,Jalen Suggs,jalen suggs,Pts+Asts,PA,19.5,20.23
+Jalen Suggs,Jalen Suggs,jalen suggs,Pts+Rebs+Asts,PRA,23.5,24.38
+Jalen Suggs,Jalen Suggs,jalen suggs,Rebounds,REB,4.0,4.15
+Jalen Suggs,Jalen Suggs,jalen suggs,Rebs+Asts,RA,6.5,10.33
+Jamal Murray,Jamal Murray,jamal murray,3-PT Made,FG3M,2.5,3.62
+Jamal Murray,Jamal Murray,jamal murray,Assists,AST,6.0,6.38
+Jamal Murray,Jamal Murray,jamal murray,Blks+Stls,SB,1.5,1.6
+Jamal Murray,Jamal Murray,jamal murray,FG Attempted,FGA,20.5,12.94
+Jamal Murray,Jamal Murray,jamal murray,Personal Fouls,PF,1.5,1.89
+Jamal Murray,Jamal Murray,jamal murray,Steals,STL,0.5,0.89
+Jonathan Kuminga,Jonathan Kuminga,jonathan kuminga,3-PT Attempted,FG3A,3.5,4.05
+Jonathan Kuminga,Jonathan Kuminga,jonathan kuminga,Dunks,DUNKS,0.5,1.18
+Jordan Clarkson,Jordan Clarkson,jordan clarkson,Assists,AST,1.5,1.86
+Jordan Clarkson,Jordan Clarkson,jordan clarkson,Blks+Stls,SB,0.5,0.78
+Jordan Clarkson,Jordan Clarkson,jordan clarkson,FG Made,FGM,2.5,2.59
+Jordan Clarkson,Jordan Clarkson,jordan clarkson,Free Throws Made,FTM,0.5,0.58
+Jordan Clarkson,Jordan Clarkson,jordan clarkson,Personal Fouls,PF,0.5,1.88
+Jordan Clarkson,Jordan Clarkson,jordan clarkson,Points,PTS,5.5,6.64
+Jordan Clarkson,Jordan Clarkson,jordan clarkson,Pts+Asts,PA,6.5,8.5
+Jordan Clarkson,Jordan Clarkson,jordan clarkson,Pts+Rebs+Asts,PRA,8.5,11.21
+Jordan Clarkson,Jordan Clarkson,jordan clarkson,Rebounds,REB,1.5,2.71
+Jordan Clarkson,Jordan Clarkson,jordan clarkson,Rebs+Asts,RA,2.5,4.57
+Jordan Clarkson,Jordan Clarkson,jordan clarkson,Steals,STL,0.5,0.69
+Jordan Clarkson,Jordan Clarkson,jordan clarkson,Turnovers,TOV,0.5,0.69
+Jordan Clarkson,Jordan Clarkson,jordan clarkson,Two Pointers Made,FG2M,1.5,1.97
+Josh Hart,Josh Hart,josh hart,Personal Fouls,PF,2.5,2.76
+Josh Hart,Josh Hart,josh hart,Turnovers,TOV,1.5,1.68
+Julius Randle,Julius Randle,julius randle,3-PT Attempted,FG3A,3.5,4.42
+Julius Randle,Julius Randle,julius randle,Assists,AST,4.5,4.57
+Julius Randle,Julius Randle,julius randle,Dunks,DUNKS,0.5,2.19
+Julius Randle,Julius Randle,julius randle,Points,PTS,19.5,20.73
+Julius Randle,Julius Randle,julius randle,Pts+Asts,PA,24.5,25.3
+Julius Randle,Julius Randle,julius randle,Steals,STL,0.5,1.02
+Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Blks+Stls,SB,1.5,1.52
+Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Blocked Shots,BLK,0.5,0.51
+Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Dunks,DUNKS,0.5,2.88
+Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Rebs+Asts,RA,14.5,14.52
+Luguentz Dort,Luguentz Dort,luguentz dort,Blks+Stls,SB,0.5,1.55
+Luguentz Dort,Luguentz Dort,luguentz dort,FG Made,FGM,2.5,2.53
+Luguentz Dort,Luguentz Dort,luguentz dort,Free Throws Attempted,FTA,0.5,0.52
+Luguentz Dort,Luguentz Dort,luguentz dort,Points - 1st 3 Minutes,PTS_3M,0.5,1.2
+Luguentz Dort,Luguentz Dort,luguentz dort,Turnovers,TOV,0.5,0.51
+Luguentz Dort,Luguentz Dort,luguentz dort,Two Pointers Made,FG2M,0.5,0.86
+Mikal Bridges,Mikal Bridges,mikal bridges,3-PT Attempted,FG3A,3.5,4.22
+Mikal Bridges,Mikal Bridges,mikal bridges,Assists,AST,2.5,2.81
+Mikal Bridges,Mikal Bridges,mikal bridges,Dunks,DUNKS,0.5,1.06
+Mikal Bridges,Mikal Bridges,mikal bridges,FG Made,FGM,3.5,4.21
+Mikal Bridges,Mikal Bridges,mikal bridges,Free Throws Attempted,FTA,0.5,1.45
+Mikal Bridges,Mikal Bridges,mikal bridges,Free Throws Made,FTM,0.5,0.93
+Mikal Bridges,Mikal Bridges,mikal bridges,Personal Fouls,PF,1.5,1.76
+Mikal Bridges,Mikal Bridges,mikal bridges,Points,PTS,11.0,12.24
+Mikal Bridges,Mikal Bridges,mikal bridges,Pts+Asts,PA,13.5,15.05
+Mikal Bridges,Mikal Bridges,mikal bridges,Pts+Rebs,PR,14.0,14.71
+Mikal Bridges,Mikal Bridges,mikal bridges,Pts+Rebs+Asts,PRA,16.5,17.52
+Mikal Bridges,Mikal Bridges,mikal bridges,Turnovers,TOV,0.5,0.68
+Mikal Bridges,Mikal Bridges,mikal bridges,Two Pointers Made,FG2M,2.5,2.96
+Miles McBride,Miles McBride,miles mcbride,Blks+Stls,SB,0.5,1.16
+Miles McBride,Miles McBride,miles mcbride,FG Made,FGM,2.5,2.63
+Miles McBride,Miles McBride,miles mcbride,Free Throws Attempted,FTA,0.5,1.0
+Miles McBride,Miles McBride,miles mcbride,Free Throws Made,FTM,0.5,0.54
+Miles McBride,Miles McBride,miles mcbride,Pts+Rebs,PR,19.5,9.81
+Miles McBride,Miles McBride,miles mcbride,Turnovers,TOV,0.5,0.72
+Miles McBride,Miles McBride,miles mcbride,Two Pointers Attempted,FG2A,2.5,2.69
+Miles McBride,Miles McBride,miles mcbride,Two Pointers Made,FG2M,0.5,0.84
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Blks+Stls,SB,1.5,2.98
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Blocked Shots,BLK,1.5,1.53
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Dunks,DUNKS,1.5,2.2
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,FG Attempted,FGA,2.5,4.85
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,FG Made,FGM,1.5,3.03
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Free Throws Attempted,FTA,1.5,1.81
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Free Throws Made,FTM,0.5,0.99
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Personal Fouls,PF,1.5,2.18
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Points,PTS,3.5,9.19
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Pts+Rebs,PR,11.5,18.57
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Pts+Rebs+Asts,PRA,11.5,19.62
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Rebounds,REB,6.5,9.38
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Two Pointers Attempted,FG2A,2.5,3.97
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Two Pointers Made,FG2M,1.5,2.51
+Mouhamed Gueye,Mouhamed Gueye,mouhamed gueye,3-PT Attempted,FG3A,1.5,1.74
+Mouhamed Gueye,Mouhamed Gueye,mouhamed gueye,3-PT Made,FG3M,0.5,0.53
+Mouhamed Gueye,Mouhamed Gueye,mouhamed gueye,Blks+Stls,SB,0.5,1.06
+Mouhamed Gueye,Mouhamed Gueye,mouhamed gueye,FG Attempted,FGA,2.5,3.03
+Mouhamed Gueye,Mouhamed Gueye,mouhamed gueye,FG Made,FGM,0.5,1.17
+Mouhamed Gueye,Mouhamed Gueye,mouhamed gueye,Personal Fouls,PF,1.5,1.81
+Mouhamed Gueye,Mouhamed Gueye,mouhamed gueye,Pts+Rebs,PR,5.5,7.27
+Mouhamed Gueye,Mouhamed Gueye,mouhamed gueye,Pts+Rebs+Asts,PRA,5.5,8.46
+Mouhamed Gueye,Mouhamed Gueye,mouhamed gueye,Rebounds,REB,2.5,3.47
+Mouhamed Gueye,Mouhamed Gueye,mouhamed gueye,Steals,STL,0.5,0.56
+Mouhamed Gueye,Mouhamed Gueye,mouhamed gueye,Two Pointers Attempted,FG2A,0.5,1.17
+Naz Reid,Naz Reid,naz reid,3-PT Attempted,FG3A,3.5,6.51
+Naz Reid,Naz Reid,naz reid,Assists,AST,0.5,1.8
+Naz Reid,Naz Reid,naz reid,Blks+Stls,SB,1.5,2.75
+Naz Reid,Naz Reid,naz reid,Blocked Shots,BLK,0.5,1.47
+Naz Reid,Naz Reid,naz reid,FG Attempted,FGA,8.5,11.32
+Naz Reid,Naz Reid,naz reid,FG Made,FGM,3.5,4.76
+Naz Reid,Naz Reid,naz reid,Free Throws Attempted,FTA,1.5,1.92
+Naz Reid,Naz Reid,naz reid,Personal Fouls,PF,2.5,3.15
+Naz Reid,Naz Reid,naz reid,Points,PTS,10.0,13.74
+Naz Reid,Naz Reid,naz reid,Pts+Asts,PA,11.5,15.54
+Naz Reid,Naz Reid,naz reid,Pts+Rebs,PR,15.5,19.86
+Naz Reid,Naz Reid,naz reid,Pts+Rebs+Asts,PRA,16.5,21.66
+Naz Reid,Naz Reid,naz reid,Rebounds,REB,5.0,6.12
+Naz Reid,Naz Reid,naz reid,Turnovers,TOV,1.5,1.53
+Naz Reid,Naz Reid,naz reid,Two Pointers Attempted,FG2A,4.5,8.01
+Naz Reid,Naz Reid,naz reid,Two Pointers Made,FG2M,2.5,3.42
+Nickeil Alexander-Walker,Nickeil Alexander-Walker,nickeil alexander walker,3-PT Attempted,FG3A,8.5,8.87
+Nickeil Alexander-Walker,Nickeil Alexander-Walker,nickeil alexander walker,Blocked Shots,BLK,0.5,0.78
+Nickeil Alexander-Walker,Nickeil Alexander-Walker,nickeil alexander walker,FG Made,FGM,5.5,7.2
+Nickeil Alexander-Walker,Nickeil Alexander-Walker,nickeil alexander walker,Personal Fouls,PF,2.5,2.57
+Nickeil Alexander-Walker,Nickeil Alexander-Walker,nickeil alexander walker,Points,PTS,18.0,22.35
+Nickeil Alexander-Walker,Nickeil Alexander-Walker,nickeil alexander walker,Points - 1st 3 Minutes,PTS_3M,1.5,2.04
+Nickeil Alexander-Walker,Nickeil Alexander-Walker,nickeil alexander walker,Pts+Asts,PA,21.5,25.29
+Nickeil Alexander-Walker,Nickeil Alexander-Walker,nickeil alexander walker,Pts+Rebs,PR,21.5,25.9
+Nickeil Alexander-Walker,Nickeil Alexander-Walker,nickeil alexander walker,Pts+Rebs+Asts,PRA,24.5,28.84
+Nickeil Alexander-Walker,Nickeil Alexander-Walker,nickeil alexander walker,Steals,STL,0.5,1.34
+Nickeil Alexander-Walker,Nickeil Alexander-Walker,nickeil alexander walker,Turnovers,TOV,1.5,1.82
+Nickeil Alexander-Walker,Nickeil Alexander-Walker,nickeil alexander walker,Two Pointers Attempted,FG2A,5.5,7.5
+Nickeil Alexander-Walker,Nickeil Alexander-Walker,nickeil alexander walker,Two Pointers Made,FG2M,2.5,4.9
+Nikola Jokić,Nikola Jokić,nikola jokic,Assists,AST,9.5,10.99
+Nikola Jokić,Nikola Jokić,nikola jokic,Blks+Stls,SB,2.5,2.6
+Nikola Jokić,Nikola Jokić,nikola jokic,Dunks,DUNKS,0.5,4.07
+Nikola Jokić,Nikola Jokić,nikola jokic,FG Attempted,FGA,21.5,13.79
+Nikola Jokić,Nikola Jokić,nikola jokic,Steals,STL,0.5,1.53
+OG Anunoby,OG Anunoby,o g anunoby,3-PT Attempted,FG3A,6.5,7.7
+OG Anunoby,OG Anunoby,o g anunoby,Assists,AST,1.5,2.16
+OG Anunoby,OG Anunoby,o g anunoby,Blks+Stls,SB,1.5,1.78
+OG Anunoby,OG Anunoby,o g anunoby,Free Throws Attempted,FTA,2.5,2.64
+OG Anunoby,OG Anunoby,o g anunoby,Points,PTS,16.5,17.15
+OG Anunoby,OG Anunoby,o g anunoby,Points - 1st 3 Minutes,PTS_3M,1.5,1.53
+OG Anunoby,OG Anunoby,o g anunoby,Pts+Asts,PA,18.5,19.31
+OG Anunoby,OG Anunoby,o g anunoby,Pts+Rebs,PR,21.5,22.53
+OG Anunoby,OG Anunoby,o g anunoby,Pts+Rebs+Asts,PRA,23.5,24.69
+OG Anunoby,OG Anunoby,o g anunoby,Rebs+Asts,RA,7.5,7.54
+OG Anunoby,OG Anunoby,o g anunoby,Steals,STL,0.5,0.87
+Onyeka Okongwu,Onyeka Okongwu,onyeka okongwu,Dunks,DUNKS,0.5,1.41
+Onyeka Okongwu,Onyeka Okongwu,onyeka okongwu,Free Throws Attempted,FTA,1.5,2.64
+Onyeka Okongwu,Onyeka Okongwu,onyeka okongwu,Free Throws Made,FTM,1.5,1.71
+Onyeka Okongwu,Onyeka Okongwu,onyeka okongwu,Points - 1st 3 Minutes,PTS_3M,0.5,1.17
+Onyeka Okongwu,Onyeka Okongwu,onyeka okongwu,Rebounds - 1st 3 Minutes,REB_3M,0.5,0.58
+Onyeka Okongwu,Onyeka Okongwu,onyeka okongwu,Steals,STL,0.5,0.82
+Oso Ighodaro,Oso Ighodaro,oso ighodaro,Blks+Stls,SB,1.5,1.59
+Oso Ighodaro,Oso Ighodaro,oso ighodaro,Free Throws Made,FTM,0.5,0.66
+Oso Ighodaro,Oso Ighodaro,oso ighodaro,Rebounds - 1st 3 Minutes,REB_3M,0.5,0.91
+Oso Ighodaro,Oso Ighodaro,oso ighodaro,Steals,STL,0.5,0.52
+Paolo Banchero,Paolo Banchero,paolo banchero,Assists,AST,5.0,5.86
+Paolo Banchero,Paolo Banchero,paolo banchero,Dunks,DUNKS,0.5,2.22
+Paolo Banchero,Paolo Banchero,paolo banchero,Pts+Rebs,PR,28.5,28.85
+Paolo Banchero,Paolo Banchero,paolo banchero,Pts+Rebs+Asts,PRA,34.0,34.71
+Paolo Banchero,Paolo Banchero,paolo banchero,Rebounds,REB,7.5,9.25
+Paolo Banchero,Paolo Banchero,paolo banchero,Steals,STL,0.5,1.26
+Royce O'Neale,Royce O'Neale,royce oneale,Free Throws Attempted,FTA,0.5,0.76
+Royce O'Neale,Royce O'Neale,royce oneale,Points,PTS,7.5,7.54
+Royce O'Neale,Royce O'Neale,royce oneale,Steals,STL,0.5,0.67
+Royce O'Neale,Royce O'Neale,royce oneale,Two Pointers Attempted,FG2A,0.5,0.69
+Rudy Gobert,Rudy Gobert,rudy gobert,Steals,STL,0.5,0.73
+Shai Gilgeous-Alexander,Shai Gilgeous-Alexander,shai gilgeous alexander,3-PT Made,FG3M,1.5,1.72
+Shai Gilgeous-Alexander,Shai Gilgeous-Alexander,shai gilgeous alexander,Assists,AST,7.0,8.44
+Shai Gilgeous-Alexander,Shai Gilgeous-Alexander,shai gilgeous alexander,Blocked Shots,BLK,0.5,0.52
+Shai Gilgeous-Alexander,Shai Gilgeous-Alexander,shai gilgeous alexander,Dunks,DUNKS,0.5,3.45
+Shai Gilgeous-Alexander,Shai Gilgeous-Alexander,shai gilgeous alexander,FG Attempted,FGA,21.5,14.78
+Shai Gilgeous-Alexander,Shai Gilgeous-Alexander,shai gilgeous alexander,Points,PTS,31.5,33.46
+Shai Gilgeous-Alexander,Shai Gilgeous-Alexander,shai gilgeous alexander,Pts+Asts,PA,38.5,41.9
+Shai Gilgeous-Alexander,Shai Gilgeous-Alexander,shai gilgeous alexander,Pts+Rebs,PR,35.5,37.27
+Shai Gilgeous-Alexander,Shai Gilgeous-Alexander,shai gilgeous alexander,Pts+Rebs+Asts,PRA,43.5,45.71
+Shai Gilgeous-Alexander,Shai Gilgeous-Alexander,shai gilgeous alexander,Rebs+Asts,RA,11.5,12.25
+Shai Gilgeous-Alexander,Shai Gilgeous-Alexander,shai gilgeous alexander,Turnovers,TOV,2.5,2.51
+Tim Hardaway,Tim Hardaway,tim hardaway,Pts+Rebs,PR,12.5,14.18
+Tim Hardaway,Tim Hardaway,tim hardaway,Rebounds,REB,1.5,2.79
+Tobias Harris,Tobias Harris,tobias harris,Dunks,DUNKS,0.5,1.22
+Tobias Harris,Tobias Harris,tobias harris,FG Attempted,FGA,13.0,7.71
+Tobias Harris,Tobias Harris,tobias harris,Steals,STL,0.5,1.1
+Wendell Carter,Wendell Carter Jr.,wendell carter,3-PT Attempted,FG3A,1.5,1.65
+Wendell Carter,Wendell Carter Jr.,wendell carter,Blocked Shots,BLK,0.5,0.75
+Wendell Carter,Wendell Carter Jr.,wendell carter,Free Throws Attempted,FTA,2.5,3.72
+Wendell Carter,Wendell Carter Jr.,wendell carter,Free Throws Made,FTM,1.5,2.41
+Wendell Carter,Wendell Carter Jr.,wendell carter,Points,PTS,9.5,10.51
+Wendell Carter,Wendell Carter Jr.,wendell carter,Pts+Asts,PA,11.5,12.02
+Wendell Carter,Wendell Carter Jr.,wendell carter,Rebounds,REB,6.5,6.74

@@ -1,0 +1,338 @@
+player_name,team,opponent,pitcher_name,lineup_spot,expected_pa,fantasy_points,fantasy_points_p10,fantasy_points_p50,fantasy_points_p90,confidence
+Aaron Judge,New York Yankees,Boston Red Sox,Connelly Early,6,4.13,5.68,0.0,5.0,14.0,Low
+CJ Abrams,Washington Nationals,Atlanta Braves,Reynaldo López,6,4.11,5.24,0.0,5.0,12.0,Medium
+Bryce Harper,Philadelphia Phillies,Chicago Cubs,Shota Imanaga,6,4.14,5.16,0.0,3.0,14.0,Low
+Brice Turang,Milwaukee Brewers,Detroit Tigers,Keider Montero,6,4.15,4.99,0.0,5.0,12.0,Medium
+Corbin Carroll,Arizona Diamondbacks,Chicago White Sox,Sean Burke,6,4.08,4.81,0.0,3.0,12.0,Medium
+Austin Martin,Minnesota Twins,New York Mets,Nolan McLean,6,4.15,4.79,0.0,5.0,11.0,Medium
+Cody Bellinger,New York Yankees,Boston Red Sox,Connelly Early,6,4.15,4.71,0.0,3.0,12.0,Medium
+Bobby Witt Jr.,Kansas City Royals,Baltimore Orioles,Shane Baz,6,4.08,4.71,0.0,5.0,11.0,Medium
+Ben Rice,New York Yankees,Boston Red Sox,Connelly Early,6,4.19,4.68,0.0,3.0,12.0,Medium
+Brayan Rocchio,Cleveland Guardians,Houston Astros,Ryan Weiss,6,4.08,4.65,0.0,3.0,11.0,Medium
+Jordan Walker,St. Louis Cardinals,Miami Marlins,Chris Paddack,6,4.13,4.63,0.0,3.0,12.0,Medium
+Hyeseong Kim,Los Angeles Dodgers,San Francisco Giants,Landen Roupp,6,4.11,4.55,0.0,4.0,10.0,Medium
+Geraldo Perdomo,Arizona Diamondbacks,Chicago White Sox,Sean Burke,6,4.06,4.47,0.0,3.0,11.0,Medium
+Mike Trout,Los Angeles Angels,Toronto Blue Jays,Patrick Corbin,6,4.11,4.46,0.0,3.0,12.0,Medium
+Angel Martínez,Cleveland Guardians,Houston Astros,Ryan Weiss,6,4.05,4.42,0.0,3.0,10.0,Medium
+Alex Call,Los Angeles Dodgers,San Francisco Giants,Landen Roupp,6,4.11,4.41,0.0,3.0,11.0,Medium
+Andy Pages,Los Angeles Dodgers,San Francisco Giants,Landen Roupp,6,4.14,4.4,0.0,3.0,10.0,Medium
+JJ Wetherholt,St. Louis Cardinals,Miami Marlins,Chris Paddack,6,4.13,4.35,0.0,3.0,11.0,Medium
+Christian Vázquez,Houston Astros,Cleveland Guardians,Parker Messick,6,4.12,4.34,0.0,3.0,12.0,Medium
+Oswald Peraza,Los Angeles Angels,Toronto Blue Jays,Patrick Corbin,6,4.07,4.33,0.0,3.0,12.0,Medium
+Elly De La Cruz,Cincinnati Reds,Tampa Bay Rays,Steven Matz,6,4.12,4.33,0.0,3.0,11.0,Medium
+Iván Herrera,St. Louis Cardinals,Miami Marlins,Chris Paddack,6,4.13,4.33,0.0,3.0,11.0,Medium
+Andrés Giménez,Toronto Blue Jays,Los Angeles Angels,Jack Kochanowicz,6,4.1,4.33,0.0,3.0,10.0,Medium
+José Ramírez,Cleveland Guardians,Houston Astros,Ryan Weiss,6,4.07,4.32,0.0,3.0,12.0,Medium
+Drake Baldwin,Atlanta Braves,Washington Nationals,Foster Griffin,6,4.15,4.28,0.0,3.0,10.0,Medium
+Daniel Schneemann,Cleveland Guardians,Houston Astros,Ryan Weiss,6,4.06,4.27,0.0,3.0,12.0,Medium
+Sal Stewart,Cincinnati Reds,Tampa Bay Rays,Steven Matz,6,4.14,4.26,0.0,3.0,12.0,Medium
+Christian Walker,Houston Astros,Cleveland Guardians,Parker Messick,6,4.13,4.26,0.0,3.0,11.0,Medium
+Darell Hernaiz,Athletics,Seattle Mariners,Luis Castillo,6,4.11,4.24,0.0,3.0,10.0,Medium
+Max Muncy,Los Angeles Dodgers,San Francisco Giants,Landen Roupp,6,4.12,4.23,0.0,3.0,11.0,Medium
+Dustin Harris,Houston Astros,Cleveland Guardians,Parker Messick,6,4.1,4.21,0.0,3.0,10.0,Medium
+Dominic Smith,Atlanta Braves,Washington Nationals,Foster Griffin,6,4.13,4.21,0.0,3.0,10.0,Medium
+Dalton Rushing,Los Angeles Dodgers,San Francisco Giants,Landen Roupp,6,4.11,4.21,0.0,3.0,10.0,Medium
+Chandler Simpson,Tampa Bay Rays,Cincinnati Reds,Chase Burns,6,4.06,4.19,0.0,3.0,10.0,Medium
+Dillon Dingler,Detroit Tigers,Milwaukee Brewers,Kyle Harrison,6,4.07,4.18,0.0,3.0,10.0,Medium
+Garrett Mitchell,Milwaukee Brewers,Detroit Tigers,Keider Montero,6,4.14,4.17,0.0,3.0,10.0,Medium
+Ceddanne Rafaela,Boston Red Sox,New York Yankees,Luis Gil,6,4.09,4.15,0.0,3.0,10.0,Medium
+Brendan Donovan,Seattle Mariners,Athletics,Jacob Lopez,6,4.09,4.11,0.0,3.0,10.0,Medium
+Matt Olson,Atlanta Braves,Washington Nationals,Foster Griffin,6,4.14,4.1,0.0,3.0,11.0,Medium
+Nico Hoerner,Chicago Cubs,Philadelphia Phillies,Jesús Luzardo,6,4.09,4.09,0.0,3.0,10.0,Medium
+Ildemaro Vargas,Arizona Diamondbacks,Chicago White Sox,Sean Burke,6,4.07,4.06,0.0,3.0,10.0,Medium
+Casey Schmitt,San Francisco Giants,Los Angeles Dodgers,Yoshinobu Yamamoto,6,4.05,4.06,0.0,3.0,10.0,Medium
+Matt Shaw,Chicago Cubs,Philadelphia Phillies,Jesús Luzardo,6,4.05,4.05,0.0,3.0,10.0,Medium
+Daylen Lile,Washington Nationals,Atlanta Braves,Reynaldo López,6,4.06,4.04,0.0,3.0,10.0,Medium
+James Wood,Washington Nationals,Atlanta Braves,Reynaldo López,6,4.08,4.0,0.0,3.0,11.0,Medium
+Jonny DeLuca,Tampa Bay Rays,Cincinnati Reds,Chase Burns,6,4.05,4.0,0.0,3.0,10.0,Medium
+Munetaka Murakami,Chicago White Sox,Arizona Diamondbacks,Merrill Kelly,6,4.14,3.99,0.0,2.0,12.0,Medium
+Gary Sánchez,Milwaukee Brewers,Detroit Tigers,Keider Montero,6,4.13,3.99,0.0,2.5,11.0,Medium
+Austin Riley,Atlanta Braves,Washington Nationals,Foster Griffin,6,4.12,3.99,0.0,3.0,10.0,Medium
+Everson Pereira,Chicago White Sox,Arizona Diamondbacks,Merrill Kelly,6,4.12,3.96,0.0,3.0,11.0,Medium
+Masyn Winn,St. Louis Cardinals,Miami Marlins,Chris Paddack,6,4.11,3.95,0.0,3.0,10.0,Medium
+Jeremiah Jackson,Baltimore Orioles,Kansas City Royals,Kris Bubic,6,4.11,3.95,0.0,3.0,10.0,Medium
+Daniel Susac,San Francisco Giants,Los Angeles Dodgers,Yoshinobu Yamamoto,6,4.04,3.94,0.0,3.0,10.0,Medium
+Carlos Correa,Houston Astros,Cleveland Guardians,Parker Messick,6,4.12,3.91,0.0,3.0,10.0,Medium
+Jake Bauers,Milwaukee Brewers,Detroit Tigers,Keider Montero,6,4.1,3.91,0.0,3.0,10.0,Medium
+Connor Wong,Boston Red Sox,New York Yankees,Luis Gil,6,4.07,3.91,0.0,3.0,10.0,Medium
+Derek Hill,Chicago White Sox,Arizona Diamondbacks,Merrill Kelly,6,4.12,3.91,0.0,3.0,10.0,Medium
+Brandon Lockridge,Milwaukee Brewers,Detroit Tigers,Keider Montero,6,4.11,3.89,0.0,3.0,10.0,Medium
+Carson Kelly,Chicago Cubs,Philadelphia Phillies,Jesús Luzardo,6,4.08,3.89,0.0,3.0,10.0,Medium
+Zach Neto,Los Angeles Angels,Toronto Blue Jays,Patrick Corbin,6,4.09,3.89,0.0,3.0,10.0,Medium
+Jac Caglianone,Kansas City Royals,Baltimore Orioles,Shane Baz,6,4.06,3.87,0.0,3.0,10.0,Medium
+Daulton Varsho,Toronto Blue Jays,Los Angeles Angels,Jack Kochanowicz,6,4.11,3.87,0.0,3.0,10.0,Medium
+Lawrence Butler,Athletics,Seattle Mariners,Luis Castillo,6,4.1,3.87,0.0,3.0,10.0,Medium
+Luisangel Acuña,Chicago White Sox,Arizona Diamondbacks,Merrill Kelly,6,4.1,3.86,0.0,3.0,10.0,Medium
+Gunnar Henderson,Baltimore Orioles,Kansas City Royals,Kris Bubic,6,4.1,3.85,0.0,2.0,10.0,Medium
+Otto Lopez,Miami Marlins,St. Louis Cardinals,Dustin May,6,4.08,3.84,0.0,3.0,10.0,Medium
+Isiah Kiner-Falefa,Boston Red Sox,New York Yankees,Luis Gil,6,4.06,3.83,0.0,3.0,10.0,Medium
+Alec Burleson,St. Louis Cardinals,Miami Marlins,Chris Paddack,6,4.12,3.82,0.0,3.0,10.0,Medium
+Miguel Rojas,Los Angeles Dodgers,San Francisco Giants,Landen Roupp,6,4.11,3.82,0.0,3.0,10.0,Medium
+Carson Benge,New York Mets,Minnesota Twins,Simeon Woods Richardson,6,4.03,3.8,0.0,3.0,10.0,Medium
+Kyle Tucker,Los Angeles Dodgers,San Francisco Giants,Landen Roupp,6,4.11,3.8,0.0,3.0,10.0,Medium
+Cam Smith,Houston Astros,Cleveland Guardians,Parker Messick,6,4.11,3.79,0.0,3.0,10.0,Medium
+Luis Robert Jr.,New York Mets,Minnesota Twins,Simeon Woods Richardson,6,4.07,3.79,0.0,3.0,10.0,Medium
+Kyle Isbel,Kansas City Royals,Baltimore Orioles,Shane Baz,6,4.05,3.79,0.0,3.0,10.0,Medium
+Ian Happ,Chicago Cubs,Philadelphia Phillies,Jesús Luzardo,6,4.07,3.79,0.0,2.0,10.0,Medium
+Colson Montgomery,Chicago White Sox,Arizona Diamondbacks,Merrill Kelly,6,4.12,3.77,0.0,2.0,11.0,Medium
+Bryson Stott,Philadelphia Phillies,Chicago Cubs,Shota Imanaga,6,4.1,3.75,0.0,3.0,10.0,Medium
+Andruw Monasterio,Boston Red Sox,New York Yankees,Luis Gil,6,4.07,3.74,0.0,3.0,10.0,Medium
+Francisco Alvarez,New York Mets,Minnesota Twins,Simeon Woods Richardson,6,4.07,3.74,0.0,3.0,10.0,Medium
+Josh Bell,Minnesota Twins,New York Mets,Nolan McLean,6,4.12,3.73,0.0,3.0,10.0,Medium
+Dominic Canzone,Seattle Mariners,Athletics,Jacob Lopez,6,4.05,3.72,0.0,3.0,10.0,Medium
+Amed Rosario,New York Yankees,Boston Red Sox,Connelly Early,6,4.12,3.71,0.0,3.0,10.0,Medium
+Curtis Mead,Washington Nationals,Atlanta Braves,Reynaldo López,6,4.05,3.7,0.0,3.0,10.0,Medium
+Jose Altuve,Houston Astros,Cleveland Guardians,Parker Messick,6,4.14,3.67,0.0,3.0,10.0,Medium
+Leody Taveras,Baltimore Orioles,Kansas City Royals,Kris Bubic,6,4.14,3.67,0.0,3.0,10.0,Medium
+Chase Meidroth,Chicago White Sox,Arizona Diamondbacks,Merrill Kelly,6,4.12,3.67,0.0,3.0,9.0,Medium
+Dansby Swanson,Chicago Cubs,Philadelphia Phillies,Jesús Luzardo,6,4.06,3.66,0.0,2.0,10.0,Medium
+José Caballero,New York Yankees,Boston Red Sox,Connelly Early,6,4.12,3.64,0.0,3.0,10.0,Medium
+Eloy Jiménez,Toronto Blue Jays,Los Angeles Angels,Jack Kochanowicz,6,4.11,3.64,0.0,3.0,10.0,Medium
+Nolan Schanuel,Los Angeles Angels,Toronto Blue Jays,Patrick Corbin,6,4.05,3.64,0.0,3.0,10.0,Medium
+Junior Caminero,Tampa Bay Rays,Cincinnati Reds,Chase Burns,6,4.05,3.63,0.0,2.0,10.0,Medium
+Michael Harris II,Atlanta Braves,Washington Nationals,Foster Griffin,6,4.12,3.63,0.0,2.0,10.0,Medium
+Javier Sanoja,Miami Marlins,St. Louis Cardinals,Dustin May,6,4.06,3.62,0.0,3.0,10.0,Medium
+Austin Wells,New York Yankees,Boston Red Sox,Connelly Early,6,4.13,3.62,0.0,3.0,9.0,Medium
+Jo Adell,Los Angeles Angels,Toronto Blue Jays,Patrick Corbin,6,4.06,3.61,0.0,3.0,9.0,Medium
+David Hamilton,Milwaukee Brewers,Detroit Tigers,Keider Montero,6,4.11,3.6,0.0,3.0,9.0,Medium
+Adrian Del Castillo,Arizona Diamondbacks,Chicago White Sox,Sean Burke,6,4.05,3.6,0.0,3.0,9.0,Medium
+Myles Straw,Toronto Blue Jays,Los Angeles Angels,Jack Kochanowicz,6,4.12,3.59,0.0,3.0,10.0,Medium
+Jacob Wilson,Athletics,Seattle Mariners,Luis Castillo,6,4.09,3.59,0.0,3.0,9.1,Medium
+Alex Bregman,Chicago Cubs,Philadelphia Phillies,Jesús Luzardo,6,4.06,3.59,0.0,3.0,9.0,Medium
+Ronald Acuña Jr.,Atlanta Braves,Washington Nationals,Foster Griffin,6,4.14,3.58,0.0,3.0,9.0,Medium
+Chase DeLauter,Cleveland Guardians,Houston Astros,Ryan Weiss,6,4.05,3.57,0.0,2.0,10.0,Medium
+Cedric Mullins,Tampa Bay Rays,Cincinnati Reds,Chase Burns,6,4.0,3.56,0.0,3.0,9.0,Medium
+Miguel Vargas,Chicago White Sox,Arizona Diamondbacks,Merrill Kelly,6,4.12,3.55,0.0,2.0,10.0,Medium
+Richie Palacios,Tampa Bay Rays,Cincinnati Reds,Chase Burns,6,4.06,3.54,0.0,3.0,9.0,Medium
+Kody Clemens,Minnesota Twins,New York Mets,Nolan McLean,6,4.1,3.53,0.0,2.0,9.0,Medium
+Ernie Clement,Toronto Blue Jays,Los Angeles Angels,Jack Kochanowicz,6,4.1,3.53,0.0,3.0,9.0,Medium
+Jakob Marsee,Miami Marlins,St. Louis Cardinals,Dustin May,6,4.03,3.52,0.0,3.0,9.0,Medium
+Brooks Lee,Minnesota Twins,New York Mets,Nolan McLean,6,4.1,3.52,0.0,3.0,9.0,Medium
+Cole Young,Seattle Mariners,Athletics,Jacob Lopez,6,4.06,3.52,0.0,3.0,9.0,Medium
+Nick Kurtz,Athletics,Seattle Mariners,Luis Castillo,6,4.16,3.51,0.0,2.0,10.0,Medium
+Agustín Ramírez,Miami Marlins,St. Louis Cardinals,Dustin May,6,4.04,3.51,0.0,2.0,9.0,Medium
+Masataka Yoshida,Boston Red Sox,New York Yankees,Luis Gil,6,4.1,3.51,0.0,3.0,9.0,Medium
+Yordan Alvarez,Houston Astros,Cleveland Guardians,Parker Messick,6,4.17,3.5,0.0,2.0,10.0,Medium
+Jacob Young,Washington Nationals,Atlanta Braves,Reynaldo López,6,4.05,3.5,0.0,3.0,9.0,Medium
+Lane Thomas,Kansas City Royals,Baltimore Orioles,Shane Baz,6,4.06,3.48,0.0,2.0,10.0,Medium
+Eli White,Atlanta Braves,Washington Nationals,Foster Griffin,6,4.11,3.48,0.0,2.0,9.0,Medium
+Francisco Lindor,New York Mets,Minnesota Twins,Simeon Woods Richardson,6,4.04,3.48,0.0,2.0,9.0,Medium
+Ben Williamson,Tampa Bay Rays,Cincinnati Reds,Chase Burns,6,4.04,3.47,0.0,3.0,9.0,Medium
+Alek Thomas,Arizona Diamondbacks,Chicago White Sox,Sean Burke,6,4.02,3.47,0.0,3.0,9.0,Medium
+Shohei Ohtani,Los Angeles Dodgers,San Francisco Giants,Landen Roupp,6,4.14,3.45,0.0,2.0,10.0,Medium
+Adam Frazier,Los Angeles Angels,Toronto Blue Jays,Patrick Corbin,6,4.07,3.45,0.0,2.0,9.0,Medium
+Jake Rogers,Detroit Tigers,Milwaukee Brewers,Kyle Harrison,6,4.04,3.44,0.0,2.0,9.0,Medium
+Byron Buxton,Minnesota Twins,New York Mets,Nolan McLean,6,4.1,3.44,0.0,2.0,9.0,Medium
+Brandon Marsh,Philadelphia Phillies,Chicago Cubs,Shota Imanaga,6,4.11,3.44,0.0,3.0,9.0,Medium
+Caleb Durbin,Boston Red Sox,New York Yankees,Luis Gil,6,4.05,3.43,0.0,3.0,9.0,Medium
+Jeff McNeil,Athletics,Seattle Mariners,Luis Castillo,6,4.13,3.43,0.0,3.0,9.0,Medium
+Austin Slater,Miami Marlins,St. Louis Cardinals,Dustin May,6,4.04,3.42,0.0,3.0,9.0,Medium
+Maikel Garcia,Kansas City Royals,Baltimore Orioles,Shane Baz,6,4.06,3.42,0.0,2.0,9.0,Medium
+Javier Báez,Detroit Tigers,Milwaukee Brewers,Kyle Harrison,6,4.05,3.4,0.0,2.0,9.0,Medium
+Adolis García,Philadelphia Phillies,Chicago Cubs,Shota Imanaga,6,4.11,3.39,0.0,3.0,9.0,Medium
+Connor Joe,Seattle Mariners,Athletics,Jacob Lopez,6,4.05,3.39,0.0,2.0,9.0,Medium
+Taylor Trammell,Houston Astros,Cleveland Guardians,Parker Messick,6,4.11,3.38,0.0,2.0,9.0,Medium
+Jake Fraley,Tampa Bay Rays,Cincinnati Reds,Chase Burns,6,4.04,3.38,0.0,2.0,9.0,Medium
+Carlos Cortes,Athletics,Seattle Mariners,Luis Castillo,6,4.13,3.37,0.0,3.0,8.0,Medium
+Ozzie Albies,Atlanta Braves,Washington Nationals,Foster Griffin,6,4.13,3.36,0.0,2.0,9.0,Medium
+Jonathan India,Kansas City Royals,Baltimore Orioles,Shane Baz,6,4.05,3.36,0.0,2.0,9.0,Medium
+Liam Hicks,Miami Marlins,St. Louis Cardinals,Dustin May,6,4.07,3.34,0.0,2.0,9.0,Medium
+Dylan Beavers,Baltimore Orioles,Kansas City Royals,Kris Bubic,6,4.11,3.34,0.0,3.0,9.0,Medium
+Greg Jones,Milwaukee Brewers,Detroit Tigers,Keider Montero,6,4.1,3.33,0.0,2.0,9.0,Medium
+Carter Jensen,Kansas City Royals,Baltimore Orioles,Shane Baz,6,4.05,3.33,0.0,2.0,9.0,Medium
+Gleyber Torres,Detroit Tigers,Milwaukee Brewers,Kyle Harrison,6,4.07,3.31,0.0,3.0,8.0,Medium
+José Fermín,St. Louis Cardinals,Miami Marlins,Chris Paddack,6,4.1,3.3,0.0,2.0,9.0,Medium
+Jorge Mateo,Atlanta Braves,Washington Nationals,Foster Griffin,6,4.12,3.3,0.0,2.0,9.0,Medium
+Blaze Alexander,Baltimore Orioles,Kansas City Royals,Kris Bubic,6,4.1,3.3,0.0,3.0,8.0,Medium
+Jonathan Aranda,Tampa Bay Rays,Cincinnati Reds,Chase Burns,6,4.06,3.29,0.0,2.0,9.0,Medium
+Jesús Sánchez,Toronto Blue Jays,Los Angeles Angels,Jack Kochanowicz,6,4.11,3.28,0.0,2.0,9.0,Medium
+Jorbit Vivas,Washington Nationals,Atlanta Braves,Reynaldo López,6,4.08,3.26,0.0,2.0,9.0,Medium
+Ryan Jeffers,Minnesota Twins,New York Mets,Nolan McLean,6,4.13,3.26,0.0,2.0,9.0,Medium
+Sam Antonacci,Chicago White Sox,Arizona Diamondbacks,Merrill Kelly,6,4.12,3.26,0.0,2.0,9.0,Medium
+J.P. Crawford,Seattle Mariners,Athletics,Jacob Lopez,6,4.07,3.26,0.0,2.0,8.0,Medium
+Connor Norby,Miami Marlins,St. Louis Cardinals,Dustin May,6,4.06,3.25,0.0,2.0,9.0,Medium
+Vladimir Guerrero Jr.,Toronto Blue Jays,Los Angeles Angels,Jack Kochanowicz,6,4.16,3.25,0.0,2.0,9.0,Medium
+Kevin McGonigle,Detroit Tigers,Milwaukee Brewers,Kyle Harrison,6,4.09,3.24,0.0,2.0,9.0,Medium
+Joey Wiemer,Washington Nationals,Atlanta Braves,Reynaldo López,6,4.08,3.24,0.0,2.0,9.0,Medium
+Jung Hoo Lee,San Francisco Giants,Los Angeles Dodgers,Yoshinobu Yamamoto,6,4.03,3.24,0.0,2.0,9.0,Medium
+Mauricio Dubón,Atlanta Braves,Washington Nationals,Foster Griffin,6,4.13,3.23,0.0,2.0,9.0,Medium
+Jarren Duran,Boston Red Sox,New York Yankees,Luis Gil,6,4.05,3.23,0.0,2.0,9.0,Medium
+Kyle Farmer,Atlanta Braves,Washington Nationals,Foster Griffin,6,4.11,3.22,0.0,2.0,9.0,Medium
+Edgar Quero,Chicago White Sox,Arizona Diamondbacks,Merrill Kelly,6,4.1,3.22,0.0,2.0,9.0,Medium
+Braden Shewmake,Houston Astros,Cleveland Guardians,Parker Messick,6,4.1,3.22,0.0,2.0,8.0,Medium
+Carlos Narváez,Boston Red Sox,New York Yankees,Luis Gil,6,4.06,3.21,0.0,2.0,8.0,Medium
+Pete Alonso,Baltimore Orioles,Kansas City Royals,Kris Bubic,6,4.11,3.2,0.0,0.0,9.0,Medium
+Shea Langeliers,Athletics,Seattle Mariners,Luis Castillo,6,4.14,3.2,0.0,2.0,9.0,Medium
+Roman Anthony,Boston Red Sox,New York Yankees,Luis Gil,6,4.09,3.19,0.0,2.0,9.0,Medium
+Andy Ibáñez,Athletics,Seattle Mariners,Luis Castillo,6,4.11,3.18,0.0,2.0,9.0,Medium
+Jose Fernandez,Arizona Diamondbacks,Chicago White Sox,Sean Burke,6,4.05,3.17,0.0,2.0,9.0,Medium
+Brett Baty,New York Mets,Minnesota Twins,Simeon Woods Richardson,6,4.02,3.17,0.0,2.0,8.1,Medium
+Christian Koss,San Francisco Giants,Los Angeles Dodgers,Yoshinobu Yamamoto,6,4.03,3.17,0.0,2.0,8.0,Medium
+Isaac Paredes,Houston Astros,Cleveland Guardians,Parker Messick,6,4.11,3.16,0.0,2.0,9.0,Medium
+Jazz Chisholm Jr.,New York Yankees,Boston Red Sox,Connelly Early,6,4.11,3.16,0.0,2.0,8.0,Medium
+Scott Kingery,Chicago Cubs,Philadelphia Phillies,Jesús Luzardo,6,4.05,3.16,0.0,2.0,8.0,Medium
+Jonah Heim,Atlanta Braves,Washington Nationals,Foster Griffin,6,4.11,3.15,0.0,2.0,8.0,Medium
+Tyler Tolbert,Kansas City Royals,Baltimore Orioles,Shane Baz,6,4.05,3.15,0.0,2.0,8.0,Medium
+Randy Arozarena,Seattle Mariners,Athletics,Jacob Lopez,6,4.08,3.15,0.0,2.0,8.0,Medium
+Kyle Schwarber,Philadelphia Phillies,Chicago Cubs,Shota Imanaga,6,4.13,3.14,0.0,0.0,12.0,Medium
+Vaughn Grissom,Los Angeles Angels,Toronto Blue Jays,Patrick Corbin,6,4.06,3.14,0.0,2.0,9.0,Medium
+Andrew Benintendi,Chicago White Sox,Arizona Diamondbacks,Merrill Kelly,6,4.1,3.14,0.0,2.0,9.0,Medium
+Jahmai Jones,Detroit Tigers,Milwaukee Brewers,Kyle Harrison,6,4.05,3.13,0.0,2.0,9.0,Medium
+Luke Raley,Seattle Mariners,Athletics,Jacob Lopez,6,4.07,3.13,0.0,2.0,8.0,Medium
+Davis Schneider,Toronto Blue Jays,Los Angeles Angels,Jack Kochanowicz,6,4.11,3.12,0.0,2.0,9.0,Medium
+Moisés Ballesteros,Chicago Cubs,Philadelphia Phillies,Jesús Luzardo,6,4.08,3.11,0.0,2.0,9.0,Medium
+Dane Myers,Cincinnati Reds,Tampa Bay Rays,Steven Matz,6,4.11,3.11,0.0,2.0,8.0,Medium
+Heriberto Hernández,Miami Marlins,St. Louis Cardinals,Dustin May,6,4.04,3.1,0.0,2.0,8.0,Medium
+Luis Arraez,San Francisco Giants,Los Angeles Dodgers,Yoshinobu Yamamoto,6,4.04,3.1,0.0,2.0,8.0,Medium
+J.C. Escarra,New York Yankees,Boston Red Sox,Connelly Early,6,4.12,3.08,0.0,0.0,9.0,Medium
+Miguel Amaya,Chicago Cubs,Philadelphia Phillies,Jesús Luzardo,6,4.06,3.08,0.0,2.0,9.0,Medium
+Xavier Edwards,Miami Marlins,St. Louis Cardinals,Dustin May,6,4.1,3.07,0.0,2.0,8.0,Medium
+George Valera,Cleveland Guardians,Houston Astros,Ryan Weiss,6,4.05,3.06,0.0,2.0,8.0,Medium
+Eugenio Suárez,Cincinnati Reds,Tampa Bay Rays,Steven Matz,6,4.11,3.06,0.0,2.0,8.0,Medium
+Pedro Pagés,St. Louis Cardinals,Miami Marlins,Chris Paddack,6,4.09,3.05,0.0,2.0,8.1,Medium
+Hayden Senger,New York Mets,Minnesota Twins,Simeon Woods Richardson,6,4.05,3.05,0.0,2.0,8.0,Medium
+Taylor Ward,Baltimore Orioles,Kansas City Royals,Kris Bubic,6,4.15,3.05,0.0,2.0,8.0,Medium
+Nathan Church,St. Louis Cardinals,Miami Marlins,Chris Paddack,6,4.09,3.04,0.0,2.0,9.0,Medium
+Brady House,Washington Nationals,Atlanta Braves,Reynaldo López,6,4.04,3.04,0.0,2.0,8.0,Medium
+Luke Keaschall,Minnesota Twins,New York Mets,Nolan McLean,6,4.08,3.04,0.0,2.0,8.0,Medium
+MJ Melendez,New York Mets,Minnesota Twins,Simeon Woods Richardson,6,4.06,3.04,0.0,0.0,8.0,Medium
+Alec Bohm,Philadelphia Phillies,Chicago Cubs,Shota Imanaga,6,4.08,3.04,0.0,2.0,8.0,Medium
+Joey Ortiz,Milwaukee Brewers,Detroit Tigers,Keider Montero,6,4.09,3.03,0.0,2.0,8.0,Medium
+James Outman,Minnesota Twins,New York Mets,Nolan McLean,6,4.09,3.03,0.0,2.0,8.0,Medium
+Drew Gilbert,San Francisco Giants,Los Angeles Dodgers,Yoshinobu Yamamoto,6,4.03,3.03,0.0,2.0,8.0,Medium
+Matt McLain,Cincinnati Reds,Tampa Bay Rays,Steven Matz,6,4.11,3.02,0.0,2.0,8.0,Medium
+Edmundo Sosa,Philadelphia Phillies,Chicago Cubs,Shota Imanaga,6,4.11,3.0,0.0,2.0,9.0,Medium
+Riley Greene,Detroit Tigers,Milwaukee Brewers,Kyle Harrison,6,4.08,2.99,0.0,2.0,8.0,Medium
+Aramis Garcia,Arizona Diamondbacks,Chicago White Sox,Sean Burke,6,4.05,2.99,0.0,2.0,8.0,Medium
+Brice Matthews,Houston Astros,Cleveland Guardians,Parker Messick,6,4.09,2.98,0.0,0.0,9.0,Medium
+Felix Reyes,Philadelphia Phillies,Chicago Cubs,Shota Imanaga,6,4.11,2.98,0.0,2.0,8.0,Medium
+Lenyn Sosa,Toronto Blue Jays,Los Angeles Angels,Jack Kochanowicz,6,4.09,2.98,0.0,0.0,8.0,Medium
+Ryan Kreidler,Minnesota Twins,New York Mets,Nolan McLean,6,4.11,2.97,0.0,0.0,9.0,Medium
+Santiago Espinal,Los Angeles Dodgers,San Francisco Giants,Landen Roupp,6,4.09,2.96,0.0,0.0,9.0,Medium
+Nasim Nuñez,Washington Nationals,Atlanta Braves,Reynaldo López,6,4.04,2.96,0.0,2.0,8.0,Medium
+Weston Wilson,Baltimore Orioles,Kansas City Royals,Kris Bubic,6,4.11,2.96,0.0,2.0,8.0,Medium
+Bryce Teodosio,Los Angeles Angels,Toronto Blue Jays,Patrick Corbin,6,4.05,2.96,0.0,2.0,8.0,Medium
+Jorge Barrosa,Arizona Diamondbacks,Chicago White Sox,Sean Burke,6,4.05,2.94,0.0,0.0,8.1,Medium
+Austin Hedges,Cleveland Guardians,Houston Astros,Ryan Weiss,6,4.05,2.94,0.0,2.0,8.0,Medium
+Brandon Valenzuela,Toronto Blue Jays,Los Angeles Angels,Jack Kochanowicz,6,4.1,2.94,0.0,0.0,8.0,Medium
+Alex Freeland,Los Angeles Dodgers,San Francisco Giants,Landen Roupp,6,4.09,2.94,0.0,2.0,8.0,Medium
+Matt Vierling,Detroit Tigers,Milwaukee Brewers,Kyle Harrison,6,4.04,2.93,0.0,0.0,8.0,Medium
+Trent Grisham,New York Yankees,Boston Red Sox,Connelly Early,6,4.13,2.93,0.0,0.0,8.0,Medium
+Colt Keith,Detroit Tigers,Milwaukee Brewers,Kyle Harrison,6,4.06,2.92,0.0,2.0,8.0,Medium
+Giancarlo Stanton,New York Yankees,Boston Red Sox,Connelly Early,6,4.12,2.92,0.0,2.0,8.0,Medium
+Isaac Collins,Kansas City Royals,Baltimore Orioles,Shane Baz,6,4.04,2.92,0.0,2.0,8.0,Medium
+Willson Contreras,Boston Red Sox,New York Yankees,Luis Gil,6,4.11,2.91,0.0,0.0,8.0,Medium
+Pete Crow-Armstrong,Chicago Cubs,Philadelphia Phillies,Jesús Luzardo,6,4.04,2.91,0.0,2.0,8.0,Medium
+Colton Cowser,Baltimore Orioles,Kansas City Royals,Kris Bubic,6,4.1,2.9,0.0,2.0,8.0,Medium
+Josh Lowe,Los Angeles Angels,Toronto Blue Jays,Patrick Corbin,6,4.03,2.9,0.0,2.0,8.0,Medium
+Nick Fortes,Tampa Bay Rays,Cincinnati Reds,Chase Burns,6,4.05,2.89,0.0,2.0,8.0,Medium
+Taylor Walls,Tampa Bay Rays,Cincinnati Reds,Chase Burns,6,4.04,2.88,0.0,0.0,8.0,Medium
+Deyvison De Los Santos,Miami Marlins,St. Louis Cardinals,Dustin May,6,4.05,2.88,0.0,2.0,8.0,Medium
+Graham Pauley,Miami Marlins,St. Louis Cardinals,Dustin May,6,4.02,2.88,0.0,2.0,8.0,Medium
+Hunter Feduccia,Tampa Bay Rays,Cincinnati Reds,Chase Burns,6,4.05,2.87,0.0,2.0,8.0,Medium
+Kerry Carpenter,Detroit Tigers,Milwaukee Brewers,Kyle Harrison,6,4.06,2.87,0.0,0.0,8.0,Medium
+J.T. Realmuto,Philadelphia Phillies,Chicago Cubs,Shota Imanaga,6,4.13,2.87,0.0,2.0,8.0,Medium
+Heliot Ramos,San Francisco Giants,Los Angeles Dodgers,Yoshinobu Yamamoto,6,4.03,2.86,0.0,0.0,8.0,Medium
+Ke'Bryan Hayes,Cincinnati Reds,Tampa Bay Rays,Steven Matz,6,4.06,2.85,0.0,2.0,8.0,Medium
+Luis Torrens,New York Mets,Minnesota Twins,Simeon Woods Richardson,6,4.05,2.85,0.0,0.0,8.0,Medium
+Max Muncy,Athletics,Seattle Mariners,Luis Castillo,6,4.11,2.85,0.0,0.0,8.0,Medium
+Trevor Larnach,Minnesota Twins,New York Mets,Nolan McLean,6,4.13,2.84,0.0,0.0,8.0,Medium
+Josh Naylor,Seattle Mariners,Athletics,Jacob Lopez,6,4.02,2.84,0.0,2.0,8.0,Medium
+Ramón Urías,St. Louis Cardinals,Miami Marlins,Chris Paddack,6,4.1,2.83,0.0,0.0,8.0,Medium
+Kazuma Okamoto,Toronto Blue Jays,Los Angeles Angels,Jack Kochanowicz,6,4.1,2.83,0.0,0.0,8.0,Medium
+Ryan Ward,Los Angeles Dodgers,San Francisco Giants,Landen Roupp,6,4.1,2.83,0.0,0.0,8.0,Medium
+William Contreras,Milwaukee Brewers,Detroit Tigers,Keider Montero,6,4.14,2.82,0.0,0.0,8.0,Medium
+Matt Chapman,San Francisco Giants,Los Angeles Dodgers,Yoshinobu Yamamoto,6,4.04,2.82,0.0,2.0,8.0,Medium
+Yandy Díaz,Tampa Bay Rays,Cincinnati Reds,Chase Burns,6,4.09,2.81,0.0,0.0,8.0,Medium
+Justin Crawford,Philadelphia Phillies,Chicago Cubs,Shota Imanaga,6,4.13,2.8,0.0,0.0,8.0,Medium
+Drew Millas,Washington Nationals,Atlanta Braves,Reynaldo López,6,4.05,2.79,0.0,0.0,7.0,High
+Marcelo Mayer,Boston Red Sox,New York Yankees,Luis Gil,6,4.05,2.78,0.0,0.0,8.0,Medium
+Austin Wynns,Athletics,Seattle Mariners,Luis Castillo,6,4.1,2.78,0.0,0.0,8.0,Medium
+Bo Bichette,New York Mets,Minnesota Twins,Simeon Woods Richardson,6,4.03,2.78,0.0,2.0,7.0,High
+Denzel Clarke,Athletics,Seattle Mariners,Luis Castillo,6,4.09,2.77,0.0,2.0,7.0,High
+Travis d'Arnaud,Los Angeles Angels,Toronto Blue Jays,Patrick Corbin,6,4.06,2.76,0.0,0.0,8.0,Medium
+David Fry,Cleveland Guardians,Houston Astros,Ryan Weiss,6,4.05,2.75,0.0,0.0,8.0,Medium
+Michael Conforto,Chicago Cubs,Philadelphia Phillies,Jesús Luzardo,6,4.07,2.75,0.0,0.0,8.0,Medium
+Bo Naylor,Cleveland Guardians,Houston Astros,Ryan Weiss,6,4.03,2.75,0.0,2.0,7.0,High
+Coby Mayo,Baltimore Orioles,Kansas City Royals,Kris Bubic,6,4.1,2.75,0.0,2.0,7.0,High
+Logan O'Hoppe,Los Angeles Angels,Toronto Blue Jays,Patrick Corbin,6,4.06,2.75,0.0,2.0,7.0,High
+James McCann,Arizona Diamondbacks,Chicago White Sox,Sean Burke,6,4.05,2.75,0.0,0.0,7.0,High
+Will Smith,Los Angeles Dodgers,San Francisco Giants,Landen Roupp,6,4.11,2.72,0.0,0.0,8.0,Medium
+José Tena,Washington Nationals,Atlanta Braves,Reynaldo López,6,4.07,2.72,0.0,0.0,7.0,High
+Jerar Encarnacion,San Francisco Giants,Los Angeles Dodgers,Yoshinobu Yamamoto,6,4.03,2.72,0.0,0.0,7.0,High
+Keibert Ruiz,Washington Nationals,Atlanta Braves,Reynaldo López,6,4.05,2.71,0.0,0.0,7.0,High
+Paul Goldschmidt,New York Yankees,Boston Red Sox,Connelly Early,6,4.13,2.71,0.0,0.0,7.0,High
+Wilyer Abreu,Boston Red Sox,New York Yankees,Luis Gil,6,4.09,2.7,0.0,0.0,8.0,Medium
+Teoscar Hernández,Los Angeles Dodgers,San Francisco Giants,Landen Roupp,6,4.1,2.7,0.0,0.0,7.0,High
+Nathaniel Lowe,Cincinnati Reds,Tampa Bay Rays,Steven Matz,6,4.11,2.69,0.0,0.0,7.0,High
+Yoán Moncada,Los Angeles Angels,Toronto Blue Jays,Patrick Corbin,6,4.06,2.68,0.0,0.0,8.0,Medium
+Blake Perkins,Milwaukee Brewers,Detroit Tigers,Keider Montero,6,4.09,2.68,0.0,0.0,7.0,High
+P.J. Higgins,Cincinnati Reds,Tampa Bay Rays,Steven Matz,6,4.11,2.67,0.0,0.0,8.0,Medium
+Trevor Story,Boston Red Sox,New York Yankees,Luis Gil,6,4.03,2.66,0.0,0.0,8.0,Medium
+TJ Friedl,Cincinnati Reds,Tampa Bay Rays,Steven Matz,6,4.08,2.66,0.0,0.0,7.0,High
+Nathan Lukes,Toronto Blue Jays,Los Angeles Angels,Jack Kochanowicz,6,4.1,2.66,0.0,0.0,7.0,High
+Nolan Gorman,St. Louis Cardinals,Miami Marlins,Chris Paddack,6,4.09,2.65,0.0,0.0,7.0,High
+Victor Scott II,St. Louis Cardinals,Miami Marlins,Chris Paddack,6,4.09,2.65,0.0,0.0,7.0,High
+Yohel Pozo,St. Louis Cardinals,Miami Marlins,Chris Paddack,6,4.09,2.65,0.0,0.0,7.0,High
+Julio Rodríguez,Seattle Mariners,Athletics,Jacob Lopez,6,4.05,2.63,0.0,0.0,7.0,High
+Reese McGuire,Chicago White Sox,Arizona Diamondbacks,Merrill Kelly,6,4.11,2.61,0.0,0.0,7.0,High
+Ketel Marte,Arizona Diamondbacks,Chicago White Sox,Sean Burke,6,4.04,2.61,0.0,0.0,7.0,High
+Spencer Steer,Cincinnati Reds,Tampa Bay Rays,Steven Matz,6,4.09,2.6,0.0,0.0,7.0,High
+Victor Caratini,Minnesota Twins,New York Mets,Nolan McLean,6,4.12,2.59,0.0,0.0,7.0,High
+Michael Busch,Chicago Cubs,Philadelphia Phillies,Jesús Luzardo,6,4.03,2.58,0.0,0.0,7.0,High
+Tanner Murray,Chicago White Sox,Arizona Diamondbacks,Merrill Kelly,6,4.12,2.58,0.0,0.0,7.0,High
+Willy Adames,San Francisco Giants,Los Angeles Dodgers,Yoshinobu Yamamoto,6,4.02,2.58,0.0,0.0,7.0,High
+Tyler Soderstrom,Athletics,Seattle Mariners,Luis Castillo,6,4.11,2.57,0.0,0.0,7.0,High
+Ryan Vilade,Tampa Bay Rays,Cincinnati Reds,Chase Burns,6,4.04,2.56,0.0,0.0,7.0,High
+Luis Rengifo,Milwaukee Brewers,Detroit Tigers,Keider Montero,6,4.08,2.56,0.0,0.0,7.0,High
+Cal Raleigh,Seattle Mariners,Athletics,Jacob Lopez,6,4.02,2.56,0.0,0.0,7.0,High
+Luis Matos,Milwaukee Brewers,Detroit Tigers,Keider Montero,6,4.1,2.53,0.0,0.0,7.0,High
+Marcus Semien,New York Mets,Minnesota Twins,Simeon Woods Richardson,6,4.05,2.52,0.0,0.0,7.0,High
+Will Benson,Cincinnati Reds,Tampa Bay Rays,Steven Matz,6,4.11,2.51,0.0,0.0,7.0,High
+Leo Jiménez,Miami Marlins,St. Louis Cardinals,Dustin May,6,4.05,2.5,0.0,0.0,7.0,High
+Trea Turner,Philadelphia Phillies,Chicago Cubs,Shota Imanaga,6,4.11,2.48,0.0,0.0,7.0,High
+Luis García Jr.,Washington Nationals,Atlanta Braves,Reynaldo López,6,4.04,2.45,0.0,0.0,7.0,High
+Johnathan Rodríguez,Baltimore Orioles,Kansas City Royals,Kris Bubic,6,4.11,2.45,0.0,0.0,7.0,High
+Salvador Perez,Kansas City Royals,Baltimore Orioles,Shane Baz,6,4.01,2.45,0.0,0.0,7.0,High
+Mike Yastrzemski,Atlanta Braves,Washington Nationals,Foster Griffin,6,4.11,2.44,0.0,0.0,7.0,High
+Tyrone Taylor,New York Mets,Minnesota Twins,Simeon Woods Richardson,6,4.05,2.42,0.0,0.0,7.0,High
+Tristan Peters,Chicago White Sox,Arizona Diamondbacks,Merrill Kelly,6,4.11,2.42,0.0,0.0,7.0,High
+Hao-Yu  Lee,Detroit Tigers,Milwaukee Brewers,Kyle Harrison,6,4.05,2.41,0.0,0.0,7.0,High
+Starling Marte,Kansas City Royals,Baltimore Orioles,Shane Baz,6,4.05,2.4,0.0,0.0,7.0,High
+Seiya Suzuki,Chicago Cubs,Philadelphia Phillies,Jesús Luzardo,6,4.06,2.38,0.0,0.0,7.0,High
+Steven Kwan,Cleveland Guardians,Houston Astros,Ryan Weiss,6,4.04,2.36,0.0,0.0,7.0,High
+Tristan Gray,Minnesota Twins,New York Mets,Nolan McLean,6,4.1,2.35,0.0,0.0,7.0,High
+Rhys Hoskins,Cleveland Guardians,Houston Astros,Ryan Weiss,6,4.06,2.34,0.0,0.0,7.0,High
+Lourdes Gurriel Jr.,Arizona Diamondbacks,Chicago White Sox,Sean Burke,6,4.05,2.34,0.0,0.0,7.0,High
+Nolan Arenado,Arizona Diamondbacks,Chicago White Sox,Sean Burke,6,4.02,2.33,0.0,0.0,7.0,High
+Yainer Diaz,Houston Astros,Cleveland Guardians,Parker Messick,6,4.07,2.32,0.0,0.0,7.0,High
+Tyler Heineman,Toronto Blue Jays,Los Angeles Angels,Jack Kochanowicz,6,4.1,2.31,0.0,0.0,7.0,High
+Tim Tawa,Arizona Diamondbacks,Chicago White Sox,Sean Burke,6,4.04,2.31,0.0,0.0,7.0,High
+Rece Hinds,Cincinnati Reds,Tampa Bay Rays,Steven Matz,6,4.1,2.28,0.0,0.0,7.0,High
+Thomas Saggese,St. Louis Cardinals,Miami Marlins,Chris Paddack,6,4.09,2.27,0.0,0.0,7.0,High
+Mark Vientos,New York Mets,Minnesota Twins,Simeon Woods Richardson,6,4.04,2.27,0.0,0.0,7.0,High
+Sal Frelick,Milwaukee Brewers,Detroit Tigers,Keider Montero,6,4.1,2.26,0.0,0.0,7.0,High
+Samuel Basallo,Baltimore Orioles,Kansas City Royals,Kris Bubic,6,4.1,2.25,0.0,0.0,7.0,High
+Michael Massey,Kansas City Royals,Baltimore Orioles,Shane Baz,6,4.04,2.25,0.0,0.0,7.0,High
+Zack Gelof,Athletics,Seattle Mariners,Luis Castillo,6,4.11,2.22,0.0,0.0,7.0,High
+Dylan Moore,Philadelphia Phillies,Chicago Cubs,Shota Imanaga,6,4.11,2.21,0.0,0.0,7.0,High
+Shay Whitcomb,Houston Astros,Cleveland Guardians,Parker Messick,6,4.1,2.18,0.0,0.0,7.0,High
+Owen Caissie,Miami Marlins,St. Louis Cardinals,Dustin May,6,4.04,2.15,0.0,0.0,7.0,High
+Matt Wallner,Minnesota Twins,New York Mets,Nolan McLean,6,4.09,2.15,0.0,0.0,7.0,High
+Randal Grichuk,New York Yankees,Boston Red Sox,Connelly Early,6,4.11,2.13,0.0,0.0,7.0,High
+Vinnie Pasquantino,Kansas City Royals,Baltimore Orioles,Shane Baz,6,4.02,2.08,0.0,0.0,7.0,High
+Patrick Bailey,San Francisco Giants,Los Angeles Dodgers,Yoshinobu Yamamoto,6,4.01,2.07,0.0,0.0,7.0,High
+Sam Huff,Baltimore Orioles,Kansas City Royals,Kris Bubic,6,4.11,2.03,0.0,0.0,7.0,High
+Rafael Marchán,Philadelphia Phillies,Chicago Cubs,Shota Imanaga,6,4.09,2.0,0.0,0.0,7.0,High
+Mitch Garver,Seattle Mariners,Athletics,Jacob Lopez,6,4.05,1.97,0.0,0.0,7.0,High
+Will Brennan,San Francisco Giants,Los Angeles Dodgers,Yoshinobu Yamamoto,6,4.03,1.97,0.0,0.0,6.0,High
+Rafael Devers,San Francisco Giants,Los Angeles Dodgers,Yoshinobu Yamamoto,6,4.01,1.95,0.0,0.0,6.0,High
+Wenceel Pérez,Detroit Tigers,Milwaukee Brewers,Kyle Harrison,6,4.03,1.94,0.0,0.0,7.0,High
+Leo Rivas,Seattle Mariners,Athletics,Jacob Lopez,6,4.04,1.94,0.0,0.0,6.1,High
+Juan Brito,Cleveland Guardians,Houston Astros,Ryan Weiss,6,4.04,1.93,0.0,0.0,7.0,High
+Ryan McMahon,New York Yankees,Boston Red Sox,Connelly Early,6,4.12,1.92,0.0,0.0,7.0,High
+Tyler Stephenson,Cincinnati Reds,Tampa Bay Rays,Steven Matz,6,4.1,1.85,0.0,0.0,6.0,High
+Kyle Manzardo,Cleveland Guardians,Houston Astros,Ryan Weiss,6,4.03,1.85,0.0,0.0,5.0,High
+Spencer Torkelson,Detroit Tigers,Milwaukee Brewers,Kyle Harrison,6,4.06,1.76,0.0,0.0,5.0,High
+Rob Refsnyder,Seattle Mariners,Athletics,Jacob Lopez,6,4.04,1.73,0.0,0.0,5.0,High
+Tommy Pham,New York Mets,Minnesota Twins,Simeon Woods Richardson,6,4.05,1.71,0.0,0.0,5.0,High

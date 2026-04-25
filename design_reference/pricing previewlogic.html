@@ -1,0 +1,84 @@
+<<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdgeRanked AI | Membership</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#0a0f1c',      
+                        surface: '#121929',   
+                        borderline: '#1e293b',
+                        brand: '#3b82f6',     
+                        edge: '#10b981',      
+                        confidence: '#f59e0b' 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-navy text-slate-300 font-sans antialiased selection:bg-brand selection:text-white">
+
+    <!-- GLOBAL NAVIGATION -->
+    <nav class="sticky top-0 z-50 bg-navy/90 backdrop-blur-lg border-b border-borderline">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Updated: Logo for Consistency -->
+                <a href="index.html" class="flex items-center gap-3 group">
+                    <img src="logo.png" alt="EdgeRanked Logo" class="h-8 w-auto">
+                    <span class="text-white font-bold text-xl tracking-tight">EdgeRanked<span class="text-brand">SportsAI</span></span>
+                </a>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="board.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface rounded-md transition">NBA</a>
+                    <a href="board.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface rounded-md transition">MLB</a>
+                    <a href="board.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface rounded-md transition">UFC</a>
+                    <a href="board.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface rounded-md transition">PGA</a>
+                    <div class="w-px h-4 bg-borderline mx-2"></div>
+                    <a href="results.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface rounded-md transition">Results</a>
+                    <a href="pricing.html" class="px-3 py-2 text-sm font-medium text-white bg-surface rounded-md transition">Pricing</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PRICING CONTENT -->
+    <main class="max-w-xl mx-auto px-4 py-20 text-center">
+        <span class="bg-brand/10 text-brand border border-brand/20 px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest mb-6 inline-block">Elite Access</span>
+        <h1 class="text-4xl md:text-5xl font-black text-white mb-6">Unlock Your Edge</h1>
+        <p class="text-slate-400 mb-12">One simple membership for full access to our AI models, daily projections, and tracked results.</p>
+        
+        <!-- PREMIUM PRICING CARD -->
+        <div class="bg-surface border border-brand/50 rounded-3xl p-8 md:p-10 relative shadow-2xl shadow-blue-900/20">
+            <!-- Emblem Placement -->
+            <div class="flex justify-center mb-6">
+                <img src="emblem.png" alt="EdgeRanked Emblem" class="w-16 h-16 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+            </div>
+            
+            <h3 class="text-2xl font-bold text-white mb-2">All-Access Membership</h3>
+            <p class="text-5xl font-black text-white mt-4">$14.99<span class="text-base text-slate-500 font-normal">/week</span></p>
+            
+            <ul class="mt-8 space-y-4 text-left max-w-sm mx-auto">
+                <li class="flex items-center gap-3"><span class="text-brand">✓</span> Full NBA, MLB, UFC, PGA boards</li>
+                <li class="flex items-center gap-3"><span class="text-brand">✓</span> Live model confidence ratings</li>
+                <li class="flex items-center gap-3"><span class="text-brand">✓</span> Real-time prop scanner access</li>
+                <li class="flex items-center gap-3"><span class="text-brand">✓</span> Priority access to new features</li>
+            </ul>
+
+            <button class="w-full mt-10 bg-brand text-white font-bold py-4 rounded-xl hover:bg-blue-600 transition shadow-lg shadow-brand/20 text-lg">
+                Start Membership
+            </button>
+            <p class="mt-4 text-xs text-slate-500">Cancel anytime. Secure payment via Stripe.</p>
+        </div>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,1924 @@
+import os
+from datetime import datetime
+
+import joblib
+import numpy as np
+import pandas as pd
+
+from nba_model.common import build_projection_app_view, clean_name, find_player_col, normalize_stat_name
+from nba_model.settings import (
+    BASE_DIR,
+    GAME_LINES_PATH,
+    INJURY_CSV_PATH,
+    INJURY_TXT_PATH,
+    LINES_PATH,
+    PROJECTIONS_APP_VIEW_PATH,
+    PROJECTIONS_PATH,
+    RAW_GAMES_PATH,
+    ROTATION_TEMPLATES_PATH,
+    TEAMS_TODAY_PATH,
+)
+
+SIMULATION_RUNS = 5000
+MODEL_FEATURES = [
+    "HOME",
+    "REST_DAYS",
+    "B2B",
+    "LOW_MIN_ROLE",
+    "VOLATILE_MINUTES",
+    "PTS_LAST3",
+    "PTS_LAST5",
+    "PTS_LAST10",
+    "REB_LAST3",
+    "REB_LAST5",
+    "REB_LAST10",
+    "AST_LAST3",
+    "AST_LAST5",
+    "AST_LAST10",
+    "STL_LAST3",
+    "STL_LAST5",
+    "STL_LAST10",
+    "BLK_LAST3",
+    "BLK_LAST5",
+    "BLK_LAST10",
+    "FG3M_LAST3",
+    "FG3M_LAST5",
+    "FG3M_LAST10",
+    "MIN_LAST3",
+    "MIN_LAST5",
+    "MIN_LAST10",
+    "MIN_STD5",
+    "PTS_STD5",
+    "REB_STD5",
+    "AST_STD5",
+    "PTS_TREND",
+    "MIN_TREND",
+    "OPP_PTS_ALLOWED",
+    "OPP_REB_ALLOWED",
+    "OPP_AST_ALLOWED",
+]
+MINUTES_FEATURES = [
+    "HOME",
+    "REST_DAYS",
+    "B2B",
+    "LOW_MIN_ROLE",
+    "VOLATILE_MINUTES",
+    "MIN_LAST3",
+    "MIN_LAST5",
+    "MIN_LAST10",
+    "MIN_STD5",
+    "MIN_TREND",
+    "OPP_PTS_ALLOWED",
+    "OPP_REB_ALLOWED",
+    "OPP_AST_ALLOWED",
+]
+STAT_TARGETS = ["PTS", "REB", "AST", "STL", "BLK", "FG3M"]
+COMBO_TARGETS = {
+    "PRA": ["PTS", "REB", "AST"],
+    "PR": ["PTS", "REB"],
+    "PA": ["PTS", "AST"],
+    "RA": ["REB", "AST"],
+    "SB": ["STL", "BLK"],
+}
+SUPPLEMENTAL_STATS = ["TOV", "FANTASY", "FTM", "FTA", "FGM", "FGA", "FG2M", "FG2A", "FG3A", "OREB", "DREB", "PF", "DD", "TD"]
+RECENT_WEIGHTS = {
+    "PTS": (0.55, 0.30, 0.15),
+    "REB": (0.50, 0.32, 0.18),
+    "AST": (0.52, 0.30, 0.18),
+    "STL": (0.45, 0.35, 0.20),
+    "BLK": (0.45, 0.35, 0.20),
+    "FG3M": (0.50, 0.32, 0.18),
+}
+STATUS_AVAILABILITY = {
+    "ACTIVE": 1.00,
+    "PROBABLE": 0.96,
+    "QUESTIONABLE": 0.78,
+    "DOUBTFUL": 0.30,
+    "OUT": 0.00,
+    "UNKNOWN": 0.94,
+}
+STATUS_MINUTES_MULTIPLIER = {
+    "ACTIVE": 1.00,
+    "PROBABLE": 0.99,
+    "QUESTIONABLE": 0.92,
+    "DOUBTFUL": 0.72,
+    "OUT": 0.00,
+    "UNKNOWN": 0.98,
+}
+USAGE_COEFFICIENT = {
+    "PTS": 0.12,
+    "REB": 0.08,
+    "AST": 0.11,
+    "STL": 0.06,
+    "BLK": 0.06,
+    "FG3M": 0.10,
+}
+INJURY_IMPACT_WEIGHT = {
+    "OUT": 1.00,
+    "DOUBTFUL": 0.70,
+    "QUESTIONABLE": 0.30,
+    "PROBABLE": 0.12,
+}
+ROLE_KEYS = ["SCORER", "PLAYMAKER", "REBOUNDER", "RIM", "SHOOTER"]
+HOME_COURT_EDGE = 2.3
+DEFAULT_MARGIN_STD = 12.0
+BLOWOUT_THRESHOLD = 18.0
+MARKET_SPREAD_BLEND = 0.72
+MARKET_TOTAL_BLEND = 0.55
+TEAM_TOTAL_BLEND = 0.65
+MIN_EXPECTED_SLATE_TEAMS = 4
+
+
+def normalize_injury_status(status):
+    s = str(status).strip().upper()
+
+    if s in {"OUT", "O", "INACTIVE", "SUSPENDED", "DNP", "IR"}:
+        return "OUT"
+    if "OUT" in s or "INACTIVE" in s or "SUSPENDED" in s:
+        return "OUT"
+    if s in {"DOUBTFUL", "D"} or "DOUBTFUL" in s:
+        return "DOUBTFUL"
+    if s in {"QUESTIONABLE", "Q"} or "QUESTIONABLE" in s:
+        return "QUESTIONABLE"
+    if s in {"PROBABLE", "P"} or "PROBABLE" in s:
+        return "PROBABLE"
+    if "GTD" in s or "GAME TIME DECISION" in s or "GAMETIME DECISION" in s:
+        return "QUESTIONABLE"
+    if s in {"AVAILABLE", "ACTIVE", "HEALTHY"}:
+        return "ACTIVE"
+    if s == "" or s == "NAN" or s == "NONE":
+        return "UNKNOWN"
+
+    return s
+
+
+def is_combo_player_name(name):
+    s = str(name)
+    return " + " in s or "&" in s or "/" in s
+
+
+def current_projection_date():
+    return datetime.now().strftime("%Y-%m-%d")
+
+
+def matchup_key(team, opponent):
+    return " vs ".join(sorted([str(team).strip().upper(), str(opponent).strip().upper()]))
+
+
+def load_lines_df():
+    if not os.path.exists(LINES_PATH):
+        raise FileNotFoundError(f"Missing lines file: {LINES_PATH}")
+
+    df = pd.read_csv(LINES_PATH)
+    if df.empty:
+        raise ValueError("lines_today.csv is empty")
+
+    df.columns = [str(c).strip().upper() for c in df.columns]
+    player_col = find_player_col(df)
+
+    if "STAT" not in df.columns:
+        for alt in ["MARKET", "PROP"]:
+            if alt in df.columns:
+                df["STAT"] = df[alt]
+                break
+
+    if "LINE" not in df.columns:
+        for alt in ["SPORTSBOOK_LINE"]:
+            if alt in df.columns:
+                df["LINE"] = df[alt]
+                break
+
+    if "STAT" not in df.columns or "LINE" not in df.columns:
+        raise ValueError(f"lines_today.csv missing STAT or LINE columns. Found: {list(df.columns)}")
+
+    if "TEAM" not in df.columns:
+        df["TEAM"] = ""
+
+    df["PLAYER_NAME"] = df[player_col].astype(str).str.strip()
+    df["PLAYER_KEY"] = df["PLAYER_NAME"].map(clean_name)
+    df["STAT_KEY"] = df["STAT"].map(normalize_stat_name)
+    df["LINE"] = pd.to_numeric(df["LINE"], errors="coerce")
+    return df
+
+
+def load_injuries():
+    injuries = {}
+
+    csv_paths = [INJURY_CSV_PATH]
+    txt_paths = [INJURY_TXT_PATH]
+
+    for csv_path in csv_paths:
+        if not os.path.exists(csv_path):
+            continue
+        try:
+            df = pd.read_csv(csv_path)
+            if not df.empty:
+                df.columns = [str(c).strip().upper() for c in df.columns]
+
+                name_col = None
+                status_col = None
+
+                for col in ["PLAYER_NAME", "PLAYER", "NAME"]:
+                    if col in df.columns:
+                        name_col = col
+                        break
+
+                for col in ["STATUS", "INJURY_STATUS", "REPORT_STATUS"]:
+                    if col in df.columns:
+                        status_col = col
+                        break
+
+                if name_col:
+                    for _, row in df.iterrows():
+                        name_key = clean_name(row[name_col])
+                        if not name_key:
+                            continue
+                        raw_status = row[status_col] if status_col else "OUT"
+                        injuries[name_key] = normalize_injury_status(raw_status)
+        except Exception as exc:
+            print(f"WARNING: Could not read injury csv {csv_path}: {exc}")
+
+    for txt_path in txt_paths:
+        if not os.path.exists(txt_path):
+            continue
+        try:
+            with open(txt_path, "r", encoding="utf-8") as handle:
+                for line in handle:
+                    raw = line.strip()
+                    if not raw:
+                        continue
+
+                    if "|" in raw:
+                        parts = [p.strip() for p in raw.split("|")]
+                    elif "," in raw:
+                        parts = [p.strip() for p in raw.split(",")]
+                    else:
+                        parts = [raw, "OUT"]
+
+                    name = parts[0]
+                    status = parts[1] if len(parts) > 1 else "OUT"
+                    injuries[clean_name(name)] = normalize_injury_status(status)
+        except Exception as exc:
+            print(f"WARNING: Could not read injury txt {txt_path}: {exc}")
+
+    return injuries
+
+
+def load_matchups():
+    if not os.path.exists(TEAMS_TODAY_PATH):
+        return {}
+
+    try:
+        df = pd.read_csv(TEAMS_TODAY_PATH)
+        if df.empty or "TEAM_ABBREVIATION" not in df.columns:
+            return {}
+        df.columns = [str(c).strip().upper() for c in df.columns]
+        matchups = {}
+        for _, row in df.iterrows():
+            team = str(row.get("TEAM_ABBREVIATION", "")).strip().upper()
+            if not team:
+                continue
+            matchups[team] = {
+                "OPPONENT": str(row.get("OPPONENT", "")).strip().upper(),
+                "MATCHUP": str(row.get("MATCHUP", "")).strip(),
+            }
+        return matchups
+    except Exception as exc:
+        print(f"WARNING: Could not read teams_today.csv: {exc}")
+        return {}
+
+
+def load_today_slate_teams():
+    if not os.path.exists(TEAMS_TODAY_PATH):
+        return set()
+
+    try:
+        df = pd.read_csv(TEAMS_TODAY_PATH)
+    except Exception as exc:
+        print(f"WARNING: Could not read teams_today.csv for slate filter: {exc}")
+        return set()
+
+    if df.empty:
+        return set()
+
+    df.columns = [str(c).strip().upper() for c in df.columns]
+    team_col = "TEAM_ABBREVIATION" if "TEAM_ABBREVIATION" in df.columns else None
+    if not team_col and "TEAM" in df.columns:
+        team_col = "TEAM"
+    if not team_col:
+        return set()
+
+    teams = {
+        str(team).strip().upper()
+        for team in df[team_col].dropna().tolist()
+        if str(team).strip()
+    }
+    if len(teams) < MIN_EXPECTED_SLATE_TEAMS:
+        print(
+            f"WARNING: teams_today.csv only has {len(teams)} teams. "
+            "Ignoring slate-team filter for this projection run."
+        )
+        return set()
+    return teams
+
+
+def load_market_game_lines():
+    if not os.path.exists(GAME_LINES_PATH):
+        return {}
+
+    try:
+        df = pd.read_csv(GAME_LINES_PATH)
+    except Exception as exc:
+        print(f"WARNING: Could not read game_lines_today.csv: {exc}")
+        return {}
+
+    if df.empty:
+        return {}
+
+    required = {"HOME_TEAM", "AWAY_TEAM"}
+    if not required.issubset(df.columns):
+        print("WARNING: game_lines_today.csv is missing HOME_TEAM/AWAY_TEAM columns.")
+        return {}
+
+    lookup = {}
+    for _, row in df.iterrows():
+        home_team = str(row.get("HOME_TEAM", "")).strip().upper()
+        away_team = str(row.get("AWAY_TEAM", "")).strip().upper()
+        if not home_team or not away_team:
+            continue
+        lookup[matchup_key(home_team, away_team)] = {
+            "HOME_TEAM": home_team,
+            "AWAY_TEAM": away_team,
+            "HOME_SPREAD": pd.to_numeric(row.get("HOME_SPREAD"), errors="coerce"),
+            "AWAY_SPREAD": pd.to_numeric(row.get("AWAY_SPREAD"), errors="coerce"),
+            "TOTAL": pd.to_numeric(row.get("TOTAL"), errors="coerce"),
+            "HOME_MONEYLINE": pd.to_numeric(row.get("HOME_MONEYLINE"), errors="coerce"),
+            "AWAY_MONEYLINE": pd.to_numeric(row.get("AWAY_MONEYLINE"), errors="coerce"),
+        }
+    return lookup
+
+
+def load_rotation_templates(logs_df):
+    if not os.path.exists(ROTATION_TEMPLATES_PATH):
+        return {}
+
+    try:
+        df = pd.read_csv(ROTATION_TEMPLATES_PATH)
+    except Exception as exc:
+        print(f"WARNING: Could not read rotation_templates.csv: {exc}")
+        return {}
+
+    if df.empty or "PLAYER_ID" not in df.columns or "TEAM_ABBREVIATION" not in df.columns:
+        return {}
+
+    latest_rows = (
+        logs_df.drop_duplicates(subset=["PLAYER_KEY"], keep="first")[["PLAYER_KEY", "PLAYER_ID", "TEAM_ABBREVIATION"]]
+        .copy()
+    )
+    latest_rows["PLAYER_ID"] = latest_rows["PLAYER_ID"].astype(str).str.replace(r"\.0$", "", regex=True)
+    latest_rows["TEAM_ABBREVIATION"] = latest_rows["TEAM_ABBREVIATION"].astype(str).str.strip().str.upper()
+
+    df["PLAYER_ID"] = df["PLAYER_ID"].astype(str).str.replace(r"\.0$", "", regex=True)
+    df["TEAM_ABBREVIATION"] = df["TEAM_ABBREVIATION"].astype(str).str.strip().str.upper()
+    merged = df.merge(latest_rows, on=["TEAM_ABBREVIATION", "PLAYER_ID"], how="inner")
+    if merged.empty:
+        return {}
+
+    templates = {}
+    for _, row in merged.iterrows():
+        q1 = float(pd.to_numeric(row.get("Q1_MINUTES"), errors="coerce") or 0.0)
+        q2 = float(pd.to_numeric(row.get("Q2_MINUTES"), errors="coerce") or 0.0)
+        q3 = float(pd.to_numeric(row.get("Q3_MINUTES"), errors="coerce") or 0.0)
+        q4 = float(pd.to_numeric(row.get("Q4_MINUTES"), errors="coerce") or 0.0)
+        total_minutes = float(pd.to_numeric(row.get("AVG_MINUTES_TOTAL"), errors="coerce") or 0.0)
+        games_in_sample = float(pd.to_numeric(row.get("GAMES_IN_SAMPLE"), errors="coerce") or 0.0)
+        quarter_total = max(q1 + q2 + q3 + q4, 1e-6)
+        avg_quarter = max(quarter_total / 4.0, 1e-6)
+        sample_weight = float(np.clip(games_in_sample / 5.0, 0.0, 1.0))
+
+        starter_signal = float(np.clip((((q1 + q3) / max(2.0 * avg_quarter, 1e-6)) - 0.95) / 0.35, 0.0, 1.0))
+        closer_signal = float(np.clip(((q4 / avg_quarter) - 0.95) / 0.40, 0.0, 1.0))
+        second_unit_signal = float(np.clip((((q2 - q1) + (q2 - q3)) / max(avg_quarter, 1e-6)) / 1.2, 0.0, 1.0))
+        garbage_signal = float(np.clip((18.0 - total_minutes) / 10.0, 0.0, 1.0) * np.clip(((q4 / avg_quarter) - 1.05) / 0.45, 0.0, 1.0))
+
+        templates[row["PLAYER_KEY"]] = {
+            "TEMPLATE_MINUTES": total_minutes,
+            "TEMPLATE_GAMES": games_in_sample,
+            "TEMPLATE_SAMPLE_WEIGHT": sample_weight,
+            "TEMPLATE_Q1_SHARE": q1 / quarter_total,
+            "TEMPLATE_Q2_SHARE": q2 / quarter_total,
+            "TEMPLATE_Q3_SHARE": q3 / quarter_total,
+            "TEMPLATE_Q4_SHARE": q4 / quarter_total,
+            "TEMPLATE_STARTER": starter_signal,
+            "TEMPLATE_CLOSER": closer_signal,
+            "TEMPLATE_SECOND_UNIT": second_unit_signal,
+            "TEMPLATE_GARBAGE_UNIT": garbage_signal,
+        }
+
+    return templates
+
+
+def build_team_strength_ratings(logs_df, league_pace):
+    team_games = (
+        logs_df.groupby(["GAME_ID", "TEAM_ABBREVIATION", "OPP_TEAM_ABBREVIATION"], as_index=False)
+        .agg(
+            TEAM_POINTS=("PTS", "sum"),
+            TEAM_PACE=("TEAM_POSS_PROXY", "mean"),
+            HOME=("HOME", "max"),
+        )
+    )
+
+    opponent_games = team_games.rename(
+        columns={
+            "TEAM_ABBREVIATION": "OPP_TEAM_ABBREVIATION",
+            "OPP_TEAM_ABBREVIATION": "TEAM_ABBREVIATION",
+            "TEAM_POINTS": "OPP_POINTS",
+            "TEAM_PACE": "OPP_PACE",
+            "HOME": "OPP_HOME",
+        }
+    )
+    team_games = team_games.merge(
+        opponent_games[["GAME_ID", "TEAM_ABBREVIATION", "OPP_POINTS", "OPP_PACE", "OPP_HOME"]],
+        on=["GAME_ID", "TEAM_ABBREVIATION"],
+        how="left",
+    )
+
+    team_games["MARGIN"] = team_games["TEAM_POINTS"] - team_games["OPP_POINTS"]
+    team_games["GAME_TOTAL"] = team_games["TEAM_POINTS"] + team_games["OPP_POINTS"]
+    team_games["PACE_ENV"] = (team_games["TEAM_PACE"] + team_games["OPP_PACE"]) / 2.0
+    team_games["WIN"] = (team_games["MARGIN"] > 0).astype(float)
+
+    strength = (
+        team_games.groupby("TEAM_ABBREVIATION")
+        .agg(
+            AVG_MARGIN=("MARGIN", "mean"),
+            MARGIN_STD=("MARGIN", "std"),
+            WIN_RATE=("WIN", "mean"),
+            AVG_PACE_ENV=("PACE_ENV", "mean"),
+            AVG_POINTS_FOR=("TEAM_POINTS", "mean"),
+            AVG_POINTS_AGAINST=("OPP_POINTS", "mean"),
+        )
+        .fillna(
+            {
+                "AVG_MARGIN": 0.0,
+                "MARGIN_STD": DEFAULT_MARGIN_STD,
+                "WIN_RATE": 0.5,
+                "AVG_PACE_ENV": league_pace,
+                "AVG_POINTS_FOR": 0.0,
+                "AVG_POINTS_AGAINST": 0.0,
+            }
+        )
+    )
+
+    strength["NET_RATING_PROXY"] = strength["AVG_MARGIN"]
+    strength["TEAM_QUALITY"] = (
+        (0.75 * strength["NET_RATING_PROXY"])
+        + (8.0 * (strength["WIN_RATE"] - 0.5))
+    )
+    league_game_total = float(team_games.drop_duplicates(subset=["GAME_ID"])["GAME_TOTAL"].mean())
+    return strength, league_game_total
+
+
+def load_historical_games():
+    if not os.path.exists(RAW_GAMES_PATH):
+        raise FileNotFoundError(f"Missing raw games file: {RAW_GAMES_PATH}")
+
+    df = pd.read_csv(RAW_GAMES_PATH)
+    if df.empty:
+        raise ValueError("raw_games.csv is empty")
+
+    df["GAME_DATE"] = pd.to_datetime(df["GAME_DATE"], errors="coerce")
+    df = df.dropna(subset=["GAME_DATE", "PLAYER_ID"]).copy()
+
+    num_cols = ["PTS", "REB", "AST", "STL", "BLK", "FG3M", "MIN", "TOV", "FGM", "FGA", "FG3A", "FTM", "FTA", "OREB", "DREB", "PF"]
+    for col in num_cols:
+        df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0)
+
+    df["FG2M"] = (df["FGM"] - df["FG3M"]).clip(lower=0.0)
+    df["FG2A"] = (df["FGA"] - df["FG3A"]).clip(lower=0.0)
+
+    df["PLAYER_NAME"] = df["PLAYER_NAME"].astype(str)
+    df["PLAYER_KEY"] = df["PLAYER_NAME"].map(clean_name)
+    df["TEAM_ABBREVIATION"] = df["TEAM_ABBREVIATION"].astype(str).str.upper()
+    df["MATCHUP"] = df["MATCHUP"].astype(str)
+    df["HOME"] = df["MATCHUP"].str.contains("vs.", regex=False).astype(int)
+    df["OPP_TEAM_ABBREVIATION"] = df["MATCHUP"].str.split().str[-1].str.upper()
+    df["TEAM_POSS_PROXY"] = df["FGA"] + (0.44 * df["FTA"]) - df["OREB"] + df["TOV"]
+    df = df.sort_values(["PLAYER_KEY", "GAME_DATE"], ascending=[True, False]).copy()
+
+    opponent_defense = (
+        df.groupby("OPP_TEAM_ABBREVIATION")[["PTS", "REB", "AST"]]
+        .mean()
+        .rename(
+            columns={
+                "PTS": "OPP_PTS_ALLOWED",
+                "REB": "OPP_REB_ALLOWED",
+                "AST": "OPP_AST_ALLOWED",
+            }
+        )
+    )
+
+    league_defaults = {
+        "OPP_PTS_ALLOWED": float(df["PTS"].mean()),
+        "OPP_REB_ALLOWED": float(df["REB"].mean()),
+        "OPP_AST_ALLOWED": float(df["AST"].mean()),
+    }
+    team_pace = df.groupby("TEAM_ABBREVIATION")["TEAM_POSS_PROXY"].mean()
+    league_pace = float(df["TEAM_POSS_PROXY"].mean())
+    team_strength, league_game_total = build_team_strength_ratings(df, league_pace)
+    return df, opponent_defense, league_defaults, team_pace, league_pace, team_strength, league_game_total
+
+
+def load_models():
+    models = {}
+    for target in STAT_TARGETS + ["MIN"]:
+        path = os.path.join(BASE_DIR, f"{target}_model.pkl")
+        if os.path.exists(path):
+            try:
+                models[target] = joblib.load(path)
+            except Exception as exc:
+                print(f"WARNING: Could not load {path}: {exc}")
+    return models
+
+
+def safe_mean(series):
+    numeric = pd.to_numeric(series, errors="coerce").dropna()
+    if numeric.empty:
+        return 0.0
+    return float(numeric.mean())
+
+
+def safe_std(series):
+    numeric = pd.to_numeric(series, errors="coerce").dropna()
+    if len(numeric) <= 1:
+        return 0.0
+    return float(numeric.std(ddof=1))
+
+
+def rolling_mean(frame, col, n):
+    return safe_mean(frame.head(n)[col])
+
+
+def rolling_std(frame, col, n):
+    return safe_std(frame.head(n)[col])
+
+
+def weighted_recent_mean(recent5, recent10, col, w5=0.55, w10=0.45):
+    return (w5 * rolling_mean(recent5, col, 5)) + (w10 * rolling_mean(recent10, col, 10))
+
+
+def safe_divide(a, b):
+    return float(a) / float(b) if b else 0.0
+
+
+def build_player_features(player_logs, team, opponent, opponent_defense, league_defaults, team_pace, league_pace):
+    recent10 = player_logs.head(10).copy()
+    recent5 = player_logs.head(5).copy()
+    recent3 = player_logs.head(3).copy()
+
+    last_game = recent10.iloc[0]
+    prev_game_date = recent10.iloc[1]["GAME_DATE"] if len(recent10) > 1 else pd.NaT
+
+    today = pd.Timestamp.now().normalize()
+    rest_days = (today - last_game["GAME_DATE"].normalize()).days
+    if pd.notna(prev_game_date):
+        previous_gap = int((last_game["GAME_DATE"].normalize() - prev_game_date.normalize()).days)
+    else:
+        previous_gap = max(rest_days, 2)
+
+    features = {
+        "HOME": 1 if "vs." in str(last_game["MATCHUP"]) else 0,
+        "REST_DAYS": max(0, min(rest_days, 5)),
+        "B2B": 1 if previous_gap == 1 else 0,
+        "LOW_MIN_ROLE": 1 if rolling_mean(recent5, "MIN", 5) < 20 else 0,
+        "VOLATILE_MINUTES": 1 if rolling_std(recent5, "MIN", 5) > 6 else 0,
+    }
+
+    for stat in ["PTS", "REB", "AST", "STL", "BLK", "FG3M", "MIN"]:
+        features[f"{stat}_LAST3"] = rolling_mean(recent3, stat, 3)
+        features[f"{stat}_LAST5"] = rolling_mean(recent5, stat, 5)
+        features[f"{stat}_LAST10"] = rolling_mean(recent10, stat, 10)
+
+    features["MIN_STD5"] = rolling_std(recent5, "MIN", 5)
+    features["PTS_STD5"] = rolling_std(recent5, "PTS", 5)
+    features["REB_STD5"] = rolling_std(recent5, "REB", 5)
+    features["AST_STD5"] = rolling_std(recent5, "AST", 5)
+    features["PTS_TREND"] = features["PTS_LAST3"] - features["PTS_LAST10"]
+    features["MIN_TREND"] = features["MIN_LAST3"] - features["MIN_LAST10"]
+
+    defense = opponent_defense.loc[opponent].to_dict() if opponent in opponent_defense.index else league_defaults
+    features["OPP_PTS_ALLOWED"] = float(defense["OPP_PTS_ALLOWED"])
+    features["OPP_REB_ALLOWED"] = float(defense["OPP_REB_ALLOWED"])
+    features["OPP_AST_ALLOWED"] = float(defense["OPP_AST_ALLOWED"])
+    features["TEAM_PACE"] = float(team_pace.get(team, league_pace))
+    features["OPP_PACE"] = float(team_pace.get(opponent, league_pace))
+    features["EXPECTED_PACE"] = (features["TEAM_PACE"] + features["OPP_PACE"]) / 2.0
+
+    return features
+
+
+def build_player_archetypes(logs_df, rotation_templates=None):
+    latest_rows = logs_df.drop_duplicates(subset=["PLAYER_KEY"], keep="first").copy()
+    latest_team = latest_rows.set_index("PLAYER_KEY")["TEAM_ABBREVIATION"].to_dict()
+    profiles = {}
+
+    for player_key in latest_rows["PLAYER_KEY"].tolist():
+        player_logs = logs_df[logs_df["PLAYER_KEY"] == player_key].head(10).copy()
+        if player_logs.empty:
+            continue
+
+        recent5 = player_logs.head(5).copy()
+        recent10 = player_logs.head(10).copy()
+        mins = max(weighted_recent_mean(recent5, recent10, "MIN"), 8.0)
+        pts = weighted_recent_mean(recent5, recent10, "PTS")
+        reb = weighted_recent_mean(recent5, recent10, "REB")
+        ast = weighted_recent_mean(recent5, recent10, "AST")
+        stl = weighted_recent_mean(recent5, recent10, "STL")
+        blk = weighted_recent_mean(recent5, recent10, "BLK")
+        fg3m = weighted_recent_mean(recent5, recent10, "FG3M")
+        oreb = weighted_recent_mean(recent5, recent10, "OREB")
+        dreb = weighted_recent_mean(recent5, recent10, "DREB")
+        fga = weighted_recent_mean(recent5, recent10, "FGA")
+        fta = weighted_recent_mean(recent5, recent10, "FTA")
+
+        scoring_rate = safe_divide(pts, mins)
+        assist_rate = safe_divide(ast, mins)
+        rebound_rate = safe_divide(reb, mins)
+        rim_rate = safe_divide(blk + (0.35 * oreb), mins)
+        shooting_rate = safe_divide(fg3m + (0.20 * fga), mins)
+
+        profiles[player_key] = {
+            "TEAM": latest_team.get(player_key, ""),
+            "MINUTES": mins,
+            "USAGE_LOAD": pts + (1.35 * ast) + (0.75 * reb) + (0.20 * fga) + (0.15 * fta),
+            "SCORER": min(1.0, (scoring_rate / 0.85) + safe_divide(fga, 18.0) * 0.35),
+            "PLAYMAKER": min(1.0, (assist_rate / 0.23) + safe_divide(ast, max(pts + ast, 1.0)) * 0.25),
+            "REBOUNDER": min(1.0, (rebound_rate / 0.24) + safe_divide(dreb + 1.5 * oreb, mins) * 0.30),
+            "RIM": min(1.0, (rim_rate / 0.10) + safe_divide(blk, max(reb + 1.0, 1.0)) * 0.15),
+            "SHOOTER": min(1.0, (shooting_rate / 0.22) + safe_divide(fg3m, max(fga, 1.0)) * 0.25),
+            "POINTS_SHARE": safe_divide(pts, max(pts + ast + reb, 1.0)),
+            "ASSISTS_SHARE": safe_divide(ast, max(pts + ast + reb, 1.0)),
+            "REBOUNDS_SHARE": safe_divide(reb, max(pts + ast + reb, 1.0)),
+            "VOLATILITY": min(1.0, rolling_std(recent5, "MIN", 5) / 8.0),
+        }
+
+    team_rosters = {}
+    for player_key, profile in profiles.items():
+        team = profile.get("TEAM", "")
+        if not team:
+            continue
+        team_rosters.setdefault(team, []).append((player_key, profile))
+
+    for team, roster in team_rosters.items():
+        roster_by_minutes = sorted(roster, key=lambda item: item[1]["MINUTES"], reverse=True)
+        roster_by_usage = sorted(roster, key=lambda item: item[1]["USAGE_LOAD"], reverse=True)
+        minute_rank = {player_key: idx + 1 for idx, (player_key, _) in enumerate(roster_by_minutes)}
+        usage_rank = {player_key: idx + 1 for idx, (player_key, _) in enumerate(roster_by_usage)}
+        closer_candidates = sorted(
+            roster,
+            key=lambda item: (
+                (0.55 * item[1]["MINUTES"])
+                + (0.30 * item[1]["USAGE_LOAD"])
+                + (4.5 * item[1]["PLAYMAKER"])
+                + (3.0 * item[1]["SCORER"])
+            ),
+            reverse=True,
+        )
+        starter_keys = {player_key for player_key, _ in roster_by_minutes[:5]}
+        closer_keys = {player_key for player_key, _ in closer_candidates[:5]}
+        second_unit_keys = {player_key for player_key, _ in roster_by_minutes[5:10]}
+
+        for player_key, profile in roster:
+            m_rank = minute_rank[player_key]
+            u_rank = usage_rank[player_key]
+            mins = profile["MINUTES"]
+
+            if mins >= 31 or m_rank <= 5:
+                rotation_tier = "CORE"
+            elif mins >= 24 or m_rank <= 8:
+                rotation_tier = "ROTATION"
+            elif mins >= 16 or m_rank <= 10:
+                rotation_tier = "BENCH"
+            else:
+                rotation_tier = "DEEP_BENCH"
+
+            profile["MINUTE_RANK_TEAM"] = m_rank
+            profile["USAGE_RANK_TEAM"] = u_rank
+            profile["ROTATION_TIER"] = rotation_tier
+            profile["CORE_PLAYER"] = 1.0 if rotation_tier == "CORE" else 0.0
+            profile["BENCH_PLAYER"] = 1.0 if rotation_tier in {"BENCH", "DEEP_BENCH"} else 0.0
+            profile["STARTER"] = 1.0 if player_key in starter_keys else 0.0
+            profile["CLOSER"] = 1.0 if player_key in closer_keys else 0.0
+            profile["SECOND_UNIT"] = 1.0 if player_key in second_unit_keys else 0.0
+            profile["GARBAGE_UNIT"] = 1.0 if rotation_tier == "DEEP_BENCH" or (rotation_tier == "BENCH" and m_rank >= 8) else 0.0
+            profile["GARBAGE_TIME_FIT"] = min(
+                1.0,
+                max(
+                    0.0,
+                    (0.55 * profile["BENCH_PLAYER"])
+                    + (0.20 * profile["VOLATILITY"])
+                    + (0.15 * profile["REBOUNDER"])
+                    + (0.10 * (1.0 if u_rank > 6 else 0.0)),
+                ),
+            )
+
+            template = (rotation_templates or {}).get(player_key)
+            if template:
+                template_weight = float(template.get("TEMPLATE_SAMPLE_WEIGHT", 0.0))
+                if template_weight > 0:
+                    profile["STARTER"] = float(
+                        np.clip(((1.0 - template_weight) * profile["STARTER"]) + (template_weight * template.get("TEMPLATE_STARTER", 0.0)), 0.0, 1.0)
+                    )
+                    profile["CLOSER"] = float(
+                        np.clip(((1.0 - template_weight) * profile["CLOSER"]) + (template_weight * template.get("TEMPLATE_CLOSER", 0.0)), 0.0, 1.0)
+                    )
+                    profile["SECOND_UNIT"] = float(
+                        np.clip(((1.0 - template_weight) * profile["SECOND_UNIT"]) + (template_weight * template.get("TEMPLATE_SECOND_UNIT", 0.0)), 0.0, 1.0)
+                    )
+                    profile["GARBAGE_UNIT"] = float(
+                        np.clip(((1.0 - template_weight) * profile["GARBAGE_UNIT"]) + (template_weight * template.get("TEMPLATE_GARBAGE_UNIT", 0.0)), 0.0, 1.0)
+                    )
+                    profile["GARBAGE_TIME_FIT"] = float(
+                        np.clip(
+                            ((1.0 - (0.70 * template_weight)) * profile["GARBAGE_TIME_FIT"])
+                            + ((0.70 * template_weight) * max(template.get("TEMPLATE_GARBAGE_UNIT", 0.0), profile["GARBAGE_UNIT"])),
+                            0.0,
+                            1.0,
+                        )
+                    )
+                profile["TEMPLATE_MINUTES"] = float(template.get("TEMPLATE_MINUTES", 0.0))
+                profile["TEMPLATE_GAMES"] = float(template.get("TEMPLATE_GAMES", 0.0))
+                profile["TEMPLATE_SAMPLE_WEIGHT"] = template_weight
+                profile["TEMPLATE_Q1_SHARE"] = float(template.get("TEMPLATE_Q1_SHARE", 0.25))
+                profile["TEMPLATE_Q2_SHARE"] = float(template.get("TEMPLATE_Q2_SHARE", 0.25))
+                profile["TEMPLATE_Q3_SHARE"] = float(template.get("TEMPLATE_Q3_SHARE", 0.25))
+                profile["TEMPLATE_Q4_SHARE"] = float(template.get("TEMPLATE_Q4_SHARE", 0.25))
+            else:
+                profile["TEMPLATE_MINUTES"] = 0.0
+                profile["TEMPLATE_GAMES"] = 0.0
+                profile["TEMPLATE_SAMPLE_WEIGHT"] = 0.0
+                profile["TEMPLATE_Q1_SHARE"] = 0.25
+                profile["TEMPLATE_Q2_SHARE"] = 0.25
+                profile["TEMPLATE_Q3_SHARE"] = 0.25
+                profile["TEMPLATE_Q4_SHARE"] = 0.25
+
+    return profiles
+
+
+def build_lineup_injury_context(logs_df, injury_map, archetypes):
+    latest_rows = logs_df.drop_duplicates(subset=["PLAYER_KEY"], keep="first").copy()
+    team_players = latest_rows.groupby("TEAM_ABBREVIATION")["PLAYER_KEY"].apply(list).to_dict()
+    team_baselines = (
+        logs_df.groupby(
+            ["GAME_ID", "TEAM_ABBREVIATION"],
+            as_index=False,
+        )[["PTS", "AST", "REB", "FG3M", "TOV", "FGM", "FGA", "FTA", "FTM"]]
+        .sum()
+        .groupby("TEAM_ABBREVIATION")[["PTS", "AST", "REB", "FG3M", "TOV", "FGM", "FGA", "FTA", "FTM"]]
+        .mean()
+        .to_dict("index")
+    )
+    team_context = {}
+
+    for team, roster in team_players.items():
+        role_losses = {key: 0.0 for key in ROLE_KEYS}
+        usage_loss = 0.0
+        points_weights = {}
+        assist_weights = {}
+        rebound_weights = {}
+        fg3m_weights = {}
+        tov_weights = {}
+        fga_weights = {}
+        fta_weights = {}
+
+        for player_key in roster:
+            status_norm = normalize_injury_status(injury_map.get(player_key, "ACTIVE"))
+            weight = INJURY_IMPACT_WEIGHT.get(status_norm, 0.0)
+            if weight <= 0:
+                continue
+            profile = archetypes.get(player_key)
+            if not profile:
+                continue
+            for role_key in ROLE_KEYS:
+                role_losses[role_key] += profile[role_key] * weight * min(1.0, profile["MINUTES"] / 32.0)
+            usage_loss += min(1.0, profile["USAGE_LOAD"] / 34.0) * weight
+
+        for player_key in roster:
+            profile = archetypes.get(player_key)
+            if not profile:
+                continue
+            status_norm = normalize_injury_status(injury_map.get(player_key, "ACTIVE"))
+            availability = STATUS_AVAILABILITY.get(status_norm, STATUS_AVAILABILITY["UNKNOWN"])
+            if availability <= 0:
+                continue
+            minute_weight = min(1.0, profile["MINUTES"] / 34.0)
+            active_weight = availability * (
+                0.60
+                + (0.24 * minute_weight)
+                + (0.08 * profile.get("STARTER", 0.0))
+                + (0.08 * profile.get("CLOSER", 0.0))
+            )
+            points_weights[player_key] = active_weight * (
+                (0.55 * profile["SCORER"])
+                + (0.25 * profile["SHOOTER"])
+                + (0.10 * profile.get("CLOSER", 0.0))
+                + (0.10 * minute_weight)
+            )
+            assist_weights[player_key] = active_weight * (
+                (0.62 * profile["PLAYMAKER"])
+                + (0.18 * profile["SCORER"])
+                + (0.08 * profile.get("CLOSER", 0.0))
+                + (0.20 * minute_weight)
+            )
+            rebound_weights[player_key] = active_weight * (
+                (0.58 * profile["REBOUNDER"])
+                + (0.20 * profile["RIM"])
+                + (0.22 * minute_weight)
+            )
+            fg3m_weights[player_key] = active_weight * (
+                (0.60 * profile["SHOOTER"])
+                + (0.20 * profile["SCORER"])
+                + (0.08 * profile.get("CLOSER", 0.0))
+                + (0.20 * minute_weight)
+            )
+            tov_weights[player_key] = active_weight * (
+                (0.48 * profile["PLAYMAKER"])
+                + (0.30 * profile["SCORER"])
+                + (0.22 * minute_weight)
+            )
+            fga_weights[player_key] = active_weight * (
+                (0.50 * profile["SCORER"])
+                + (0.28 * profile["SHOOTER"])
+                + (0.10 * profile.get("CLOSER", 0.0))
+                + (0.22 * minute_weight)
+            )
+            fta_weights[player_key] = active_weight * (
+                (0.44 * profile["SCORER"])
+                + (0.22 * profile["RIM"])
+                + (0.14 * profile["PLAYMAKER"])
+                + (0.08 * profile.get("CLOSER", 0.0))
+                + (0.20 * minute_weight)
+            )
+
+        points_total = max(sum(points_weights.values()), 1e-6)
+        assist_total = max(sum(assist_weights.values()), 1e-6)
+        rebound_total = max(sum(rebound_weights.values()), 1e-6)
+        fg3m_total = max(sum(fg3m_weights.values()), 1e-6)
+        tov_total = max(sum(tov_weights.values()), 1e-6)
+        fga_total = max(sum(fga_weights.values()), 1e-6)
+        fta_total = max(sum(fta_weights.values()), 1e-6)
+        player_allocation = {}
+        for player_key in roster:
+            player_allocation[player_key] = {
+                "PTS_SHARE": float(points_weights.get(player_key, 0.0) / points_total),
+                "AST_SHARE": float(assist_weights.get(player_key, 0.0) / assist_total),
+                "REB_SHARE": float(rebound_weights.get(player_key, 0.0) / rebound_total),
+                "FG3M_SHARE": float(fg3m_weights.get(player_key, 0.0) / fg3m_total),
+                "TOV_SHARE": float(tov_weights.get(player_key, 0.0) / tov_total),
+                "FGA_SHARE": float(fga_weights.get(player_key, 0.0) / fga_total),
+                "FTA_SHARE": float(fta_weights.get(player_key, 0.0) / fta_total),
+            }
+
+        baseline = team_baselines.get(team, {})
+
+        team_context[team] = {
+            "ROLE_LOSSES": {role: min(val, 1.5) for role, val in role_losses.items()},
+            "USAGE_LOSS": min(usage_loss, 1.5),
+            "BASELINE_TEAM_POINTS": float(baseline.get("PTS", np.nan)),
+            "BASELINE_TEAM_AST": float(baseline.get("AST", np.nan)),
+            "BASELINE_TEAM_REB": float(baseline.get("REB", np.nan)),
+            "BASELINE_TEAM_FG3M": float(baseline.get("FG3M", np.nan)),
+            "BASELINE_TEAM_TOV": float(baseline.get("TOV", np.nan)),
+            "BASELINE_TEAM_FGM": float(baseline.get("FGM", np.nan)),
+            "BASELINE_TEAM_FGA": float(baseline.get("FGA", np.nan)),
+            "BASELINE_TEAM_FTA": float(baseline.get("FTA", np.nan)),
+            "BASELINE_TEAM_FTM": float(baseline.get("FTM", np.nan)),
+            "PLAYER_ALLOCATION": player_allocation,
+        }
+
+    return team_context
+
+
+def build_game_sim_contexts(matchups, team_strength, lineup_injury_context, team_pace, league_pace, league_game_total, market_game_lines):
+    contexts = {}
+    processed_matchups = set()
+
+    for team, matchup_info in matchups.items():
+        opponent = str(matchup_info.get("OPPONENT", "")).strip().upper()
+        if not opponent:
+            continue
+
+        game_id = matchup_key(team, opponent)
+        if game_id in processed_matchups:
+            continue
+        processed_matchups.add(game_id)
+
+        team_home = 1 if "vs." in str(matchup_info.get("MATCHUP", "")) else 0
+        opponent_home = 1 if team_home == 0 else 0
+
+        team_strength_row = team_strength.loc[team] if team in team_strength.index else None
+        opp_strength_row = team_strength.loc[opponent] if opponent in team_strength.index else None
+
+        team_quality = float(team_strength_row["TEAM_QUALITY"]) if team_strength_row is not None else 0.0
+        opp_quality = float(opp_strength_row["TEAM_QUALITY"]) if opp_strength_row is not None else 0.0
+        team_margin_std = float(team_strength_row["MARGIN_STD"]) if team_strength_row is not None else DEFAULT_MARGIN_STD
+        opp_margin_std = float(opp_strength_row["MARGIN_STD"]) if opp_strength_row is not None else DEFAULT_MARGIN_STD
+        team_avg_pace = float(team_pace.get(team, league_pace))
+        opp_avg_pace = float(team_pace.get(opponent, league_pace))
+
+        team_context = lineup_injury_context.get(team, {"USAGE_LOSS": 0.0, "ROLE_LOSSES": {}})
+        opp_context = lineup_injury_context.get(opponent, {"USAGE_LOSS": 0.0, "ROLE_LOSSES": {}})
+        injury_margin_shift = 4.5 * (opp_context["USAGE_LOSS"] - team_context["USAGE_LOSS"])
+
+        model_margin = (team_quality - opp_quality) + injury_margin_shift + (HOME_COURT_EDGE if team_home else -HOME_COURT_EDGE)
+        market_line = market_game_lines.get(game_id, {})
+        market_total = None
+        market_margin = None
+        if market_line:
+            market_total = pd.to_numeric(market_line.get("TOTAL"), errors="coerce")
+            if team == market_line.get("HOME_TEAM"):
+                market_margin = -pd.to_numeric(market_line.get("HOME_SPREAD"), errors="coerce")
+            elif team == market_line.get("AWAY_TEAM"):
+                market_margin = -pd.to_numeric(market_line.get("AWAY_SPREAD"), errors="coerce")
+
+        if market_margin is not None and not pd.isna(market_margin):
+            expected_margin = (MARKET_SPREAD_BLEND * float(market_margin)) + ((1.0 - MARKET_SPREAD_BLEND) * model_margin)
+            base_margin_std = 11.2 - min(abs(float(market_margin)), 16.0) * 0.18
+        else:
+            expected_margin = model_margin
+            base_margin_std = np.sqrt((team_margin_std ** 2 + opp_margin_std ** 2) / 2.0)
+
+        margin_std = max(7.5, min(16.0, float(base_margin_std)))
+        expected_pace = (team_avg_pace + opp_avg_pace) / 2.0
+        market_total_factor = 1.0
+        implied_team_total = np.nan
+        implied_opp_total = np.nan
+        if market_total is not None and not pd.isna(market_total) and league_game_total > 0:
+            total_delta = (float(market_total) - float(league_game_total)) / max(float(league_game_total), 1.0)
+            market_total_factor = float(np.clip(1.0 + (MARKET_TOTAL_BLEND * total_delta), 0.94, 1.07))
+            implied_team_total = (float(market_total) / 2.0) + (float(expected_margin) / 2.0)
+            implied_opp_total = float(market_total) - implied_team_total
+
+        rng_seed = abs(hash((game_id, current_projection_date(), "game_context"))) % (2 ** 32)
+        rng = np.random.default_rng(rng_seed)
+        margin_draws = rng.normal(expected_margin, margin_std, SIMULATION_RUNS)
+        competitive_mask = np.abs(margin_draws) <= 6.0
+        blowout_mask = np.abs(margin_draws) >= BLOWOUT_THRESHOLD
+        pace_noise = rng.normal(0.0, 0.018, SIMULATION_RUNS)
+        pace_script = np.clip((1.0 + ((expected_pace - league_pace) / max(league_pace, 1.0)) + pace_noise) * market_total_factor, 0.93, 1.10)
+
+        team_points_target = implied_team_total if not pd.isna(implied_team_total) else float(team_context.get("BASELINE_TEAM_POINTS", 110.0))
+        opp_points_target = implied_opp_total if not pd.isna(implied_opp_total) else float(opp_context.get("BASELINE_TEAM_POINTS", 110.0))
+        team_points_ratio = team_points_target / max(float(team_context.get("BASELINE_TEAM_POINTS", team_points_target)), 1.0)
+        opp_points_ratio = opp_points_target / max(float(opp_context.get("BASELINE_TEAM_POINTS", opp_points_target)), 1.0)
+
+        def team_event_draws(side_context, points_target, points_ratio):
+            base_ast = float(side_context.get("BASELINE_TEAM_AST", 24.0))
+            base_reb = float(side_context.get("BASELINE_TEAM_REB", 44.0))
+            base_fg3m = float(side_context.get("BASELINE_TEAM_FG3M", 13.0))
+            base_tov = float(side_context.get("BASELINE_TEAM_TOV", 13.5))
+            base_fgm = float(side_context.get("BASELINE_TEAM_FGM", 40.0))
+            base_fga = float(side_context.get("BASELINE_TEAM_FGA", 88.0))
+            base_fta = float(side_context.get("BASELINE_TEAM_FTA", 24.0))
+            base_ftm = float(side_context.get("BASELINE_TEAM_FTM", 19.0))
+            ast_target = base_ast * min(1.12, max(0.88, 0.96 + (0.55 * (points_ratio - 1.0))))
+            reb_target = base_reb * min(1.08, max(0.94, 0.99 + (0.18 * (points_ratio - 1.0))))
+            fg3m_target = base_fg3m * min(1.18, max(0.82, 0.94 + (0.75 * (points_ratio - 1.0))))
+            tov_target = base_tov * min(1.12, max(0.90, 0.98 + (0.30 * (points_ratio - 1.0))))
+            fga_target = base_fga * min(1.12, max(0.90, 0.98 + (0.55 * (points_ratio - 1.0))))
+            fta_target = base_fta * min(1.15, max(0.88, 0.98 + (0.70 * (points_ratio - 1.0))))
+            fgm_target = base_fgm * min(1.12, max(0.90, 0.98 + (0.52 * (points_ratio - 1.0))))
+            ftm_target = base_ftm * min(1.15, max(0.88, 0.98 + (0.68 * (points_ratio - 1.0))))
+            ast_target = min(ast_target, fgm_target * 0.82)
+            fgm_target = min(fgm_target, fga_target * 0.68)
+            ftm_target = min(ftm_target, fta_target * 0.90)
+            return {
+                "TEAM_POINTS_DRAWS": np.clip(rng.normal(points_target, max(5.5, 0.07 * points_target), SIMULATION_RUNS), 75.0, 165.0),
+                "TEAM_AST_DRAWS": np.clip(rng.normal(ast_target, max(3.0, 0.11 * ast_target), SIMULATION_RUNS), 10.0, 45.0),
+                "TEAM_REB_DRAWS": np.clip(rng.normal(reb_target, max(4.0, 0.10 * reb_target), SIMULATION_RUNS), 28.0, 70.0),
+                "TEAM_FG3M_DRAWS": np.clip(rng.normal(fg3m_target, max(1.8, 0.16 * fg3m_target), SIMULATION_RUNS), 3.0, 30.0),
+                "TEAM_TOV_DRAWS": np.clip(rng.normal(tov_target, max(1.8, 0.14 * tov_target), SIMULATION_RUNS), 6.0, 24.0),
+                "TEAM_FGM_DRAWS": np.clip(rng.normal(fgm_target, max(2.8, 0.09 * fgm_target), SIMULATION_RUNS), 24.0, 65.0),
+                "TEAM_FGA_DRAWS": np.clip(rng.normal(fga_target, max(4.0, 0.08 * fga_target), SIMULATION_RUNS), 60.0, 120.0),
+                "TEAM_FTA_DRAWS": np.clip(rng.normal(fta_target, max(2.6, 0.12 * fta_target), SIMULATION_RUNS), 10.0, 45.0),
+                "TEAM_FTM_DRAWS": np.clip(rng.normal(ftm_target, max(2.2, 0.10 * ftm_target), SIMULATION_RUNS), 8.0, 38.0),
+            }
+
+        team_event_pools = team_event_draws(team_context, team_points_target, team_points_ratio)
+        opp_event_pools = team_event_draws(opp_context, opp_points_target, opp_points_ratio)
+
+        game_context = {
+            "GAME_ID": game_id,
+            "EXPECTED_MARGIN": float(expected_margin),
+            "MARGIN_STD": float(margin_std),
+            "EXPECTED_PACE": float(expected_pace),
+            "MARKET_SPREAD": float(market_margin) if market_margin is not None and not pd.isna(market_margin) else np.nan,
+            "MARKET_TOTAL": float(market_total) if market_total is not None and not pd.isna(market_total) else np.nan,
+            "IMPLIED_TEAM_TOTAL": float(implied_team_total) if not pd.isna(implied_team_total) else np.nan,
+            "IMPLIED_OPP_TOTAL": float(implied_opp_total) if not pd.isna(implied_opp_total) else np.nan,
+            "PACE_SCRIPT": pace_script,
+            "TEAM_MARGIN_DRAWS": margin_draws,
+            "COMPETITIVE_MASK": competitive_mask,
+            "BLOWOUT_MASK": blowout_mask,
+            **team_event_pools,
+        }
+        contexts[team] = game_context
+        contexts[opponent] = {
+            **game_context,
+            "EXPECTED_MARGIN": float(-expected_margin),
+            "MARKET_SPREAD": float(-market_margin) if market_margin is not None and not pd.isna(market_margin) else np.nan,
+            "IMPLIED_TEAM_TOTAL": float(implied_opp_total) if not pd.isna(implied_opp_total) else np.nan,
+            "IMPLIED_OPP_TOTAL": float(implied_team_total) if not pd.isna(implied_team_total) else np.nan,
+            "TEAM_MARGIN_DRAWS": -margin_draws,
+            **opp_event_pools,
+        }
+
+    return contexts
+
+
+def predict_with_model(model, feature_values, feature_order):
+    if model is None:
+        return None
+    frame = pd.DataFrame([{col: float(feature_values.get(col, 0.0)) for col in feature_order}])
+    try:
+        pred = model.predict(frame)[0]
+        return float(pred)
+    except Exception:
+        return None
+
+
+def blended_stat_projection(stat, model_pred, features):
+    last3 = features[f"{stat}_LAST3"]
+    last5 = features[f"{stat}_LAST5"]
+    last10 = features[f"{stat}_LAST10"]
+    weights = RECENT_WEIGHTS[stat]
+    recent_blend = (weights[0] * last5) + (weights[1] * last10) + (weights[2] * last3)
+
+    if model_pred is None:
+        return max(0.0, recent_blend)
+
+    model_weight = 0.60 if stat in {"PTS", "REB", "AST"} else 0.52
+    recent_weight = 1.0 - model_weight
+    return max(0.0, (model_weight * model_pred) + (recent_weight * recent_blend))
+
+
+def minutes_projection(model_pred, features):
+    recent_component = (0.50 * features["MIN_LAST5"]) + (0.30 * features["MIN_LAST10"]) + (0.20 * features["MIN_LAST3"])
+    if model_pred is None:
+        return max(0.0, recent_component)
+    return max(0.0, (0.62 * model_pred) + (0.38 * recent_component))
+
+
+def confidence_from_profile(features, games_used, availability):
+    base = 0.56
+    base += min(games_used, 10) * 0.020
+    base += min(features["MIN_LAST5"], 36) * 0.006
+    base -= min(features["MIN_STD5"], 10) * 0.015
+    base -= abs(features["PTS_TREND"]) * 0.006
+    base *= availability
+    conf = max(0.05, min(base, 0.95))
+
+    if conf >= 0.80:
+        return conf, "HIGH", "High"
+    if conf >= 0.64:
+        return conf, "MEDIUM", "Medium"
+    return conf, "LOW", "Low"
+
+
+def simulate_minutes(mean_minutes, features, status, rng, role_fit, game_context=None):
+    availability = STATUS_AVAILABILITY.get(status, STATUS_AVAILABILITY["UNKNOWN"])
+    minutes_multiplier = STATUS_MINUTES_MULTIPLIER.get(status, STATUS_MINUTES_MULTIPLIER["UNKNOWN"])
+
+    active_mask = rng.random(SIMULATION_RUNS) < availability
+    player_noise = rng.normal(0.0, 0.35, SIMULATION_RUNS)
+
+    if game_context:
+        team_margin_draws = game_context["TEAM_MARGIN_DRAWS"]
+        pace_script = game_context["PACE_SCRIPT"]
+        competitive_mask = game_context["COMPETITIVE_MASK"]
+        blowout_mask = game_context["BLOWOUT_MASK"]
+        game_script = np.clip((team_margin_draws / 12.0) + player_noise, -1.6, 1.6)
+    else:
+        team_margin_draws = rng.normal(0.0, DEFAULT_MARGIN_STD, SIMULATION_RUNS)
+        pace_script = np.ones(SIMULATION_RUNS)
+        competitive_mask = np.abs(team_margin_draws) <= 6.0
+        blowout_mask = np.abs(team_margin_draws) >= BLOWOUT_THRESHOLD
+        game_script = np.clip((team_margin_draws / 12.0) + player_noise, -1.6, 1.6)
+
+    base_sigma = max(2.2, features["MIN_STD5"] * 1.10)
+    if features["VOLATILE_MINUTES"]:
+        base_sigma += 1.5
+    if features["LOW_MIN_ROLE"]:
+        base_sigma += 1.0
+    if status in {"QUESTIONABLE", "DOUBTFUL"}:
+        base_sigma += 1.6
+
+    core_minutes_share = min(1.0, max(0.0, ((mean_minutes - 18.0) / 16.0)))
+    low_minutes_share = float(features["LOW_MIN_ROLE"])
+    volatile_share = float(features["VOLATILE_MINUTES"])
+    playmaker_share = float(role_fit.get("PLAYMAKER", 0.0))
+    scorer_share = float(role_fit.get("SCORER", 0.0))
+    rebounder_share = float(role_fit.get("REBOUNDER", 0.0))
+    core_player = float(role_fit.get("CORE_PLAYER", 0.0))
+    bench_player = float(role_fit.get("BENCH_PLAYER", 0.0))
+    garbage_time_fit = float(role_fit.get("GARBAGE_TIME_FIT", 0.0))
+    starter = float(role_fit.get("STARTER", 0.0))
+    closer = float(role_fit.get("CLOSER", 0.0))
+    second_unit = float(role_fit.get("SECOND_UNIT", 0.0))
+    garbage_unit = float(role_fit.get("GARBAGE_UNIT", 0.0))
+    template_minutes = float(role_fit.get("TEMPLATE_MINUTES", 0.0))
+    template_sample = float(role_fit.get("TEMPLATE_SAMPLE_WEIGHT", 0.0))
+    template_shares = np.array(
+        [
+            float(role_fit.get("TEMPLATE_Q1_SHARE", 0.25)),
+            float(role_fit.get("TEMPLATE_Q2_SHARE", 0.25)),
+            float(role_fit.get("TEMPLATE_Q3_SHARE", 0.25)),
+            float(role_fit.get("TEMPLATE_Q4_SHARE", 0.25)),
+        ],
+        dtype=float,
+    )
+
+    target_minutes = rng.normal(mean_minutes * minutes_multiplier, base_sigma, SIMULATION_RUNS)
+    target_minutes *= pace_script
+    if template_sample > 0 and template_minutes > 0:
+        template_minutes_draw = rng.normal(template_minutes * minutes_multiplier, max(1.5, base_sigma * 0.65), SIMULATION_RUNS)
+        anchor_weight = 0.18 + (0.17 * template_sample)
+        target_minutes = ((1.0 - anchor_weight) * target_minutes) + (anchor_weight * template_minutes_draw)
+
+    # Quarter-by-quarter rotation shape so close games and blowouts move time into
+    # realistic buckets rather than acting like a flat full-game haircut.
+    q1_share = 0.26 + (0.05 * starter) + (0.02 * core_player) - (0.06 * second_unit) - (0.08 * garbage_unit)
+    q2_share = 0.24 - (0.04 * starter) + (0.07 * second_unit) + (0.02 * bench_player)
+    q3_share = 0.25 + (0.04 * starter) + (0.02 * closer) - (0.02 * garbage_unit)
+    q4_share = 0.25 + (0.06 * closer) - (0.04 * second_unit) - (0.05 * garbage_unit)
+    share_total = q1_share + q2_share + q3_share + q4_share
+    quarter_shares = np.array([q1_share, q2_share, q3_share, q4_share], dtype=float) / share_total
+    template_share_total = template_shares.sum()
+    if template_sample > 0 and template_share_total > 0:
+        template_shares = template_shares / template_share_total
+        share_blend = 0.45 + (0.40 * template_sample)
+        quarter_shares = ((1.0 - share_blend) * quarter_shares) + (share_blend * template_shares)
+        quarter_shares = quarter_shares / max(quarter_shares.sum(), 1e-6)
+    quarter_minutes = target_minutes[:, None] * quarter_shares[None, :]
+
+    quarter_minutes[:, 0] += 0.55 * starter + 0.20 * core_player + 0.15 * playmaker_share - 0.35 * second_unit - 0.45 * garbage_unit
+    quarter_minutes[:, 1] += 0.60 * second_unit + 0.25 * bench_player + 0.15 * garbage_time_fit - 0.30 * starter
+    quarter_minutes[:, 2] += 0.35 * starter + 0.20 * core_player + 0.18 * scorer_share - 0.10 * garbage_unit
+    quarter_minutes[:, 3] += 0.55 * closer + 0.20 * core_player - 0.25 * second_unit - 0.40 * garbage_unit
+
+    competitive_float = competitive_mask.astype(float)
+    blowout_float = blowout_mask.astype(float)
+    leading_big = (team_margin_draws >= BLOWOUT_THRESHOLD).astype(float)
+    trailing_big = (team_margin_draws <= -BLOWOUT_THRESHOLD).astype(float)
+
+    quarter_minutes[:, 3] += competitive_float * (1.0 * closer + 0.9 * core_minutes_share + 0.40 * playmaker_share)
+    quarter_minutes[:, 3] -= leading_big * (1.2 * closer + 0.8 * core_minutes_share + 0.35 * scorer_share)
+    quarter_minutes[:, 3] -= trailing_big * (1.3 * closer + 0.9 * core_minutes_share + 0.30 * scorer_share)
+    quarter_minutes[:, 3] += blowout_float * (1.05 * garbage_unit + 0.75 * second_unit + 0.95 * garbage_time_fit + 0.30 * rebounder_share)
+    quarter_minutes[:, 2] -= trailing_big * (0.45 * closer + 0.35 * core_minutes_share)
+    quarter_minutes[:, 2] += blowout_float * (0.35 * second_unit + 0.40 * garbage_unit + 0.20 * garbage_time_fit)
+
+    quarter_minutes += rng.normal(0.0, 0.24 + (0.10 * volatile_share), (SIMULATION_RUNS, 4))
+    quarter_minutes = np.clip(quarter_minutes, 0.0, 12.0)
+    minutes = quarter_minutes.sum(axis=1)
+
+    close_game_bonus = competitive_float * (0.25 + (0.55 * core_player))
+    blowout_penalty = blowout_float * (
+        (0.50 + (1.0 * core_minutes_share) + (0.45 * core_player))
+        * (1.0 - (0.55 * low_minutes_share) - (0.25 * bench_player))
+    )
+    garbage_time_bonus = blowout_float * (
+        (0.70 * low_minutes_share)
+        + (0.70 * bench_player)
+        + (0.75 * garbage_time_fit)
+        + (0.25 * volatile_share)
+    )
+    minutes += close_game_bonus - blowout_penalty + garbage_time_bonus
+
+    if features["LOW_MIN_ROLE"]:
+        minutes = np.minimum(minutes, 32.0)
+    else:
+        minutes = np.minimum(minutes, 40.0)
+
+    minutes = np.clip(minutes, 0.0, None)
+    # Rescale quarter buckets to the final minute total after caps/adjustments.
+    quarter_sum = np.clip(quarter_minutes.sum(axis=1), 0.1, None)
+    quarter_minutes *= (minutes / quarter_sum)[:, None]
+    quarter_minutes = np.clip(quarter_minutes, 0.0, 12.0)
+    minutes = quarter_minutes.sum(axis=1)
+    minutes *= active_mask.astype(float)
+    quarter_minutes *= active_mask.astype(float)[:, None]
+    return minutes, quarter_minutes, active_mask, game_script, availability
+
+
+def simulate_core_stat(stat, mean_value, mean_minutes, minutes_draws, features, game_script, rng):
+    minute_basis = max(mean_minutes, 1.0)
+    rate = max(mean_value, 0.0) / minute_basis
+    minutes_ratio = np.divide(minutes_draws, minute_basis, out=np.zeros_like(minutes_draws), where=minute_basis > 0)
+
+    baseline = rate * minutes_draws
+    baseline *= 1.0 + (USAGE_COEFFICIENT[stat] * game_script)
+    baseline = np.clip(baseline, 0.0, None)
+
+    if stat in {"STL", "BLK", "FG3M"}:
+        lam = np.clip(baseline, 0.02, None)
+        return rng.poisson(lam).astype(float)
+
+    if stat == "PTS":
+        raw_sigma = max(features["PTS_STD5"], 0.22 * mean_value + 1.7)
+    elif stat == "REB":
+        raw_sigma = max(features["REB_STD5"], 0.18 * mean_value + 1.2)
+    else:
+        raw_sigma = max(features["AST_STD5"], 0.20 * mean_value + 1.1)
+
+    sigma = raw_sigma * np.sqrt(np.clip(minutes_ratio, 0.2, 1.8))
+    noise = rng.normal(0.0, sigma, SIMULATION_RUNS)
+    draws = np.clip(baseline + noise, 0.0, None)
+    return draws
+
+
+def simulate_rate_stat(mean_value, mean_minutes, minutes_draws, volatility_scale, game_script, rng, integer_output=False):
+    minute_basis = max(mean_minutes, 1.0)
+    rate = max(mean_value, 0.0) / minute_basis
+    baseline = np.clip(rate * minutes_draws, 0.0, None)
+    baseline *= 1.0 + (volatility_scale * game_script)
+    baseline = np.clip(baseline, 0.0, None)
+
+    if integer_output:
+        return rng.poisson(np.clip(baseline, 0.01, None)).astype(float)
+
+    sigma = np.maximum(0.5, 0.20 * baseline + 0.35)
+    draws = baseline + rng.normal(0.0, sigma, SIMULATION_RUNS)
+    return np.clip(draws, 0.0, None)
+
+
+def simulate_opening_window_stat(full_game_draws, mean_minutes, quarter_minutes, role_strength, rng, scale=1.0):
+    opening_minutes_share = np.clip(
+        np.divide(3.0, np.maximum(quarter_minutes[:, 0], 6.0)),
+        0.16,
+        0.50,
+    )
+    opener_multiplier = 0.88 + (0.22 * role_strength)
+    first_quarter_share = np.divide(quarter_minutes[:, 0], np.maximum(quarter_minutes.sum(axis=1), 1.0))
+    lam = np.clip(full_game_draws * first_quarter_share * opening_minutes_share * opener_multiplier * scale, 0.01, None)
+    return rng.poisson(lam).astype(float)
+
+
+def simulate_quarters_points_hits(points_draws, quarter_minutes, scorer_strength, rng, threshold):
+    hot_hand = rng.normal(1.0, 0.08 + (0.05 * scorer_strength), SIMULATION_RUNS)
+    quarter_share = np.divide(quarter_minutes, np.maximum(quarter_minutes.sum(axis=1, keepdims=True), 1.0))
+    lam_per_quarter = np.clip(points_draws[:, None] * quarter_share * hot_hand[:, None], 0.01, None)
+    quarter_points = rng.poisson(lam_per_quarter).astype(float)
+    return (quarter_points >= threshold).sum(axis=1).astype(float)
+
+
+def blend_with_team_pool(player_draws, team_pool_draws, share, minutes_draws, mean_minutes, rng, noise_scale=0.08, blend_weight=0.58):
+    if share <= 0:
+        return player_draws
+
+    minute_ratio = np.clip(
+        np.divide(minutes_draws, max(mean_minutes, 1.0), out=np.zeros_like(minutes_draws), where=max(mean_minutes, 1.0) > 0),
+        0.35,
+        1.65,
+    )
+    activity_mask = (minutes_draws > 0).astype(float)
+    allocation_noise = rng.normal(1.0, noise_scale, SIMULATION_RUNS)
+    team_allocated = np.clip(
+        team_pool_draws * share * (0.76 + (0.24 * minute_ratio)) * allocation_noise * activity_mask,
+        0.0,
+        None,
+    )
+    return np.clip((blend_weight * player_draws) + ((1.0 - blend_weight) * team_allocated), 0.0, None)
+
+
+def summarize_distribution(draws):
+    return {
+        "P10": float(np.percentile(draws, 10)),
+        "P50": float(np.percentile(draws, 50)),
+        "P90": float(np.percentile(draws, 90)),
+        "MEAN": float(np.mean(draws)),
+        "STD": float(np.std(draws)),
+    }
+
+
+def build_player_projection(player_row, logs_df, opponent_defense, league_defaults, injury_map, matchups, models, lineup_injury_context, archetypes, team_pace, league_pace, game_sim_contexts):
+    player_name = player_row["PLAYER_NAME"]
+    player_key = player_row["PLAYER_KEY"]
+    team = str(player_row["TEAM"]).strip().upper()
+    player_logs = logs_df[logs_df["PLAYER_KEY"] == player_key].copy()
+
+    if player_logs.empty:
+        return None, "missing_logs"
+
+    recent10 = player_logs.head(10).copy()
+    recent5 = player_logs.head(5).copy()
+
+    if len(recent10) < 5:
+        return None, "insufficient_logs"
+
+    avg_min_5 = rolling_mean(recent5, "MIN", 5)
+    if avg_min_5 < 8:
+        return None, "too_few_minutes"
+
+    days_since_last_game = (pd.Timestamp.now().normalize() - recent10.iloc[0]["GAME_DATE"].normalize()).days
+    if days_since_last_game > 25:
+        return None, "stale_logs"
+
+    matchup_info = matchups.get(team, {})
+    opponent = matchup_info.get("OPPONENT", str(recent10.iloc[0]["OPP_TEAM_ABBREVIATION"]).strip().upper())
+    matchup = matchup_info.get("MATCHUP", "")
+
+    features = build_player_features(player_logs, team, opponent, opponent_defense, league_defaults, team_pace, league_pace)
+    injury_status = normalize_injury_status(injury_map.get(player_key, "ACTIVE"))
+    if injury_status == "OUT":
+        return None, "inactive_out"
+    player_profile = archetypes.get(player_key, {})
+    team_context = lineup_injury_context.get(team, {"ROLE_LOSSES": {key: 0.0 for key in ROLE_KEYS}, "USAGE_LOSS": 0.0})
+    game_context = game_sim_contexts.get(team)
+    role_losses = team_context["ROLE_LOSSES"]
+    team_injury_impact = float(sum(role_losses.values()) / max(len(ROLE_KEYS), 1))
+    role_fit = {
+        "SCORER": player_profile.get("SCORER", 0.0),
+        "PLAYMAKER": player_profile.get("PLAYMAKER", 0.0),
+        "REBOUNDER": player_profile.get("REBOUNDER", 0.0),
+        "RIM": player_profile.get("RIM", 0.0),
+        "SHOOTER": player_profile.get("SHOOTER", 0.0),
+        "CORE_PLAYER": player_profile.get("CORE_PLAYER", 0.0),
+        "BENCH_PLAYER": player_profile.get("BENCH_PLAYER", 0.0),
+        "GARBAGE_TIME_FIT": player_profile.get("GARBAGE_TIME_FIT", 0.0),
+        "STARTER": player_profile.get("STARTER", 0.0),
+        "CLOSER": player_profile.get("CLOSER", 0.0),
+        "SECOND_UNIT": player_profile.get("SECOND_UNIT", 0.0),
+        "GARBAGE_UNIT": player_profile.get("GARBAGE_UNIT", 0.0),
+        "TEMPLATE_MINUTES": player_profile.get("TEMPLATE_MINUTES", 0.0),
+        "TEMPLATE_GAMES": player_profile.get("TEMPLATE_GAMES", 0.0),
+        "TEMPLATE_SAMPLE_WEIGHT": player_profile.get("TEMPLATE_SAMPLE_WEIGHT", 0.0),
+        "TEMPLATE_Q1_SHARE": player_profile.get("TEMPLATE_Q1_SHARE", 0.25),
+        "TEMPLATE_Q2_SHARE": player_profile.get("TEMPLATE_Q2_SHARE", 0.25),
+        "TEMPLATE_Q3_SHARE": player_profile.get("TEMPLATE_Q3_SHARE", 0.25),
+        "TEMPLATE_Q4_SHARE": player_profile.get("TEMPLATE_Q4_SHARE", 0.25),
+    }
+    expected_team_margin = float(game_context["EXPECTED_MARGIN"]) if game_context else 0.0
+    market_spread = float(game_context["MARKET_SPREAD"]) if game_context and not pd.isna(game_context.get("MARKET_SPREAD")) else np.nan
+    market_total = float(game_context["MARKET_TOTAL"]) if game_context and not pd.isna(game_context.get("MARKET_TOTAL")) else np.nan
+    implied_team_total = float(game_context["IMPLIED_TEAM_TOTAL"]) if game_context and not pd.isna(game_context.get("IMPLIED_TEAM_TOTAL")) else np.nan
+    allocation = team_context.get("PLAYER_ALLOCATION", {}).get(
+        player_key,
+        {"PTS_SHARE": 0.0, "AST_SHARE": 0.0, "REB_SHARE": 0.0, "FG3M_SHARE": 0.0, "TOV_SHARE": 0.0, "FGA_SHARE": 0.0, "FTA_SHARE": 0.0},
+    )
+
+    minutes_model = models.get("MIN")
+    mean_minutes = minutes_projection(
+        predict_with_model(minutes_model, features, MINUTES_FEATURES),
+        features,
+    )
+    if injury_status not in {"OUT", "DOUBTFUL"}:
+        minute_fit = (
+            0.34 * role_fit["SCORER"]
+            + 0.36 * role_fit["PLAYMAKER"]
+            + 0.18 * role_fit["REBOUNDER"]
+            + 0.12 * role_fit["RIM"]
+        )
+        minutes_bump = 1.0 + min(0.13, (0.025 + (0.04 * minute_fit)) * team_context["USAGE_LOSS"])
+        mean_minutes *= minutes_bump
+
+    stat_means = {}
+    for stat in STAT_TARGETS:
+        stat_means[stat] = blended_stat_projection(
+            stat,
+            predict_with_model(models.get(stat), features, MODEL_FEATURES),
+            features,
+        )
+
+    if injury_status not in {"OUT", "DOUBTFUL"} and team_context["USAGE_LOSS"] > 0:
+        scorer_bump = min(0.20, role_losses["SCORER"] * (0.03 + 0.12 * role_fit["SCORER"]))
+        playmaker_bump = min(0.20, role_losses["PLAYMAKER"] * (0.03 + 0.14 * role_fit["PLAYMAKER"]))
+        rebound_bump = min(0.12, role_losses["REBOUNDER"] * (0.02 + 0.10 * role_fit["REBOUNDER"]))
+        rim_bump = min(0.10, role_losses["RIM"] * (0.02 + 0.10 * role_fit["RIM"]))
+        shooter_bump = min(0.16, role_losses["SHOOTER"] * (0.03 + 0.11 * role_fit["SHOOTER"]))
+
+        stat_means["PTS"] *= 1.0 + scorer_bump + (0.35 * shooter_bump)
+        stat_means["AST"] *= 1.0 + playmaker_bump + (0.18 * scorer_bump)
+        stat_means["REB"] *= 1.0 + rebound_bump + (0.15 * rim_bump)
+        stat_means["BLK"] *= 1.0 + rim_bump
+        stat_means["FG3M"] *= 1.0 + shooter_bump + (0.20 * scorer_bump)
+
+    pace_ratio = features["EXPECTED_PACE"] / max(league_pace, 1.0)
+    pace_multiplier = min(1.08, max(0.94, pace_ratio))
+    mean_minutes *= min(1.03, max(0.97, 1.0 + ((pace_multiplier - 1.0) * 0.35)))
+
+    base_team_points = float(team_context.get("BASELINE_TEAM_POINTS", np.nan))
+    base_team_ast = float(team_context.get("BASELINE_TEAM_AST", np.nan))
+    base_team_reb = float(team_context.get("BASELINE_TEAM_REB", np.nan))
+    if not np.isnan(implied_team_total) and not np.isnan(base_team_points) and base_team_points > 0:
+        team_total_ratio = implied_team_total / base_team_points
+        scoring_env = min(1.12, max(0.90, 1.0 + (TEAM_TOTAL_BLEND * (team_total_ratio - 1.0))))
+        assist_env = min(1.10, max(0.91, 1.0 + (0.85 * TEAM_TOTAL_BLEND * (team_total_ratio - 1.0))))
+        rebound_env = min(1.08, max(0.94, 1.0 + (0.30 * (team_total_ratio - 1.0))))
+        usage_anchor = 0.55 + (0.45 * role_fit["SCORER"])
+        shot_anchor = 0.55 + (0.35 * role_fit["SHOOTER"]) + (0.10 * role_fit["CORE_PLAYER"])
+        stat_means["PTS"] *= 1.0 + ((scoring_env - 1.0) * usage_anchor)
+        stat_means["AST"] *= 1.0 + ((assist_env - 1.0) * (0.60 + 0.40 * role_fit["PLAYMAKER"]))
+        stat_means["FG3M"] *= 1.0 + ((scoring_env - 1.0) * shot_anchor)
+        if allocation["PTS_SHARE"] > 0:
+            allocated_pts = implied_team_total * allocation["PTS_SHARE"]
+            pts_blend = 0.50 + (0.20 * role_fit["CORE_PLAYER"]) + (0.10 * role_fit["SCORER"])
+            stat_means["PTS"] = (pts_blend * stat_means["PTS"]) + ((1.0 - pts_blend) * allocated_pts)
+        if not np.isnan(base_team_ast) and base_team_ast > 0 and allocation["AST_SHARE"] > 0:
+            allocated_ast = (base_team_ast * assist_env) * allocation["AST_SHARE"]
+            ast_blend = 0.52 + (0.18 * role_fit["PLAYMAKER"])
+            stat_means["AST"] = (ast_blend * stat_means["AST"]) + ((1.0 - ast_blend) * allocated_ast)
+        if not np.isnan(base_team_reb) and base_team_reb > 0 and allocation["REB_SHARE"] > 0:
+            allocated_reb = (base_team_reb * rebound_env) * allocation["REB_SHARE"]
+            reb_blend = 0.55 + (0.18 * role_fit["REBOUNDER"])
+            stat_means["REB"] = (reb_blend * stat_means["REB"]) + ((1.0 - reb_blend) * allocated_reb)
+
+    rng_seed = abs(hash((player_key, current_projection_date()))) % (2 ** 32)
+    rng = np.random.default_rng(rng_seed)
+    minutes_draws, quarter_minutes, active_mask, game_script, availability = simulate_minutes(
+        mean_minutes,
+        features,
+        injury_status,
+        rng,
+        role_fit,
+        game_context=game_context,
+    )
+
+    stat_draws = {}
+    stat_summaries = {}
+    for stat in STAT_TARGETS:
+        draws = simulate_core_stat(stat, stat_means[stat], mean_minutes, minutes_draws, features, game_script, rng)
+        draws *= active_mask.astype(float)
+        if game_context is not None:
+            if stat == "PTS":
+                draws = blend_with_team_pool(
+                    draws,
+                    game_context["TEAM_POINTS_DRAWS"],
+                    allocation["PTS_SHARE"],
+                    minutes_draws,
+                    mean_minutes,
+                    rng,
+                    noise_scale=0.07,
+                    blend_weight=0.54,
+                )
+            elif stat == "AST":
+                draws = blend_with_team_pool(
+                    draws,
+                    game_context["TEAM_AST_DRAWS"],
+                    allocation["AST_SHARE"],
+                    minutes_draws,
+                    mean_minutes,
+                    rng,
+                    noise_scale=0.08,
+                    blend_weight=0.52,
+                )
+            elif stat == "REB":
+                draws = blend_with_team_pool(
+                    draws,
+                    game_context["TEAM_REB_DRAWS"],
+                    allocation["REB_SHARE"],
+                    minutes_draws,
+                    mean_minutes,
+                    rng,
+                    noise_scale=0.07,
+                    blend_weight=0.56,
+                )
+            elif stat == "FG3M":
+                draws = blend_with_team_pool(
+                    draws,
+                    game_context["TEAM_FG3M_DRAWS"],
+                    allocation["FG3M_SHARE"],
+                    minutes_draws,
+                    mean_minutes,
+                    rng,
+                    noise_scale=0.09,
+                    blend_weight=0.60,
+                )
+        stat_draws[stat] = draws
+        stat_summaries[stat] = summarize_distribution(draws)
+
+    tov_mean = max(0.0, (0.55 * safe_mean(recent5["TOV"])) + (0.45 * safe_mean(recent10["TOV"])))
+    tov_rate = tov_mean / max(mean_minutes, 1.0)
+    tov_draws = rng.poisson(np.clip(tov_rate * minutes_draws, 0.01, None)).astype(float)
+    tov_draws *= active_mask.astype(float)
+    if game_context is not None:
+        tov_draws = blend_with_team_pool(
+            tov_draws,
+            game_context["TEAM_TOV_DRAWS"],
+            allocation["TOV_SHARE"],
+            minutes_draws,
+            mean_minutes,
+            rng,
+            noise_scale=0.08,
+            blend_weight=0.62,
+        )
+    tov_summary = summarize_distribution(tov_draws)
+
+    ftm_mean = weighted_recent_mean(recent5, recent10, "FTM")
+    fta_mean = weighted_recent_mean(recent5, recent10, "FTA")
+    fgm_mean = weighted_recent_mean(recent5, recent10, "FGM")
+    fga_mean = weighted_recent_mean(recent5, recent10, "FGA")
+    fg2m_mean = weighted_recent_mean(recent5, recent10, "FG2M")
+    fg2a_mean = weighted_recent_mean(recent5, recent10, "FG2A")
+    fg3a_mean = weighted_recent_mean(recent5, recent10, "FG3A")
+    oreb_mean = weighted_recent_mean(recent5, recent10, "OREB")
+    dreb_mean = weighted_recent_mean(recent5, recent10, "DREB")
+    pf_mean = weighted_recent_mean(recent5, recent10, "PF")
+
+    ftm_draws = simulate_rate_stat(ftm_mean, mean_minutes, minutes_draws, 0.08, game_script, rng, integer_output=True) * active_mask.astype(float)
+    fta_draws = simulate_rate_stat(fta_mean, mean_minutes, minutes_draws, 0.09, game_script, rng, integer_output=True) * active_mask.astype(float)
+    fgm_draws = simulate_rate_stat(fgm_mean, mean_minutes, minutes_draws, 0.08, game_script, rng, integer_output=True) * active_mask.astype(float)
+    fga_draws = simulate_rate_stat(fga_mean, mean_minutes, minutes_draws, 0.10, game_script, rng, integer_output=True) * active_mask.astype(float)
+    if game_context is not None:
+        fta_draws = blend_with_team_pool(
+            fta_draws,
+            game_context["TEAM_FTA_DRAWS"],
+            allocation["FTA_SHARE"],
+            minutes_draws,
+            mean_minutes,
+            rng,
+            noise_scale=0.08,
+            blend_weight=0.58,
+        )
+        ftm_draws = np.minimum(
+            blend_with_team_pool(
+                ftm_draws,
+                game_context["TEAM_FTM_DRAWS"],
+                allocation["FTA_SHARE"],
+                minutes_draws,
+                mean_minutes,
+                rng,
+                noise_scale=0.08,
+                blend_weight=0.58,
+            ),
+            np.maximum(fta_draws, 0.0),
+        )
+        fga_draws = blend_with_team_pool(
+            fga_draws,
+            game_context["TEAM_FGA_DRAWS"],
+            allocation["FGA_SHARE"],
+            minutes_draws,
+            mean_minutes,
+            rng,
+            noise_scale=0.07,
+            blend_weight=0.58,
+        )
+        fgm_draws = np.minimum(
+            blend_with_team_pool(
+                fgm_draws,
+                game_context["TEAM_FGM_DRAWS"],
+                allocation["FGA_SHARE"],
+                minutes_draws,
+                mean_minutes,
+                rng,
+                noise_scale=0.07,
+                blend_weight=0.60,
+            ),
+            np.maximum(fga_draws, 0.0),
+        )
+    fg2m_draws = np.minimum(
+        simulate_rate_stat(fg2m_mean, mean_minutes, minutes_draws, 0.08, game_script, rng, integer_output=True),
+        np.maximum(fgm_draws, 0.0),
+    ) * active_mask.astype(float)
+    fg2a_draws = np.minimum(
+        simulate_rate_stat(fg2a_mean, mean_minutes, minutes_draws, 0.10, game_script, rng, integer_output=True),
+        np.maximum(fga_draws, 0.0),
+    ) * active_mask.astype(float)
+    fg3a_draws = np.minimum(
+        simulate_rate_stat(fg3a_mean, mean_minutes, minutes_draws, 0.10, game_script, rng, integer_output=True),
+        np.maximum(fga_draws, 0.0),
+    ) * active_mask.astype(float)
+    oreb_draws = simulate_rate_stat(oreb_mean, mean_minutes, minutes_draws, 0.05, game_script, rng, integer_output=True) * active_mask.astype(float)
+    dreb_draws = simulate_rate_stat(dreb_mean, mean_minutes, minutes_draws, 0.05, game_script, rng, integer_output=True) * active_mask.astype(float)
+    pf_draws = simulate_rate_stat(pf_mean, mean_minutes, minutes_draws, 0.03, game_script, rng, integer_output=True) * active_mask.astype(float)
+    dunk_base_rate = np.clip(
+        (safe_divide(fg2m_mean, max(mean_minutes, 1.0)) * (0.10 + (0.40 * role_fit["RIM"]) + (0.15 * role_fit["SCORER"]))),
+        0.0,
+        None,
+    )
+    dunk_draws = rng.poisson(np.clip(dunk_base_rate * minutes_draws, 0.01, None)).astype(float) * active_mask.astype(float)
+
+    pts_3m_draws = simulate_opening_window_stat(stat_draws["PTS"], mean_minutes, quarter_minutes, role_fit["SCORER"], rng) * active_mask.astype(float)
+    ast_3m_draws = simulate_opening_window_stat(stat_draws["AST"], mean_minutes, quarter_minutes, role_fit["PLAYMAKER"], rng, scale=0.78) * active_mask.astype(float)
+    reb_3m_draws = simulate_opening_window_stat(stat_draws["REB"], mean_minutes, quarter_minutes, role_fit["REBOUNDER"], rng, scale=0.92) * active_mask.astype(float)
+    q3p_draws = simulate_quarters_points_hits(stat_draws["PTS"], quarter_minutes, role_fit["SCORER"], rng, threshold=3) * active_mask.astype(float)
+    q5p_draws = simulate_quarters_points_hits(stat_draws["PTS"], quarter_minutes, role_fit["SCORER"], rng, threshold=5) * active_mask.astype(float)
+
+    fantasy_draws = (
+        stat_draws["PTS"]
+        + 1.2 * stat_draws["REB"]
+        + 1.5 * stat_draws["AST"]
+        + 3.0 * stat_draws["STL"]
+        + 3.0 * stat_draws["BLK"]
+        + 0.5 * stat_draws["FG3M"]
+        - tov_draws
+    )
+    dd_hits = (
+        (stat_draws["PTS"] >= 10).astype(int)
+        + (stat_draws["REB"] >= 10).astype(int)
+        + (stat_draws["AST"] >= 10).astype(int)
+        + (stat_draws["STL"] >= 10).astype(int)
+        + (stat_draws["BLK"] >= 10).astype(int)
+    ) >= 2
+    td_hits = (
+        (stat_draws["PTS"] >= 10).astype(int)
+        + (stat_draws["REB"] >= 10).astype(int)
+        + (stat_draws["AST"] >= 10).astype(int)
+        + (stat_draws["STL"] >= 10).astype(int)
+        + (stat_draws["BLK"] >= 10).astype(int)
+    ) >= 3
+
+    supplemental_draws = {
+        "FTM": ftm_draws,
+        "FTA": fta_draws,
+        "FGM": fgm_draws,
+        "FGA": fga_draws,
+        "FG2M": fg2m_draws,
+        "FG2A": fg2a_draws,
+        "FG3A": fg3a_draws,
+        "OREB": oreb_draws,
+        "DREB": dreb_draws,
+        "PF": pf_draws,
+        "DUNKS": dunk_draws,
+        "FANTASY": fantasy_draws,
+        "DD": dd_hits.astype(float),
+        "TD": td_hits.astype(float),
+        "PTS_3M": pts_3m_draws,
+        "AST_3M": ast_3m_draws,
+        "REB_3M": reb_3m_draws,
+        "Q3P": q3p_draws,
+        "Q5P": q5p_draws,
+    }
+
+    min_summary = summarize_distribution(minutes_draws)
+    conf_num, model_conf, conf_label = confidence_from_profile(features, len(recent10), availability)
+
+    row = {
+        "GAME_DATE": current_projection_date(),
+        "PLAYER_NAME": player_name,
+        "TEAM_ABBREVIATION": team,
+        "OPPONENT": opponent,
+        "MATCHUP": matchup,
+        "SIM_RUNS": SIMULATION_RUNS,
+        "ACTIVE_PROB": round(float(availability), 4),
+        "TEAM_INJURY_IMPACT": round(float(team_injury_impact), 4),
+        "ARCHETYPE_SCORER": round(float(role_fit["SCORER"]), 4),
+        "ARCHETYPE_PLAYMAKER": round(float(role_fit["PLAYMAKER"]), 4),
+        "ARCHETYPE_REBOUNDER": round(float(role_fit["REBOUNDER"]), 4),
+        "ARCHETYPE_RIM": round(float(role_fit["RIM"]), 4),
+        "ARCHETYPE_SHOOTER": round(float(role_fit["SHOOTER"]), 4),
+        "EXPECTED_PACE": round(float(features["EXPECTED_PACE"]), 2),
+        "PACE_MULTIPLIER": round(float(pace_multiplier), 4),
+        "EXPECTED_TEAM_MARGIN": round(expected_team_margin, 2),
+        "BLOWOUT_RISK": round(float(np.mean(np.abs(game_context["TEAM_MARGIN_DRAWS"]) >= BLOWOUT_THRESHOLD)) if game_context else 0.0, 4),
+        "MARKET_SPREAD": round(market_spread, 2) if not np.isnan(market_spread) else np.nan,
+        "MARKET_TOTAL": round(market_total, 2) if not np.isnan(market_total) else np.nan,
+        "IMPLIED_TEAM_TOTAL": round(implied_team_total, 2) if not np.isnan(implied_team_total) else np.nan,
+        "ROTATION_TIER": player_profile.get("ROTATION_TIER", ""),
+        "ROTATION_TEMPLATE_GAMES": round(float(player_profile.get("TEMPLATE_GAMES", 0.0)), 2),
+        "ROTATION_TEMPLATE_MIN": round(float(player_profile.get("TEMPLATE_MINUTES", 0.0)), 2),
+        "INJURY_STATUS": injury_status,
+        "CONFIDENCE": round(float(conf_num), 2),
+        "BET_CONFIDENCE": round(float(conf_num), 2),
+        "MODEL_CONFIDENCE": model_conf,
+        "CONFIDENCE_LABEL": conf_label,
+        "AVG_MIN_LAST_5": round(float(avg_min_5), 2),
+        "AVG_MIN_LAST_10": round(float(rolling_mean(recent10, "MIN", 10)), 2),
+        "MIN_PROJ": round(min_summary["MEAN"], 2),
+        "PRED_MIN": round(min_summary["MEAN"], 2),
+        "SIM_MIN_P10": round(min_summary["P10"], 2),
+        "SIM_MIN_P50": round(min_summary["P50"], 2),
+        "SIM_MIN_P90": round(min_summary["P90"], 2),
+        "SIM_MIN_STD": round(min_summary["STD"], 2),
+    }
+
+    for stat in STAT_TARGETS:
+        summary = stat_summaries[stat]
+        row[f"{stat}_PROJ"] = round(summary["MEAN"], 2)
+        row[f"PRED_{stat}"] = round(summary["MEAN"], 2)
+        row[f"SIM_{stat}_P10"] = round(summary["P10"], 2)
+        row[f"SIM_{stat}_P50"] = round(summary["P50"], 2)
+        row[f"SIM_{stat}_P90"] = round(summary["P90"], 2)
+        row[f"SIM_{stat}_STD"] = round(summary["STD"], 2)
+
+    row["TOV_PROJ"] = round(tov_summary["MEAN"], 2)
+    row["PRED_TOV"] = round(tov_summary["MEAN"], 2)
+    row["SIM_TOV_P10"] = round(tov_summary["P10"], 2)
+    row["SIM_TOV_P50"] = round(tov_summary["P50"], 2)
+    row["SIM_TOV_P90"] = round(tov_summary["P90"], 2)
+    row["SIM_TOV_STD"] = round(tov_summary["STD"], 2)
+
+    for stat, draws in supplemental_draws.items():
+        summary = summarize_distribution(draws)
+        row[f"{stat}_PROJ"] = round(summary["MEAN"], 4 if stat in {"DD", "TD"} else 2)
+        row[f"PRED_{stat}"] = round(summary["MEAN"], 4 if stat in {"DD", "TD"} else 2)
+        row[f"SIM_{stat}_P10"] = round(summary["P10"], 4 if stat in {"DD", "TD"} else 2)
+        row[f"SIM_{stat}_P50"] = round(summary["P50"], 4 if stat in {"DD", "TD"} else 2)
+        row[f"SIM_{stat}_P90"] = round(summary["P90"], 4 if stat in {"DD", "TD"} else 2)
+        row[f"SIM_{stat}_STD"] = round(summary["STD"], 4 if stat in {"DD", "TD"} else 2)
+
+    for combo, parts in COMBO_TARGETS.items():
+        combo_draws = np.zeros(SIMULATION_RUNS)
+        for part in parts:
+            combo_draws += stat_draws[part]
+        combo_summary = summarize_distribution(combo_draws)
+        row[f"{combo}_PROJ"] = round(combo_summary["MEAN"], 2)
+        row[f"SIM_{combo}_P10"] = round(combo_summary["P10"], 2)
+        row[f"SIM_{combo}_P50"] = round(combo_summary["P50"], 2)
+        row[f"SIM_{combo}_P90"] = round(combo_summary["P90"], 2)
+        row[f"SIM_{combo}_STD"] = round(combo_summary["STD"], 2)
+
+    return row, None
+
+
+def build_projections():
+    lines_df = load_lines_df()
+    # Rebuild the core identity columns defensively so small upstream schema
+    # shifts do not break the full projection run on game day.
+    if "PLAYER_NAME" not in lines_df.columns:
+        player_col = find_player_col(lines_df)
+        lines_df["PLAYER_NAME"] = lines_df[player_col].astype(str).str.strip()
+    if "PLAYER_KEY" not in lines_df.columns:
+        lines_df["PLAYER_KEY"] = lines_df["PLAYER_NAME"].map(clean_name)
+    if "TEAM" not in lines_df.columns:
+        team_col = None
+        for candidate in ["TEAM_ABBREVIATION", "TEAM_ABBR", "PLAYER_TEAM", "TEAM_NAME"]:
+            if candidate in lines_df.columns:
+                team_col = candidate
+                break
+        lines_df["TEAM"] = (
+            lines_df[team_col].astype(str).str.strip().str.upper()
+            if team_col
+            else ""
+        )
+    else:
+        lines_df["TEAM"] = lines_df["TEAM"].astype(str).str.strip().str.upper()
+
+    lines_df["PLAYER_NAME"] = lines_df["PLAYER_NAME"].astype(str).str.strip()
+    lines_df["PLAYER_KEY"] = lines_df["PLAYER_KEY"].astype(str).str.strip()
+
+    slate_teams = load_today_slate_teams()
+    if slate_teams and "TEAM" in lines_df.columns:
+        line_teams = lines_df["TEAM"].astype(str).str.strip().str.upper()
+        off_slate_count = int((~line_teams.isin(slate_teams)).sum())
+        if off_slate_count:
+            print(f"Filtering out {off_slate_count} off-slate line rows before projections.")
+        filtered_lines = lines_df[line_teams.isin(slate_teams)].copy()
+        if filtered_lines.empty and not lines_df.empty:
+            print("WARNING: Slate-team filter removed every line row. Falling back to unfiltered lines for this run.")
+        else:
+            lines_df = filtered_lines
+    market_game_lines = load_market_game_lines()
+    injury_map = load_injuries()
+    matchups = load_matchups()
+    logs_df, opponent_defense, league_defaults, team_pace, league_pace, team_strength, league_game_total = load_historical_games()
+    models = load_models()
+    rotation_templates = load_rotation_templates(logs_df)
+    archetypes = build_player_archetypes(logs_df, rotation_templates=rotation_templates)
+    lineup_injury_context = build_lineup_injury_context(logs_df, injury_map, archetypes)
+    game_sim_contexts = build_game_sim_contexts(
+        matchups,
+        team_strength,
+        lineup_injury_context,
+        team_pace,
+        league_pace,
+        league_game_total,
+        market_game_lines,
+    )
+
+    single_player_df = lines_df[~lines_df["PLAYER_NAME"].apply(is_combo_player_name)].copy()
+    single_player_df = single_player_df.assign(
+        PLAYER_NAME=single_player_df.get("PLAYER_NAME", pd.Series(dtype="object")).astype(str).str.strip(),
+        PLAYER_KEY=single_player_df.get("PLAYER_KEY", pd.Series(dtype="object")).astype(str).str.strip(),
+        TEAM=single_player_df.get("TEAM", pd.Series(dtype="object")).astype(str).str.strip().str.upper(),
+    )
+    single_player_df = single_player_df[
+        single_player_df["PLAYER_NAME"].ne("")
+        & single_player_df["PLAYER_KEY"].ne("")
+    ].copy()
+
+    line_universe = single_player_df.reindex(columns=["PLAYER_NAME", "PLAYER_KEY", "TEAM"]).copy()
+    latest_player_rows = (
+        logs_df.drop_duplicates(subset=["PLAYER_KEY"], keep="first")[["PLAYER_NAME", "PLAYER_KEY", "TEAM_ABBREVIATION"]]
+        .rename(columns={"TEAM_ABBREVIATION": "TEAM"})
+        .copy()
+    )
+    latest_player_rows["PLAYER_NAME"] = latest_player_rows["PLAYER_NAME"].astype(str).str.strip()
+    latest_player_rows["PLAYER_KEY"] = latest_player_rows["PLAYER_KEY"].astype(str).str.strip()
+    latest_player_rows["TEAM"] = latest_player_rows["TEAM"].astype(str).str.strip().str.upper()
+    if slate_teams:
+        latest_player_rows = latest_player_rows[latest_player_rows["TEAM"].isin(slate_teams)].copy()
+        team_latest_dates = (
+            logs_df[logs_df["TEAM_ABBREVIATION"].isin(slate_teams)]
+            .groupby("TEAM_ABBREVIATION")["GAME_DATE"]
+            .max()
+            .to_dict()
+        )
+        latest_game_logs = logs_df.copy()
+        latest_game_logs["_TEAM_LATEST_DATE"] = latest_game_logs["TEAM_ABBREVIATION"].map(team_latest_dates)
+        latest_game_logs = latest_game_logs[
+            latest_game_logs["GAME_DATE"].notna()
+            & latest_game_logs["_TEAM_LATEST_DATE"].notna()
+            & (latest_game_logs["GAME_DATE"] == latest_game_logs["_TEAM_LATEST_DATE"])
+        ].copy()
+        latest_game_player_keys = set(latest_game_logs["PLAYER_KEY"].dropna().astype(str).str.strip().tolist())
+        if latest_game_player_keys:
+            latest_player_rows = latest_player_rows[latest_player_rows["PLAYER_KEY"].isin(latest_game_player_keys)].copy()
+
+    unique_players = (
+        pd.concat([line_universe, latest_player_rows], ignore_index=True)
+        .dropna(subset=["PLAYER_NAME", "PLAYER_KEY"])
+        .drop_duplicates(subset=["PLAYER_KEY"], keep="first")
+        .reset_index(drop=True)
+    )
+
+    print(f"Projection date: {current_projection_date()}")
+    print(f"Total rows in lines_today.csv: {len(lines_df)}")
+    print(f"Single-player rows used for projections: {len(single_player_df)}")
+    print(f"Players with lines loaded: {len(line_universe.drop_duplicates(subset=['PLAYER_KEY']))}")
+    print(f"Players in full projection universe: {len(unique_players)}")
+    print(f"Injury entries loaded: {len(injury_map)}")
+    print(f"Market game lines loaded: {len(market_game_lines)}")
+    print(f"Rotation templates loaded: {len(rotation_templates)}")
+    print(f"Loaded trained models: {sorted(models.keys())}")
+
+    rows = []
+    skipped_combo = sorted(
+        name for name in lines_df["PLAYER_NAME"].dropna().astype(str).unique().tolist()
+        if is_combo_player_name(name)
+    )
+    failed_players = []
+
+    for _, player_row in unique_players.iterrows():
+        projection_row, fail_reason = build_player_projection(
+            player_row,
+            logs_df,
+            opponent_defense,
+            league_defaults,
+            injury_map,
+            matchups,
+            models,
+            lineup_injury_context,
+            archetypes,
+            team_pace,
+            league_pace,
+            game_sim_contexts,
+        )
+        if projection_row is None:
+            failed_players.append(f"{player_row['PLAYER_NAME']} ({fail_reason})")
+            continue
+        rows.append(projection_row)
+
+    projections = pd.DataFrame(rows)
+    if projections.empty:
+        raise ValueError("No projections were created")
+
+    projections = projections.sort_values(
+        by=["PTS_PROJ", "PRA_PROJ", "MIN_PROJ"],
+        ascending=[False, False, False],
+    ).reset_index(drop=True)
+
+    projections.to_csv(PROJECTIONS_PATH, index=False)
+    app_view = build_projection_app_view(projections.copy())
+    app_view.to_csv(PROJECTIONS_APP_VIEW_PATH, index=False)
+
+    print(f"\nSaved projections: {PROJECTIONS_PATH}")
+    print(f"Saved projections app view: {PROJECTIONS_APP_VIEW_PATH}")
+    print(f"Rows saved: {len(projections)}")
+
+    if skipped_combo:
+        print(f"\nSkipped combo props from player lookup: {len(skipped_combo)}")
+        for name in skipped_combo[:25]:
+            print(f"- {name}")
+
+    if failed_players:
+        print(f"\nPlayers skipped due to missing/insufficient history: {len(failed_players)}")
+        for name in failed_players[:25]:
+            print(f"- {name}")
+
+    print("\nTop 20 simulated scorers:")
+    print(
+        projections[
+            [
+                "PLAYER_NAME",
+                "TEAM_ABBREVIATION",
+                "OPPONENT",
+                "PTS_PROJ",
+                "SIM_PTS_P10",
+                "SIM_PTS_P90",
+                "ACTIVE_PROB",
+                "INJURY_STATUS",
+            ]
+        ]
+        .head(20)
+        .to_string(index=False)
+    )
+
+
+def main():
+    build_projections()
+    print("\npredict_today.py finished successfully")
+
+
+if __name__ == "__main__":
+    main()

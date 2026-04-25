@@ -1,0 +1,8 @@
+market,evaluation_type,rows,win_rate,mean_abs_error,rmse
+winner_red,classification,467,0.9165,0.1829,
+inside_distance,classification,467,0.8908,0.3859,
+under_1_5,classification,467,0.8116,0.3357,
+under_2_5,classification,467,0.8608,0.3801,
+under_3_5,classification,467,0.9764,0.0505,
+under_4_5,classification,467,0.9807,0.0436,
+fight_time_mins,regression,467,,3.5597,4.1646

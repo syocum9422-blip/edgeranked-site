@@ -1,0 +1,26 @@
+{
+  "generated_at_et": "2026-04-21T05:10:48.368980-04:00",
+  "reader_mode": "canonical",
+  "publish_mode": "legacy",
+  "expected_projection_source": "/home/ubuntu/EdgeRanked/sports/mlb/outputs/canonical/hitter_predictions_full.csv",
+  "provided_projection_source": "/home/ubuntu/EdgeRanked/sports/mlb/outputs/canonical/hitter_predictions_full.csv",
+  "lines_path": "/home/ubuntu/EdgeRanked/sports/mlb/mlb_model/data/mlb/lines_today.csv",
+  "lines_slate_date_source": "SLATE_DATE",
+  "lines_slate_validated": true,
+  "lines_slate_validation_path": "/home/ubuntu/EdgeRanked/sports/mlb/data/normalized/lines_today.csv",
+  "canonical_lines_path": "/home/ubuntu/EdgeRanked/sports/mlb/data/normalized/lines_today.csv",
+  "full_board_path": "/home/ubuntu/EdgeRanked/sports/mlb/outputs/canonical/hitter_predictions_full.csv",
+  "summary_path": "/home/ubuntu/EdgeRanked/sports/mlb/outputs/site/hitter_summary_today.csv",
+  "site_consistency": {
+    "lines_mtime_et": "2026-04-21T05:00:15.084274-04:00",
+    "full_board_mtime_et": "2026-04-21T05:10:47.384382-04:00",
+    "summary_mtime_et": "2026-04-21T05:10:47.441382-04:00"
+  },
+  "row_counts": {
+    "lines": 127,
+    "full_board": 337,
+    "summary": 85
+  },
+  "failures": [],
+  "ok": true
+}

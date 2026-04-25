@@ -1,0 +1,28 @@
+pitcher_name,team,opponent,projected_strikeouts,projected_outs,projected_ip,sim_mean,sim_mean_outs,range,recommended_play,recommendation_confidence,sportsbook_line,floor_p10,ceiling_p90,outs_floor_p10,outs_ceiling_p90,over_4_5_pct,over_5_5_pct,over_6_5_pct,over_7_5_pct,over_8_5_pct,best_over_line,best_over_prob_pct
+Nolan McLean,New York Mets,Minnesota Twins,7.85,16.89,5.63,7.77,16.79,4.0-12.0,Over 6.5,Medium,6.5,4.0,12.0,14.0,20.0,83.6,74.1,62.9,51.0,39.7,6.5,62.9
+Chase Burns,Cincinnati Reds,Tampa Bay Rays,6.97,14.98,4.99,6.95,14.81,3.0-11.0,Over 5.5,High,5.5,3.0,11.0,12.0,18.0,78.1,66.4,53.8,41.3,29.8,5.5,66.4
+Connelly Early,Boston Red Sox,New York Yankees,6.01,12.92,4.31,6.72,12.72,3.0-11.0,Over 5.5,Medium,5.5,3.0,11.0,10.0,15.0,76.9,64.9,51.4,38.2,26.3,5.5,64.9
+Yoshinobu Yamamoto,Los Angeles Dodgers,San Francisco Giants,6.78,17.98,5.99,6.76,17.9,3.0-11.0,Over 5.5,Medium,5.5,3.0,11.0,15.0,21.0,73.6,62.1,49.9,38.7,28.4,5.5,62.1
+Kris Bubic,Kansas City Royals,Baltimore Orioles,7.12,15.92,5.31,6.94,15.79,3.0-11.0,Pass,Low,,3.0,11.0,13.0,19.0,75.1,64.2,52.9,41.5,30.9,6.5,52.9
+Jesús Luzardo,Philadelphia Phillies,Chicago Cubs,7.02,15.82,5.27,6.78,15.68,3.0-11.0,Pass,Low,,3.0,11.0,13.0,18.0,74.9,63.6,51.2,39.2,28.2,6.5,51.2
+Parker Messick,Cleveland Guardians,Houston Astros,6.17,17.73,5.91,6.19,17.64,2.0-10.0,Pass,Low,,2.0,10.0,15.0,21.0,67.2,55.0,43.5,32.5,23.0,5.5,55.0
+Shota Imanaga,Chicago Cubs,Philadelphia Phillies,5.92,15.56,5.19,5.88,15.43,2.0-10.0,Pass,Low,6.5,2.0,10.0,13.0,18.0,64.0,51.4,39.7,28.7,20.0,6.5,39.7
+Landen Roupp,San Francisco Giants,Los Angeles Dodgers,5.11,14.82,4.94,5.19,14.66,2.0-9.0,Pass,Low,,2.0,9.0,12.0,17.0,55.0,42.5,31.1,21.5,13.9,4.5,55.0
+Jacob Lopez,Athletics,Seattle Mariners,5.19,13.04,4.35,5.11,12.88,2.0-9.0,Pass,Low,5.5,2.0,9.0,10.0,16.0,54.7,41.6,29.9,20.0,12.8,5.5,41.6
+Shane Baz,Baltimore Orioles,Kansas City Royals,5.06,15.08,5.02,5.13,14.93,2.0-9.0,Pass,Low,4.5,2.0,9.0,12.0,18.0,54.3,41.6,29.9,20.9,13.7,4.5,54.3
+Sean Burke,Chicago White Sox,Arizona Diamondbacks,4.61,17.06,5.69,4.84,16.21,1.0-9.0,Pass,Low,,1.0,9.0,13.0,20.0,49.8,37.4,26.5,18.0,11.6,4.5,49.8
+Kyle Harrison,Milwaukee Brewers,Detroit Tigers,4.81,13.68,4.56,4.79,13.38,1.0-9.0,Pass,Low,,1.0,9.0,11.0,16.0,50.2,37.3,25.9,17.1,10.6,4.5,50.2
+Steven Matz,Tampa Bay Rays,Cincinnati Reds,4.37,16.08,5.36,4.6,15.9,1.0-9.0,Pass,Low,,1.0,9.0,13.0,19.0,46.3,34.3,24.4,16.9,10.9,4.5,46.3
+Keider Montero,Detroit Tigers,Milwaukee Brewers,4.17,16.5,5.5,4.42,16.36,1.0-8.0,Pass,Low,,1.0,8.0,14.0,19.0,44.0,32.1,22.4,14.8,9.6,4.5,44.0
+Foster Griffin,Washington Nationals,Atlanta Braves,4.12,13.8,4.6,4.32,13.61,1.0-8.0,Pass,Low,4.5,1.0,8.0,11.0,16.0,42.8,31.5,21.6,14.1,8.6,4.5,42.8
+Merrill Kelly,Arizona Diamondbacks,Chicago White Sox,4.02,14.3,4.76,4.23,14.1,1.0-8.0,Pass,Low,4.5,1.0,8.0,11.0,17.0,41.4,29.9,20.6,13.5,8.3,4.5,41.4
+Luis Castillo,Seattle Mariners,Athletics,3.81,12.97,4.32,3.95,12.71,1.0-8.0,Pass,Low,5.5,1.0,8.0,10.0,16.0,37.4,26.3,17.5,11.1,6.9,5.5,26.3
+Simeon Woods Richardson,Minnesota Twins,New York Mets,3.6,13.83,4.61,3.88,13.65,1.0-8.0,Pass,Low,,1.0,8.0,11.0,16.0,36.7,25.8,17.3,11.4,7.0,4.5,36.7
+Patrick Corbin,Toronto Blue Jays,Los Angeles Angels,3.5,12.94,4.31,3.74,12.75,1.0-8.0,Pass,Low,,1.0,8.0,10.0,15.0,34.6,24.3,16.5,10.4,6.1,4.5,34.6
+Chris Paddack,Miami Marlins,St. Louis Cardinals,3.44,15.98,5.33,3.79,15.15,1.0-8.0,Pass,Low,,1.0,8.0,12.0,18.0,34.7,24.3,16.2,10.3,6.3,4.5,34.7
+Dustin May,St. Louis Cardinals,Miami Marlins,3.41,13.88,4.63,3.68,13.72,1.0-7.0,Pass,Low,,1.0,7.0,11.0,17.0,33.7,23.3,15.6,9.8,6.0,4.5,33.7
+Randy Vásquez,San Diego Padres,Colorado Rockies,3.21,14.42,4.81,3.59,14.25,0.0-8.0,Pass,Low,,0.0,8.0,11.0,17.0,32.7,23.1,15.6,10.1,6.3,4.5,32.7
+Jack Kochanowicz,Los Angeles Angels,Toronto Blue Jays,2.52,15.62,5.21,3.04,15.51,0.0-7.0,Pass,Low,,0.0,7.0,13.0,18.0,25.3,17.3,11.5,7.4,4.6,4.5,25.3
+Luis Gil,New York Yankees,Boston Red Sox,2.27,12.29,4.1,2.69,12.11,0.0-6.0,Pass,Low,,0.0,6.0,9.0,15.0,21.5,13.8,8.5,5.0,2.7,4.5,21.5
+Ryan Weiss,Houston Astros,Cleveland Guardians,2.55,9.93,3.31,2.52,10.03,0.0-6.0,Pass,Low,3.5,0.0,6.0,7.0,13.0,20.2,13.4,8.4,4.8,2.6,3.5,20.2
+Reynaldo López,Atlanta Braves,Washington Nationals,2.0,13.43,4.48,2.23,13.1,0.0-6.0,Pass,Low,4.5,0.0,6.0,10.0,16.0,16.9,11.5,7.6,4.9,3.0,4.5,16.9

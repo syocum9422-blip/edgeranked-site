@@ -1,0 +1,31 @@
+.DS_Store
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Local configs and logs
+email_config.json
+*.log
+
+# Large local model artifacts
+*_model.pkl
+model_dataset.csv
+raw_games.csv
+player_lookup.csv
+
+# Local generated outputs that don't need to live in git
+grade_best_bets.log
+grade_best_bets_error.log
+run_best_bets.log
+run_best_bets_error.log
+run_model.log
+run_model_error.log
+
+# macOS / local files
+.pycache_tmp/

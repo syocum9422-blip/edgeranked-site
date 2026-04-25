@@ -1,0 +1,31 @@
+NBA Model Calibration Report
+Total graded bets: 92
+Overall record: 49-43
+Overall win rate: 0.533
+
+By confidence label:
+confidence_label  bets  wins  losses  win_pct
+            High    56    35      21    0.625
+          Medium    22     7      15    0.318
+             Low    14     7       7    0.500
+
+By stat:
+stat  bets  wins  losses  win_pct
+ PTS    86    46      40    0.535
+ AST     3     1       2    0.333
+ REB     3     2       1    0.667
+
+By side:
+prediction  bets  wins  losses  win_pct
+      OVER    48    18      30    0.375
+     UNDER    42    29      13    0.690
+       NaN     2     2       0    1.000
+
+By hit-rate bucket:
+hit_rate_bucket  bets  wins  losses  win_pct
+           70%+    32    21      11    0.656
+        unknown    23    12      11    0.522
+         55-60%    15     7       8    0.467
+         60-65%    11     3       8    0.273
+         65-70%     7     4       3    0.571
+          <=55%     4     2       2    0.500

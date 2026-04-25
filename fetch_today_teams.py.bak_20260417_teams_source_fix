@@ -1,0 +1,40 @@
+import json
+from datetime import datetime
+from zoneinfo import ZoneInfo
+from urllib.request import Request, urlopen
+
+API_KEY = "5f4e5a46-0c06-4ff5-82f2-f9a1461a32f7"
+
+today = datetime.now(ZoneInfo("America/New_York")).date().isoformat()
+
+url = f"https://api.balldontlie.io/v1/games?dates[]={today}&per_page=100"
+
+req = Request(
+    url,
+    headers={"Authorization": API_KEY}
+)
+
+with urlopen(req, timeout=30) as response:
+    data = json.loads(response.read().decode("utf-8"))
+
+games = data.get("data", [])
+
+teams = set()
+
+with open("teams_today.csv", "w") as f:
+    f.write("TEAM_ABBREVIATION,OPPONENT,MATCHUP\n")
+
+    for g in games:
+        home = g["home_team"]["abbreviation"].upper()
+        visitor = g["visitor_team"]["abbreviation"].upper()
+
+        teams.add(home)
+        teams.add(visitor)
+
+        f.write(f"{home},{visitor},{home} vs. {visitor}\n")
+        f.write(f"{visitor},{home},{visitor} @ {home}\n")
+
+print("Date used:", today)
+print("Games returned:", len(games))
+print("Teams returned:", len(teams))
+print(sorted(teams))

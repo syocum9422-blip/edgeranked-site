@@ -1,0 +1,173 @@
+2. The Universal Sport Dashboard (board.html)
+This file is the holy grail of your app. It works perfectly for NBA, MLB, UFC, or PGA. It includes the Top Summary Row, the Premium Betting Cards (Top Plays), and the Data Table that automatically collapses into stacked mobile cards on smaller screens.
+
+(This example is populated with PGA data per your request, but your Python backend can easily loop MLB or NBA data into these exact same components).
+
+<!-- GLOBAL NAV GOES HERE (from above) -->
+
+    <!-- SPORT HEADER & SUMMARY ROW -->
+    <header class="bg-surface border-b border-borderline pt-8 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-black text-white tracking-tight">PGA Projections</h1>
+                    <p class="text-sm text-slate-400 mt-2 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-edge animate-pulse"></span> 
+                        Last updated: Today, 8:15 AM EST • Model v3.0
+                    </p>
+                </div>
+            </div>
+
+            <!-- 4 Premium Stat Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-navy border border-borderline rounded-lg p-4">
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Active Plays</p>
+                    <p class="text-2xl font-black text-white mt-1">12</p>
+                </div>
+                <div class="bg-navy border border-borderline rounded-lg p-4">
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Best Edge Available</p>
+                    <p class="text-2xl font-black text-edge mt-1">+14.2%</p>
+                </div>
+                <div class="bg-navy border border-borderline rounded-lg p-4">
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Props Scanned</p>
+                    <p class="text-2xl font-black text-white mt-1">345</p>
+                </div>
+                <div class="bg-navy border border-borderline rounded-lg p-4">
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tournament</p>
+                    <p class="text-lg font-bold text-white mt-2 truncate">The Masters</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN BOARD SECTION -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- SECTION 1: TOP PLAYS (Premium Betting Cards) -->
+        <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-edge" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+            Top Highlighted Plays
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+            <!-- JINJA: {% for play in top_plays %} -->
+            <div class="bg-surface border border-borderline rounded-xl p-5 relative overflow-hidden shadow-lg">
+                <!-- Badges -->
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-edge/10 text-edge border border-edge/20 px-2 py-1 rounded text-[10px] font-black tracking-wider uppercase">
+                        +14.2% EDGE
+                    </span>
+                    <span class="bg-brand/10 text-brand border border-brand/20 px-2 py-1 rounded text-[10px] font-black tracking-wider uppercase">
+                        HIGH CONFIDENCE
+                    </span>
+                </div>
+                
+                <!-- Matchup/Market -->
+                <h3 class="text-xl font-black text-white leading-tight">Scottie Scheffler</h3>
+                <p class="text-sm text-slate-400 mb-4">Tournament Matchup vs X. Schauffele</p>
+                
+                <!-- Data Grid -->
+                <div class="grid grid-cols-2 gap-2 bg-navy rounded-lg p-3 border border-borderline">
+                    <div>
+                        <p class="text-[10px] text-slate-500 uppercase font-bold">Pick</p>
+                        <p class="font-bold text-white">Scheffler</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[10px] text-slate-500 uppercase font-bold">Line</p>
+                        <p class="font-bold text-white">-120</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-slate-500 uppercase font-bold">Win Prob</p>
+                        <p class="font-mono text-brand font-bold">68.5%</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[10px] text-slate-500 uppercase font-bold">Implied</p>
+                        <p class="font-mono text-slate-400">54.5%</p>
+                    </div>
+                </div>
+            </div>
+            <!-- JINJA: {% endfor %} -->
+        </div>
+
+        <!-- SECTION 2: THE BOARD (Responsive Table) -->
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-bold text-white">Full Board</h2>
+            <!-- Filters (Jinja form/links) -->
+            <div class="flex gap-2">
+                <button class="bg-surface border border-borderline text-xs font-bold text-white px-3 py-1.5 rounded hover:bg-slate-800 transition">Outrights</button>
+                <button class="bg-brand border border-brand text-xs font-bold text-white px-3 py-1.5 rounded">Matchups</button>
+            </div>
+        </div>
+
+        <div class="bg-surface border border-borderline rounded-xl overflow-hidden shadow-xl">
+            
+            <!-- DESKTOP TABLE (Hidden on mobile) -->
+            <div class="overflow-x-auto hidden md:block">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-navy border-b border-borderline text-[10px] uppercase text-slate-400 font-bold tracking-wider sticky top-0">
+                        <tr>
+                            <th class="px-5 py-4">Golfer / Matchup</th>
+                            <th class="px-5 py-4">Market</th>
+                            <th class="px-5 py-4">Model Prob</th>
+                            <th class="px-5 py-4">Line (Implied)</th>
+                            <th class="px-5 py-4">Pick</th>
+                            <th class="px-5 py-4 text-center">Confidence</th>
+                            <th class="px-5 py-4 text-right">Edge %</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-borderline text-sm">
+                        <!-- JINJA ROW -->
+                        <tr class="hover:bg-slate-800/30 transition-colors">
+                            <td class="px-5 py-4">
+                                <p class="font-bold text-white">Ludvig Aberg</p>
+                                <p class="text-xs text-slate-500">vs Rory McIlroy</p>
+                            </td>
+                            <td class="px-5 py-4 text-slate-300">Tournament Matchup</td>
+                            <td class="px-5 py-4 font-mono font-bold text-brand">55.2%</td>
+                            <td class="px-5 py-4 font-mono text-slate-300">+110 (47.6%)</td>
+                            <td class="px-5 py-4 font-bold text-white">Aberg</td>
+                            <td class="px-5 py-4 text-center">
+                                <span class="bg-confidence/10 text-confidence border border-confidence/20 px-2 py-0.5 rounded text-[10px] font-black uppercase">MED</span>
+                            </td>
+                            <td class="px-5 py-4 text-right">
+                                <span class="bg-edge/10 text-edge border border-edge/20 px-2 py-1 rounded text-[10px] font-black tracking-wider uppercase">+7.6%</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- MOBILE CARD FALLBACK (Hidden on Desktop) -->
+            <!-- Extremely clean vertical stacking for iPhone -->
+            <div class="md:hidden divide-y divide-borderline">
+                <!-- JINJA ROW -->
+                <div class="p-4 bg-surface">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <p class="font-bold text-white text-base">Ludvig Aberg</p>
+                            <p class="text-[11px] text-slate-400">Matchup vs R. McIlroy</p>
+                        </div>
+                        <span class="bg-edge/10 text-edge border border-edge/20 px-2 py-1 rounded text-[10px] font-black uppercase text-right whitespace-nowrap">
+                            +7.6% EDGE
+                        </span>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-2 bg-navy p-3 rounded border border-borderline items-center">
+                        <div>
+                            <p class="text-[9px] text-slate-500 uppercase font-bold">Pick</p>
+                            <p class="font-bold text-white text-sm">Aberg</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[9px] text-slate-500 uppercase font-bold">Model</p>
+                            <p class="font-mono text-brand font-bold text-sm">55.2%</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[9px] text-slate-500 uppercase font-bold">Line</p>
+                            <p class="font-mono text-white text-sm">+110</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>

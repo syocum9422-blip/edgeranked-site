@@ -1,0 +1,52 @@
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+CRON_TZ=America/New_York
+
+# Edit these for your Lightsail box before installing with:
+#   crontab /path/to/repo/scripts/aws/aws_crontab.txt
+EDGERANKED_SITE_REPO_DIR=/home/ubuntu/EdgeRanked/site
+EDGERANKED_LIVE_SITE_DIR=/home/ubuntu/edgeranked-sportsai
+EDGERANKED_NBA_BASE_DIR=/home/ubuntu/EdgeRanked/site
+EDGERANKED_MLB_BASE_DIR=/home/ubuntu/EdgeRanked/sports/mlb
+EDGERANKED_MLB_SOURCE_DIR=/home/ubuntu/EdgeRanked/sports/mlb
+EDGERANKED_MLB_PIPELINE_DIR=/home/ubuntu/EdgeRanked/sports/mlb/mlb_model
+MLB_READER_MODE=canonical
+MLB_PUBLISH_MODE=legacy
+EDGERANKED_PGA_BASE_DIR=/home/ubuntu/EdgeRanked/sports/pga
+EDGERANKED_PGA_PIPELINE_DIR=/home/ubuntu/EdgeRanked/sports/pga
+EDGERANKED_UFC_BASE_DIR=/home/ubuntu/edgeranked-sportsai/data/ufc
+EDGERANKED_UFC_PIPELINE_DIR=/home/ubuntu/EdgeRanked/sports/ufc
+PYTHON_BIN=/home/ubuntu/EdgeRanked/site/.venv/bin/python
+MLB_PYTHON_BIN=/home/ubuntu/EdgeRanked/sports/mlb/.venv/bin/python
+PGA_PYTHON_BIN=/home/ubuntu/EdgeRanked/sports/pga/.venv/bin/python
+UFC_PYTHON_BIN=/home/ubuntu/EdgeRanked/sports/ufc/.venv/bin/python
+EDGERANKED_CRON_LOG_DIR=/home/ubuntu/EdgeRanked/site/logs/cron
+
+# NBA: run_nba_day.sh sources /home/ubuntu/.edgeranked_env (or EDGERANKED_ENV_FILE). Define ODDS_API_KEY there
+# so the 9:15 job can fetch game lines — see edgeranked_env.example.
+
+# NBA jobs
+15 9 * * * mkdir -p "$EDGERANKED_CRON_LOG_DIR" && EDGERANKED_NBA_FULL_RUN=1 bash "$EDGERANKED_SITE_REPO_DIR/scripts/aws/run_nba_day.sh" >> "$EDGERANKED_CRON_LOG_DIR/nba_0915.log" 2>&1
+0 15 * * * mkdir -p "$EDGERANKED_CRON_LOG_DIR" && bash "$EDGERANKED_SITE_REPO_DIR/scripts/aws/run_nba_day.sh" >> "$EDGERANKED_CRON_LOG_DIR/nba_1500.log" 2>&1
+15 18 * * * mkdir -p "$EDGERANKED_CRON_LOG_DIR" && bash "$EDGERANKED_SITE_REPO_DIR/scripts/aws/run_nba_day.sh" >> "$EDGERANKED_CRON_LOG_DIR/nba_1815.log" 2>&1
+
+# MLB jobs
+0 9 * * * mkdir -p "$EDGERANKED_CRON_LOG_DIR" && bash "$EDGERANKED_SITE_REPO_DIR/scripts/aws/run_mlb_day.sh" >> "$EDGERANKED_CRON_LOG_DIR/mlb_0900.log" 2>&1
+0 14 * * * mkdir -p "$EDGERANKED_CRON_LOG_DIR" && bash "$EDGERANKED_SITE_REPO_DIR/scripts/aws/run_mlb_day.sh" >> "$EDGERANKED_CRON_LOG_DIR/mlb_1400.log" 2>&1
+15 18 * * * mkdir -p "$EDGERANKED_CRON_LOG_DIR" && bash "$EDGERANKED_SITE_REPO_DIR/scripts/aws/run_mlb_day.sh" >> "$EDGERANKED_CRON_LOG_DIR/mlb_1815.log" 2>&1
+
+# PGA jobs
+# Tournament-day schedule requested for Thursday through Sunday at 6:30 AM ET.
+30 6 * * 4-7 mkdir -p "$EDGERANKED_CRON_LOG_DIR" && bash "$EDGERANKED_SITE_REPO_DIR/scripts/aws/run_pga_day.sh" >> "$EDGERANKED_CRON_LOG_DIR/pga_0630.log" 2>&1
+
+# UFC jobs
+# Assumption: Sunday and Wednesday refresh at 7:00 AM ET, plus an early Saturday pre-fight refresh at 6:00 AM ET.
+0 7 * * 0 mkdir -p "$EDGERANKED_CRON_LOG_DIR" && bash "$EDGERANKED_SITE_REPO_DIR/scripts/aws/run_ufc_day.sh" >> "$EDGERANKED_CRON_LOG_DIR/ufc_sun_0700.log" 2>&1
+0 7 * * 3 mkdir -p "$EDGERANKED_CRON_LOG_DIR" && bash "$EDGERANKED_SITE_REPO_DIR/scripts/aws/run_ufc_day.sh" >> "$EDGERANKED_CRON_LOG_DIR/ufc_wed_0700.log" 2>&1
+0 6 * * 6 mkdir -p "$EDGERANKED_CRON_LOG_DIR" && bash "$EDGERANKED_SITE_REPO_DIR/scripts/aws/run_ufc_day.sh" >> "$EDGERANKED_CRON_LOG_DIR/ufc_sat_0600.log" 2>&1
+
+# Grading / publish notes
+# NBA grading runs inside the 9:15 AM ET NBA job via scripts/run_nba_best_bets.sh.
+# MLB results refresh and publish run inside the 9:00 AM ET MLB job via scripts/aws/run_mlb_day.sh.
+# PGA publishing runs inside scripts/aws/run_pga_day.sh.
+# UFC publishes site-facing UFC files via scripts/aws/run_ufc_day.sh.

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdgeRanked AI | NBA Board</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#0a0f1c',      
+                        surface: '#121929',   
+                        borderline: '#1e293b',
+                        brand: '#3b82f6',     
+                        edge: '#10b981',      
+                        confidence: '#f59e0b' 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-navy text-slate-300 font-sans antialiased selection:bg-brand selection:text-white">
+
+    <!-- GLOBAL NAVIGATION -->
+    <nav class="sticky top-0 z-50 bg-navy/90 backdrop-blur-lg border-b border-borderline">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="index.html" class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-brand rounded flex items-center justify-center font-bold text-white shadow-lg shadow-brand/20">ER</div>
+                    <span class="text-white font-bold text-xl tracking-tight">EdgeRanked<span class="text-brand">AI</span></span>
+                </a>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="board.html" class="px-3 py-2 text-sm font-medium text-white bg-surface rounded-md transition">NBA</a>
+                    <a href="board.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface rounded-md transition">MLB</a>
+                    <a href="board.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface rounded-md transition">UFC</a>
+                    <a href="board.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface rounded-md transition">PGA</a>
+                    <div class="w-px h-4 bg-borderline mx-2"></div>
+                    <a href="results.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface rounded-md transition">Results</a>
+                    <a href="pricing.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface rounded-md transition">Pricing</a>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="pricing.html" class="bg-white text-navy px-4 py-2 rounded-md text-sm font-bold hover:bg-slate-200 transition shadow-lg">Get Access</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- SPORT HEADER & SUMMARY ROW -->
+    <header class="bg-surface border-b border-borderline pt-8 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-black text-white tracking-tight">NBA Projections</h1>
+                    <p class="text-sm text-slate-400 mt-2 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-edge animate-pulse"></span> 
+                        Last updated: Today, 8:15 AM EST • Model v3.0
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-navy border border-borderline rounded-lg p-4">
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Active Plays</p>
+                    <p class="text-2xl font-black text-white mt-1">12</p>
+                </div>
+                <div class="bg-navy border border-borderline rounded-lg p-4">
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Best Edge Available</p>
+                    <p class="text-2xl font-black text-edge mt-1">+14.2%</p>
+                </div>
+                <div class="bg-navy border border-borderline rounded-lg p-4">
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Props Scanned</p>
+                    <p class="text-2xl font-black text-white mt-1">345</p>
+                </div>
+                <div class="bg-navy border border-borderline rounded-lg p-4">
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Games Today</p>
+                    <p class="text-2xl font-bold text-white mt-1">8</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN BOARD SECTION -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- SECTION 1: TOP PLAYS (Premium Betting Cards) -->
+        <h2 class="text-xl font-bold text-white mb-4">Top Highlighted Plays</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+            
+            <!-- Card 1 -->
+            <div class="bg-surface border border-borderline rounded-xl p-5 relative overflow-hidden shadow-lg">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-edge/10 text-edge border border-edge/20 px-2 py-1 rounded text-[10px] font-black tracking-wider uppercase">+14.2% EDGE</span>
+                    <span class="bg-brand/10 text-brand border border-brand/20 px-2 py-1 rounded text-[10px] font-black tracking-wider uppercase">HIGH CONFIDENCE</span>
+                </div>
+                <h3 class="text-xl font-black text-white leading-tight">Luka Doncic</h3>
+                <p class="text-sm text-slate-400 mb-4">DAL vs LAL • Points</p>
+                <div class="grid grid-cols-2 gap-2 bg-navy rounded-lg p-3 border border-borderline">
+                    <div>
+                        <p class="text-[10px] text-slate-500 uppercase font-bold">Pick</p>
+                        <p class="font-bold text-white">Over 32.5</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[10px] text-slate-500 uppercase font-bold">Line</p>
+                        <p class="font-bold text-white">-110</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-slate-500 uppercase font-bold">Model Proj</p>
+                        <p class="font-mono text-brand font-bold">36.1</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[10px] text-slate-500 uppercase font-bold">Win Prob</p>
+                        <p class="font-mono text-slate-400">64.5%</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SECTION 2: THE BOARD (Responsive Table) -->
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-bold text-white">Full Board</h2>
+        </div>
+
+        <div class="bg-surface border border-borderline rounded-xl overflow-hidden shadow-xl">
+            
+            <!-- DESKTOP TABLE -->
+            <div class="overflow-x-auto hidden md:block">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-navy border-b border-borderline text-[10px] uppercase text-slate-400 font-bold tracking-wider sticky top-0">
+                        <tr>
+                            <th class="px-5 py-4">Player / Matchup</th>
+                            <th class="px-5 py-4">Market</th>
+                            <th class="px-5 py-4">Model Proj</th>
+                            <th class="px-5 py-4">Sportsbook Line</th>
+                            <th class="px-5 py-4">Pick</th>
+                            <th class="px-5 py-4 text-center">Confidence</th>
+                            <th class="px-5 py-4 text-right">Edge %</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-borderline text-sm">
+                        <!-- Row 1 -->
+                        <tr class="hover:bg-slate-800/30 transition-colors">
+                            <td class="px-5 py-4">
+                                <p class="font-bold text-white">Jayson Tatum</p>
+                                <p class="text-xs text-slate-500">BOS vs NYK</p>
+                            </td>
+                            <td class="px-5 py-4 text-slate-300">Rebounds</td>
+                            <td class="px-5 py-4 font-mono font-bold text-brand">9.8</td>
+                            <td class="px-5 py-4 font-mono text-slate-300">8.5 (-120)</td>
+                            <td class="px-5 py-4 font-bold text-white">Over</td>
+                            <td class="px-5 py-4 text-center">
+                                <span class="bg-confidence/10 text-confidence border border-confidence/20 px-2 py-0.5 rounded text-[10px] font-black uppercase">MED</span>
+                            </td>
+                            <td class="px-5 py-4 text-right">
+                                <span class="bg-edge/10 text-edge border border-edge/20 px-2 py-1 rounded text-[10px] font-black tracking-wider uppercase">+7.6%</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- MOBILE CARD FALLBACK -->
+            <div class="md:hidden divide-y divide-borderline">
+                <!-- Mobile Card 1 -->
+                <div class="p-4 bg-surface">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <p class="font-bold text-white text-base">Jayson Tatum</p>
+                            <p class="text-[11px] text-slate-400">BOS vs NYK • Rebounds</p>
+                        </div>
+                        <span class="bg-edge/10 text-edge border border-edge/20 px-2 py-1 rounded text-[10px] font-black uppercase text-right whitespace-nowrap">
+                            +7.6% EDGE
+                        </span>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-2 bg-navy p-3 rounded border border-borderline items-center">
+                        <div>
+                            <p class="text-[9px] text-slate-500 uppercase font-bold">Pick</p>
+                            <p class="font-bold text-white text-sm">Over 8.5</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[9px] text-slate-500 uppercase font-bold">Model</p>
+                            <p class="font-mono text-brand font-bold text-sm">9.8</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[9px] text-slate-500 uppercase font-bold">Line</p>
+                            <p class="font-mono text-white text-sm">-120</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</body>
+</html>
