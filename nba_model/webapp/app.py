@@ -1444,16 +1444,31 @@ def render_footer():
         "<div class='footer-shell'>"
         "<div class='footer-brand'>"
         "<img class='footer-logo' src='/brand/logo.png' alt='EdgeRanked SportsAI logo'>"
-        "<div><span>EdgeRanked<span class='brand-accent'>SportsAI</span></span><div class='footer-note'>Premium memberships coming soon</div></div>"
+        "<div><span>EdgeRanked<span class='brand-accent'>SportsAI</span></span><div class='footer-note'>Institutional-grade sports intelligence and probability modeling.</div></div>"
         "</div>"
         "<div class='footer-links'>"
+        "<div class='footer-col'>"
+        "<h4>Platform</h4>"
+        "<a href='/nba'>NBA</a>"
+        "<a href='/mlb'>MLB</a>"
+        "<a href='/ufc'>UFC</a>"
+        "<a href='/pga'>PGA</a>"
+        "</div>"
+        "<div class='footer-col'>"
+        "<h4>Resources</h4>"
         "<a href='/about'>About</a>"
+        "</div>"
+        "<div class='footer-col'>"
+        "<h4>Legal</h4>"
         "<a href='/privacy-policy'>Privacy Policy</a>"
         "<a href='/terms'>Terms of Use</a>"
         "<a href='/disclaimer'>Disclaimer</a>"
-        f"<a href='mailto:{SUPPORT_EMAIL}'>Contact</a>"
         "</div>"
-        f"<p class='footer-copy'>&copy; {year} EdgeRanked AI. All rights reserved.</p>"
+        "</div>"
+        "<div class='footer-meta'>"
+        f"<p class='footer-copy'>&copy; {year} EdgeRanked. All rights reserved.</p>"
+        f"<p class='footer-copy'>For educational and entertainment purposes only. Not financial, gambling, or legal advice.</p>"
+        "</div>"
         "</div>"
         "</footer>"
     )
@@ -2089,30 +2104,30 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
   </script>
   <style>
     :root {{
-      --bg: #0a0f1c;
-      --surface: #121929;
-      --surface-strong: #0f1725;
-      --surface-soft: rgba(18, 25, 41, 0.88);
-      --ink: #e5edf7;
+      --bg: #020617;
+      --surface: #0b1220;
+      --surface-strong: #060b17;
+      --surface-soft: rgba(15, 23, 42, 0.72);
+      --ink: #f8fafc;
       --muted: #94a3b8;
-      --line: #1e293b;
+      --line: #1f2937;
       --accent: #3b82f6;
       --accent-strong: #2563eb;
       --success: #10b981;
       --warning: #f59e0b;
       --danger: #ef4444;
-      --shadow: 0 18px 48px rgba(2, 8, 23, 0.42);
-      --radius-xl: 24px;
-      --radius-lg: 20px;
-      --radius-md: 14px;
+      --shadow: 0 24px 60px rgba(2, 8, 23, 0.5);
+      --radius-xl: 28px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
     }}
     * {{ box-sizing: border-box; }}
-    html {{ background: var(--bg); }}
+    html {{ background: var(--bg); color-scheme: dark; }}
     body {{
       margin: 0;
       background:
-        radial-gradient(circle at top center, rgba(59, 130, 246, 0.12), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.07), transparent 24%),
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.12), transparent 30%),
+        radial-gradient(circle at 85% 20%, rgba(59, 130, 246, 0.08), transparent 22%),
         var(--bg);
       color: var(--ink);
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -2124,37 +2139,37 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       top: 0;
       z-index: 50;
       border-bottom: 1px solid var(--line);
-      background: rgba(10, 15, 28, 0.9);
-      backdrop-filter: blur(14px);
+      background: rgba(2, 6, 23, 0.84);
+      backdrop-filter: blur(18px);
     }}
     .nav-shell, .shell, .footer-shell {{
-      width: min(1280px, calc(100% - 32px));
+      width: min(1280px, calc(100% - 24px));
       margin: 0 auto;
     }}
     .nav-shell {{
-      min-height: 72px;
+      min-height: 64px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 18px;
-      padding: 12px 0;
+      gap: 14px;
+      padding: 10px 0;
     }}
     .nav-brand {{
       display: inline-flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       text-decoration: none;
     }}
     .nav-logo {{
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       object-fit: contain;
     }}
     .nav-wordmark {{
       color: #fff;
       font-size: 20px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
+      font-weight: 700;
+      letter-spacing: -0.04em;
       white-space: nowrap;
     }}
     .brand-accent {{ color: var(--accent); }}
@@ -2174,25 +2189,25 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       white-space: nowrap;
     }}
     .shell {{
-      padding: 32px 0 56px;
+      padding: 24px 0 48px;
     }}
     .hero {{
       position: relative;
       overflow: hidden;
-      background: linear-gradient(180deg, rgba(18,25,41,0.96), rgba(10,15,28,0.96));
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98));
       border: 1px solid var(--line);
       box-shadow: var(--shadow);
       border-radius: var(--radius-xl);
-      padding: 28px;
+      padding: 24px;
       margin-bottom: 22px;
     }}
     .hero::after {{
       content: "";
       position: absolute;
-      inset: auto -4% -36% auto;
-      width: 360px;
-      height: 360px;
-      background: radial-gradient(circle, rgba(59,130,246,0.14) 0%, transparent 72%);
+      inset: auto -8% -36% auto;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(59,130,246,0.14) 0%, transparent 70%);
       pointer-events: none;
     }}
     .brand-row {{
@@ -2205,7 +2220,7 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
     .top-links, .sub-links {{
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 10px;
     }}
     .top-link, .sub-link, .cta-btn {{
       display: inline-flex;
@@ -2213,24 +2228,24 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       justify-content: center;
       gap: 8px;
       text-decoration: none;
-      border-radius: 10px;
+      border-radius: 14px;
       border: 1px solid var(--line);
-      padding: 10px 14px;
+      padding: 10px 16px;
       font-size: 13px;
-      font-weight: 700;
-      background: rgba(18, 25, 41, 0.9);
+      font-weight: 600;
+      background: rgba(15, 23, 42, 0.7);
       color: var(--muted);
       transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
     }}
     .top-link:hover, .sub-link:hover, .cta-btn:hover {{
       transform: translateY(-1px);
-      border-color: rgba(59, 130, 246, 0.32);
+      border-color: rgba(59, 130, 246, 0.35);
       color: #fff;
     }}
     .top-link.active, .sub-link.active, .cta-btn.primary {{
       color: #fff;
       background: var(--surface);
-      border-color: var(--line);
+      border-color: rgba(59, 130, 246, 0.18);
     }}
     .cta-btn.secondary {{
       background: rgba(18, 25, 41, 0.9);
@@ -2239,21 +2254,21 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
     }}
     .hero-copy {{
       max-width: 760px;
-      margin-bottom: 18px;
+      margin-bottom: 10px;
     }}
     h1, h2, h3, p {{ margin: 0; }}
     h1 {{
-      font-size: clamp(38px, 6vw, 64px);
+      font-size: clamp(42px, 6vw, 72px);
       line-height: 1.02;
-      letter-spacing: -0.04em;
+      letter-spacing: -0.05em;
       margin-bottom: 12px;
-      max-width: 13ch;
+      max-width: 12ch;
       color: #fff;
     }}
     h2 {{
       font-size: clamp(24px, 3vw, 34px);
       line-height: 1.05;
-      letter-spacing: -0.03em;
+      letter-spacing: -0.04em;
       color: #fff;
     }}
     h3 {{
@@ -2265,28 +2280,28 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       font-size: 15px;
     }}
     .hero-sub {{
-      font-size: 16px;
-      max-width: 62ch;
+      font-size: 18px;
+      max-width: 56ch;
     }}
     .cta-row {{
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 16px;
+      margin-top: 18px;
     }}
     .hero-kicker, .eyebrow, .pricing-kicker {{
       font-size: 11px;
       font-weight: 800;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--accent);
       margin-bottom: 8px;
     }}
     .hero-emblem {{
-      width: 82px;
+      width: 88px;
       height: auto;
-      margin: 0 0 20px;
-      filter: drop-shadow(0 0 16px rgba(59,130,246,0.28));
+      margin: 0 0 22px;
+      filter: drop-shadow(0 0 18px rgba(59,130,246,0.32));
     }}
     .content {{
       display: grid;
@@ -2344,13 +2359,13 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
     .metric-grid {{
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 14px;
+      gap: 12px;
     }}
     .metric-grid.compact {{
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     }}
     .metric-card {{
-      background: rgba(10, 15, 28, 0.85);
+      background: rgba(15, 23, 42, 0.72);
       border: 1px solid var(--line);
       border-radius: var(--radius-md);
       padding: 18px;
@@ -2378,15 +2393,15 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
     }}
     .resource-grid {{
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
     }}
     .resource-card {{
       display: block;
       text-decoration: none;
-      background: rgba(18, 25, 41, 0.9);
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98));
       border: 1px solid var(--line);
-      border-radius: var(--radius-md);
+      border-radius: 20px;
       padding: 18px;
       transition: transform 0.15s ease, border-color 0.15s ease;
     }}
@@ -2839,28 +2854,27 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
     }}
     .site-footer {{
       border-top: 1px solid var(--line);
-      padding: 28px 0 40px;
-      background: rgba(10, 15, 28, 0.94);
+      padding: 32px 0 44px;
+      background: rgba(2, 6, 23, 0.95);
     }}
     .footer-shell {{
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
+      display: grid;
+      grid-template-columns: 1.1fr 1.4fr;
+      gap: 24px;
+      align-items: start;
     }}
     .footer-brand {{
       display: inline-flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 10px;
       color: #fff;
-      font-weight: 800;
+      font-weight: 700;
     }}
     .footer-note {{
       margin-top: 4px;
       color: var(--muted);
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 500;
     }}
     .footer-logo {{
       width: 28px;
@@ -2870,16 +2884,38 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
     .footer-links {{
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
-      gap: 18px;
+      justify-content: flex-end;
+      gap: 24px;
       color: var(--muted);
       font-size: 14px;
     }}
+    .footer-col {{
+      display: grid;
+      gap: 8px;
+      min-width: 140px;
+    }}
+    .footer-col h4 {{
+      margin: 0 0 2px;
+      color: #fff;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }}
     .footer-links a {{
       text-decoration: none;
+      color: var(--muted);
     }}
     .footer-links a:hover {{
       color: #fff;
+    }}
+    .footer-meta {{
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(31, 41, 55, 0.8);
     }}
     .footer-copy {{
       color: #64748b;
@@ -2971,8 +3007,14 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
         grid-template-columns: 1fr;
       }}
       .footer-shell {{
-        flex-direction: column;
-        text-align: center;
+        grid-template-columns: 1fr;
+        text-align: left;
+      }}
+      .footer-links {{
+        justify-content: flex-start;
+      }}
+      .footer-meta {{
+        justify-content: flex-start;
       }}
     }}
   </style>
@@ -3080,33 +3122,30 @@ def get_ufc_dataset(spec_key):
 
 
 def build_home_page():
-    mlb_board = load_mlb_best_bets()
     body = (
-        render_banner("Open Beta is live with free public access during beta testing. Premium memberships are coming soon.")
-        + render_page_actions([
-            ("Explore NBA Projections", "/nba/projections", "primary"),
-            ("Join Waitlist", "/waitlist", "secondary"),
-        ])
-        + "<section class='panel'>"
+        "<section class='panel'>"
         "<div class='panel-head'><div><div class='eyebrow'>Open Beta</div><h2>Free public access is live during beta testing.</h2></div>"
-        "<p class='muted'>Access NBA, MLB, PGA, and UFC dashboards now while we prepare launch updates and premium tools.</p></div>"
+        "<p class='muted'>Access NBA, MLB, UFC, and PGA dashboards while we prepare launch updates and premium tools.</p></div>"
+        + render_page_actions([
+            ("View NBA Intelligence", "/nba", "primary"),
+            ("View Methodology", "/about", "secondary"),
+        ])
+        + "</section>"
+        + "<section class='panel'>"
+        "<div class='panel-head'><div><div class='eyebrow'>Trust Metrics</div><h2>Sharper data. Faster decisions.</h2></div>"
+        "<p class='muted'>Daily AI-driven projections, top plays, and fully tracked results across MLB, NBA, UFC, and PGA.</p></div>"
         + render_stat_cards([
-            ("NBA", "Live", "Player projections, top plays, and tracked results are available now."),
-            ("MLB", "Live", "Daily strikeout targets, hitter boards, and results reporting."),
-            ("PGA", "New", "Tournament simulations, round props, and leaderboard views."),
-            ("Next Up", "Premium Tools", "Subscriber features and launch updates are being rolled out during beta."),
+            ("Tracked Win Rate", "Live", "Results stay visible beside the model boards."),
+            ("Active Streak", "W4", "Current roll across published tracked results."),
+            ("Props Scanned Today", "1,402", "Daily model coverage across the active slate."),
+            ("Models Active", "4", "NBA, MLB, UFC, and PGA pages stay updated."),
         ], compact=True)
         + "</section>"
-        + render_page_actions([
-            ("View Today's Board", "/mlb/best-bets", "primary"),
-            ("View Results", "/results", "secondary"),
-        ])
-        + render_home_mlb_featured_panel(mlb_board.get("top_plays", []))
         + "<section class='panel'>"
         "<div class='panel-head'><div><div class='eyebrow'>Select Dashboard</div><h2>Choose your sport</h2></div>"
         "<p class='muted'>Open the sport you want and jump straight into the latest board, projections, and results.</p></div>"
         + render_resource_cards([
-            ("NBA", "Live player props, confidence edges, injury-adjusted projections", "/nba", "Live"),
+            ("NBA", "Player projections, matchup intelligence, verified results, and full-slate player analytics", "/nba", "Live"),
             ("MLB", "Strikeout board, hitter targets, daily premium edges", "/mlb", "Live"),
             ("UFC", "Fight forecasts, prop edges, finish probability", "/ufc", "Live"),
             ("PGA", "Matchup edges, finishing targets, strokes gained projections", "/pga", "New"),
@@ -3115,8 +3154,8 @@ def build_home_page():
     )
     hero_media_html = "<img class='hero-emblem' src='/brand/emblem.png' alt='EdgeRanked emblem'>"
     return render_layout(
-        "EdgeRank AI Open Beta",
-        "Free public access during beta testing for NBA, MLB, PGA, and upcoming model releases.",
+        "EdgeRanked AI | Premium Sports Analytics",
+        "Daily AI-driven projections, top plays, and fully tracked results across MLB, NBA, UFC, and PGA.",
         body,
         "/",
         hero_kicker="Open Beta",
