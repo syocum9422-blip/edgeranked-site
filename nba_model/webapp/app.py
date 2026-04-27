@@ -123,14 +123,13 @@ ROOT_NAV_ITEMS = [
     ("MLB", "/mlb"),
     ("UFC", "/ufc"),
     ("PGA", "/pga"),
-    ("Results", "/results"),
     ("Waitlist", "/waitlist"),
     ("About", "/about"),
 ]
-NBA_NAV_ITEMS = [("Overview", "/nba"), ("Top Plays", "/nba/best-bets"), ("Projections", "/nba/projections"), ("Results", "/nba/record"), ("History", "/nba/history")]
+NBA_NAV_ITEMS = [("Overview", "/nba"), ("Top Plays", "/nba/best-bets"), ("Projections", "/nba/projections"), ("History", "/nba/history")]
 UFC_NAV_ITEMS = [("Overview", "/ufc"), ("Fight Card", "/ufc/fights"), ("Props", "/ufc/props")]
 PGA_NAV_ITEMS = [("Overview", "/pga"), ("Best Bets", "/pga/best-bets"), ("Leaderboard", "/pga/leaderboard")]
-MLB_PRIMARY_NAV = [("Overview", "/mlb"), ("Top Plays", "/mlb/best-bets"), ("Pitchers", "/mlb/pitcher-strikeouts"), ("Hitters", "/mlb/projections"), ("Results", "/mlb/record")]
+MLB_PRIMARY_NAV = [("Overview", "/mlb"), ("Top Plays", "/mlb/best-bets"), ("Pitchers", "/mlb/pitcher-strikeouts"), ("Hitters", "/mlb/projections")]
 MLB_HITTER_NAV = [
     ("Hit Targets", "/mlb/projections"),
     ("2+ Hits", "/mlb/two-plus-hits"),
