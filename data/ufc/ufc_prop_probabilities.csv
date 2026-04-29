@@ -32,6 +32,17 @@ dfe111758a46,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Tim Elliott,
 dfe111758a46,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Tim Elliott,Steve Erceg,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.721987521510246
 dfe111758a46,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Tim Elliott,Steve Erceg,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4299127671114518
 dfe111758a46,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Tim Elliott,Steve Erceg,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5700872328885482
+ea17775f446c,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Marwan Rahiki,Ollie Schmid,simulation,,,moneyline,Marwan Rahiki win,red,,0.7299046656219681
+ea17775f446c,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Marwan Rahiki,Ollie Schmid,simulation,,,moneyline,Ollie Schmid win,blue,,0.2700953343780319
+ea17775f446c,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Marwan Rahiki,Ollie Schmid,simulation,,,inside_distance,Fight ends inside distance,yes,,0.44622538258308964
+ea17775f446c,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Marwan Rahiki,Ollie Schmid,simulation,,,inside_distance,Fight goes to decision,no,,0.5662703034479607
+ea17775f446c,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Marwan Rahiki,Ollie Schmid,simulation,,,method,Win by KO/TKO,ko_tko,,0.2491629740058117
+ea17775f446c,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Marwan Rahiki,Ollie Schmid,simulation,,,method,Win by Submission,submission,,0.18456672254622772
+ea17775f446c,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Marwan Rahiki,Ollie Schmid,simulation,,,method,Win by Decision,decision,,0.5662703034479607
+ea17775f446c,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Marwan Rahiki,Ollie Schmid,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.24950759738986714
+ea17775f446c,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Marwan Rahiki,Ollie Schmid,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7504924026101328
+ea17775f446c,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Marwan Rahiki,Ollie Schmid,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.38519875585957486
+ea17775f446c,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Marwan Rahiki,Ollie Schmid,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6148012441404251
 631604dc8c18,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Shamil Gaziev,Brando Pericic,simulation,,,moneyline,Shamil Gaziev win,red,,0.6042763084937102
 631604dc8c18,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Shamil Gaziev,Brando Pericic,simulation,,,moneyline,Brando Pericic win,blue,,0.39572369150628983
 631604dc8c18,UFC Fight Night: Della Maddalena vs. Prates,2026-05-02,Shamil Gaziev,Brando Pericic,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5593973025444545
