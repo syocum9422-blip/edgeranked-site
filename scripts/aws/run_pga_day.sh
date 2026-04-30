@@ -5,17 +5,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SITE_REPO_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 LIVE_SITE_DIR="${EDGERANKED_LIVE_SITE_DIR:-/home/ubuntu/edgeranked-sportsai}"
 ENV_FILE="${EDGERANKED_ENV_FILE:-/home/ubuntu/.edgeranked_env}"
-SITE_PARENT_DIR="$(cd "$SITE_REPO_DIR/.." && pwd)"
-
-resolve_first_dir() {
-  for candidate in "$@"; do
-    if [[ -n "$candidate" && -e "$candidate" ]]; then
-      printf '%s\n' "$candidate"
-      return 0
-    fi
-  done
-  printf '%s\n' "$1"
-}
 
 if [[ -f "$ENV_FILE" ]]; then
   set -a
@@ -24,11 +13,35 @@ if [[ -f "$ENV_FILE" ]]; then
   set +a
 fi
 
-DEFAULT_PGA_PIPELINE_DIR="$(resolve_first_dir \
-  "${EDGERANKED_PGA_PIPELINE_DIR:-}" \
-  "${EDGERANKED_PGA_BASE_DIR:-}" \
-  "$SITE_PARENT_DIR/sports/pga")"
-PGA_PIPELINE_DIR="${EDGERANKED_PGA_PIPELINE_DIR:-${EDGERANKED_PGA_BASE_DIR:-$DEFAULT_PGA_PIPELINE_DIR}}"
+if [[ -z "${EDGERANKED_PGA_BASE_DIR:-}" ]]; then
+  echo "ERROR: EDGERANKED_PGA_BASE_DIR is required for PGA production runs." >&2
+  echo "Set it in $ENV_FILE, cron, and the Gunicorn systemd environment." >&2
+  exit 64
+fi
+
+PGA_PIPELINE_DIR="${EDGERANKED_PGA_PIPELINE_DIR:-$EDGERANKED_PGA_BASE_DIR}"
+
+if [[ "$PGA_PIPELINE_DIR" != "$EDGERANKED_PGA_BASE_DIR" ]]; then
+  echo "ERROR: EDGERANKED_PGA_PIPELINE_DIR must match EDGERANKED_PGA_BASE_DIR in production." >&2
+  echo "EDGERANKED_PGA_BASE_DIR=$EDGERANKED_PGA_BASE_DIR" >&2
+  echo "EDGERANKED_PGA_PIPELINE_DIR=$PGA_PIPELINE_DIR" >&2
+  exit 64
+fi
+
+if [[ ! -d "$PGA_PIPELINE_DIR" ]]; then
+  echo "ERROR: PGA pipeline directory does not exist: $PGA_PIPELINE_DIR" >&2
+  exit 66
+fi
+
+if [[ ! -f "$PGA_PIPELINE_DIR/generate_bets.py" && ! -f "$PGA_PIPELINE_DIR/src/main.py" ]]; then
+  echo "ERROR: PGA pipeline entrypoint not found under $PGA_PIPELINE_DIR" >&2
+  exit 66
+fi
+
+if [[ -d "$PGA_PIPELINE_DIR/data" ]]; then
+  find "$PGA_PIPELINE_DIR/data" -name '._*.json' -type f -delete
+fi
+
 PGA_PYTHON_BIN="${PGA_PYTHON_BIN:-$PGA_PIPELINE_DIR/.venv/bin/python}"
 
 if [[ ! -x "$PGA_PYTHON_BIN" ]]; then

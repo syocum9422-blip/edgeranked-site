@@ -21,10 +21,6 @@ from mlb_model.production.unified_output_router import publish_site_projection_e
 print(publish_site_projection_exports())
 PY
 
-sudo mkdir -p /home/mlb_model
-sudo rm -rf /home/mlb_model/mlb
-sudo ln -s /home/ubuntu/edgeranked-sportsai/mlb /home/mlb_model/mlb
-
 sudo systemctl restart edgerankai.service || true
 
 echo "Finished unified MLB run: $(date)"

@@ -130,6 +130,12 @@ PGA_PUBLISH_STATE_PATH = PGA_PUBLISHED_DIR / "publish_state.json"
 PGA_RESULTS_PATH = PGA_PUBLISHED_DIR / "pga_simulation_results.csv"
 PGA_INVALID_PROP_TYPES = {"", "holes_played", "null", "nan", "none"}
 
+LOGGER.warning("PGA_BASE_DIR=%s", PGA_BASE_DIR)
+LOGGER.warning("PGA_OUTPUT_DIR=%s", PGA_OUTPUT_DIR)
+LOGGER.warning("PGA_DATA_DIR=%s", PGA_DATA_DIR)
+LOGGER.warning("PGA_PUBLISHED_DIR=%s", PGA_PUBLISHED_DIR)
+LOGGER.warning("PGA_TOURNAMENT_METADATA_PATH=%s", PGA_TOURNAMENT_METADATA_PATH)
+LOGGER.warning("PGA_RESULTS_PATH=%s", PGA_RESULTS_PATH)
 
 BRAND_ASSETS_DIR = PROJECT_ROOT / "assets" / "brand"
 BRAND_LOGO_FILE = "edgeranked_logo.png"
@@ -467,15 +473,6 @@ def file_timestamp(path):
         return None
     return datetime.fromtimestamp(path.stat().st_mtime, ET)
 
-
-
-
-def public_data_source_label(path):
-    return Path(path).name or "data_source"
-
-
-def public_data_source_labels(paths):
-    return [public_data_source_label(path) for path in paths if Path(path).exists()]
 
 def format_timestamp(ts):
     if not ts:
@@ -997,7 +994,7 @@ def load_mlb_best_bets():
         "top_plays": top_plays,
         "board_date": board_date,
         "banner": banner,
-        "source_label": public_data_source_label(source_path),
+        "source_path": str(source_path),
         "last_updated": last_updated,
         "props_scanned": props_scanned_count(),
         "plays_shown": len(records),
@@ -1057,7 +1054,7 @@ def load_mlb_pitcher_board():
         "records": records[:25],
         "board_date": board_date,
         "banner": banner,
-        "source_label": public_data_source_label(source_path),
+        "source_path": str(source_path),
         "last_updated": last_updated,
         "props_scanned": pitcher_props_scanned_count() or len(records),
         "plays_shown": min(len(records), 25),
@@ -1111,7 +1108,7 @@ def load_mlb_history_board():
         "records": rows,
         "board_date": board_date,
         "banner": banner,
-        "source_label": public_data_source_label(source_path),
+        "source_path": str(source_path),
         "last_updated": last_updated,
         "props_scanned": len(rows),
         "plays_shown": len(rows),
@@ -1141,7 +1138,7 @@ def load_mlb_graded_board():
         "records": rows,
         "board_date": board_date,
         "banner": banner,
-        "source_label": public_data_source_label(source_path),
+        "source_path": str(source_path),
         "last_updated": last_updated,
         "props_scanned": len(rows),
         "plays_shown": len(rows),
@@ -1225,7 +1222,7 @@ def load_mlb_record_board():
         "records": rows,
         "board_date": latest_date_in_df(daily, "date") or latest_date_in_df(history, "date"),
         "banner": "Showing most recent available board" if (latest_date_in_df(daily, "date") or latest_date_in_df(history, "date")) and (latest_date_in_df(daily, "date") or latest_date_in_df(history, "date")) < today_et() else "",
-        "source_label": public_data_source_label(MLB_FILES["record"]),
+        "source_path": str(MLB_FILES["record"]),
         "last_updated": last_updated,
         "props_scanned": len(graded),
         "plays_shown": len(rows),
@@ -1732,13 +1729,20 @@ def mlb_first_numeric_from_row(row, columns):
 def log_mlb_hitter_category_debug(route_label, category_key, target_stat, rows):
     top_players = [normalize_text(row.get("player")) for row in rows[:5]]
     LOGGER.info(
-        "MLB hitter category route=%s selected_category=%s metric=%s top5=%s",
+        "MLB hitter category debug route=%s selected_category=%s metric=%s top5=%s",
         route_label,
         category_key,
         mlb_hitter_sort_column_label(target_stat),
         top_players,
     )
-    return ""
+    return (
+        "\n<!-- MLB hitter category debug: "
+        f"route/API={escape(route_label)}; "
+        f"selected_category={escape(category_key)}; "
+        f"metric={escape(mlb_hitter_sort_column_label(target_stat))}; "
+        f"top5={escape(', '.join(top_players))} "
+        "-->\n"
+    )
 
 
 def build_mlb_hitter_projection_board():
@@ -2110,8 +2114,9 @@ def build_mlb_player_projection_profiles():
         records.append(profile)
     records = sorted(records, key=lambda item: (item.get("team", ""), item.get("player", "")))
     teams = sorted({item["team"] for item in records if item.get("team")})
+    existing_sources = [str(path) for path in source_paths if Path(path).exists()]
     last_updated = max(filter(None, [file_timestamp(path) for path in source_paths]), default=None)
-    return {"records": records, "teams": teams, "source_labels": public_data_source_labels(source_paths), "last_updated": last_updated}
+    return {"records": records, "teams": teams, "source_path": existing_sources, "last_updated": last_updated}
 
 
 def mlb_system_rows():
@@ -2120,7 +2125,7 @@ def mlb_system_rows():
         rows.append({
             "file": label,
             "exists": "Yes" if path.exists() else "No",
-            "source_label": public_data_source_label(path),
+            "path": str(path),
             "updated": format_timestamp(file_timestamp(path)),
         })
     return rows
@@ -2362,7 +2367,7 @@ def build_nba_player_projection_profiles():
     df = read_csv_df(PROJECTIONS_PATH)
     source_path = Path(PROJECTIONS_PATH)
     if df.empty:
-        return {"records": [], "teams": [], "source_label": public_data_source_label(source_path), "last_updated": file_timestamp(source_path)}
+        return {"records": [], "teams": [], "source_path": str(source_path), "last_updated": file_timestamp(source_path)}
 
     profiles = {}
     projection_columns = [
@@ -2400,7 +2405,7 @@ def build_nba_player_projection_profiles():
 
     records = finalize_player_profiles(profiles)
     teams = sorted({item["team"] for item in records if item.get("team")})
-    return {"records": records, "teams": teams, "source_label": public_data_source_label(source_path), "last_updated": file_timestamp(source_path)}
+    return {"records": records, "teams": teams, "source_path": str(source_path), "last_updated": file_timestamp(source_path)}
 
 
 def build_nba_best_bets_board():
@@ -2420,7 +2425,7 @@ def build_nba_best_bets_board():
     if df.empty:
         return {
             "records": [],
-            "source_label": public_data_source_label(source_path),
+            "source_path": str(source_path),
             "last_updated": file_timestamp(source_path),
             "plays_shown": 0,
             "recent_hit_rate": None,
@@ -2467,7 +2472,7 @@ def build_nba_best_bets_board():
 
     return {
         "records": rows,
-        "source_label": public_data_source_label(source_path),
+        "source_path": str(source_path),
         "last_updated": file_timestamp(source_path),
         "plays_shown": len(rows),
         "recent_hit_rate": recent_hit_rate,
@@ -2552,7 +2557,7 @@ def build_nba_record_board():
         },
         "records": daily_rows,
         "recent_results": recent_results,
-        "source_label": public_data_source_label(RECORD_SUMMARY_PATH),
+        "source_path": str(Path(RECORD_SUMMARY_PATH)),
         "last_updated": last_updated,
         "plays_tracked": len(graded),
     }
@@ -2764,19 +2769,19 @@ def load_pga_best_bets(round_number=None, round_only=False):
         if records:
             return {
                 "records": records,
-                "source_label": public_data_source_label(PGA_PUBLISHED_BEST_BETS_PATH),
+                "source_path": str(PGA_PUBLISHED_BEST_BETS_PATH),
                 "last_updated": file_timestamp(PGA_PUBLISHED_BEST_BETS_PATH),
                 "selected_round": published_round,
                 "is_round_specific": published_round is not None,
                 "is_available_props": False,
             }
 
-    empty_source_label = public_data_source_label(PGA_PUBLISHED_BEST_BETS_PATH)
+    empty_source = str(PGA_PUBLISHED_BEST_BETS_PATH)
     fallback_props = load_pga_available_props(selected_round)
     if fallback_props:
         return {
             "records": fallback_props,
-            "source_label": empty_source_label,
+            "source_path": empty_source,
             "last_updated": None,
             "selected_round": selected_round,
             "is_round_specific": False,
@@ -2784,7 +2789,7 @@ def load_pga_best_bets(round_number=None, round_only=False):
         }
     return {
         "records": [],
-        "source_label": empty_source_label,
+        "source_path": empty_source,
         "last_updated": None,
         "selected_round": selected_round,
         "is_round_specific": False,
@@ -2795,7 +2800,7 @@ def load_pga_best_bets(round_number=None, round_only=False):
 def load_pga_leaderboard():
     df = read_csv_df(PGA_RESULTS_PATH)
     if df.empty:
-        return {"records": [], "source_label": public_data_source_label(PGA_RESULTS_PATH), "last_updated": file_timestamp(PGA_RESULTS_PATH)}
+        return {"records": [], "source_path": str(PGA_RESULTS_PATH), "last_updated": file_timestamp(PGA_RESULTS_PATH)}
 
     work = df.copy()
     sort_col = "win_perc" if "win_perc" in work.columns else work.columns[0]
@@ -2816,7 +2821,7 @@ def load_pga_leaderboard():
         })
     return {
         "records": records,
-        "source_label": public_data_source_label(PGA_RESULTS_PATH),
+        "source_path": str(PGA_RESULTS_PATH),
         "last_updated": file_timestamp(PGA_RESULTS_PATH),
     }
 
@@ -2853,7 +2858,7 @@ def build_pga_player_projection_profiles():
     return {
         "records": records,
         "teams": [],
-        "source_label": leaderboard.get("source_label"),
+        "source_path": leaderboard.get("source_path"),
         "last_updated": leaderboard.get("last_updated"),
     }
 
@@ -2861,9 +2866,10 @@ def build_pga_player_projection_profiles():
 def load_pga_summary(round_number=None):
     metadata = read_json(PGA_TOURNAMENT_METADATA_PATH)
     config = read_json(PGA_CONFIG_PATH)
+    publish_state = read_json(PGA_PUBLISH_STATE_PATH)
     available_rounds = pga_available_rounds()
-    current_round = pga_published_round()
-    selected_round = round_number if round_number in available_rounds else current_round
+    published_round = pga_published_round()
+    selected_round = round_number if round_number in available_rounds else published_round
     best_bets = load_pga_best_bets(selected_round)
     round_best_bets = load_pga_best_bets(selected_round, round_only=True)
     leaderboard = load_pga_leaderboard()
@@ -2880,36 +2886,29 @@ def load_pga_summary(round_number=None):
         "leaderboard": leaderboard,
         "available_rounds": available_rounds,
         "selected_round": selected_round,
-        "current_round": current_round,
+        "published_round": published_round,
+        "publish_state": publish_state,
         "favorite": favorite,
         "top_bet": top_bet,
     }
 
 
 def pga_system_status():
-    sources = {
-        "base": PGA_BASE_DIR,
-        "outputs": PGA_OUTPUT_DIR,
-        "data": PGA_DATA_DIR,
-        "tournament_metadata": PGA_TOURNAMENT_METADATA_PATH,
-        "results": PGA_RESULTS_PATH,
-        "best_bets": PGA_PUBLISHED_BEST_BETS_PATH,
-        "state": PGA_PUBLISH_STATE_PATH,
-        "processed_odds": PGA_PROCESSED_ODDS_DIR,
+    paths = {
+        "PGA_BASE_DIR": PGA_BASE_DIR,
+        "PGA_OUTPUT_DIR": PGA_OUTPUT_DIR,
+        "PGA_DATA_DIR": PGA_DATA_DIR,
+        "PGA_TOURNAMENT_METADATA_PATH": PGA_TOURNAMENT_METADATA_PATH,
+        "PGA_RESULTS_PATH": PGA_RESULTS_PATH,
+        "PGA_PUBLISHED_BEST_BETS_PATH": PGA_PUBLISHED_BEST_BETS_PATH,
+        "PGA_PUBLISH_STATE_PATH": PGA_PUBLISH_STATE_PATH,
+        "PGA_PROCESSED_ODDS_DIR": PGA_PROCESSED_ODDS_DIR,
     }
     return {
         "ok": True,
-        "source_label": "pga_system",
-        "records": [
-            {
-                "file": label,
-                "exists": "Yes" if Path(source).exists() else "No",
-                "source_label": label,
-                "updated": format_timestamp(file_timestamp(source)),
-            }
-            for label, source in sources.items()
-        ],
-        "generated_at": now_et().isoformat(),
+        "paths": {key: str(path) for key, path in paths.items()},
+        "exists": {key: Path(path).exists() for key, path in paths.items()},
+        "publish_state": read_json(PGA_PUBLISH_STATE_PATH),
         "tournament_metadata": read_json(PGA_TOURNAMENT_METADATA_PATH),
     }
 
@@ -3826,9 +3825,9 @@ def build_ufc_player_projection_profiles():
 
     records = finalize_player_profiles(profiles)
     records = sorted(records, key=lambda item: item.get("player", ""))
-    sources = [UFC_PAGE_SPECS["fights"]["path"], UFC_PAGE_SPECS["props"]["path"]]
+    sources = [str(path) for path in [UFC_PAGE_SPECS["fights"]["path"], UFC_PAGE_SPECS["props"]["path"]] if path.exists()]
     last_updated = max(filter(None, [file_timestamp(path) for path in [UFC_PAGE_SPECS["fights"]["path"], UFC_PAGE_SPECS["props"]["path"]]]), default=None)
-    return {"records": records, "teams": [], "source_labels": public_data_source_labels(sources), "last_updated": last_updated}
+    return {"records": records, "teams": [], "source_path": sources, "last_updated": last_updated}
 
 
 def render_ufc_props_table(rows):
@@ -5744,7 +5743,7 @@ def get_mlb_dataset(spec_key):
         return {
             "kind": kind,
             "records": build_mlb_hitter_projection_board(),
-            "source_label": "mlb_projections",
+            "source_path": str(source_path),
             "last_updated": file_timestamp(source_path),
         }
     if kind in MLB_HITTER_CATEGORY_STATS:
@@ -5757,7 +5756,7 @@ def get_mlb_dataset(spec_key):
         return {
             "kind": kind,
             "records": records,
-            "source_label": "mlb_projections",
+            "source_path": str(source_path),
             "last_updated": file_timestamp(source_path),
         }
     if kind == "mlb_lines":
@@ -5768,7 +5767,7 @@ def get_mlb_dataset(spec_key):
             lines_df = read_csv_df(source_path)
         if not lines_df.empty:
             lines_df = lines_df[lines_df.apply(mlb_line_is_clean_display_row, axis=1)].copy()
-        return {"kind": kind, "records": records_from_df(lines_df.head(50)), "source_label": public_data_source_label(source_path), "last_updated": file_timestamp(source_path)}
+        return {"kind": kind, "records": records_from_df(lines_df.head(50)), "source_path": str(source_path), "last_updated": file_timestamp(source_path)}
     if kind == "mlb_tracking":
         hitter_tracking = read_csv_df(MLB_FILES["hitter_tracking"])
         pitcher_tracking = read_csv_df(MLB_FILES["pitcher_tracking"])
@@ -5776,10 +5775,10 @@ def get_mlb_dataset(spec_key):
             "kind": kind,
             "hitters": records_from_df(latest_rows_by_date(hitter_tracking, allowed_results_only=False).head(25)),
             "pitchers": records_from_df(latest_rows_by_date(pitcher_tracking, allowed_results_only=False).head(25)),
-            "source_label": public_data_source_label(MLB_FILES["hitter_tracking"]),
+            "source_path": str(MLB_FILES["hitter_tracking"]),
             "last_updated": max(filter(None, [file_timestamp(MLB_FILES["hitter_tracking"]), file_timestamp(MLB_FILES["pitcher_tracking"])]), default=None),
         }
-    return {"kind": kind, "records": mlb_system_rows(), "source_label": "mlb_system", "last_updated": max(filter(None, [file_timestamp(path) for path in MLB_FILES.values()]), default=None)}
+    return {"kind": kind, "records": mlb_system_rows(), "source_path": str(MLB_OUTPUT_DIR), "last_updated": max(filter(None, [file_timestamp(path) for path in MLB_FILES.values()]), default=None)}
 
 
 def get_nba_dataset(spec_key):
@@ -5791,7 +5790,7 @@ def get_nba_dataset(spec_key):
             "records": records,
             "title": spec["title"],
             "description": spec["description"],
-            "source_label": "nba_projections",
+            "source_path": str(Path(PROJECTIONS_PATH)),
             "last_updated": file_timestamp(PROJECTIONS_PATH),
         }
     if spec_key in {"history", "graded"}:
@@ -5807,7 +5806,7 @@ def get_nba_dataset(spec_key):
     if spec_key == "system":
         rows = []
         for key, item in NBA_PAGE_SPECS.items():
-            rows.append({"page": key, "exists": "Yes" if item["path"].exists() else "No", "source_label": "ufc_system"})
+            rows.append({"page": key, "exists": "Yes" if item["path"].exists() else "No", "path": str(item["path"])})
         return {"kind": "table", "records": rows, "title": spec["title"], "description": spec["description"]}
     return {"kind": "table", "records": records_from_df(read_csv_df(spec["path"])), "title": spec["title"], "description": spec["description"]}
 
@@ -5819,7 +5818,7 @@ def get_ufc_dataset(spec_key):
     if spec_key == "system":
         rows = []
         for key, item in UFC_PAGE_SPECS.items():
-            rows.append({"page": key, "exists": "Yes" if item["path"].exists() else "No", "source_label": "ufc_system"})
+            rows.append({"page": key, "exists": "Yes" if item["path"].exists() else "No", "path": str(item["path"])})
         return {"kind": "table", "records": rows, "title": spec["title"], "description": spec["description"]}
     return {"kind": "table", "records": records_from_df(read_csv_df(spec["path"])), "title": spec["title"], "description": spec["description"]}
 

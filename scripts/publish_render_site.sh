@@ -23,53 +23,6 @@ publish_sport_enabled() {
   return 1
 }
 
-validate_nba_freshness() {
-  "$PYTHON_BIN" - "$ROOT" <<'PY'
-import csv
-import sys
-from datetime import datetime
-from pathlib import Path
-from zoneinfo import ZoneInfo
-
-root = Path(sys.argv[1])
-today = datetime.now(ZoneInfo("America/New_York")).date().isoformat()
-
-checks = [
-    ("projections.csv", "GAME_DATE"),
-    ("game_lines_today.csv", "GAME_DATE"),
-    ("Best_Bets/nba_best_bets_today.csv", "DATE"),
-]
-
-errors = []
-for rel_path, date_column in checks:
-    path = root / rel_path
-    if not path.exists():
-        errors.append(f"{rel_path} is missing")
-        continue
-    with path.open(newline="", encoding="utf-8") as handle:
-        reader = csv.DictReader(handle)
-        if not reader.fieldnames or date_column not in reader.fieldnames:
-            errors.append(f"{rel_path} is missing {date_column}")
-            continue
-        dates = {
-            (row.get(date_column) or "").strip()[:10]
-            for row in reader
-            if (row.get(date_column) or "").strip()
-        }
-    if today not in dates:
-        latest = max(dates) if dates else "none"
-        errors.append(f"{rel_path} latest {date_column}={latest}; expected {today}")
-
-if errors:
-    print("ERROR: Refusing to publish stale NBA files:")
-    for error in errors:
-        print(f"  - {error}")
-    sys.exit(1)
-
-print(f"[site_publish] NBA freshness guard passed for {today}")
-PY
-}
-
 sync_one() {
   local rel_path="$1"
   local source="$ROOT/$rel_path"
@@ -98,12 +51,11 @@ sync_live_site() {
 
   echo "Syncing refreshed files into live site: $LIVE_SITE_DIR"
   if publish_sport_enabled "nba"; then
-    validate_nba_freshness
     echo "[site_publish] syncing NBA files"
     sync_one "projections.csv"
     sync_one "Projections_app_view.csv"
-    sync_one "lines_today.csv"
     sync_one "game_lines_today.csv"
+    sync_one "lines_today.csv"
     sync_one "injured_players.csv"
     sync_one "teams_today.csv"
     sync_one "Best_Bets/nba_best_bets_today.csv"
@@ -111,6 +63,8 @@ sync_live_site() {
     sync_one "Best_Bets/nba_bets_history.csv"
     sync_one "Best_Bets/graded_bets.csv"
     sync_one "Best_Bets/match_audit_today.csv"
+    sync_one "Best_Bets/unmatched_players_today.csv"
+    sync_one "Best_Bets/unmatched_stats_today.csv"
     sync_one "Best_Bets/calibration_summary.csv"
     sync_one "Best_Bets/calibration_report.txt"
     sync_one "Best_Bets/results_page.html"
@@ -120,12 +74,25 @@ sync_live_site() {
     sync_one "mlb/outputs"
     sync_one "data/mlb/lines_today.csv"
   fi
+  if publish_sport_enabled "wnba"; then
+    echo "[site_publish] syncing WNBA files"
+    sync_one "wnba"
+  fi
 }
 
 cd "$ROOT"
 
+if publish_sport_enabled "nba"; then
+  if [[ ! -f "$ROOT/scripts/validate_nba_publish_ready.py" ]]; then
+    echo "ERROR: Missing NBA validator: $ROOT/scripts/validate_nba_publish_ready.py"
+    exit 1
+  fi
+  echo "[site_publish] validating NBA publish inputs before live sync"
+  EDGERANKED_NBA_BASE_DIR="$ROOT" "$PYTHON_BIN" "$ROOT/scripts/validate_nba_publish_ready.py"
+fi
+
 if ! "$PYTHON_BIN" "$ROOT/scripts/publish_render_snapshot.py"; then
-  echo "ERROR: Snapshot refresh failed. Aborting live-site sync so stale or invalid MLB files are not published."
+  echo "ERROR: Snapshot validation/refresh failed for EDGERANKED_PUBLISH_SPORTS=$PUBLISH_SPORTS. Aborting live-site sync."
   exit 1
 fi
 sync_live_site
@@ -140,25 +107,47 @@ if [[ ! -d "$ROOT/.git" ]] || ! git -C "$ROOT" rev-parse --is-inside-work-tree >
   exit 0
 fi
 
-git add \
-  projections.csv \
-  Projections_app_view.csv \
-  lines_today.csv \
-  injured_players.csv \
-  teams_today.csv \
-  Best_Bets/nba_best_bets_today.csv \
-  Best_Bets/record_summary.csv \
-  Best_Bets/nba_bets_history.csv \
-  Best_Bets/graded_bets.csv \
-  Best_Bets/match_audit_today.csv \
-  Best_Bets/calibration_summary.csv \
-  Best_Bets/calibration_report.txt \
-  Best_Bets/results_page.html \
-  mlb/outputs \
-  data/mlb/lines_today.csv \
-  sports/mlb/outputs/site/hitter_summary_today.csv \
-  sports/mlb/outputs/site/payload_manifest.json \
-  sports/mlb/outputs/site/validation_manifest.json
+GIT_ADD_PATHS=()
+
+if publish_sport_enabled "nba"; then
+  GIT_ADD_PATHS+=(
+    projections.csv
+    Projections_app_view.csv
+    game_lines_today.csv
+    lines_today.csv
+    injured_players.csv
+    teams_today.csv
+    Best_Bets/nba_best_bets_today.csv
+    Best_Bets/record_summary.csv
+    Best_Bets/nba_bets_history.csv
+    Best_Bets/graded_bets.csv
+    Best_Bets/match_audit_today.csv
+    Best_Bets/unmatched_players_today.csv
+    Best_Bets/unmatched_stats_today.csv
+    Best_Bets/calibration_summary.csv
+    Best_Bets/calibration_report.txt
+    Best_Bets/results_page.html
+  )
+fi
+
+if publish_sport_enabled "wnba"; then
+  GIT_ADD_PATHS+=(wnba)
+fi
+
+if publish_sport_enabled "mlb"; then
+  GIT_ADD_PATHS+=(
+    mlb/outputs
+    data/mlb/lines_today.csv
+  )
+fi
+
+if [[ "${#GIT_ADD_PATHS[@]}" -eq 0 ]]; then
+  echo "No git paths are enabled for EDGERANKED_PUBLISH_SPORTS=$PUBLISH_SPORTS."
+  exit 0
+fi
+
+git add "${GIT_ADD_PATHS[@]}"
+
 if git diff --cached --quiet; then
   echo "No snapshot changes to publish."
   exit 0
