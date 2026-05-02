@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-04-29T07:00:44.802889+00:00",
+  "generated_at": "2026-05-02T06:00:34.201935+00:00",
   "sport": "ufc",
   "event": {
     "name": "UFC Fight Night: Della Maddalena vs. Prates",
     "date": "2026-05-02",
-    "fight_count": 38
+    "fight_count": 39
   },
   "fights": [
     {
@@ -3011,9 +3011,152 @@
       }
     },
     {
-      "fight_id": "9d4b5e845187",
+      "fight_id": "5c53a65247ad",
       "card_position": 22,
       "card_label": "Card Position 22",
+      "fight_title": "Jim Miller vs Jared Gordon",
+      "weight_class": "Lightweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Jim Miller",
+      "fighter_blue": "Jared Gordon",
+      "predicted_winner": "Jim Miller",
+      "predicted_winner_pct": 65.3,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 65.3,
+        "blue_pct": 34.7
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 27.2,
+        "submission_pct": 28.3,
+        "decision_pct": 44.5,
+        "inside_distance_pct": 56.1
+      },
+      "totals": {
+        "over_1_5_pct": 67.2,
+        "under_1_5_pct": 32.8,
+        "over_2_5_pct": 46.0,
+        "under_2_5_pct": 54.0
+      },
+      "expectations": {
+        "fight_time_mins": 9.2513,
+        "red_takedowns": 1.608,
+        "blue_takedowns": 0.909
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 44.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 56.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 44.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 27.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 28.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Jared Gordon win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 34.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Jim Miller win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 65.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 67.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 32.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 46.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 54.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "9d4b5e845187",
+      "card_position": 23,
+      "card_label": "Card Position 23",
       "fight_title": "Roman Kopylov vs Marco Tulio",
       "weight_class": "Middleweight",
       "scheduled_rounds": 3,
@@ -3155,8 +3298,8 @@
     },
     {
       "fight_id": "e04a09806592",
-      "card_position": 23,
-      "card_label": "Card Position 23",
+      "card_position": 24,
+      "card_label": "Card Position 24",
       "fight_title": "Pat Sabatini vs William Gomis",
       "weight_class": "Featherweight",
       "scheduled_rounds": 3,
@@ -3298,8 +3441,8 @@
     },
     {
       "fight_id": "634c0a38271a",
-      "card_position": 24,
-      "card_label": "Card Position 24",
+      "card_position": 25,
+      "card_label": "Card Position 25",
       "fight_title": "Baisangur Susurkaev vs Djorden Santos",
       "weight_class": "Middleweight",
       "scheduled_rounds": 3,
@@ -3441,8 +3584,8 @@
     },
     {
       "fight_id": "1ec9a278cd24",
-      "card_position": 25,
-      "card_label": "Card Position 25",
+      "card_position": 26,
+      "card_label": "Card Position 26",
       "fight_title": "Clayton Carpenter vs Jose Ochoa",
       "weight_class": "Flyweight",
       "scheduled_rounds": 3,
@@ -3584,8 +3727,8 @@
     },
     {
       "fight_id": "bbf83df2b883",
-      "card_position": 26,
-      "card_label": "Card Position 26",
+      "card_position": 27,
+      "card_label": "Card Position 27",
       "fight_title": "Arnold Allen vs Melquizael Costa",
       "weight_class": "Featherweight",
       "scheduled_rounds": 3,
@@ -3727,8 +3870,8 @@
     },
     {
       "fight_id": "f57e86c41d8e",
-      "card_position": 27,
-      "card_label": "Card Position 27",
+      "card_position": 28,
+      "card_label": "Card Position 28",
       "fight_title": "Dooho Choi vs Daniel Santos",
       "weight_class": "Featherweight",
       "scheduled_rounds": 3,
@@ -3870,8 +4013,8 @@
     },
     {
       "fight_id": "6432d9f62834",
-      "card_position": 28,
-      "card_label": "Card Position 28",
+      "card_position": 29,
+      "card_label": "Card Position 29",
       "fight_title": "Malcolm Wellmaker vs Juan Diaz",
       "weight_class": "Bantamweight",
       "scheduled_rounds": 3,
@@ -4013,8 +4156,8 @@
     },
     {
       "fight_id": "8a71ac2fbceb",
-      "card_position": 29,
-      "card_label": "Card Position 29",
+      "card_position": 30,
+      "card_label": "Card Position 30",
       "fight_title": "Modestas Bukauskas vs Rodolfo Bellato",
       "weight_class": "Light Heavyweight",
       "scheduled_rounds": 3,
@@ -4156,8 +4299,8 @@
     },
     {
       "fight_id": "d3c27000a4ec",
-      "card_position": 30,
-      "card_label": "Card Position 30",
+      "card_position": 31,
+      "card_label": "Card Position 31",
       "fight_title": "Timmy Cuamba vs Benardo Sopaj",
       "weight_class": "Bantamweight",
       "scheduled_rounds": 3,
@@ -4299,8 +4442,8 @@
     },
     {
       "fight_id": "23f4d3a72f8c",
-      "card_position": 31,
-      "card_label": "Card Position 31",
+      "card_position": 32,
+      "card_label": "Card Position 32",
       "fight_title": "Jeremiah Wells vs Nicolas Dalby",
       "weight_class": "Welterweight",
       "scheduled_rounds": 3,
@@ -4442,8 +4585,8 @@
     },
     {
       "fight_id": "ea525a34641d",
-      "card_position": 32,
-      "card_label": "Card Position 32",
+      "card_position": 33,
+      "card_label": "Card Position 33",
       "fight_title": "Tuco Tokkos vs Ivan Erslan",
       "weight_class": "Light Heavyweight",
       "scheduled_rounds": 3,
@@ -4585,8 +4728,8 @@
     },
     {
       "fight_id": "c5cdcce4e6fe",
-      "card_position": 33,
-      "card_label": "Card Position 33",
+      "card_position": 34,
+      "card_label": "Card Position 34",
       "fight_title": "Trey Ogden vs Tommy Gantt",
       "weight_class": "Lightweight",
       "scheduled_rounds": 3,
@@ -4728,8 +4871,8 @@
     },
     {
       "fight_id": "773ebe2f56c1",
-      "card_position": 34,
-      "card_label": "Card Position 34",
+      "card_position": 35,
+      "card_label": "Card Position 35",
       "fight_title": "Ketlen Vieira vs Jacqueline Cavalcanti",
       "weight_class": "Women's Bantamweight",
       "scheduled_rounds": 3,
@@ -4871,8 +5014,8 @@
     },
     {
       "fight_id": "546886f6cdc3",
-      "card_position": 35,
-      "card_label": "Card Position 35",
+      "card_position": 36,
+      "card_label": "Card Position 36",
       "fight_title": "Cody Brundage vs Andre Petroski",
       "weight_class": "Middleweight",
       "scheduled_rounds": 3,
@@ -5014,8 +5157,8 @@
     },
     {
       "fight_id": "aac86077a2f6",
-      "card_position": 36,
-      "card_label": "Card Position 36",
+      "card_position": 37,
+      "card_label": "Card Position 37",
       "fight_title": "Alice Ardelean vs Polyana Viana",
       "weight_class": "Women's Strawweight",
       "scheduled_rounds": 3,
@@ -5157,8 +5300,8 @@
     },
     {
       "fight_id": "c1ef40bf35ff",
-      "card_position": 37,
-      "card_label": "Card Position 37",
+      "card_position": 38,
+      "card_label": "Card Position 38",
       "fight_title": "Daniel Barez vs Luis Gurule",
       "weight_class": "Flyweight",
       "scheduled_rounds": 3,
@@ -5300,7 +5443,7 @@
     },
     {
       "fight_id": "226094e8ee09",
-      "card_position": 38,
+      "card_position": 39,
       "card_label": "Opening Fight",
       "fight_title": "Shauna Bannon vs Nicolle Caliari",
       "weight_class": "Women's Strawweight",

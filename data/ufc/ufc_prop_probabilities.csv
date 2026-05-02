@@ -230,6 +230,17 @@ bb9ccc8ccf91,UFC 328: Chimaev vs. Strickland,2026-05-09,Ateba Gautier,Ozzy Diaz,
 91d77c166590,UFC 328: Chimaev vs. Strickland,2026-05-09,Grant Dawson,Mateusz Rebecki,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7926677559025714
 91d77c166590,UFC 328: Chimaev vs. Strickland,2026-05-09,Grant Dawson,Mateusz Rebecki,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4724485928648496
 91d77c166590,UFC 328: Chimaev vs. Strickland,2026-05-09,Grant Dawson,Mateusz Rebecki,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5275514071351504
+5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,moneyline,Jim Miller win,red,,0.6526117745047894
+5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,moneyline,Jared Gordon win,blue,,0.34738822549521065
+5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5614979399412757
+5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,inside_distance,Fight goes to decision,no,,0.44493300441826605
+5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,method,Win by KO/TKO,ko_tko,,0.27239610531880054
+5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,method,Win by Submission,submission,,0.2826708902629336
+5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,method,Win by Decision,decision,,0.44493300441826605
+5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.3280510803190472
+5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6719489196809528
+5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.5402095800494743
+5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.4597904199505257
 9d4b5e845187,UFC 328: Chimaev vs. Strickland,2026-05-09,Roman Kopylov,Marco Tulio,simulation,,,moneyline,Roman Kopylov win,red,,0.6654690982572571
 9d4b5e845187,UFC 328: Chimaev vs. Strickland,2026-05-09,Roman Kopylov,Marco Tulio,simulation,,,moneyline,Marco Tulio win,blue,,0.3345309017427429
 9d4b5e845187,UFC 328: Chimaev vs. Strickland,2026-05-09,Roman Kopylov,Marco Tulio,simulation,,,inside_distance,Fight ends inside distance,yes,,0.46667177949110056
