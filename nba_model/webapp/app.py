@@ -1,5 +1,6 @@
 import csv
 import json
+from nba_model.webapp.mlb_weather_view import register_mlb_weather_routes
 import logging
 import os
 import urllib.request
@@ -11,6 +12,7 @@ from zoneinfo import ZoneInfo
 
 import pandas as pd
 from flask import Flask, Response, jsonify, request, send_from_directory
+from nba_model.webapp.auth_views import register_auth_routes
 
 from nba_model.common import build_projection_app_view
 from nba_model.settings import (
@@ -26,7 +28,7 @@ from nba_model.settings import (
     RESULTS_PAGE_PATH,
     TEAMS_TODAY_PATH,
 )
-# from nba_model.webapp.wnba_views import register_wnba_routes
+from nba_model.webapp.wnba_views import register_wnba_routes
 
 
 ET = ZoneInfo("America/New_York")
@@ -207,15 +209,16 @@ ROOT_NAV_ITEMS = [
     ("Home", "/"),
     ("NBA", "/nba"),
     ("MLB", "/mlb"),
-    ("UFC", "/ufc"),
+    ("WNBA", "/wnba"),
     ("PGA", "/pga"),
+    ("UFC", "/ufc"),
     ("Pricing", "/pricing"),
     ("About", "/about"),
 ]
 NBA_NAV_ITEMS = [("Overview", "/nba"), ("Projections", "/nba/projections"), ("Top Plays", "/nba/best-bets"), ("History", "/nba/history")]
 UFC_NAV_ITEMS = [("Overview", "/ufc"), ("Fight Card", "/ufc/fights"), ("Props", "/ufc/props")]
 PGA_NAV_ITEMS = [("Overview", "/pga"), ("Best Bets", "/pga/best-bets"), ("Leaderboard", "/pga/leaderboard")]
-MLB_PRIMARY_NAV = [("Overview", "/mlb"), ("Top Plays", "/mlb/best-bets"), ("Pitchers", "/mlb/pitcher-strikeouts"), ("Hitters", "/mlb/projections")]
+MLB_PRIMARY_NAV = [("Overview", "/mlb"), ("Top Plays", "/mlb/best-bets"), ("Pitchers", "/mlb/pitcher-strikeouts"), ("Hitters", "/mlb/projections"), ("Weather", "/mlb/weather")]
 MLB_HITTER_NAV = [
     ("Full Board", "/mlb/hitter-board"),
     ("Hit Targets", "/mlb/projections"),
@@ -662,16 +665,10 @@ def append_profile_field(target, label, value, kind="value", source_column=None)
     payload = profile_value_payload(value, kind)
     if payload is None:
         return
-    payload.update({"label": label, "source_column": source_column or label})
-    duplicate_key = (
-        normalize_text(payload["label"]).lower(),
-        normalize_text(payload["source_column"]).lower(),
-    )
+    payload.update({"label": label})
+    duplicate_key = normalize_text(payload["label"]).lower()
     for item in target:
-        item_key = (
-            normalize_text(item.get("label")).lower(),
-            normalize_text(item.get("source_column")).lower(),
-        )
+        item_key = normalize_text(item.get("label")).lower()
         if item_key == duplicate_key:
             return
     target.append(payload)
@@ -1943,7 +1940,6 @@ def build_mlb_player_projection_profiles():
             "hitter_stats": [],
             "pitcher_stats": [],
             "probabilities": [],
-            "source_files": [],
         })
         if player_type and player_type not in normalize_text(profile.get("player_type")):
             existing_type = normalize_text(profile.get("player_type"))
@@ -1952,8 +1948,6 @@ def build_mlb_player_projection_profiles():
             profile["opponent"] = normalize_text(opponent)
         if profile.get("matchup") == "Matchup pending" and matchup:
             profile["matchup"] = normalize_text(matchup)
-        if source_file and str(source_file) not in profile["source_files"]:
-            profile["source_files"].append(str(source_file))
         return profile
 
     hitter_source = MLB_FILES["hitters_full"] if MLB_READER_MODE == "canonical" and MLB_FILES["hitters_full"].exists() else MLB_FILES["hitters"]
@@ -2115,15 +2109,7 @@ def build_mlb_player_projection_profiles():
 
 
 def mlb_system_rows():
-    rows = []
-    for label, path in MLB_FILES.items():
-        rows.append({
-            "file": label,
-            "exists": "Yes" if path.exists() else "No",
-            "source_label": public_data_source_label(path),
-            "updated": format_timestamp(file_timestamp(path)),
-        })
-    return rows
+    return [{"service": "mlb", "status": "available"}]
 
 
 def clean_nba_best_bets_records(records):
@@ -2887,31 +2873,7 @@ def load_pga_summary(round_number=None):
 
 
 def pga_system_status():
-    sources = {
-        "base": PGA_BASE_DIR,
-        "outputs": PGA_OUTPUT_DIR,
-        "data": PGA_DATA_DIR,
-        "tournament_metadata": PGA_TOURNAMENT_METADATA_PATH,
-        "results": PGA_RESULTS_PATH,
-        "best_bets": PGA_PUBLISHED_BEST_BETS_PATH,
-        "state": PGA_PUBLISH_STATE_PATH,
-        "processed_odds": PGA_PROCESSED_ODDS_DIR,
-    }
-    return {
-        "ok": True,
-        "source_label": "pga_system",
-        "records": [
-            {
-                "file": label,
-                "exists": "Yes" if Path(source).exists() else "No",
-                "source_label": label,
-                "updated": format_timestamp(file_timestamp(source)),
-            }
-            for label, source in sources.items()
-        ],
-        "generated_at": now_et().isoformat(),
-        "tournament_metadata": read_json(PGA_TOURNAMENT_METADATA_PATH),
-    }
+    return {"ok": True, "service": "pga", "status": "available"}
 
 
 def render_root_nav(active_path):
@@ -2936,8 +2898,9 @@ def render_footer():
         "<h4>Platform</h4>"
         "<a href='/nba'>NBA</a>"
         "<a href='/mlb'>MLB</a>"
-        "<a href='/ufc'>UFC</a>"
+        "<a href='/wnba'>WNBA</a>"
         "<a href='/pga'>PGA</a>"
+        "<a href='/ufc'>UFC</a>"
         "</div>"
         "<div class='footer-col'>"
         "<h4>Resources</h4>"
@@ -5682,6 +5645,15 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
 <style>
 </style>
 
+
+<script
+  async
+  crossorigin="anonymous"
+  data-clerk-publishable-key="pk_live_Y2xlcmsuZWRnZXJhbmtlZGFpLmNvbSQ"
+  src="https://clerk.edgerankedai.com/npm/@clerk/clerk-js@latest/dist/clerk.browser.js">
+</script>
+<script src="/static/auth_gate.js"></script>
+
 </head>
 <body>
   <nav class="site-nav">
@@ -5691,7 +5663,7 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
         <span class="nav-wordmark">EdgeRanked<span class="brand-accent">SportsAI</span></span>
       </a>
       {render_root_nav(active_path)}
-      <a class="cta-btn primary" href="/pricing">Get Access</a>
+      <a class="cta-btn primary" href='/sign-up'>Create Account</a> <a class='cta-btn secondary' href='/sign-in'>Sign In</a></a>
     </div>
   </nav>
   <div class="shell">
@@ -5711,6 +5683,7 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
     </main>
   </div>
   {render_footer()}
+<script src="/static/auth_nav.js"></script>
 </body>
 </html>"""
 
@@ -5805,10 +5778,7 @@ def get_nba_dataset(spec_key):
         board.update({"kind": "table", "title": spec["title"], "description": spec["description"]})
         return board
     if spec_key == "system":
-        rows = []
-        for key, item in NBA_PAGE_SPECS.items():
-            rows.append({"page": key, "exists": "Yes" if item["path"].exists() else "No", "source_label": "ufc_system"})
-        return {"kind": "table", "records": rows, "title": spec["title"], "description": spec["description"]}
+        return {"kind": "table", "records": [{"service": "nba", "status": "available"}], "title": spec["title"], "description": spec["description"]}
     return {"kind": "table", "records": records_from_df(read_csv_df(spec["path"])), "title": spec["title"], "description": spec["description"]}
 
 
@@ -5817,10 +5787,7 @@ def get_ufc_dataset(spec_key):
     if spec_key == "fights":
         return {"kind": "json", "data": read_json(spec["path"]), "title": spec["title"], "description": spec["description"]}
     if spec_key == "system":
-        rows = []
-        for key, item in UFC_PAGE_SPECS.items():
-            rows.append({"page": key, "exists": "Yes" if item["path"].exists() else "No", "source_label": "ufc_system"})
-        return {"kind": "table", "records": rows, "title": spec["title"], "description": spec["description"]}
+        return {"kind": "table", "records": [{"service": "ufc", "status": "available"}], "title": spec["title"], "description": spec["description"]}
     return {"kind": "table", "records": records_from_df(read_csv_df(spec["path"])), "title": spec["title"], "description": spec["description"]}
 
 
@@ -5851,8 +5818,9 @@ def build_home_page():
         + render_resource_cards([
             ("NBA", "Player projections, matchup intelligence, verified results, and full-slate player analytics", "/nba", "Live"),
             ("MLB", "Strikeout board, hitter targets, daily premium edges", "/mlb", "Live"),
-            ("UFC", "Fight forecasts, prop edges, finish probability", "/ufc", "Live"),
+            ("WNBA", "Player projections, top plays, and verified results", "/wnba", "Live"),
             ("PGA", "Matchup edges, finishing targets, strokes gained projections", "/pga", "New"),
+            ("UFC", "Fight forecasts, prop edges, finish probability", "/ufc", "Live"),
         ])
         + "</section>"
     )
@@ -5950,29 +5918,28 @@ def build_mlb_home():
     best_bets = load_mlb_best_bets()
     hitter_rows = build_mlb_hitter_projection_board()
     pitcher_rows = build_mlb_pitcher_projection_board()
-    pitcher_extra_columns = [("Pitcher K%", "pitcher_k_percent_season", "pct"), ("Opponent Hitter K%", "opponent_hitter_k_percent", "pct")]
+
+    quick_links = """
+    <section class='panel'>
+      <h2>MLB Snapshot</h2>
+      <p class='muted'>Quick view of today’s strongest MLB projection signals. Use the full boards for deeper player-by-player filtering.</p>
+      <div class='cta-row'>
+        <a class='cta-btn primary' href='/mlb/hitter-board'>Full Hitter Board</a>
+        <a class='cta-btn secondary' href='/mlb/pitcher-strikeouts'>Pitcher Board</a>
+        <a class='cta-btn secondary' href='/mlb/weather'>Weather Impact</a>
+      </div>
+    </section>
+    """
+
     body = (
         render_banner(best_bets["banner"])
+        + quick_links
         + render_mlb_projection_snapshot(hitter_rows, pitcher_rows)
-        + render_mlb_projection_cards(
-            "Hitter Projection Board",
-            "Daily hitter projections across the slate, with sportsbook lines and edge context kept secondary.",
-            hitter_rows,
-            "mlb-hitters",
-            entity_label="Player",
-        )
-        + render_mlb_projection_cards(
-            "Pitcher Projection Board",
-            "Projection-first pitcher rows for strikeouts and workload-driven markets.",
-            pitcher_rows,
-            "mlb-pitchers",
-            entity_label="Pitcher",
-            extra_columns=pitcher_extra_columns,
-        )
-        + render_mlb_player_profile_explorer(build_mlb_player_projection_profiles())
         + render_mlb_compact_top_plays(best_bets["top_plays"])
     )
-    return render_layout("MLB Projection Center", "Daily hitter and pitcher projections powered by EdgeRanked.", body, "/mlb", render_mlb_nav("/mlb"))
+
+    return render_layout("MLB Snapshot", "Today’s MLB projection overview powered by EdgeRanked.", body, "/mlb", render_mlb_nav("/mlb"))
+
 
 
 def build_pricing_page(form_values=None, submit_state=None):
@@ -5985,7 +5952,7 @@ def build_pricing_page(form_values=None, submit_state=None):
         + "<p class='muted pricing-copy'>One membership for full access to our AI models, daily projections, and tracked results.</p>"
         + "<article class='pricing-card pricing-card-featured pricing-card-single'>"
         + "<div class='pricing-name'>All-Access Membership</div>"
-        + "<div class='pricing-price'>$14.99<span>/week</span></div>"
+        + "<div class='pricing-price'>$19.99<span>/month</span></div>"
         + "<ul class='pricing-list'>"
         + "<li>Full NBA, MLB, UFC, and PGA boards</li>"
         + "<li>Live model confidence ratings</li>"
@@ -6605,7 +6572,7 @@ a{color:#60a5fa!important}
 
     @flask_app.get("/api/pga/system")
     def pga_system_api():
-        return jsonify(json_ready(pga_system_status()))
+        return jsonify({"status": "ok", "sport": "pga", "public": True})
 
     @flask_app.get("/privacy-policy")
     @flask_app.get("/privacy")
@@ -6624,7 +6591,7 @@ a{color:#60a5fa!important}
     def nba_home():
         return build_nba_home()
 
-    # register_wnba_routes(flask_app, render_layout, render_subnav)
+    register_wnba_routes(flask_app, render_layout, render_subnav)
 
     @flask_app.get("/mlb")
     def mlb_home():
@@ -6651,16 +6618,22 @@ a{color:#60a5fa!important}
             return build_nba_dataset_page(spec_key)
 
         def nba_api(spec_key=key):
+            if spec_key == "system":
+                return jsonify({"status": "ok", "sport": "nba", "public": True})
             return jsonify(json_ready(get_nba_dataset(spec_key)))
 
         flask_app.add_url_rule(spec["route"], f"nba_page_{key}", nba_page)
         flask_app.add_url_rule(spec["api_route"], f"nba_api_{key}", nba_api)
+
+    register_mlb_weather_routes(flask_app, render_layout, render_mlb_nav, render_banner, render_meta_strip, json_ready)
 
     for key, spec in MLB_PAGE_SPECS.items():
         def mlb_page(spec_key=key):
             return build_mlb_dataset_page(spec_key)
 
         def mlb_api(spec_key=key):
+            if spec_key == "system":
+                return jsonify({"status": "ok", "sport": "mlb", "public": True})
             return jsonify(json_ready(get_mlb_dataset(spec_key)))
 
         flask_app.add_url_rule(spec["route"], f"mlb_page_{key}", mlb_page)
@@ -6671,10 +6644,14 @@ a{color:#60a5fa!important}
             return build_ufc_dataset_page(spec_key)
 
         def ufc_api(spec_key=key):
+            if spec_key == "system":
+                return jsonify({"status": "ok", "sport": "ufc", "public": True})
             return jsonify(json_ready(get_ufc_dataset(spec_key)))
 
         flask_app.add_url_rule(spec["route"], f"ufc_page_{key}", ufc_page)
         flask_app.add_url_rule(spec["api_route"], f"ufc_api_{key}", ufc_api)
+
+    register_auth_routes(flask_app)
 
     return flask_app
 
