@@ -6572,7 +6572,7 @@ a{color:#60a5fa!important}
 
     @flask_app.get("/api/pga/system")
     def pga_system_api():
-        return jsonify({"status": "ok", "sport": "pga", "public": True})
+        return jsonify(json_ready(pga_system_status()))
 
     @flask_app.get("/privacy-policy")
     @flask_app.get("/privacy")
@@ -6618,8 +6618,6 @@ a{color:#60a5fa!important}
             return build_nba_dataset_page(spec_key)
 
         def nba_api(spec_key=key):
-            if spec_key == "system":
-                return jsonify({"status": "ok", "sport": "nba", "public": True})
             return jsonify(json_ready(get_nba_dataset(spec_key)))
 
         flask_app.add_url_rule(spec["route"], f"nba_page_{key}", nba_page)
@@ -6632,8 +6630,6 @@ a{color:#60a5fa!important}
             return build_mlb_dataset_page(spec_key)
 
         def mlb_api(spec_key=key):
-            if spec_key == "system":
-                return jsonify({"status": "ok", "sport": "mlb", "public": True})
             return jsonify(json_ready(get_mlb_dataset(spec_key)))
 
         flask_app.add_url_rule(spec["route"], f"mlb_page_{key}", mlb_page)
@@ -6644,8 +6640,6 @@ a{color:#60a5fa!important}
             return build_ufc_dataset_page(spec_key)
 
         def ufc_api(spec_key=key):
-            if spec_key == "system":
-                return jsonify({"status": "ok", "sport": "ufc", "public": True})
             return jsonify(json_ready(get_ufc_dataset(spec_key)))
 
         flask_app.add_url_rule(spec["route"], f"ufc_page_{key}", ufc_page)
