@@ -1,287 +1,287 @@
 fight_id,event_name,event_date,fighter_red,fighter_blue,source,projection_player,projection_opponent,market_type,market_label,selection,line,probability
-683d35166924,UFC 328: Chimaev vs. Strickland,2026-05-09,Khamzat Chimaev,Sean Strickland,simulation,,,moneyline,Khamzat Chimaev win,red,,0.6804045998762551
-683d35166924,UFC 328: Chimaev vs. Strickland,2026-05-09,Khamzat Chimaev,Sean Strickland,simulation,,,moneyline,Sean Strickland win,blue,,0.3195954001237449
-683d35166924,UFC 328: Chimaev vs. Strickland,2026-05-09,Khamzat Chimaev,Sean Strickland,simulation,,,inside_distance,Fight ends inside distance,yes,,0.6247221798599637
-683d35166924,UFC 328: Chimaev vs. Strickland,2026-05-09,Khamzat Chimaev,Sean Strickland,simulation,,,inside_distance,Fight goes to decision,no,,0.36707553688613304
-683d35166924,UFC 328: Chimaev vs. Strickland,2026-05-09,Khamzat Chimaev,Sean Strickland,simulation,,,method,Win by KO/TKO,ko_tko,,0.2473451973504847
-683d35166924,UFC 328: Chimaev vs. Strickland,2026-05-09,Khamzat Chimaev,Sean Strickland,simulation,,,method,Win by Submission,submission,,0.3855792657633828
-683d35166924,UFC 328: Chimaev vs. Strickland,2026-05-09,Khamzat Chimaev,Sean Strickland,simulation,,,method,Win by Decision,decision,,0.36707553688613304
-683d35166924,UFC 328: Chimaev vs. Strickland,2026-05-09,Khamzat Chimaev,Sean Strickland,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.3996525464361091
-683d35166924,UFC 328: Chimaev vs. Strickland,2026-05-09,Khamzat Chimaev,Sean Strickland,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6003474535638909
-683d35166924,UFC 328: Chimaev vs. Strickland,2026-05-09,Khamzat Chimaev,Sean Strickland,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.6434792562225926
-683d35166924,UFC 328: Chimaev vs. Strickland,2026-05-09,Khamzat Chimaev,Sean Strickland,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.3565207437774074
-1f4f66b1537a,UFC 328: Chimaev vs. Strickland,2026-05-09,Joshua Van,Tatsuro Taira,simulation,,,moneyline,Joshua Van win,red,,0.5997845985120885
-1f4f66b1537a,UFC 328: Chimaev vs. Strickland,2026-05-09,Joshua Van,Tatsuro Taira,simulation,,,moneyline,Tatsuro Taira win,blue,,0.40021540148791146
-1f4f66b1537a,UFC 328: Chimaev vs. Strickland,2026-05-09,Joshua Van,Tatsuro Taira,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5554770467265466
-1f4f66b1537a,UFC 328: Chimaev vs. Strickland,2026-05-09,Joshua Van,Tatsuro Taira,simulation,,,inside_distance,Fight goes to decision,no,,0.4109124675917549
-1f4f66b1537a,UFC 328: Chimaev vs. Strickland,2026-05-09,Joshua Van,Tatsuro Taira,simulation,,,method,Win by KO/TKO,ko_tko,,0.4140754031655271
-1f4f66b1537a,UFC 328: Chimaev vs. Strickland,2026-05-09,Joshua Van,Tatsuro Taira,simulation,,,method,Win by Submission,submission,,0.17501212924271783
-1f4f66b1537a,UFC 328: Chimaev vs. Strickland,2026-05-09,Joshua Van,Tatsuro Taira,simulation,,,method,Win by Decision,decision,,0.4109124675917549
-1f4f66b1537a,UFC 328: Chimaev vs. Strickland,2026-05-09,Joshua Van,Tatsuro Taira,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.40605633094384636
-1f4f66b1537a,UFC 328: Chimaev vs. Strickland,2026-05-09,Joshua Van,Tatsuro Taira,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.5939436690561537
-1f4f66b1537a,UFC 328: Chimaev vs. Strickland,2026-05-09,Joshua Van,Tatsuro Taira,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.5404229865159463
-1f4f66b1537a,UFC 328: Chimaev vs. Strickland,2026-05-09,Joshua Van,Tatsuro Taira,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.45957701348405366
-8cc673bead27,UFC 328: Chimaev vs. Strickland,2026-05-09,Alexander Volkov,Waldo Cortes Acosta,simulation,,,moneyline,Alexander Volkov win,red,,0.7946744299641169
-8cc673bead27,UFC 328: Chimaev vs. Strickland,2026-05-09,Alexander Volkov,Waldo Cortes Acosta,simulation,,,moneyline,Waldo Cortes Acosta win,blue,,0.20532557003588314
-8cc673bead27,UFC 328: Chimaev vs. Strickland,2026-05-09,Alexander Volkov,Waldo Cortes Acosta,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3701570953699994
-8cc673bead27,UFC 328: Chimaev vs. Strickland,2026-05-09,Alexander Volkov,Waldo Cortes Acosta,simulation,,,inside_distance,Fight goes to decision,no,,0.6334488210689055
-8cc673bead27,UFC 328: Chimaev vs. Strickland,2026-05-09,Alexander Volkov,Waldo Cortes Acosta,simulation,,,method,Win by KO/TKO,ko_tko,,0.26809843276398837
-8cc673bead27,UFC 328: Chimaev vs. Strickland,2026-05-09,Alexander Volkov,Waldo Cortes Acosta,simulation,,,method,Win by Submission,submission,,0.09845274616710606
-8cc673bead27,UFC 328: Chimaev vs. Strickland,2026-05-09,Alexander Volkov,Waldo Cortes Acosta,simulation,,,method,Win by Decision,decision,,0.6334488210689055
-8cc673bead27,UFC 328: Chimaev vs. Strickland,2026-05-09,Alexander Volkov,Waldo Cortes Acosta,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.2048009268886715
-8cc673bead27,UFC 328: Chimaev vs. Strickland,2026-05-09,Alexander Volkov,Waldo Cortes Acosta,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7951990731113285
-8cc673bead27,UFC 328: Chimaev vs. Strickland,2026-05-09,Alexander Volkov,Waldo Cortes Acosta,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.32510931981272134
-8cc673bead27,UFC 328: Chimaev vs. Strickland,2026-05-09,Alexander Volkov,Waldo Cortes Acosta,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6748906801872787
-6b0db742a3ef,UFC 328: Chimaev vs. Strickland,2026-05-09,Sean Brady,Joaquin Buckley,simulation,,,moneyline,Sean Brady win,red,,0.804107690615939
-6b0db742a3ef,UFC 328: Chimaev vs. Strickland,2026-05-09,Sean Brady,Joaquin Buckley,simulation,,,moneyline,Joaquin Buckley win,blue,,0.195892309384061
-6b0db742a3ef,UFC 328: Chimaev vs. Strickland,2026-05-09,Sean Brady,Joaquin Buckley,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4893053014097764
-6b0db742a3ef,UFC 328: Chimaev vs. Strickland,2026-05-09,Sean Brady,Joaquin Buckley,simulation,,,inside_distance,Fight goes to decision,no,,0.4980224287212878
-6b0db742a3ef,UFC 328: Chimaev vs. Strickland,2026-05-09,Sean Brady,Joaquin Buckley,simulation,,,method,Win by KO/TKO,ko_tko,,0.22927970369545023
-6b0db742a3ef,UFC 328: Chimaev vs. Strickland,2026-05-09,Sean Brady,Joaquin Buckley,simulation,,,method,Win by Submission,submission,,0.27269786758326203
-6b0db742a3ef,UFC 328: Chimaev vs. Strickland,2026-05-09,Sean Brady,Joaquin Buckley,simulation,,,method,Win by Decision,decision,,0.4980224287212878
-6b0db742a3ef,UFC 328: Chimaev vs. Strickland,2026-05-09,Sean Brady,Joaquin Buckley,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.3475396249050138
-6b0db742a3ef,UFC 328: Chimaev vs. Strickland,2026-05-09,Sean Brady,Joaquin Buckley,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6524603750949862
-6b0db742a3ef,UFC 328: Chimaev vs. Strickland,2026-05-09,Sean Brady,Joaquin Buckley,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4114977576476532
-6b0db742a3ef,UFC 328: Chimaev vs. Strickland,2026-05-09,Sean Brady,Joaquin Buckley,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5885022423523468
-fba487ed56b3,UFC 328: Chimaev vs. Strickland,2026-05-09,King Green,Jeremy Stephens,simulation,,,moneyline,King Green win,red,,0.8855605766768555
-fba487ed56b3,UFC 328: Chimaev vs. Strickland,2026-05-09,King Green,Jeremy Stephens,simulation,,,moneyline,Jeremy Stephens win,blue,,0.1144394233231445
-fba487ed56b3,UFC 328: Chimaev vs. Strickland,2026-05-09,King Green,Jeremy Stephens,simulation,,,inside_distance,Fight ends inside distance,yes,,0.43944688703444834
-fba487ed56b3,UFC 328: Chimaev vs. Strickland,2026-05-09,King Green,Jeremy Stephens,simulation,,,inside_distance,Fight goes to decision,no,,0.5681434080754927
-fba487ed56b3,UFC 328: Chimaev vs. Strickland,2026-05-09,King Green,Jeremy Stephens,simulation,,,method,Win by KO/TKO,ko_tko,,0.323054325176493
-fba487ed56b3,UFC 328: Chimaev vs. Strickland,2026-05-09,King Green,Jeremy Stephens,simulation,,,method,Win by Submission,submission,,0.10880226674801424
-fba487ed56b3,UFC 328: Chimaev vs. Strickland,2026-05-09,King Green,Jeremy Stephens,simulation,,,method,Win by Decision,decision,,0.5681434080754927
-fba487ed56b3,UFC 328: Chimaev vs. Strickland,2026-05-09,King Green,Jeremy Stephens,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.24498741198951848
-fba487ed56b3,UFC 328: Chimaev vs. Strickland,2026-05-09,King Green,Jeremy Stephens,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7550125880104815
-fba487ed56b3,UFC 328: Chimaev vs. Strickland,2026-05-09,King Green,Jeremy Stephens,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3756778008442584
-fba487ed56b3,UFC 328: Chimaev vs. Strickland,2026-05-09,King Green,Jeremy Stephens,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6243221991557416
-bb9ccc8ccf91,UFC 328: Chimaev vs. Strickland,2026-05-09,Ateba Gautier,Ozzy Diaz,simulation,,,moneyline,Ateba Gautier win,red,,0.6919459892894813
-bb9ccc8ccf91,UFC 328: Chimaev vs. Strickland,2026-05-09,Ateba Gautier,Ozzy Diaz,simulation,,,moneyline,Ozzy Diaz win,blue,,0.30805401071051874
-bb9ccc8ccf91,UFC 328: Chimaev vs. Strickland,2026-05-09,Ateba Gautier,Ozzy Diaz,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4678883832581798
-bb9ccc8ccf91,UFC 328: Chimaev vs. Strickland,2026-05-09,Ateba Gautier,Ozzy Diaz,simulation,,,inside_distance,Fight goes to decision,no,,0.5068624846524276
-bb9ccc8ccf91,UFC 328: Chimaev vs. Strickland,2026-05-09,Ateba Gautier,Ozzy Diaz,simulation,,,method,Win by KO/TKO,ko_tko,,0.29987974813337415
-bb9ccc8ccf91,UFC 328: Chimaev vs. Strickland,2026-05-09,Ateba Gautier,Ozzy Diaz,simulation,,,method,Win by Submission,submission,,0.1932577672141986
-bb9ccc8ccf91,UFC 328: Chimaev vs. Strickland,2026-05-09,Ateba Gautier,Ozzy Diaz,simulation,,,method,Win by Decision,decision,,0.5068624846524276
-bb9ccc8ccf91,UFC 328: Chimaev vs. Strickland,2026-05-09,Ateba Gautier,Ozzy Diaz,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.3447914750249674
-bb9ccc8ccf91,UFC 328: Chimaev vs. Strickland,2026-05-09,Ateba Gautier,Ozzy Diaz,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6552085249750326
-bb9ccc8ccf91,UFC 328: Chimaev vs. Strickland,2026-05-09,Ateba Gautier,Ozzy Diaz,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.40653076546779826
-bb9ccc8ccf91,UFC 328: Chimaev vs. Strickland,2026-05-09,Ateba Gautier,Ozzy Diaz,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5934692345322017
-230f328a0296,UFC 328: Chimaev vs. Strickland,2026-05-09,Joel Alvarez,Yaroslav Amosov,simulation,,,moneyline,Joel Alvarez win,red,,0.6973436164271196
-230f328a0296,UFC 328: Chimaev vs. Strickland,2026-05-09,Joel Alvarez,Yaroslav Amosov,simulation,,,moneyline,Yaroslav Amosov win,blue,,0.3026563835728804
-230f328a0296,UFC 328: Chimaev vs. Strickland,2026-05-09,Joel Alvarez,Yaroslav Amosov,simulation,,,inside_distance,Fight ends inside distance,yes,,0.48824597181533286
-230f328a0296,UFC 328: Chimaev vs. Strickland,2026-05-09,Joel Alvarez,Yaroslav Amosov,simulation,,,inside_distance,Fight goes to decision,no,,0.44803614855315355
-230f328a0296,UFC 328: Chimaev vs. Strickland,2026-05-09,Joel Alvarez,Yaroslav Amosov,simulation,,,method,Win by KO/TKO,ko_tko,,0.2215353400516588
-230f328a0296,UFC 328: Chimaev vs. Strickland,2026-05-09,Joel Alvarez,Yaroslav Amosov,simulation,,,method,Win by Submission,submission,,0.3304285113951876
-230f328a0296,UFC 328: Chimaev vs. Strickland,2026-05-09,Joel Alvarez,Yaroslav Amosov,simulation,,,method,Win by Decision,decision,,0.44803614855315355
-230f328a0296,UFC 328: Chimaev vs. Strickland,2026-05-09,Joel Alvarez,Yaroslav Amosov,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.297296527337979
-230f328a0296,UFC 328: Chimaev vs. Strickland,2026-05-09,Joel Alvarez,Yaroslav Amosov,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7027034726620209
-230f328a0296,UFC 328: Chimaev vs. Strickland,2026-05-09,Joel Alvarez,Yaroslav Amosov,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4746491248858278
-230f328a0296,UFC 328: Chimaev vs. Strickland,2026-05-09,Joel Alvarez,Yaroslav Amosov,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5253508751141722
-91d77c166590,UFC 328: Chimaev vs. Strickland,2026-05-09,Grant Dawson,Mateusz Rebecki,simulation,,,moneyline,Grant Dawson win,red,,0.6281278632484796
-91d77c166590,UFC 328: Chimaev vs. Strickland,2026-05-09,Grant Dawson,Mateusz Rebecki,simulation,,,moneyline,Mateusz Rebecki win,blue,,0.3718721367515204
-91d77c166590,UFC 328: Chimaev vs. Strickland,2026-05-09,Grant Dawson,Mateusz Rebecki,simulation,,,inside_distance,Fight ends inside distance,yes,,0.503442909757323
-91d77c166590,UFC 328: Chimaev vs. Strickland,2026-05-09,Grant Dawson,Mateusz Rebecki,simulation,,,inside_distance,Fight goes to decision,no,,0.5271186684919675
-91d77c166590,UFC 328: Chimaev vs. Strickland,2026-05-09,Grant Dawson,Mateusz Rebecki,simulation,,,method,Win by KO/TKO,ko_tko,,0.26203042192639603
-91d77c166590,UFC 328: Chimaev vs. Strickland,2026-05-09,Grant Dawson,Mateusz Rebecki,simulation,,,method,Win by Submission,submission,,0.21085090958163652
-91d77c166590,UFC 328: Chimaev vs. Strickland,2026-05-09,Grant Dawson,Mateusz Rebecki,simulation,,,method,Win by Decision,decision,,0.5271186684919675
-91d77c166590,UFC 328: Chimaev vs. Strickland,2026-05-09,Grant Dawson,Mateusz Rebecki,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.20733224409742856
-91d77c166590,UFC 328: Chimaev vs. Strickland,2026-05-09,Grant Dawson,Mateusz Rebecki,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7926677559025714
-91d77c166590,UFC 328: Chimaev vs. Strickland,2026-05-09,Grant Dawson,Mateusz Rebecki,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4724485928648496
-91d77c166590,UFC 328: Chimaev vs. Strickland,2026-05-09,Grant Dawson,Mateusz Rebecki,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5275514071351504
-5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,moneyline,Jim Miller win,red,,0.6526117745047894
-5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,moneyline,Jared Gordon win,blue,,0.34738822549521065
-5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5614979399412757
-5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,inside_distance,Fight goes to decision,no,,0.44493300441826605
-5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,method,Win by KO/TKO,ko_tko,,0.27239610531880054
-5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,method,Win by Submission,submission,,0.2826708902629336
-5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,method,Win by Decision,decision,,0.44493300441826605
-5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.3280510803190472
-5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6719489196809528
-5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.5402095800494743
-5c53a65247ad,UFC 328: Chimaev vs. Strickland,2026-05-09,Jim Miller,Jared Gordon,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.4597904199505257
-9d4b5e845187,UFC 328: Chimaev vs. Strickland,2026-05-09,Roman Kopylov,Marco Tulio,simulation,,,moneyline,Roman Kopylov win,red,,0.6654690982572571
-9d4b5e845187,UFC 328: Chimaev vs. Strickland,2026-05-09,Roman Kopylov,Marco Tulio,simulation,,,moneyline,Marco Tulio win,blue,,0.3345309017427429
-9d4b5e845187,UFC 328: Chimaev vs. Strickland,2026-05-09,Roman Kopylov,Marco Tulio,simulation,,,inside_distance,Fight ends inside distance,yes,,0.46667177949110056
-9d4b5e845187,UFC 328: Chimaev vs. Strickland,2026-05-09,Roman Kopylov,Marco Tulio,simulation,,,inside_distance,Fight goes to decision,no,,0.5245420043442823
-9d4b5e845187,UFC 328: Chimaev vs. Strickland,2026-05-09,Roman Kopylov,Marco Tulio,simulation,,,method,Win by KO/TKO,ko_tko,,0.2900722348152698
-9d4b5e845187,UFC 328: Chimaev vs. Strickland,2026-05-09,Roman Kopylov,Marco Tulio,simulation,,,method,Win by Submission,submission,,0.1853857608404481
-9d4b5e845187,UFC 328: Chimaev vs. Strickland,2026-05-09,Roman Kopylov,Marco Tulio,simulation,,,method,Win by Decision,decision,,0.5245420043442823
-9d4b5e845187,UFC 328: Chimaev vs. Strickland,2026-05-09,Roman Kopylov,Marco Tulio,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.25846894083961863
-9d4b5e845187,UFC 328: Chimaev vs. Strickland,2026-05-09,Roman Kopylov,Marco Tulio,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7415310591603814
-9d4b5e845187,UFC 328: Chimaev vs. Strickland,2026-05-09,Roman Kopylov,Marco Tulio,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.44386856697264204
-9d4b5e845187,UFC 328: Chimaev vs. Strickland,2026-05-09,Roman Kopylov,Marco Tulio,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5561314330273579
-e04a09806592,UFC 328: Chimaev vs. Strickland,2026-05-09,Pat Sabatini,William Gomis,simulation,,,moneyline,Pat Sabatini win,red,,0.7738178646721354
-e04a09806592,UFC 328: Chimaev vs. Strickland,2026-05-09,Pat Sabatini,William Gomis,simulation,,,moneyline,William Gomis win,blue,,0.22618213532786458
-e04a09806592,UFC 328: Chimaev vs. Strickland,2026-05-09,Pat Sabatini,William Gomis,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5192381749077122
-e04a09806592,UFC 328: Chimaev vs. Strickland,2026-05-09,Pat Sabatini,William Gomis,simulation,,,inside_distance,Fight goes to decision,no,,0.4939960429575787
-e04a09806592,UFC 328: Chimaev vs. Strickland,2026-05-09,Pat Sabatini,William Gomis,simulation,,,method,Win by KO/TKO,ko_tko,,0.19797408495739188
-e04a09806592,UFC 328: Chimaev vs. Strickland,2026-05-09,Pat Sabatini,William Gomis,simulation,,,method,Win by Submission,submission,,0.3080298720850293
-e04a09806592,UFC 328: Chimaev vs. Strickland,2026-05-09,Pat Sabatini,William Gomis,simulation,,,method,Win by Decision,decision,,0.4939960429575787
-e04a09806592,UFC 328: Chimaev vs. Strickland,2026-05-09,Pat Sabatini,William Gomis,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.2688832672663172
-e04a09806592,UFC 328: Chimaev vs. Strickland,2026-05-09,Pat Sabatini,William Gomis,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7311167327336827
-e04a09806592,UFC 328: Chimaev vs. Strickland,2026-05-09,Pat Sabatini,William Gomis,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.49253961432282145
-e04a09806592,UFC 328: Chimaev vs. Strickland,2026-05-09,Pat Sabatini,William Gomis,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5074603856771785
-634c0a38271a,UFC 328: Chimaev vs. Strickland,2026-05-09,Baisangur Susurkaev,Djorden Santos,simulation,,,moneyline,Baisangur Susurkaev win,red,,0.7428791072264029
-634c0a38271a,UFC 328: Chimaev vs. Strickland,2026-05-09,Baisangur Susurkaev,Djorden Santos,simulation,,,moneyline,Djorden Santos win,blue,,0.25712089277359707
-634c0a38271a,UFC 328: Chimaev vs. Strickland,2026-05-09,Baisangur Susurkaev,Djorden Santos,simulation,,,inside_distance,Fight ends inside distance,yes,,0.49937113285564644
-634c0a38271a,UFC 328: Chimaev vs. Strickland,2026-05-09,Baisangur Susurkaev,Djorden Santos,simulation,,,inside_distance,Fight goes to decision,no,,0.5066069481427261
-634c0a38271a,UFC 328: Chimaev vs. Strickland,2026-05-09,Baisangur Susurkaev,Djorden Santos,simulation,,,method,Win by KO/TKO,ko_tko,,0.32946470983780207
-634c0a38271a,UFC 328: Chimaev vs. Strickland,2026-05-09,Baisangur Susurkaev,Djorden Santos,simulation,,,method,Win by Submission,submission,,0.1639283420194721
-634c0a38271a,UFC 328: Chimaev vs. Strickland,2026-05-09,Baisangur Susurkaev,Djorden Santos,simulation,,,method,Win by Decision,decision,,0.5066069481427261
-634c0a38271a,UFC 328: Chimaev vs. Strickland,2026-05-09,Baisangur Susurkaev,Djorden Santos,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.2676851292097538
-634c0a38271a,UFC 328: Chimaev vs. Strickland,2026-05-09,Baisangur Susurkaev,Djorden Santos,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7323148707902463
-634c0a38271a,UFC 328: Chimaev vs. Strickland,2026-05-09,Baisangur Susurkaev,Djorden Santos,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4074456220228347
-634c0a38271a,UFC 328: Chimaev vs. Strickland,2026-05-09,Baisangur Susurkaev,Djorden Santos,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5925543779771654
-1ec9a278cd24,UFC 328: Chimaev vs. Strickland,2026-05-09,Clayton Carpenter,Jose Ochoa,simulation,,,moneyline,Clayton Carpenter win,red,,0.7943456191475565
-1ec9a278cd24,UFC 328: Chimaev vs. Strickland,2026-05-09,Clayton Carpenter,Jose Ochoa,simulation,,,moneyline,Jose Ochoa win,blue,,0.20565438085244347
-1ec9a278cd24,UFC 328: Chimaev vs. Strickland,2026-05-09,Clayton Carpenter,Jose Ochoa,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4151079323717811
-1ec9a278cd24,UFC 328: Chimaev vs. Strickland,2026-05-09,Clayton Carpenter,Jose Ochoa,simulation,,,inside_distance,Fight goes to decision,no,,0.6006772441064561
-1ec9a278cd24,UFC 328: Chimaev vs. Strickland,2026-05-09,Clayton Carpenter,Jose Ochoa,simulation,,,method,Win by KO/TKO,ko_tko,,0.2662461402267242
-1ec9a278cd24,UFC 328: Chimaev vs. Strickland,2026-05-09,Clayton Carpenter,Jose Ochoa,simulation,,,method,Win by Submission,submission,,0.13307661566682014
-1ec9a278cd24,UFC 328: Chimaev vs. Strickland,2026-05-09,Clayton Carpenter,Jose Ochoa,simulation,,,method,Win by Decision,decision,,0.6006772441064561
-1ec9a278cd24,UFC 328: Chimaev vs. Strickland,2026-05-09,Clayton Carpenter,Jose Ochoa,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.23051982481946098
-1ec9a278cd24,UFC 328: Chimaev vs. Strickland,2026-05-09,Clayton Carpenter,Jose Ochoa,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.769480175180539
-1ec9a278cd24,UFC 328: Chimaev vs. Strickland,2026-05-09,Clayton Carpenter,Jose Ochoa,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3587403213662043
-1ec9a278cd24,UFC 328: Chimaev vs. Strickland,2026-05-09,Clayton Carpenter,Jose Ochoa,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6412596786337956
 bbf83df2b883,UFC Fight Night: Allen vs. Costa,2026-05-16,Arnold Allen,Melquizael Costa,simulation,,,moneyline,Arnold Allen win,red,,0.6547860959323311
 bbf83df2b883,UFC Fight Night: Allen vs. Costa,2026-05-16,Arnold Allen,Melquizael Costa,simulation,,,moneyline,Melquizael Costa win,blue,,0.34521390406766894
-bbf83df2b883,UFC Fight Night: Allen vs. Costa,2026-05-16,Arnold Allen,Melquizael Costa,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4441175410027306
-bbf83df2b883,UFC Fight Night: Allen vs. Costa,2026-05-16,Arnold Allen,Melquizael Costa,simulation,,,inside_distance,Fight goes to decision,no,,0.5659537731402495
-bbf83df2b883,UFC Fight Night: Allen vs. Costa,2026-05-16,Arnold Allen,Melquizael Costa,simulation,,,method,Win by KO/TKO,ko_tko,,0.29831047441929476
-bbf83df2b883,UFC Fight Night: Allen vs. Costa,2026-05-16,Arnold Allen,Melquizael Costa,simulation,,,method,Win by Submission,submission,,0.13573575244045588
-bbf83df2b883,UFC Fight Night: Allen vs. Costa,2026-05-16,Arnold Allen,Melquizael Costa,simulation,,,method,Win by Decision,decision,,0.5659537731402495
+bbf83df2b883,UFC Fight Night: Allen vs. Costa,2026-05-16,Arnold Allen,Melquizael Costa,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4340462268597506
+bbf83df2b883,UFC Fight Night: Allen vs. Costa,2026-05-16,Arnold Allen,Melquizael Costa,simulation,,,inside_distance,Fight goes to decision,no,,0.5659537731402494
+bbf83df2b883,UFC Fight Night: Allen vs. Costa,2026-05-16,Arnold Allen,Melquizael Costa,simulation,,,method,Win by KO/TKO,ko_tko,,0.2983104744192947
+bbf83df2b883,UFC Fight Night: Allen vs. Costa,2026-05-16,Arnold Allen,Melquizael Costa,simulation,,,method,Win by Submission,submission,,0.13573575244045585
+bbf83df2b883,UFC Fight Night: Allen vs. Costa,2026-05-16,Arnold Allen,Melquizael Costa,simulation,,,method,Win by Decision,decision,,0.5659537731402494
 bbf83df2b883,UFC Fight Night: Allen vs. Costa,2026-05-16,Arnold Allen,Melquizael Costa,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.23555399752163467
 bbf83df2b883,UFC Fight Night: Allen vs. Costa,2026-05-16,Arnold Allen,Melquizael Costa,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7644460024783654
 bbf83df2b883,UFC Fight Night: Allen vs. Costa,2026-05-16,Arnold Allen,Melquizael Costa,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4262773106254932
 bbf83df2b883,UFC Fight Night: Allen vs. Costa,2026-05-16,Arnold Allen,Melquizael Costa,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5737226893745069
-f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,moneyline,Dooho Choi win,red,,0.7298992837555759
-f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,moneyline,Daniel Santos win,blue,,0.2701007162444241
-f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,inside_distance,Fight ends inside distance,yes,,0.34204503450732693
-f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,inside_distance,Fight goes to decision,no,,0.6428589540513749
-f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,method,Win by KO/TKO,ko_tko,,0.2583302403943076
-f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,method,Win by Submission,submission,,0.09881080555431768
-f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,method,Win by Decision,decision,,0.6428589540513749
-f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.1646123095166386
-f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.8353876904833614
-f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.31294153444569933
-f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6870584655543006
+f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,moneyline,Dooho Choi win,red,,0.8324740155070522
+f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,moneyline,Daniel Santos win,blue,,0.16752598449294775
+f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4769698727451981
+f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,inside_distance,Fight goes to decision,no,,0.5230301272548019
+f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,method,Win by KO/TKO,ko_tko,,0.28685078307164036
+f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,method,Win by Submission,submission,,0.19011908967355776
+f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,method,Win by Decision,decision,,0.5230301272548019
+f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.21777433275240796
+f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.782225667247592
+f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4004646048583171
+f57e86c41d8e,UFC Fight Night: Allen vs. Costa,2026-05-16,Dooho Choi,Daniel Santos,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5995353951416829
 6432d9f62834,UFC Fight Night: Allen vs. Costa,2026-05-16,Malcolm Wellmaker,Juan Diaz,simulation,,,moneyline,Malcolm Wellmaker win,red,,0.7341676281344589
 6432d9f62834,UFC Fight Night: Allen vs. Costa,2026-05-16,Malcolm Wellmaker,Juan Diaz,simulation,,,moneyline,Juan Diaz win,blue,,0.2658323718655411
-6432d9f62834,UFC Fight Night: Allen vs. Costa,2026-05-16,Malcolm Wellmaker,Juan Diaz,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3519500255285686
-6432d9f62834,UFC Fight Night: Allen vs. Costa,2026-05-16,Malcolm Wellmaker,Juan Diaz,simulation,,,inside_distance,Fight goes to decision,no,,0.639495384711946
-6432d9f62834,UFC Fight Night: Allen vs. Costa,2026-05-16,Malcolm Wellmaker,Juan Diaz,simulation,,,method,Win by KO/TKO,ko_tko,,0.25704028267855833
-6432d9f62834,UFC Fight Night: Allen vs. Costa,2026-05-16,Malcolm Wellmaker,Juan Diaz,simulation,,,method,Win by Submission,submission,,0.103464332609496
-6432d9f62834,UFC Fight Night: Allen vs. Costa,2026-05-16,Malcolm Wellmaker,Juan Diaz,simulation,,,method,Win by Decision,decision,,0.639495384711946
+6432d9f62834,UFC Fight Night: Allen vs. Costa,2026-05-16,Malcolm Wellmaker,Juan Diaz,simulation,,,inside_distance,Fight ends inside distance,yes,,0.36050461528805416
+6432d9f62834,UFC Fight Night: Allen vs. Costa,2026-05-16,Malcolm Wellmaker,Juan Diaz,simulation,,,inside_distance,Fight goes to decision,no,,0.6394953847119458
+6432d9f62834,UFC Fight Night: Allen vs. Costa,2026-05-16,Malcolm Wellmaker,Juan Diaz,simulation,,,method,Win by KO/TKO,ko_tko,,0.2570402826785582
+6432d9f62834,UFC Fight Night: Allen vs. Costa,2026-05-16,Malcolm Wellmaker,Juan Diaz,simulation,,,method,Win by Submission,submission,,0.10346433260949596
+6432d9f62834,UFC Fight Night: Allen vs. Costa,2026-05-16,Malcolm Wellmaker,Juan Diaz,simulation,,,method,Win by Decision,decision,,0.6394953847119458
 6432d9f62834,UFC Fight Night: Allen vs. Costa,2026-05-16,Malcolm Wellmaker,Juan Diaz,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.20106550836605414
 6432d9f62834,UFC Fight Night: Allen vs. Costa,2026-05-16,Malcolm Wellmaker,Juan Diaz,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7989344916339458
 6432d9f62834,UFC Fight Night: Allen vs. Costa,2026-05-16,Malcolm Wellmaker,Juan Diaz,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.316341346368811
 6432d9f62834,UFC Fight Night: Allen vs. Costa,2026-05-16,Malcolm Wellmaker,Juan Diaz,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.683658653631189
 8a71ac2fbceb,UFC Fight Night: Allen vs. Costa,2026-05-16,Modestas Bukauskas,Rodolfo Bellato,simulation,,,moneyline,Modestas Bukauskas win,red,,0.6694532407759383
 8a71ac2fbceb,UFC Fight Night: Allen vs. Costa,2026-05-16,Modestas Bukauskas,Rodolfo Bellato,simulation,,,moneyline,Rodolfo Bellato win,blue,,0.33054675922406174
-8a71ac2fbceb,UFC Fight Night: Allen vs. Costa,2026-05-16,Modestas Bukauskas,Rodolfo Bellato,simulation,,,inside_distance,Fight ends inside distance,yes,,0.47882166117897174
-8a71ac2fbceb,UFC Fight Night: Allen vs. Costa,2026-05-16,Modestas Bukauskas,Rodolfo Bellato,simulation,,,inside_distance,Fight goes to decision,no,,0.5267250531951571
-8a71ac2fbceb,UFC Fight Night: Allen vs. Costa,2026-05-16,Modestas Bukauskas,Rodolfo Bellato,simulation,,,method,Win by KO/TKO,ko_tko,,0.30284881104436323
-8a71ac2fbceb,UFC Fight Night: Allen vs. Costa,2026-05-16,Modestas Bukauskas,Rodolfo Bellato,simulation,,,method,Win by Submission,submission,,0.17042613576048035
-8a71ac2fbceb,UFC Fight Night: Allen vs. Costa,2026-05-16,Modestas Bukauskas,Rodolfo Bellato,simulation,,,method,Win by Decision,decision,,0.5267250531951571
+8a71ac2fbceb,UFC Fight Night: Allen vs. Costa,2026-05-16,Modestas Bukauskas,Rodolfo Bellato,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4732749468048433
+8a71ac2fbceb,UFC Fight Night: Allen vs. Costa,2026-05-16,Modestas Bukauskas,Rodolfo Bellato,simulation,,,inside_distance,Fight goes to decision,no,,0.5267250531951567
+8a71ac2fbceb,UFC Fight Night: Allen vs. Costa,2026-05-16,Modestas Bukauskas,Rodolfo Bellato,simulation,,,method,Win by KO/TKO,ko_tko,,0.302848811044363
+8a71ac2fbceb,UFC Fight Night: Allen vs. Costa,2026-05-16,Modestas Bukauskas,Rodolfo Bellato,simulation,,,method,Win by Submission,submission,,0.17042613576048024
+8a71ac2fbceb,UFC Fight Night: Allen vs. Costa,2026-05-16,Modestas Bukauskas,Rodolfo Bellato,simulation,,,method,Win by Decision,decision,,0.5267250531951567
 8a71ac2fbceb,UFC Fight Night: Allen vs. Costa,2026-05-16,Modestas Bukauskas,Rodolfo Bellato,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.27609142159316286
 8a71ac2fbceb,UFC Fight Night: Allen vs. Costa,2026-05-16,Modestas Bukauskas,Rodolfo Bellato,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7239085784068371
 8a71ac2fbceb,UFC Fight Night: Allen vs. Costa,2026-05-16,Modestas Bukauskas,Rodolfo Bellato,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.43288656736933634
 8a71ac2fbceb,UFC Fight Night: Allen vs. Costa,2026-05-16,Modestas Bukauskas,Rodolfo Bellato,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5671134326306637
-d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,moneyline,Timmy Cuamba win,red,,0.6109870108508336
-d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,moneyline,Benardo Sopaj win,blue,,0.3890129891491664
-d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3678905305652495
-d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,inside_distance,Fight goes to decision,no,,0.6289422348264551
-d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,method,Win by KO/TKO,ko_tko,,0.26148723488869113
-d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,method,Win by Submission,submission,,0.1095705302848538
-d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,method,Win by Decision,decision,,0.6289422348264551
-d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.2146854419791021
-d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7853145580208979
-d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.32602786841763565
-d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6739721315823644
+d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,moneyline,Timmy Cuamba win,red,,0.4997992841136903
+d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,moneyline,Benardo Sopaj win,blue,,0.5002007158863098
+d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,inside_distance,Fight ends inside distance,yes,,0.37272696073550204
+d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,inside_distance,Fight goes to decision,no,,0.627273039264498
+d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,method,Win by KO/TKO,ko_tko,,0.2767326969946616
+d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,method,Win by Submission,submission,,0.09599426374084048
+d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,method,Win by Decision,decision,,0.627273039264498
+d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.19792366129038663
+d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.8020763387096134
+d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3595153664264097
+d3c27000a4ec,UFC Fight Night: Allen vs. Costa,2026-05-16,Timmy Cuamba,Benardo Sopaj,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6404846335735903
 23f4d3a72f8c,UFC Fight Night: Allen vs. Costa,2026-05-16,Jeremiah Wells,Nicolas Dalby,simulation,,,moneyline,Jeremiah Wells win,red,,0.7873686443490676
 23f4d3a72f8c,UFC Fight Night: Allen vs. Costa,2026-05-16,Jeremiah Wells,Nicolas Dalby,simulation,,,moneyline,Nicolas Dalby win,blue,,0.21263135565093239
-23f4d3a72f8c,UFC Fight Night: Allen vs. Costa,2026-05-16,Jeremiah Wells,Nicolas Dalby,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5048589034371526
-23f4d3a72f8c,UFC Fight Night: Allen vs. Costa,2026-05-16,Jeremiah Wells,Nicolas Dalby,simulation,,,inside_distance,Fight goes to decision,no,,0.5422537135549835
-23f4d3a72f8c,UFC Fight Night: Allen vs. Costa,2026-05-16,Jeremiah Wells,Nicolas Dalby,simulation,,,method,Win by KO/TKO,ko_tko,,0.22462788909377854
-23f4d3a72f8c,UFC Fight Night: Allen vs. Costa,2026-05-16,Jeremiah Wells,Nicolas Dalby,simulation,,,method,Win by Submission,submission,,0.23311839735123827
-23f4d3a72f8c,UFC Fight Night: Allen vs. Costa,2026-05-16,Jeremiah Wells,Nicolas Dalby,simulation,,,method,Win by Decision,decision,,0.5422537135549835
+23f4d3a72f8c,UFC Fight Night: Allen vs. Costa,2026-05-16,Jeremiah Wells,Nicolas Dalby,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4577462864450166
+23f4d3a72f8c,UFC Fight Night: Allen vs. Costa,2026-05-16,Jeremiah Wells,Nicolas Dalby,simulation,,,inside_distance,Fight goes to decision,no,,0.5422537135549834
+23f4d3a72f8c,UFC Fight Night: Allen vs. Costa,2026-05-16,Jeremiah Wells,Nicolas Dalby,simulation,,,method,Win by KO/TKO,ko_tko,,0.22462788909377843
+23f4d3a72f8c,UFC Fight Night: Allen vs. Costa,2026-05-16,Jeremiah Wells,Nicolas Dalby,simulation,,,method,Win by Submission,submission,,0.23311839735123815
+23f4d3a72f8c,UFC Fight Night: Allen vs. Costa,2026-05-16,Jeremiah Wells,Nicolas Dalby,simulation,,,method,Win by Decision,decision,,0.5422537135549834
 23f4d3a72f8c,UFC Fight Night: Allen vs. Costa,2026-05-16,Jeremiah Wells,Nicolas Dalby,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.24292781556066936
 23f4d3a72f8c,UFC Fight Night: Allen vs. Costa,2026-05-16,Jeremiah Wells,Nicolas Dalby,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7570721844393307
 23f4d3a72f8c,UFC Fight Night: Allen vs. Costa,2026-05-16,Jeremiah Wells,Nicolas Dalby,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4138537538158867
 23f4d3a72f8c,UFC Fight Night: Allen vs. Costa,2026-05-16,Jeremiah Wells,Nicolas Dalby,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5861462461841134
 ea525a34641d,UFC Fight Night: Allen vs. Costa,2026-05-16,Tuco Tokkos,Ivan Erslan,simulation,,,moneyline,Tuco Tokkos win,red,,0.763112355435624
 ea525a34641d,UFC Fight Night: Allen vs. Costa,2026-05-16,Tuco Tokkos,Ivan Erslan,simulation,,,moneyline,Ivan Erslan win,blue,,0.23688764456437605
-ea525a34641d,UFC Fight Night: Allen vs. Costa,2026-05-16,Tuco Tokkos,Ivan Erslan,simulation,,,inside_distance,Fight ends inside distance,yes,,0.49029793032358404
-ea525a34641d,UFC Fight Night: Allen vs. Costa,2026-05-16,Tuco Tokkos,Ivan Erslan,simulation,,,inside_distance,Fight goes to decision,no,,0.5425624598676367
-ea525a34641d,UFC Fight Night: Allen vs. Costa,2026-05-16,Tuco Tokkos,Ivan Erslan,simulation,,,method,Win by KO/TKO,ko_tko,,0.27449231829722875
-ea525a34641d,UFC Fight Night: Allen vs. Costa,2026-05-16,Tuco Tokkos,Ivan Erslan,simulation,,,method,Win by Submission,submission,,0.182945221835135
-ea525a34641d,UFC Fight Night: Allen vs. Costa,2026-05-16,Tuco Tokkos,Ivan Erslan,simulation,,,method,Win by Decision,decision,,0.5425624598676367
+ea525a34641d,UFC Fight Night: Allen vs. Costa,2026-05-16,Tuco Tokkos,Ivan Erslan,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4574375401323636
+ea525a34641d,UFC Fight Night: Allen vs. Costa,2026-05-16,Tuco Tokkos,Ivan Erslan,simulation,,,inside_distance,Fight goes to decision,no,,0.5425624598676364
+ea525a34641d,UFC Fight Night: Allen vs. Costa,2026-05-16,Tuco Tokkos,Ivan Erslan,simulation,,,method,Win by KO/TKO,ko_tko,,0.27449231829722864
+ea525a34641d,UFC Fight Night: Allen vs. Costa,2026-05-16,Tuco Tokkos,Ivan Erslan,simulation,,,method,Win by Submission,submission,,0.18294522183513492
+ea525a34641d,UFC Fight Night: Allen vs. Costa,2026-05-16,Tuco Tokkos,Ivan Erslan,simulation,,,method,Win by Decision,decision,,0.5425624598676364
 ea525a34641d,UFC Fight Night: Allen vs. Costa,2026-05-16,Tuco Tokkos,Ivan Erslan,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.2593239456742642
 ea525a34641d,UFC Fight Night: Allen vs. Costa,2026-05-16,Tuco Tokkos,Ivan Erslan,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7406760543257358
 ea525a34641d,UFC Fight Night: Allen vs. Costa,2026-05-16,Tuco Tokkos,Ivan Erslan,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4712633038527916
 ea525a34641d,UFC Fight Night: Allen vs. Costa,2026-05-16,Tuco Tokkos,Ivan Erslan,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5287366961472084
-c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,moneyline,Trey Ogden win,red,,0.7290062152162007
-c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,moneyline,Tommy Gantt win,blue,,0.2709937847837993
-c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,inside_distance,Fight ends inside distance,yes,,0.36198489150032687
-c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,inside_distance,Fight goes to decision,no,,0.6333632224981107
-c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,method,Win by KO/TKO,ko_tko,,0.2518472851391424
-c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,method,Win by Submission,submission,,0.1147894923627467
-c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,method,Win by Decision,decision,,0.6333632224981107
-c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.21050034496056697
-c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7894996550394331
-c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.32519599176306163
-c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6748040082369384
+c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,moneyline,Trey Ogden win,red,,0.7791433656530458
+c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,moneyline,Tommy Gantt win,blue,,0.22085663434695424
+c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,inside_distance,Fight ends inside distance,yes,,0.414985867778895
+c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,inside_distance,Fight goes to decision,no,,0.585014132221105
+c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,method,Win by KO/TKO,ko_tko,,0.23201841357086933
+c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,method,Win by Submission,submission,,0.18296745420802568
+c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,method,Win by Decision,decision,,0.585014132221105
+c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.2150366638669945
+c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7849633361330055
+c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3501563003255714
+c5cdcce4e6fe,UFC Fight Night: Allen vs. Costa,2026-05-16,Trey Ogden,Tommy Gantt,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6498436996744286
 773ebe2f56c1,UFC Fight Night: Allen vs. Costa,2026-05-16,Ketlen Vieira,Jacqueline Cavalcanti,simulation,,,moneyline,Ketlen Vieira win,red,,0.6009025022462032
 773ebe2f56c1,UFC Fight Night: Allen vs. Costa,2026-05-16,Ketlen Vieira,Jacqueline Cavalcanti,simulation,,,moneyline,Jacqueline Cavalcanti win,blue,,0.39909749775379677
-773ebe2f56c1,UFC Fight Night: Allen vs. Costa,2026-05-16,Ketlen Vieira,Jacqueline Cavalcanti,simulation,,,inside_distance,Fight ends inside distance,yes,,0.6260062709983353
-773ebe2f56c1,UFC Fight Night: Allen vs. Costa,2026-05-16,Ketlen Vieira,Jacqueline Cavalcanti,simulation,,,inside_distance,Fight goes to decision,no,,0.39345703128027365
-773ebe2f56c1,UFC Fight Night: Allen vs. Costa,2026-05-16,Ketlen Vieira,Jacqueline Cavalcanti,simulation,,,method,Win by KO/TKO,ko_tko,,0.43871450676138174
-773ebe2f56c1,UFC Fight Night: Allen vs. Costa,2026-05-16,Ketlen Vieira,Jacqueline Cavalcanti,simulation,,,method,Win by Submission,submission,,0.16782846195834514
-773ebe2f56c1,UFC Fight Night: Allen vs. Costa,2026-05-16,Ketlen Vieira,Jacqueline Cavalcanti,simulation,,,method,Win by Decision,decision,,0.39345703128027365
+773ebe2f56c1,UFC Fight Night: Allen vs. Costa,2026-05-16,Ketlen Vieira,Jacqueline Cavalcanti,simulation,,,inside_distance,Fight ends inside distance,yes,,0.6065429687197266
+773ebe2f56c1,UFC Fight Night: Allen vs. Costa,2026-05-16,Ketlen Vieira,Jacqueline Cavalcanti,simulation,,,inside_distance,Fight goes to decision,no,,0.39345703128027343
+773ebe2f56c1,UFC Fight Night: Allen vs. Costa,2026-05-16,Ketlen Vieira,Jacqueline Cavalcanti,simulation,,,method,Win by KO/TKO,ko_tko,,0.4387145067613815
+773ebe2f56c1,UFC Fight Night: Allen vs. Costa,2026-05-16,Ketlen Vieira,Jacqueline Cavalcanti,simulation,,,method,Win by Submission,submission,,0.16782846195834505
+773ebe2f56c1,UFC Fight Night: Allen vs. Costa,2026-05-16,Ketlen Vieira,Jacqueline Cavalcanti,simulation,,,method,Win by Decision,decision,,0.39345703128027343
 773ebe2f56c1,UFC Fight Night: Allen vs. Costa,2026-05-16,Ketlen Vieira,Jacqueline Cavalcanti,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.3946517887455547
 773ebe2f56c1,UFC Fight Night: Allen vs. Costa,2026-05-16,Ketlen Vieira,Jacqueline Cavalcanti,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6053482112544453
 773ebe2f56c1,UFC Fight Night: Allen vs. Costa,2026-05-16,Ketlen Vieira,Jacqueline Cavalcanti,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.6000731765523902
 773ebe2f56c1,UFC Fight Night: Allen vs. Costa,2026-05-16,Ketlen Vieira,Jacqueline Cavalcanti,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.39992682344760977
 546886f6cdc3,UFC Fight Night: Allen vs. Costa,2026-05-16,Cody Brundage,Andre Petroski,simulation,,,moneyline,Cody Brundage win,red,,0.6644305131893704
 546886f6cdc3,UFC Fight Night: Allen vs. Costa,2026-05-16,Cody Brundage,Andre Petroski,simulation,,,moneyline,Andre Petroski win,blue,,0.3355694868106296
-546886f6cdc3,UFC Fight Night: Allen vs. Costa,2026-05-16,Cody Brundage,Andre Petroski,simulation,,,inside_distance,Fight ends inside distance,yes,,0.38682017568454063
-546886f6cdc3,UFC Fight Night: Allen vs. Costa,2026-05-16,Cody Brundage,Andre Petroski,simulation,,,inside_distance,Fight goes to decision,no,,0.6284154936124215
-546886f6cdc3,UFC Fight Night: Allen vs. Costa,2026-05-16,Cody Brundage,Andre Petroski,simulation,,,method,Win by KO/TKO,ko_tko,,0.25211631848810445
-546886f6cdc3,UFC Fight Night: Allen vs. Costa,2026-05-16,Cody Brundage,Andre Petroski,simulation,,,method,Win by Submission,submission,,0.11946818789947433
-546886f6cdc3,UFC Fight Night: Allen vs. Costa,2026-05-16,Cody Brundage,Andre Petroski,simulation,,,method,Win by Decision,decision,,0.6284154936124215
+546886f6cdc3,UFC Fight Night: Allen vs. Costa,2026-05-16,Cody Brundage,Andre Petroski,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3715845063875786
+546886f6cdc3,UFC Fight Night: Allen vs. Costa,2026-05-16,Cody Brundage,Andre Petroski,simulation,,,inside_distance,Fight goes to decision,no,,0.6284154936124213
+546886f6cdc3,UFC Fight Night: Allen vs. Costa,2026-05-16,Cody Brundage,Andre Petroski,simulation,,,method,Win by KO/TKO,ko_tko,,0.25211631848810434
+546886f6cdc3,UFC Fight Night: Allen vs. Costa,2026-05-16,Cody Brundage,Andre Petroski,simulation,,,method,Win by Submission,submission,,0.11946818789947428
+546886f6cdc3,UFC Fight Night: Allen vs. Costa,2026-05-16,Cody Brundage,Andre Petroski,simulation,,,method,Win by Decision,decision,,0.6284154936124213
 546886f6cdc3,UFC Fight Night: Allen vs. Costa,2026-05-16,Cody Brundage,Andre Petroski,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.19835450894901416
 546886f6cdc3,UFC Fight Night: Allen vs. Costa,2026-05-16,Cody Brundage,Andre Petroski,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.8016454910509858
 546886f6cdc3,UFC Fight Night: Allen vs. Costa,2026-05-16,Cody Brundage,Andre Petroski,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.37566685803386796
 546886f6cdc3,UFC Fight Night: Allen vs. Costa,2026-05-16,Cody Brundage,Andre Petroski,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.624333141966132
 aac86077a2f6,UFC Fight Night: Allen vs. Costa,2026-05-16,Alice Ardelean,Polyana Viana,simulation,,,moneyline,Alice Ardelean win,red,,0.7674994024944656
 aac86077a2f6,UFC Fight Night: Allen vs. Costa,2026-05-16,Alice Ardelean,Polyana Viana,simulation,,,moneyline,Polyana Viana win,blue,,0.23250059750553442
-aac86077a2f6,UFC Fight Night: Allen vs. Costa,2026-05-16,Alice Ardelean,Polyana Viana,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5394793915885732
-aac86077a2f6,UFC Fight Night: Allen vs. Costa,2026-05-16,Alice Ardelean,Polyana Viana,simulation,,,inside_distance,Fight goes to decision,no,,0.43411665984578457
-aac86077a2f6,UFC Fight Night: Allen vs. Costa,2026-05-16,Alice Ardelean,Polyana Viana,simulation,,,method,Win by KO/TKO,ko_tko,,0.3397501988669186
-aac86077a2f6,UFC Fight Night: Allen vs. Costa,2026-05-16,Alice Ardelean,Polyana Viana,simulation,,,method,Win by Submission,submission,,0.22613314128729703
-aac86077a2f6,UFC Fight Night: Allen vs. Costa,2026-05-16,Alice Ardelean,Polyana Viana,simulation,,,method,Win by Decision,decision,,0.43411665984578457
+aac86077a2f6,UFC Fight Night: Allen vs. Costa,2026-05-16,Alice Ardelean,Polyana Viana,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5658833401542155
+aac86077a2f6,UFC Fight Night: Allen vs. Costa,2026-05-16,Alice Ardelean,Polyana Viana,simulation,,,inside_distance,Fight goes to decision,no,,0.4341166598457845
+aac86077a2f6,UFC Fight Night: Allen vs. Costa,2026-05-16,Alice Ardelean,Polyana Viana,simulation,,,method,Win by KO/TKO,ko_tko,,0.33975019886691854
+aac86077a2f6,UFC Fight Night: Allen vs. Costa,2026-05-16,Alice Ardelean,Polyana Viana,simulation,,,method,Win by Submission,submission,,0.22613314128729697
+aac86077a2f6,UFC Fight Night: Allen vs. Costa,2026-05-16,Alice Ardelean,Polyana Viana,simulation,,,method,Win by Decision,decision,,0.4341166598457845
 aac86077a2f6,UFC Fight Night: Allen vs. Costa,2026-05-16,Alice Ardelean,Polyana Viana,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.4181680101480934
 aac86077a2f6,UFC Fight Night: Allen vs. Costa,2026-05-16,Alice Ardelean,Polyana Viana,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.5818319898519067
 aac86077a2f6,UFC Fight Night: Allen vs. Costa,2026-05-16,Alice Ardelean,Polyana Viana,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.5260675487890595
 aac86077a2f6,UFC Fight Night: Allen vs. Costa,2026-05-16,Alice Ardelean,Polyana Viana,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.4739324512109405
 c1ef40bf35ff,UFC Fight Night: Allen vs. Costa,2026-05-16,Daniel Barez,Luis Gurule,simulation,,,moneyline,Daniel Barez win,red,,0.7535334335759812
 c1ef40bf35ff,UFC Fight Night: Allen vs. Costa,2026-05-16,Daniel Barez,Luis Gurule,simulation,,,moneyline,Luis Gurule win,blue,,0.24646656642401876
-c1ef40bf35ff,UFC Fight Night: Allen vs. Costa,2026-05-16,Daniel Barez,Luis Gurule,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5367754683816597
-c1ef40bf35ff,UFC Fight Night: Allen vs. Costa,2026-05-16,Daniel Barez,Luis Gurule,simulation,,,inside_distance,Fight goes to decision,no,,0.5223519069340303
-c1ef40bf35ff,UFC Fight Night: Allen vs. Costa,2026-05-16,Daniel Barez,Luis Gurule,simulation,,,method,Win by KO/TKO,ko_tko,,0.24974635327838457
-c1ef40bf35ff,UFC Fight Night: Allen vs. Costa,2026-05-16,Daniel Barez,Luis Gurule,simulation,,,method,Win by Submission,submission,,0.22790173978758593
-c1ef40bf35ff,UFC Fight Night: Allen vs. Costa,2026-05-16,Daniel Barez,Luis Gurule,simulation,,,method,Win by Decision,decision,,0.5223519069340303
+c1ef40bf35ff,UFC Fight Night: Allen vs. Costa,2026-05-16,Daniel Barez,Luis Gurule,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4776480930659701
+c1ef40bf35ff,UFC Fight Night: Allen vs. Costa,2026-05-16,Daniel Barez,Luis Gurule,simulation,,,inside_distance,Fight goes to decision,no,,0.5223519069340299
+c1ef40bf35ff,UFC Fight Night: Allen vs. Costa,2026-05-16,Daniel Barez,Luis Gurule,simulation,,,method,Win by KO/TKO,ko_tko,,0.24974635327838435
+c1ef40bf35ff,UFC Fight Night: Allen vs. Costa,2026-05-16,Daniel Barez,Luis Gurule,simulation,,,method,Win by Submission,submission,,0.22790173978758574
+c1ef40bf35ff,UFC Fight Night: Allen vs. Costa,2026-05-16,Daniel Barez,Luis Gurule,simulation,,,method,Win by Decision,decision,,0.5223519069340299
 c1ef40bf35ff,UFC Fight Night: Allen vs. Costa,2026-05-16,Daniel Barez,Luis Gurule,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.2502374691120122
 c1ef40bf35ff,UFC Fight Night: Allen vs. Costa,2026-05-16,Daniel Barez,Luis Gurule,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7497625308879878
 c1ef40bf35ff,UFC Fight Night: Allen vs. Costa,2026-05-16,Daniel Barez,Luis Gurule,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4779286136348206
 c1ef40bf35ff,UFC Fight Night: Allen vs. Costa,2026-05-16,Daniel Barez,Luis Gurule,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5220713863651794
 226094e8ee09,UFC Fight Night: Allen vs. Costa,2026-05-16,Shauna Bannon,Nicolle Caliari,simulation,,,moneyline,Shauna Bannon win,red,,0.643085553869137
 226094e8ee09,UFC Fight Night: Allen vs. Costa,2026-05-16,Shauna Bannon,Nicolle Caliari,simulation,,,moneyline,Nicolle Caliari win,blue,,0.356914446130863
-226094e8ee09,UFC Fight Night: Allen vs. Costa,2026-05-16,Shauna Bannon,Nicolle Caliari,simulation,,,inside_distance,Fight ends inside distance,yes,,0.38685133091489704
-226094e8ee09,UFC Fight Night: Allen vs. Costa,2026-05-16,Shauna Bannon,Nicolle Caliari,simulation,,,inside_distance,Fight goes to decision,no,,0.6299833629442683
-226094e8ee09,UFC Fight Night: Allen vs. Costa,2026-05-16,Shauna Bannon,Nicolle Caliari,simulation,,,method,Win by KO/TKO,ko_tko,,0.21260023649089355
-226094e8ee09,UFC Fight Night: Allen vs. Costa,2026-05-16,Shauna Bannon,Nicolle Caliari,simulation,,,method,Win by Submission,submission,,0.15741640056483835
-226094e8ee09,UFC Fight Night: Allen vs. Costa,2026-05-16,Shauna Bannon,Nicolle Caliari,simulation,,,method,Win by Decision,decision,,0.6299833629442683
+226094e8ee09,UFC Fight Night: Allen vs. Costa,2026-05-16,Shauna Bannon,Nicolle Caliari,simulation,,,inside_distance,Fight ends inside distance,yes,,0.37001663705573185
+226094e8ee09,UFC Fight Night: Allen vs. Costa,2026-05-16,Shauna Bannon,Nicolle Caliari,simulation,,,inside_distance,Fight goes to decision,no,,0.6299833629442682
+226094e8ee09,UFC Fight Night: Allen vs. Costa,2026-05-16,Shauna Bannon,Nicolle Caliari,simulation,,,method,Win by KO/TKO,ko_tko,,0.2126002364908935
+226094e8ee09,UFC Fight Night: Allen vs. Costa,2026-05-16,Shauna Bannon,Nicolle Caliari,simulation,,,method,Win by Submission,submission,,0.15741640056483833
+226094e8ee09,UFC Fight Night: Allen vs. Costa,2026-05-16,Shauna Bannon,Nicolle Caliari,simulation,,,method,Win by Decision,decision,,0.6299833629442682
 226094e8ee09,UFC Fight Night: Allen vs. Costa,2026-05-16,Shauna Bannon,Nicolle Caliari,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.1673186901636075
 226094e8ee09,UFC Fight Night: Allen vs. Costa,2026-05-16,Shauna Bannon,Nicolle Caliari,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.8326813098363925
 226094e8ee09,UFC Fight Night: Allen vs. Costa,2026-05-16,Shauna Bannon,Nicolle Caliari,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3818641225060677
 226094e8ee09,UFC Fight Night: Allen vs. Costa,2026-05-16,Shauna Bannon,Nicolle Caliari,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6181358774939323
+4f63935b36ed,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Song Yadong,Deiveson Figueiredo,simulation,,,moneyline,Song Yadong win,red,,0.7061367528152236
+4f63935b36ed,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Song Yadong,Deiveson Figueiredo,simulation,,,moneyline,Deiveson Figueiredo win,blue,,0.2938632471847764
+4f63935b36ed,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Song Yadong,Deiveson Figueiredo,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4119355769090704
+4f63935b36ed,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Song Yadong,Deiveson Figueiredo,simulation,,,inside_distance,Fight goes to decision,no,,0.5880644230909295
+4f63935b36ed,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Song Yadong,Deiveson Figueiredo,simulation,,,method,Win by KO/TKO,ko_tko,,0.29046987106964756
+4f63935b36ed,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Song Yadong,Deiveson Figueiredo,simulation,,,method,Win by Submission,submission,,0.12146570583942284
+4f63935b36ed,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Song Yadong,Deiveson Figueiredo,simulation,,,method,Win by Decision,decision,,0.5880644230909295
+4f63935b36ed,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Song Yadong,Deiveson Figueiredo,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.23369571954059207
+4f63935b36ed,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Song Yadong,Deiveson Figueiredo,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7663042804594079
+4f63935b36ed,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Song Yadong,Deiveson Figueiredo,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.42078409628487295
+4f63935b36ed,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Song Yadong,Deiveson Figueiredo,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.579215903715127
+7ebbb9192dc4,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhang Mingyang,Alonzo Menifield,simulation,,,moneyline,Zhang Mingyang win,red,,0.6975411038299892
+7ebbb9192dc4,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhang Mingyang,Alonzo Menifield,simulation,,,moneyline,Alonzo Menifield win,blue,,0.30245889617001076
+7ebbb9192dc4,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhang Mingyang,Alonzo Menifield,simulation,,,inside_distance,Fight ends inside distance,yes,,0.38033592018528484
+7ebbb9192dc4,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhang Mingyang,Alonzo Menifield,simulation,,,inside_distance,Fight goes to decision,no,,0.6196640798147152
+7ebbb9192dc4,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhang Mingyang,Alonzo Menifield,simulation,,,method,Win by KO/TKO,ko_tko,,0.2619977805555361
+7ebbb9192dc4,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhang Mingyang,Alonzo Menifield,simulation,,,method,Win by Submission,submission,,0.11833813962974878
+7ebbb9192dc4,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhang Mingyang,Alonzo Menifield,simulation,,,method,Win by Decision,decision,,0.6196640798147152
+7ebbb9192dc4,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhang Mingyang,Alonzo Menifield,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.2177411280608459
+7ebbb9192dc4,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhang Mingyang,Alonzo Menifield,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7822588719391541
+7ebbb9192dc4,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhang Mingyang,Alonzo Menifield,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.32680801415734817
+7ebbb9192dc4,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhang Mingyang,Alonzo Menifield,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6731919858426518
+cd8949162678,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Sergei Pavlovich,Tallison Teixeira,simulation,,,moneyline,Sergei Pavlovich win,red,,0.5937843829761675
+cd8949162678,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Sergei Pavlovich,Tallison Teixeira,simulation,,,moneyline,Tallison Teixeira win,blue,,0.40621561702383246
+cd8949162678,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Sergei Pavlovich,Tallison Teixeira,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4568901672305479
+cd8949162678,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Sergei Pavlovich,Tallison Teixeira,simulation,,,inside_distance,Fight goes to decision,no,,0.5431098327694521
+cd8949162678,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Sergei Pavlovich,Tallison Teixeira,simulation,,,method,Win by KO/TKO,ko_tko,,0.27136280864151
+cd8949162678,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Sergei Pavlovich,Tallison Teixeira,simulation,,,method,Win by Submission,submission,,0.18552735858903782
+cd8949162678,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Sergei Pavlovich,Tallison Teixeira,simulation,,,method,Win by Decision,decision,,0.5431098327694521
+cd8949162678,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Sergei Pavlovich,Tallison Teixeira,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.2994276799182832
+cd8949162678,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Sergei Pavlovich,Tallison Teixeira,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7005723200817169
+cd8949162678,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Sergei Pavlovich,Tallison Teixeira,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3929448656898716
+cd8949162678,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Sergei Pavlovich,Tallison Teixeira,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6070551343101285
+cf80b901d880,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Kai Asakura,Cameron Smotherman,simulation,,,moneyline,Kai Asakura win,red,,0.5922785474725933
+cf80b901d880,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Kai Asakura,Cameron Smotherman,simulation,,,moneyline,Cameron Smotherman win,blue,,0.40772145252740666
+cf80b901d880,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Kai Asakura,Cameron Smotherman,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3689158928800904
+cf80b901d880,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Kai Asakura,Cameron Smotherman,simulation,,,inside_distance,Fight goes to decision,no,,0.6310841071199096
+cf80b901d880,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Kai Asakura,Cameron Smotherman,simulation,,,method,Win by KO/TKO,ko_tko,,0.25124858020325913
+cf80b901d880,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Kai Asakura,Cameron Smotherman,simulation,,,method,Win by Submission,submission,,0.11766731267683127
+cf80b901d880,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Kai Asakura,Cameron Smotherman,simulation,,,method,Win by Decision,decision,,0.6310841071199096
+cf80b901d880,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Kai Asakura,Cameron Smotherman,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.2128566017990005
+cf80b901d880,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Kai Asakura,Cameron Smotherman,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7871433982009994
+cf80b901d880,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Kai Asakura,Cameron Smotherman,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.33637277771881924
+cf80b901d880,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Kai Asakura,Cameron Smotherman,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6636272222811808
+708a1ed2f9c8,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Alex Perez,Sumudaerji,simulation,,,moneyline,Alex Perez win,red,,0.7160240152779805
+708a1ed2f9c8,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Alex Perez,Sumudaerji,simulation,,,moneyline,Sumudaerji win,blue,,0.28397598472201946
+708a1ed2f9c8,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Alex Perez,Sumudaerji,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3985988508564241
+708a1ed2f9c8,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Alex Perez,Sumudaerji,simulation,,,inside_distance,Fight goes to decision,no,,0.6014011491435759
+708a1ed2f9c8,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Alex Perez,Sumudaerji,simulation,,,method,Win by KO/TKO,ko_tko,,0.24152842002672234
+708a1ed2f9c8,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Alex Perez,Sumudaerji,simulation,,,method,Win by Submission,submission,,0.15707043082970173
+708a1ed2f9c8,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Alex Perez,Sumudaerji,simulation,,,method,Win by Decision,decision,,0.6014011491435759
+708a1ed2f9c8,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Alex Perez,Sumudaerji,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.27446306743379745
+708a1ed2f9c8,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Alex Perez,Sumudaerji,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7255369325662026
+708a1ed2f9c8,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Alex Perez,Sumudaerji,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.36292604697100167
+708a1ed2f9c8,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Alex Perez,Sumudaerji,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6370739530289984
+1086934cd5d9,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Muslim Salikhov,Jake Matthews,simulation,,,moneyline,Muslim Salikhov win,red,,0.7690614473474091
+1086934cd5d9,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Muslim Salikhov,Jake Matthews,simulation,,,moneyline,Jake Matthews win,blue,,0.2309385526525909
+1086934cd5d9,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Muslim Salikhov,Jake Matthews,simulation,,,inside_distance,Fight ends inside distance,yes,,0.359414998939815
+1086934cd5d9,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Muslim Salikhov,Jake Matthews,simulation,,,inside_distance,Fight goes to decision,no,,0.640585001060185
+1086934cd5d9,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Muslim Salikhov,Jake Matthews,simulation,,,method,Win by KO/TKO,ko_tko,,0.24059268370277723
+1086934cd5d9,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Muslim Salikhov,Jake Matthews,simulation,,,method,Win by Submission,submission,,0.11882231523703773
+1086934cd5d9,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Muslim Salikhov,Jake Matthews,simulation,,,method,Win by Decision,decision,,0.640585001060185
+1086934cd5d9,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Muslim Salikhov,Jake Matthews,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.20671698120426696
+1086934cd5d9,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Muslim Salikhov,Jake Matthews,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.793283018795733
+1086934cd5d9,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Muslim Salikhov,Jake Matthews,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.34596509763870564
+1086934cd5d9,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Muslim Salikhov,Jake Matthews,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6540349023612944
+dd06a3fa331f,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Yi Sak Lee,Luis Felipe Dias,simulation,,,moneyline,Yi Sak Lee win,red,,0.7290062152162007
+dd06a3fa331f,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Yi Sak Lee,Luis Felipe Dias,simulation,,,moneyline,Luis Felipe Dias win,blue,,0.2709937847837993
+dd06a3fa331f,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Yi Sak Lee,Luis Felipe Dias,simulation,,,inside_distance,Fight ends inside distance,yes,,0.36663677750188917
+dd06a3fa331f,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Yi Sak Lee,Luis Felipe Dias,simulation,,,inside_distance,Fight goes to decision,no,,0.6333632224981108
+dd06a3fa331f,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Yi Sak Lee,Luis Felipe Dias,simulation,,,method,Win by KO/TKO,ko_tko,,0.25184728513914245
+dd06a3fa331f,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Yi Sak Lee,Luis Felipe Dias,simulation,,,method,Win by Submission,submission,,0.11478949236274673
+dd06a3fa331f,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Yi Sak Lee,Luis Felipe Dias,simulation,,,method,Win by Decision,decision,,0.6333632224981108
+dd06a3fa331f,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Yi Sak Lee,Luis Felipe Dias,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.21050034496056697
+dd06a3fa331f,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Yi Sak Lee,Luis Felipe Dias,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7894996550394331
+dd06a3fa331f,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Yi Sak Lee,Luis Felipe Dias,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.32519599176306163
+dd06a3fa331f,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Yi Sak Lee,Luis Felipe Dias,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6748040082369384
+6cb330b6a7eb,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Aoriqileng,Cody Haddon,simulation,,,moneyline,Aoriqileng win,red,,0.7932027559103297
+6cb330b6a7eb,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Aoriqileng,Cody Haddon,simulation,,,moneyline,Cody Haddon win,blue,,0.20679724408967026
+6cb330b6a7eb,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Aoriqileng,Cody Haddon,simulation,,,inside_distance,Fight ends inside distance,yes,,0.39178555796738335
+6cb330b6a7eb,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Aoriqileng,Cody Haddon,simulation,,,inside_distance,Fight goes to decision,no,,0.6082144420326167
+6cb330b6a7eb,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Aoriqileng,Cody Haddon,simulation,,,method,Win by KO/TKO,ko_tko,,0.24503014379072577
+6cb330b6a7eb,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Aoriqileng,Cody Haddon,simulation,,,method,Win by Submission,submission,,0.14675541417665758
+6cb330b6a7eb,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Aoriqileng,Cody Haddon,simulation,,,method,Win by Decision,decision,,0.6082144420326167
+6cb330b6a7eb,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Aoriqileng,Cody Haddon,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.22397179403459935
+6cb330b6a7eb,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Aoriqileng,Cody Haddon,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7760282059654007
+6cb330b6a7eb,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Aoriqileng,Cody Haddon,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3857944405413657
+6cb330b6a7eb,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Aoriqileng,Cody Haddon,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6142055594586343
+e0799699009e,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Rei Tsuruya,Jesus Aguilar,simulation,,,moneyline,Rei Tsuruya win,red,,0.7861849950645827
+e0799699009e,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Rei Tsuruya,Jesus Aguilar,simulation,,,moneyline,Jesus Aguilar win,blue,,0.21381500493541727
+e0799699009e,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Rei Tsuruya,Jesus Aguilar,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5376052320921216
+e0799699009e,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Rei Tsuruya,Jesus Aguilar,simulation,,,inside_distance,Fight goes to decision,no,,0.46239476790787837
+e0799699009e,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Rei Tsuruya,Jesus Aguilar,simulation,,,method,Win by KO/TKO,ko_tko,,0.25124292341268295
+e0799699009e,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Rei Tsuruya,Jesus Aguilar,simulation,,,method,Win by Submission,submission,,0.2863623086794387
+e0799699009e,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Rei Tsuruya,Jesus Aguilar,simulation,,,method,Win by Decision,decision,,0.46239476790787837
+e0799699009e,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Rei Tsuruya,Jesus Aguilar,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.2609997149332188
+e0799699009e,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Rei Tsuruya,Jesus Aguilar,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7390002850667812
+e0799699009e,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Rei Tsuruya,Jesus Aguilar,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.558021999741506
+e0799699009e,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Rei Tsuruya,Jesus Aguilar,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.441978000258494
+0be44c830348,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Angela Hill,Xiong Jingnan,simulation,,,moneyline,Angela Hill win,red,,0.7416438674497927
+0be44c830348,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Angela Hill,Xiong Jingnan,simulation,,,moneyline,Xiong Jingnan win,blue,,0.2583561325502073
+0be44c830348,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Angela Hill,Xiong Jingnan,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4321326938740173
+0be44c830348,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Angela Hill,Xiong Jingnan,simulation,,,inside_distance,Fight goes to decision,no,,0.5678673061259827
+0be44c830348,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Angela Hill,Xiong Jingnan,simulation,,,method,Win by KO/TKO,ko_tko,,0.22381827283996622
+0be44c830348,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Angela Hill,Xiong Jingnan,simulation,,,method,Win by Submission,submission,,0.20831442103405107
+0be44c830348,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Angela Hill,Xiong Jingnan,simulation,,,method,Win by Decision,decision,,0.5678673061259827
+0be44c830348,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Angela Hill,Xiong Jingnan,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.28233000806463965
+0be44c830348,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Angela Hill,Xiong Jingnan,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7176699919353604
+0be44c830348,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Angela Hill,Xiong Jingnan,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3834259138388578
+0be44c830348,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Angela Hill,Xiong Jingnan,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6165740861611422
+a51b07b12e9b,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Loma Lookboonmee,Jaqueline Amorim,simulation,,,moneyline,Loma Lookboonmee win,red,,0.7211449286043986
+a51b07b12e9b,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Loma Lookboonmee,Jaqueline Amorim,simulation,,,moneyline,Jaqueline Amorim win,blue,,0.2788550713956014
+a51b07b12e9b,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Loma Lookboonmee,Jaqueline Amorim,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5644920533036706
+a51b07b12e9b,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Loma Lookboonmee,Jaqueline Amorim,simulation,,,inside_distance,Fight goes to decision,no,,0.4355079466963294
+a51b07b12e9b,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Loma Lookboonmee,Jaqueline Amorim,simulation,,,method,Win by KO/TKO,ko_tko,,0.2089657844143444
+a51b07b12e9b,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Loma Lookboonmee,Jaqueline Amorim,simulation,,,method,Win by Submission,submission,,0.3555262688893262
+a51b07b12e9b,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Loma Lookboonmee,Jaqueline Amorim,simulation,,,method,Win by Decision,decision,,0.4355079466963294
+a51b07b12e9b,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Loma Lookboonmee,Jaqueline Amorim,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.38865757708444626
+a51b07b12e9b,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Loma Lookboonmee,Jaqueline Amorim,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6113424229155537
+a51b07b12e9b,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Loma Lookboonmee,Jaqueline Amorim,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.48729096005741296
+a51b07b12e9b,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Loma Lookboonmee,Jaqueline Amorim,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5127090399425871
+1fe02f331cb5,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhu Kangjie,Ramon Taveras,simulation,,,moneyline,Zhu Kangjie win,red,,0.7807049929669664
+1fe02f331cb5,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhu Kangjie,Ramon Taveras,simulation,,,moneyline,Ramon Taveras win,blue,,0.21929500703303362
+1fe02f331cb5,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhu Kangjie,Ramon Taveras,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3899715504494919
+1fe02f331cb5,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhu Kangjie,Ramon Taveras,simulation,,,inside_distance,Fight goes to decision,no,,0.6100284495505082
+1fe02f331cb5,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhu Kangjie,Ramon Taveras,simulation,,,method,Win by KO/TKO,ko_tko,,0.28304050975471995
+1fe02f331cb5,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhu Kangjie,Ramon Taveras,simulation,,,method,Win by Submission,submission,,0.10693104069477194
+1fe02f331cb5,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhu Kangjie,Ramon Taveras,simulation,,,method,Win by Decision,decision,,0.6100284495505082
+1fe02f331cb5,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhu Kangjie,Ramon Taveras,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.21913795898001118
+1fe02f331cb5,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhu Kangjie,Ramon Taveras,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7808620410199888
+1fe02f331cb5,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhu Kangjie,Ramon Taveras,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.32336186213737006
+1fe02f331cb5,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Zhu Kangjie,Ramon Taveras,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6766381378626299
+053dde67941c,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Ding Meng,Jose Henrique,simulation,,,moneyline,Ding Meng win,red,,0.7290062152162007
+053dde67941c,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Ding Meng,Jose Henrique,simulation,,,moneyline,Jose Henrique win,blue,,0.2709937847837993
+053dde67941c,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Ding Meng,Jose Henrique,simulation,,,inside_distance,Fight ends inside distance,yes,,0.36663677750188917
+053dde67941c,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Ding Meng,Jose Henrique,simulation,,,inside_distance,Fight goes to decision,no,,0.6333632224981108
+053dde67941c,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Ding Meng,Jose Henrique,simulation,,,method,Win by KO/TKO,ko_tko,,0.25184728513914245
+053dde67941c,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Ding Meng,Jose Henrique,simulation,,,method,Win by Submission,submission,,0.11478949236274673
+053dde67941c,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Ding Meng,Jose Henrique,simulation,,,method,Win by Decision,decision,,0.6333632224981108
+053dde67941c,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Ding Meng,Jose Henrique,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.21050034496056697
+053dde67941c,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Ding Meng,Jose Henrique,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7894996550394331
+053dde67941c,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Ding Meng,Jose Henrique,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.32519599176306163
+053dde67941c,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Ding Meng,Jose Henrique,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6748040082369384
