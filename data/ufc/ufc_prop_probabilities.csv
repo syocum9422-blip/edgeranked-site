@@ -285,3 +285,135 @@ a51b07b12e9b,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Loma Lookboonmee,Ja
 a51b07b12e9b,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Loma Lookboonmee,Jaqueline Amorim,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6113424229155537
 a51b07b12e9b,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Loma Lookboonmee,Jaqueline Amorim,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.48729096005741296
 a51b07b12e9b,UFC Fight Night: Song vs. Figueiredo,2026-05-30,Loma Lookboonmee,Jaqueline Amorim,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5127090399425871
+2eb610c502b3,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Belal Muhammad,Gabriel Bonfim,simulation,,,moneyline,Belal Muhammad win,red,,0.6154504467348946
+2eb610c502b3,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Belal Muhammad,Gabriel Bonfim,simulation,,,moneyline,Gabriel Bonfim win,blue,,0.3845495532651054
+2eb610c502b3,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Belal Muhammad,Gabriel Bonfim,simulation,,,inside_distance,Fight ends inside distance,yes,,0.38431774652449013
+2eb610c502b3,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Belal Muhammad,Gabriel Bonfim,simulation,,,inside_distance,Fight goes to decision,no,,0.6156822534755099
+2eb610c502b3,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Belal Muhammad,Gabriel Bonfim,simulation,,,method,Win by KO/TKO,ko_tko,,0.25513020478607235
+2eb610c502b3,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Belal Muhammad,Gabriel Bonfim,simulation,,,method,Win by Submission,submission,,0.12918754173841782
+2eb610c502b3,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Belal Muhammad,Gabriel Bonfim,simulation,,,method,Win by Decision,decision,,0.6156822534755099
+2eb610c502b3,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Belal Muhammad,Gabriel Bonfim,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.20820002788727274
+2eb610c502b3,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Belal Muhammad,Gabriel Bonfim,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7917999721127272
+2eb610c502b3,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Belal Muhammad,Gabriel Bonfim,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.38310818760491033
+2eb610c502b3,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Belal Muhammad,Gabriel Bonfim,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6168918123950897
+70cfc8a6f450,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Iwo Baraniewski,Billy Elekana,simulation,,,moneyline,Iwo Baraniewski win,red,,0.7769049587748303
+70cfc8a6f450,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Iwo Baraniewski,Billy Elekana,simulation,,,moneyline,Billy Elekana win,blue,,0.22309504122516965
+70cfc8a6f450,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Iwo Baraniewski,Billy Elekana,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5664604703614153
+70cfc8a6f450,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Iwo Baraniewski,Billy Elekana,simulation,,,inside_distance,Fight goes to decision,no,,0.43353952963858466
+70cfc8a6f450,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Iwo Baraniewski,Billy Elekana,simulation,,,method,Win by KO/TKO,ko_tko,,0.43019736749770165
+70cfc8a6f450,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Iwo Baraniewski,Billy Elekana,simulation,,,method,Win by Submission,submission,,0.13626310286371365
+70cfc8a6f450,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Iwo Baraniewski,Billy Elekana,simulation,,,method,Win by Decision,decision,,0.43353952963858466
+70cfc8a6f450,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Iwo Baraniewski,Billy Elekana,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.41466707233317746
+70cfc8a6f450,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Iwo Baraniewski,Billy Elekana,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.5853329276668225
+70cfc8a6f450,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Iwo Baraniewski,Billy Elekana,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.5470149606480312
+70cfc8a6f450,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Iwo Baraniewski,Billy Elekana,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.45298503935196877
+a1cce6fb6d33,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Imanol Rodriguez,Matt Schnell,simulation,,,moneyline,Imanol Rodriguez win,red,,0.7618761392735971
+a1cce6fb6d33,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Imanol Rodriguez,Matt Schnell,simulation,,,moneyline,Matt Schnell win,blue,,0.2381238607264029
+a1cce6fb6d33,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Imanol Rodriguez,Matt Schnell,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4454600917675467
+a1cce6fb6d33,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Imanol Rodriguez,Matt Schnell,simulation,,,inside_distance,Fight goes to decision,no,,0.5545399082324534
+a1cce6fb6d33,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Imanol Rodriguez,Matt Schnell,simulation,,,method,Win by KO/TKO,ko_tko,,0.24909610526358414
+a1cce6fb6d33,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Imanol Rodriguez,Matt Schnell,simulation,,,method,Win by Submission,submission,,0.19636398650396256
+a1cce6fb6d33,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Imanol Rodriguez,Matt Schnell,simulation,,,method,Win by Decision,decision,,0.5545399082324534
+a1cce6fb6d33,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Imanol Rodriguez,Matt Schnell,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.29344948208438076
+a1cce6fb6d33,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Imanol Rodriguez,Matt Schnell,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7065505179156193
+a1cce6fb6d33,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Imanol Rodriguez,Matt Schnell,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4068138077886829
+a1cce6fb6d33,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Imanol Rodriguez,Matt Schnell,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5931861922113171
+ee2d400baed6,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bruno Silva,Edgar Chairez,simulation,,,moneyline,Bruno Silva win,red,,0.8339135357861107
+ee2d400baed6,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bruno Silva,Edgar Chairez,simulation,,,moneyline,Edgar Chairez win,blue,,0.16608646421388928
+ee2d400baed6,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bruno Silva,Edgar Chairez,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4117707812498686
+ee2d400baed6,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bruno Silva,Edgar Chairez,simulation,,,inside_distance,Fight goes to decision,no,,0.5882292187501315
+ee2d400baed6,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bruno Silva,Edgar Chairez,simulation,,,method,Win by KO/TKO,ko_tko,,0.23260170902099805
+ee2d400baed6,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bruno Silva,Edgar Chairez,simulation,,,method,Win by Submission,submission,,0.17916907222887055
+ee2d400baed6,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bruno Silva,Edgar Chairez,simulation,,,method,Win by Decision,decision,,0.5882292187501315
+ee2d400baed6,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bruno Silva,Edgar Chairez,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.22531083475189229
+ee2d400baed6,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bruno Silva,Edgar Chairez,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7746891652481077
+ee2d400baed6,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bruno Silva,Edgar Chairez,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.36134683524569683
+ee2d400baed6,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bruno Silva,Edgar Chairez,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6386531647543032
+9fecd8a425ef,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jeisla Chaves,Yuneisy Duben,simulation,,,moneyline,Jeisla Chaves win,red,,0.7136963657068549
+9fecd8a425ef,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jeisla Chaves,Yuneisy Duben,simulation,,,moneyline,Yuneisy Duben win,blue,,0.2863036342931451
+9fecd8a425ef,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jeisla Chaves,Yuneisy Duben,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5766653891858599
+9fecd8a425ef,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jeisla Chaves,Yuneisy Duben,simulation,,,inside_distance,Fight goes to decision,no,,0.42333461081414014
+9fecd8a425ef,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jeisla Chaves,Yuneisy Duben,simulation,,,method,Win by KO/TKO,ko_tko,,0.4189702165071984
+9fecd8a425ef,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jeisla Chaves,Yuneisy Duben,simulation,,,method,Win by Submission,submission,,0.15769517267866145
+9fecd8a425ef,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jeisla Chaves,Yuneisy Duben,simulation,,,method,Win by Decision,decision,,0.42333461081414014
+9fecd8a425ef,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jeisla Chaves,Yuneisy Duben,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.3236475158340189
+9fecd8a425ef,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jeisla Chaves,Yuneisy Duben,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6763524841659811
+9fecd8a425ef,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jeisla Chaves,Yuneisy Duben,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4326218438415783
+9fecd8a425ef,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jeisla Chaves,Yuneisy Duben,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5673781561584217
+f41dfe6cf29d,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Brendan Allen,Edmen Shahbazyan,simulation,,,moneyline,Brendan Allen win,red,,0.8348993150483575
+f41dfe6cf29d,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Brendan Allen,Edmen Shahbazyan,simulation,,,moneyline,Edmen Shahbazyan win,blue,,0.16510068495164254
+f41dfe6cf29d,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Brendan Allen,Edmen Shahbazyan,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4705051389598198
+f41dfe6cf29d,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Brendan Allen,Edmen Shahbazyan,simulation,,,inside_distance,Fight goes to decision,no,,0.5294948610401802
+f41dfe6cf29d,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Brendan Allen,Edmen Shahbazyan,simulation,,,method,Win by KO/TKO,ko_tko,,0.22975961070527404
+f41dfe6cf29d,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Brendan Allen,Edmen Shahbazyan,simulation,,,method,Win by Submission,submission,,0.24074552825454576
+f41dfe6cf29d,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Brendan Allen,Edmen Shahbazyan,simulation,,,method,Win by Decision,decision,,0.5294948610401802
+f41dfe6cf29d,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Brendan Allen,Edmen Shahbazyan,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.23422189236694307
+f41dfe6cf29d,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Brendan Allen,Edmen Shahbazyan,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.765778107633057
+f41dfe6cf29d,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Brendan Allen,Edmen Shahbazyan,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4354334440769521
+f41dfe6cf29d,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Brendan Allen,Edmen Shahbazyan,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5645665559230479
+d7a86871bf97,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bryce Mitchell,Victor Henry,simulation,,,moneyline,Bryce Mitchell win,red,,0.6922393195599946
+d7a86871bf97,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bryce Mitchell,Victor Henry,simulation,,,moneyline,Victor Henry win,blue,,0.3077606804400054
+d7a86871bf97,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bryce Mitchell,Victor Henry,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5400983793297364
+d7a86871bf97,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bryce Mitchell,Victor Henry,simulation,,,inside_distance,Fight goes to decision,no,,0.45990162067026363
+d7a86871bf97,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bryce Mitchell,Victor Henry,simulation,,,method,Win by KO/TKO,ko_tko,,0.4306206502764915
+d7a86871bf97,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bryce Mitchell,Victor Henry,simulation,,,method,Win by Submission,submission,,0.10947772905324488
+d7a86871bf97,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bryce Mitchell,Victor Henry,simulation,,,method,Win by Decision,decision,,0.45990162067026363
+d7a86871bf97,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bryce Mitchell,Victor Henry,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.34073180995942026
+d7a86871bf97,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bryce Mitchell,Victor Henry,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6592681900405797
+d7a86871bf97,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bryce Mitchell,Victor Henry,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.45213829858487675
+d7a86871bf97,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Bryce Mitchell,Victor Henry,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5478617014151232
+912f8ba5d494,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Marcus McGhee,Jakub Wiklacz,simulation,,,moneyline,Marcus McGhee win,red,,0.7449421783638683
+912f8ba5d494,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Marcus McGhee,Jakub Wiklacz,simulation,,,moneyline,Jakub Wiklacz win,blue,,0.25505782163613167
+912f8ba5d494,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Marcus McGhee,Jakub Wiklacz,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5552874034475122
+912f8ba5d494,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Marcus McGhee,Jakub Wiklacz,simulation,,,inside_distance,Fight goes to decision,no,,0.44471259655248785
+912f8ba5d494,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Marcus McGhee,Jakub Wiklacz,simulation,,,method,Win by KO/TKO,ko_tko,,0.2676947766571476
+912f8ba5d494,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Marcus McGhee,Jakub Wiklacz,simulation,,,method,Win by Submission,submission,,0.2875926267903646
+912f8ba5d494,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Marcus McGhee,Jakub Wiklacz,simulation,,,method,Win by Decision,decision,,0.44471259655248785
+912f8ba5d494,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Marcus McGhee,Jakub Wiklacz,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.3131484463039015
+912f8ba5d494,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Marcus McGhee,Jakub Wiklacz,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6868515536960985
+912f8ba5d494,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Marcus McGhee,Jakub Wiklacz,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.44760044983603836
+912f8ba5d494,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Marcus McGhee,Jakub Wiklacz,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5523995501639616
+aa56c9c1fd74,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jordan Leavitt,Joanderson Brito,simulation,,,moneyline,Jordan Leavitt win,red,,0.7917085288957214
+aa56c9c1fd74,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jordan Leavitt,Joanderson Brito,simulation,,,moneyline,Joanderson Brito win,blue,,0.2082914711042786
+aa56c9c1fd74,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jordan Leavitt,Joanderson Brito,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3529296337157277
+aa56c9c1fd74,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jordan Leavitt,Joanderson Brito,simulation,,,inside_distance,Fight goes to decision,no,,0.6470703662842723
+aa56c9c1fd74,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jordan Leavitt,Joanderson Brito,simulation,,,method,Win by KO/TKO,ko_tko,,0.25675840538501343
+aa56c9c1fd74,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jordan Leavitt,Joanderson Brito,simulation,,,method,Win by Submission,submission,,0.0961712283307143
+aa56c9c1fd74,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jordan Leavitt,Joanderson Brito,simulation,,,method,Win by Decision,decision,,0.6470703662842723
+aa56c9c1fd74,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jordan Leavitt,Joanderson Brito,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.199958919770922
+aa56c9c1fd74,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jordan Leavitt,Joanderson Brito,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.800041080229078
+aa56c9c1fd74,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jordan Leavitt,Joanderson Brito,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3422543535836608
+aa56c9c1fd74,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Jordan Leavitt,Joanderson Brito,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6577456464163391
+38376690a65f,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Fares Ziam,Tom Nolan,simulation,,,moneyline,Fares Ziam win,red,,0.7438738728782026
+38376690a65f,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Fares Ziam,Tom Nolan,simulation,,,moneyline,Tom Nolan win,blue,,0.2561261271217974
+38376690a65f,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Fares Ziam,Tom Nolan,simulation,,,inside_distance,Fight ends inside distance,yes,,0.49220157711075574
+38376690a65f,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Fares Ziam,Tom Nolan,simulation,,,inside_distance,Fight goes to decision,no,,0.5077984228892443
+38376690a65f,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Fares Ziam,Tom Nolan,simulation,,,method,Win by KO/TKO,ko_tko,,0.37637025678534203
+38376690a65f,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Fares Ziam,Tom Nolan,simulation,,,method,Win by Submission,submission,,0.1158313203254137
+38376690a65f,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Fares Ziam,Tom Nolan,simulation,,,method,Win by Decision,decision,,0.5077984228892443
+38376690a65f,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Fares Ziam,Tom Nolan,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.3516475260635027
+38376690a65f,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Fares Ziam,Tom Nolan,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6483524739364973
+38376690a65f,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Fares Ziam,Tom Nolan,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4317898780558128
+38376690a65f,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Fares Ziam,Tom Nolan,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5682101219441872
+147d95685cfe,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Ketlen Souza,Ariane Carnelossi,simulation,,,moneyline,Ketlen Souza win,red,,0.8018188074402766
+147d95685cfe,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Ketlen Souza,Ariane Carnelossi,simulation,,,moneyline,Ariane Carnelossi win,blue,,0.19818119255972344
+147d95685cfe,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Ketlen Souza,Ariane Carnelossi,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3685869143529257
+147d95685cfe,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Ketlen Souza,Ariane Carnelossi,simulation,,,inside_distance,Fight goes to decision,no,,0.6314130856470743
+147d95685cfe,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Ketlen Souza,Ariane Carnelossi,simulation,,,method,Win by KO/TKO,ko_tko,,0.2530147900950614
+147d95685cfe,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Ketlen Souza,Ariane Carnelossi,simulation,,,method,Win by Submission,submission,,0.11557212425786428
+147d95685cfe,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Ketlen Souza,Ariane Carnelossi,simulation,,,method,Win by Decision,decision,,0.6314130856470743
+147d95685cfe,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Ketlen Souza,Ariane Carnelossi,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.2457458989969302
+147d95685cfe,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Ketlen Souza,Ariane Carnelossi,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7542541010030698
+147d95685cfe,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Ketlen Souza,Ariane Carnelossi,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3175954728127653
+147d95685cfe,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Ketlen Souza,Ariane Carnelossi,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6824045271872348
+e7e2a81ecd59,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Priscila Cachoeira,Chelsea Chandler,simulation,,,moneyline,Priscila Cachoeira win,red,,0.707852075235015
+e7e2a81ecd59,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Priscila Cachoeira,Chelsea Chandler,simulation,,,moneyline,Chelsea Chandler win,blue,,0.29214792476498497
+e7e2a81ecd59,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Priscila Cachoeira,Chelsea Chandler,simulation,,,inside_distance,Fight ends inside distance,yes,,0.36754429180754933
+e7e2a81ecd59,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Priscila Cachoeira,Chelsea Chandler,simulation,,,inside_distance,Fight goes to decision,no,,0.6324557081924507
+e7e2a81ecd59,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Priscila Cachoeira,Chelsea Chandler,simulation,,,method,Win by KO/TKO,ko_tko,,0.21434500269620432
+e7e2a81ecd59,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Priscila Cachoeira,Chelsea Chandler,simulation,,,method,Win by Submission,submission,,0.153199289111345
+e7e2a81ecd59,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Priscila Cachoeira,Chelsea Chandler,simulation,,,method,Win by Decision,decision,,0.6324557081924507
+e7e2a81ecd59,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Priscila Cachoeira,Chelsea Chandler,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.19161284392453545
+e7e2a81ecd59,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Priscila Cachoeira,Chelsea Chandler,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.8083871560754645
+e7e2a81ecd59,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Priscila Cachoeira,Chelsea Chandler,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.34797790574095794
+e7e2a81ecd59,UFC Fight Night: Muhammad vs. Bonfim,2026-06-06,Priscila Cachoeira,Chelsea Chandler,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.652022094259042

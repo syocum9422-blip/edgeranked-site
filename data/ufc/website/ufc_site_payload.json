@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-05-13T07:00:35.097352+00:00",
+  "generated_at": "2026-05-16T06:00:45.358323+00:00",
   "sport": "ufc",
   "event": {
     "name": "UFC Fight Night: Allen vs. Costa",
     "date": "2026-05-16",
-    "fight_count": 26
+    "fight_count": 38
   },
   "fights": [
     {
@@ -3585,7 +3585,7 @@
     {
       "fight_id": "a51b07b12e9b",
       "card_position": 26,
-      "card_label": "Opening Fight",
+      "card_label": "Card Position 26",
       "fight_title": "Loma Lookboonmee vs Jaqueline Amorim",
       "weight_class": "Women's Strawweight",
       "scheduled_rounds": 3,
@@ -3718,6 +3718,1722 @@
             "selection": "under",
             "line": 2.5,
             "probability_pct": 48.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "2eb610c502b3",
+      "card_position": 27,
+      "card_label": "Card Position 27",
+      "fight_title": "Belal Muhammad vs Gabriel Bonfim",
+      "weight_class": "Welterweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Belal Muhammad",
+      "fighter_blue": "Gabriel Bonfim",
+      "predicted_winner": "Belal Muhammad",
+      "predicted_winner_pct": 61.5,
+      "confidence_tier": "competitive",
+      "win_probabilities": {
+        "red_pct": 61.5,
+        "blue_pct": 38.5
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 25.5,
+        "submission_pct": 12.9,
+        "decision_pct": 61.6,
+        "inside_distance_pct": 38.4
+      },
+      "totals": {
+        "over_1_5_pct": 79.2,
+        "under_1_5_pct": 20.8,
+        "over_2_5_pct": 61.7,
+        "under_2_5_pct": 38.3
+      },
+      "expectations": {
+        "fight_time_mins": 12.2609,
+        "red_takedowns": 0.2912,
+        "blue_takedowns": 1.7346
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 61.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 38.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 61.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 25.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 12.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Gabriel Bonfim win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 38.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Belal Muhammad win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 61.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 79.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 20.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 61.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 38.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "70cfc8a6f450",
+      "card_position": 28,
+      "card_label": "Card Position 28",
+      "fight_title": "Iwo Baraniewski vs Billy Elekana",
+      "weight_class": "Light Heavyweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Iwo Baraniewski",
+      "fighter_blue": "Billy Elekana",
+      "predicted_winner": "Iwo Baraniewski",
+      "predicted_winner_pct": 77.7,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 77.7,
+        "blue_pct": 22.3
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 43.0,
+        "submission_pct": 13.6,
+        "decision_pct": 43.4,
+        "inside_distance_pct": 56.6
+      },
+      "totals": {
+        "over_1_5_pct": 58.5,
+        "under_1_5_pct": 41.5,
+        "over_2_5_pct": 45.3,
+        "under_2_5_pct": 54.7
+      },
+      "expectations": {
+        "fight_time_mins": 8.1424,
+        "red_takedowns": 0.6765,
+        "blue_takedowns": 0.967
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 43.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 56.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 43.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 43.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 13.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Billy Elekana win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 22.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Iwo Baraniewski win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 77.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 58.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 41.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 45.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 54.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "a1cce6fb6d33",
+      "card_position": 29,
+      "card_label": "Card Position 29",
+      "fight_title": "Imanol Rodriguez vs Matt Schnell",
+      "weight_class": "Flyweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Imanol Rodriguez",
+      "fighter_blue": "Matt Schnell",
+      "predicted_winner": "Imanol Rodriguez",
+      "predicted_winner_pct": 76.2,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 76.2,
+        "blue_pct": 23.8
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 24.9,
+        "submission_pct": 19.6,
+        "decision_pct": 55.5,
+        "inside_distance_pct": 44.5
+      },
+      "totals": {
+        "over_1_5_pct": 70.7,
+        "under_1_5_pct": 29.3,
+        "over_2_5_pct": 59.3,
+        "under_2_5_pct": 40.7
+      },
+      "expectations": {
+        "fight_time_mins": 11.3246,
+        "red_takedowns": 1.6666,
+        "blue_takedowns": 0.7845
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 55.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 44.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 55.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 24.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 19.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Matt Schnell win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 23.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Imanol Rodriguez win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 76.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 70.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 29.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 59.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 40.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "ee2d400baed6",
+      "card_position": 30,
+      "card_label": "Card Position 30",
+      "fight_title": "Bruno Silva vs Edgar Chairez",
+      "weight_class": "Flyweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Bruno Silva",
+      "fighter_blue": "Edgar Chairez",
+      "predicted_winner": "Bruno Silva",
+      "predicted_winner_pct": 83.4,
+      "confidence_tier": "high",
+      "win_probabilities": {
+        "red_pct": 83.4,
+        "blue_pct": 16.6
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 23.3,
+        "submission_pct": 17.9,
+        "decision_pct": 58.8,
+        "inside_distance_pct": 41.2
+      },
+      "totals": {
+        "over_1_5_pct": 77.5,
+        "under_1_5_pct": 22.5,
+        "over_2_5_pct": 63.9,
+        "under_2_5_pct": 36.1
+      },
+      "expectations": {
+        "fight_time_mins": 11.9565,
+        "red_takedowns": 2.4158,
+        "blue_takedowns": 0.1833
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 58.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 41.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 58.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 23.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 17.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Edgar Chairez win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 16.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Bruno Silva win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 83.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 77.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 22.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 63.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 36.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "9fecd8a425ef",
+      "card_position": 31,
+      "card_label": "Card Position 31",
+      "fight_title": "Jeisla Chaves vs Yuneisy Duben",
+      "weight_class": "Women's Flyweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Jeisla Chaves",
+      "fighter_blue": "Yuneisy Duben",
+      "predicted_winner": "Jeisla Chaves",
+      "predicted_winner_pct": 71.4,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 71.4,
+        "blue_pct": 28.6
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 41.9,
+        "submission_pct": 15.8,
+        "decision_pct": 42.3,
+        "inside_distance_pct": 57.7
+      },
+      "totals": {
+        "over_1_5_pct": 67.6,
+        "under_1_5_pct": 32.4,
+        "over_2_5_pct": 56.7,
+        "under_2_5_pct": 43.3
+      },
+      "expectations": {
+        "fight_time_mins": 9.6741,
+        "red_takedowns": 1.7511,
+        "blue_takedowns": 0.7228
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 42.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 57.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 42.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 41.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 15.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Yuneisy Duben win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 28.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Jeisla Chaves win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 71.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 67.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 32.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 56.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 43.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "f41dfe6cf29d",
+      "card_position": 32,
+      "card_label": "Card Position 32",
+      "fight_title": "Brendan Allen vs Edmen Shahbazyan",
+      "weight_class": "Middleweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Brendan Allen",
+      "fighter_blue": "Edmen Shahbazyan",
+      "predicted_winner": "Brendan Allen",
+      "predicted_winner_pct": 83.5,
+      "confidence_tier": "high",
+      "win_probabilities": {
+        "red_pct": 83.5,
+        "blue_pct": 16.5
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 23.0,
+        "submission_pct": 24.1,
+        "decision_pct": 52.9,
+        "inside_distance_pct": 47.1
+      },
+      "totals": {
+        "over_1_5_pct": 76.6,
+        "under_1_5_pct": 23.4,
+        "over_2_5_pct": 56.5,
+        "under_2_5_pct": 43.5
+      },
+      "expectations": {
+        "fight_time_mins": 11.4538,
+        "red_takedowns": 0.3753,
+        "blue_takedowns": 0.5824
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 52.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 47.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 52.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 23.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 24.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Edmen Shahbazyan win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 16.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Brendan Allen win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 83.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 76.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 23.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 56.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 43.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "d7a86871bf97",
+      "card_position": 33,
+      "card_label": "Card Position 33",
+      "fight_title": "Bryce Mitchell vs Victor Henry",
+      "weight_class": "Bantamweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Bryce Mitchell",
+      "fighter_blue": "Victor Henry",
+      "predicted_winner": "Bryce Mitchell",
+      "predicted_winner_pct": 69.2,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 69.2,
+        "blue_pct": 30.8
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 43.1,
+        "submission_pct": 10.9,
+        "decision_pct": 46.0,
+        "inside_distance_pct": 54.0
+      },
+      "totals": {
+        "over_1_5_pct": 65.9,
+        "under_1_5_pct": 34.1,
+        "over_2_5_pct": 54.8,
+        "under_2_5_pct": 45.2
+      },
+      "expectations": {
+        "fight_time_mins": 9.3346,
+        "red_takedowns": 2.9227,
+        "blue_takedowns": 0.3374
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 46.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 54.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 46.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 43.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 10.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Victor Henry win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 30.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Bryce Mitchell win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 69.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 65.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 34.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 54.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 45.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "912f8ba5d494",
+      "card_position": 34,
+      "card_label": "Card Position 34",
+      "fight_title": "Marcus McGhee vs Jakub Wiklacz",
+      "weight_class": "Bantamweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Marcus McGhee",
+      "fighter_blue": "Jakub Wiklacz",
+      "predicted_winner": "Marcus McGhee",
+      "predicted_winner_pct": 74.5,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 74.5,
+        "blue_pct": 25.5
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 26.8,
+        "submission_pct": 28.8,
+        "decision_pct": 44.5,
+        "inside_distance_pct": 55.5
+      },
+      "totals": {
+        "over_1_5_pct": 68.7,
+        "under_1_5_pct": 31.3,
+        "over_2_5_pct": 55.2,
+        "under_2_5_pct": 44.8
+      },
+      "expectations": {
+        "fight_time_mins": 10.007,
+        "red_takedowns": 0.8128,
+        "blue_takedowns": 0.4213
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 44.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 55.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 44.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 26.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 28.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Jakub Wiklacz win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 25.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Marcus McGhee win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 74.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 68.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 31.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 55.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 44.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "aa56c9c1fd74",
+      "card_position": 35,
+      "card_label": "Card Position 35",
+      "fight_title": "Jordan Leavitt vs Joanderson Brito",
+      "weight_class": "Featherweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Jordan Leavitt",
+      "fighter_blue": "Joanderson Brito",
+      "predicted_winner": "Jordan Leavitt",
+      "predicted_winner_pct": 79.2,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 79.2,
+        "blue_pct": 20.8
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 25.7,
+        "submission_pct": 9.6,
+        "decision_pct": 64.7,
+        "inside_distance_pct": 35.3
+      },
+      "totals": {
+        "over_1_5_pct": 80.0,
+        "under_1_5_pct": 20.0,
+        "over_2_5_pct": 65.8,
+        "under_2_5_pct": 34.2
+      },
+      "expectations": {
+        "fight_time_mins": 12.4859,
+        "red_takedowns": 0.412,
+        "blue_takedowns": 0.9044
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 64.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 35.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 64.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 25.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 9.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Joanderson Brito win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 20.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Jordan Leavitt win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 79.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 80.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 20.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 65.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 34.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "38376690a65f",
+      "card_position": 36,
+      "card_label": "Card Position 36",
+      "fight_title": "Fares Ziam vs Tom Nolan",
+      "weight_class": "Lightweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Fares Ziam",
+      "fighter_blue": "Tom Nolan",
+      "predicted_winner": "Fares Ziam",
+      "predicted_winner_pct": 74.4,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 74.4,
+        "blue_pct": 25.6
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 37.6,
+        "submission_pct": 11.6,
+        "decision_pct": 50.8,
+        "inside_distance_pct": 49.2
+      },
+      "totals": {
+        "over_1_5_pct": 64.8,
+        "under_1_5_pct": 35.2,
+        "over_2_5_pct": 56.8,
+        "under_2_5_pct": 43.2
+      },
+      "expectations": {
+        "fight_time_mins": 9.1718,
+        "red_takedowns": 1.58,
+        "blue_takedowns": 0.4122
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 50.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 49.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 50.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 37.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 11.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Tom Nolan win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 25.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fares Ziam win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 74.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 64.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 35.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 56.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 43.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "147d95685cfe",
+      "card_position": 37,
+      "card_label": "Card Position 37",
+      "fight_title": "Ketlen Souza vs Ariane Carnelossi",
+      "weight_class": "Women's Strawweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Ketlen Souza",
+      "fighter_blue": "Ariane Carnelossi",
+      "predicted_winner": "Ketlen Souza",
+      "predicted_winner_pct": 80.2,
+      "confidence_tier": "high",
+      "win_probabilities": {
+        "red_pct": 80.2,
+        "blue_pct": 19.8
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 25.3,
+        "submission_pct": 11.6,
+        "decision_pct": 63.1,
+        "inside_distance_pct": 36.9
+      },
+      "totals": {
+        "over_1_5_pct": 75.4,
+        "under_1_5_pct": 24.6,
+        "over_2_5_pct": 68.2,
+        "under_2_5_pct": 31.8
+      },
+      "expectations": {
+        "fight_time_mins": 12.024,
+        "red_takedowns": 0.802,
+        "blue_takedowns": 0.8507
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 63.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 36.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 63.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 25.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 11.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Ariane Carnelossi win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 19.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Ketlen Souza win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 80.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 75.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 24.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 68.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 31.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "e7e2a81ecd59",
+      "card_position": 38,
+      "card_label": "Opening Fight",
+      "fight_title": "Priscila Cachoeira vs Chelsea Chandler",
+      "weight_class": "Women's Bantamweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Priscila Cachoeira",
+      "fighter_blue": "Chelsea Chandler",
+      "predicted_winner": "Priscila Cachoeira",
+      "predicted_winner_pct": 70.8,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 70.8,
+        "blue_pct": 29.2
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 21.4,
+        "submission_pct": 15.3,
+        "decision_pct": 63.2,
+        "inside_distance_pct": 36.8
+      },
+      "totals": {
+        "over_1_5_pct": 80.8,
+        "under_1_5_pct": 19.2,
+        "over_2_5_pct": 65.2,
+        "under_2_5_pct": 34.8
+      },
+      "expectations": {
+        "fight_time_mins": 12.2079,
+        "red_takedowns": 0.4826,
+        "blue_takedowns": 0.8326
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 63.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 36.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 63.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 21.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 15.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Chelsea Chandler win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 29.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Priscila Cachoeira win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 70.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 80.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 19.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 65.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 34.8,
             "source": "simulation",
             "projection_player": null,
             "projection_opponent": null
