@@ -1,209 +1,196 @@
 LINES_PLAYER,PROJECTION_PLAYER,PLAYER_KEY,RAW_STAT,NORMALIZED_STAT,LINE,PROJECTION
-De'Aaron Fox,De'Aaron Fox,deaaron fox,3-PT Attempted,FG3A,4.5,4.68
-De'Aaron Fox,De'Aaron Fox,deaaron fox,3-PT Made,FG3M,0.5,1.3
-De'Aaron Fox,De'Aaron Fox,deaaron fox,Blks+Stls,SB,1.5,1.91
-De'Aaron Fox,De'Aaron Fox,deaaron fox,Defensive Rebounds,DREB,3.0,4.17
-De'Aaron Fox,De'Aaron Fox,deaaron fox,Fantasy Score,FANTASY,31.5,33.8
-De'Aaron Fox,De'Aaron Fox,deaaron fox,Offensive Rebounds,OREB,0.5,0.87
-De'Aaron Fox,De'Aaron Fox,deaaron fox,Rebs+Asts,RA,9.5,10.49
-De'Aaron Fox,De'Aaron Fox,deaaron fox,Two Pointers Attempted,FG2A,8.0,8.94
-Devin Vassell,Devin Vassell,devin vassell,3-PT Attempted,FG3A,6.5,6.81
-Devin Vassell,Devin Vassell,devin vassell,Blks+Stls,SB,1.5,2.3
-Devin Vassell,Devin Vassell,devin vassell,Defensive Rebounds,DREB,3.5,4.16
-Devin Vassell,Devin Vassell,devin vassell,Fantasy Score,FANTASY,26.5,29.65
-Devin Vassell,Devin Vassell,devin vassell,Free Throws Attempted,FTA,1.5,2.33
-Devin Vassell,Devin Vassell,devin vassell,Free Throws Made,FTM,1.5,1.61
-Devin Vassell,Devin Vassell,devin vassell,Offensive Rebounds,OREB,0.5,0.76
-Devin Vassell,Devin Vassell,devin vassell,Pts+Asts,PA,15.5,15.63
-Devin Vassell,Devin Vassell,devin vassell,Pts+Rebs,PR,17.5,17.57
-Devin Vassell,Devin Vassell,devin vassell,Pts+Rebs+Asts,PRA,20.0,20.26
-Devin Vassell,Devin Vassell,devin vassell,Rebounds,REB,4.0,4.63
-Devin Vassell,Devin Vassell,devin vassell,Rebs+Asts,RA,6.5,7.32
-Devin Vassell,Devin Vassell,devin vassell,Turnovers,TOV,0.5,0.91
-Devin Vassell,Devin Vassell,devin vassell,Two Pointers Made,FG2M,1.5,1.7
-Dylan Harper,Dylan Harper,dylan harper,Assists,AST,2.5,2.69
-Dylan Harper,Dylan Harper,dylan harper,Blks+Stls,SB,0.5,0.88
-Dylan Harper,Dylan Harper,dylan harper,Defensive Rebounds,DREB,3.0,4.33
-Dylan Harper,Dylan Harper,dylan harper,FG Attempted,FGA,7.5,7.69
-Dylan Harper,Dylan Harper,dylan harper,FG Made,FGM,3.5,3.8
-Dylan Harper,Dylan Harper,dylan harper,Fantasy Score,FANTASY,21.5,23.97
-Dylan Harper,Dylan Harper,dylan harper,Free Throws Attempted,FTA,2.5,2.64
-Dylan Harper,Dylan Harper,dylan harper,Free Throws Made,FTM,1.5,1.78
-Dylan Harper,Dylan Harper,dylan harper,Offensive Rebounds,OREB,1.0,1.76
-Dylan Harper,Dylan Harper,dylan harper,Personal Fouls,PF,1.5,1.64
-Dylan Harper,Dylan Harper,dylan harper,Points,PTS,10.5,11.95
-Dylan Harper,Dylan Harper,dylan harper,Pts+Asts,PA,13.5,14.64
-Dylan Harper,Dylan Harper,dylan harper,Pts+Rebs,PR,14.5,17.34
-Dylan Harper,Dylan Harper,dylan harper,Pts+Rebs+Asts,PRA,17.5,20.03
-Dylan Harper,Dylan Harper,dylan harper,Rebounds,REB,4.0,5.39
-Dylan Harper,Dylan Harper,dylan harper,Rebs+Asts,RA,6.5,8.08
-Dylan Harper,Dylan Harper,dylan harper,Two Pointers Attempted,FG2A,5.0,5.08
-Jalen Brunson,Jalen Brunson,jalen brunson,3-PT Attempted,FG3A,6.5,6.92
-Jalen Brunson,Jalen Brunson,jalen brunson,3-PT Made,FG3M,2.0,2.03
-Jalen Brunson,Jalen Brunson,jalen brunson,Assists,AST,6.5,6.82
-Jalen Brunson,Jalen Brunson,jalen brunson,Blks+Stls,SB,0.5,1.09
-Jalen Brunson,Jalen Brunson,jalen brunson,Defensive Rebounds,DREB,2.5,2.88
-Jalen Brunson,Jalen Brunson,jalen brunson,Fantasy Score,FANTASY,39.5,41.32
-Jalen Brunson,Jalen Brunson,jalen brunson,Offensive Rebounds,OREB,0.5,0.56
-Jalen Brunson,Jalen Brunson,jalen brunson,Pts+Rebs+Asts,PRA,34.5,34.81
-Jalen Brunson,Jalen Brunson,jalen brunson,Rebounds,REB,3.0,3.38
-Jalen Brunson,Jalen Brunson,jalen brunson,Rebs+Asts,RA,9.5,10.2
-Jalen Brunson,Jalen Brunson,jalen brunson,Two Pointers Made,FG2M,6.5,6.69
-Josh Hart,Josh Hart,josh hart,3-PT Attempted,FG3A,5.0,6.06
-Josh Hart,Josh Hart,josh hart,Blks+Stls,SB,1.5,2.06
-Josh Hart,Josh Hart,josh hart,Defensive Rebounds,DREB,6.5,7.1
-Josh Hart,Josh Hart,josh hart,FG Attempted,FGA,9.5,9.61
-Josh Hart,Josh Hart,josh hart,FG Made,FGM,4.0,4.56
-Josh Hart,Josh Hart,josh hart,Fantasy Score,FANTASY,31.0,34.12
-Josh Hart,Josh Hart,josh hart,Free Throws Attempted,FTA,1.5,1.51
-Josh Hart,Josh Hart,josh hart,Personal Fouls,PF,2.5,2.71
-Josh Hart,Josh Hart,josh hart,Points,PTS,11.5,13.18
-Josh Hart,Josh Hart,josh hart,Pts+Asts,PA,16.5,17.59
-Josh Hart,Josh Hart,josh hart,Pts+Rebs,PR,20.0,20.74
-Josh Hart,Josh Hart,josh hart,Pts+Rebs+Asts,PRA,24.5,25.15
-Josh Hart,Josh Hart,josh hart,Two Pointers Attempted,FG2A,5.0,5.58
-Josh Hart,Josh Hart,josh hart,Two Pointers Made,FG2M,2.5,3.04
-Julian Champagnie,Julian Champagnie,julian champagnie,3-PT Attempted,FG3A,6.5,7.17
-Julian Champagnie,Julian Champagnie,julian champagnie,3-PT Made,FG3M,2.0,2.3
-Julian Champagnie,Julian Champagnie,julian champagnie,Assists,AST,0.5,1.66
-Julian Champagnie,Julian Champagnie,julian champagnie,Blks+Stls,SB,1.5,1.94
-Julian Champagnie,Julian Champagnie,julian champagnie,Defensive Rebounds,DREB,4.5,5.19
-Julian Champagnie,Julian Champagnie,julian champagnie,FG Attempted,FGA,8.5,9.18
-Julian Champagnie,Julian Champagnie,julian champagnie,Fantasy Score,FANTASY,24.5,28.7
-Julian Champagnie,Julian Champagnie,julian champagnie,Free Throws Made,FTM,0.5,1.01
-Julian Champagnie,Julian Champagnie,julian champagnie,Offensive Rebounds,OREB,0.5,0.97
-Julian Champagnie,Julian Champagnie,julian champagnie,Personal Fouls,PF,2.5,2.53
-Julian Champagnie,Julian Champagnie,julian champagnie,Points,PTS,10.0,13.03
-Julian Champagnie,Julian Champagnie,julian champagnie,Pts+Asts,PA,11.5,14.69
-Julian Champagnie,Julian Champagnie,julian champagnie,Pts+Rebs,PR,15.5,18.82
-Julian Champagnie,Julian Champagnie,julian champagnie,Pts+Rebs+Asts,PRA,17.5,20.48
-Julian Champagnie,Julian Champagnie,julian champagnie,Rebounds,REB,5.5,5.79
-Julian Champagnie,Julian Champagnie,julian champagnie,Rebs+Asts,RA,7.0,7.45
-Julian Champagnie,Julian Champagnie,julian champagnie,Turnovers,TOV,0.5,0.75
-Julian Champagnie,Julian Champagnie,julian champagnie,Two Pointers Attempted,FG2A,2.0,2.67
-Julian Champagnie,Julian Champagnie,julian champagnie,Two Pointers Made,FG2M,0.5,1.8
-Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,3-PT Made,FG3M,0.5,1.63
-Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Assists,AST,4.0,5.54
-Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Blks+Stls,SB,2.5,2.61
-Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Defensive Rebounds,DREB,8.5,9.01
-Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Double-Double,DD,0.5,0.54
-Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Fantasy Score,FANTASY,40.0,43.94
-Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Rebounds - 1st 3 Minutes,REB_3M,0.5,1.01
-Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Rebs+Asts,RA,15.5,16.53
-Keldon Johnson,Keldon Johnson,keldon johnson,3-PT Attempted,FG3A,3.0,4.47
-Keldon Johnson,Keldon Johnson,keldon johnson,Assists,AST,0.5,1.47
-Keldon Johnson,Keldon Johnson,keldon johnson,Blks+Stls,SB,0.5,0.84
-Keldon Johnson,Keldon Johnson,keldon johnson,FG Attempted,FGA,7.0,8.8
-Keldon Johnson,Keldon Johnson,keldon johnson,FG Made,FGM,3.0,3.95
-Keldon Johnson,Keldon Johnson,keldon johnson,Fantasy Score,FANTASY,15.5,18.61
-Keldon Johnson,Keldon Johnson,keldon johnson,Offensive Rebounds,OREB,1.0,1.96
-Keldon Johnson,Keldon Johnson,keldon johnson,Personal Fouls,PF,1.5,3.48
-Keldon Johnson,Keldon Johnson,keldon johnson,Points,PTS,8.5,10.22
-Keldon Johnson,Keldon Johnson,keldon johnson,Pts+Asts,PA,9.0,11.69
-Keldon Johnson,Keldon Johnson,keldon johnson,Pts+Rebs,PR,11.5,13.79
-Keldon Johnson,Keldon Johnson,keldon johnson,Pts+Rebs+Asts,PRA,12.5,15.26
-Keldon Johnson,Keldon Johnson,keldon johnson,Rebounds,REB,3.0,3.57
-Keldon Johnson,Keldon Johnson,keldon johnson,Rebs+Asts,RA,3.5,5.04
-Keldon Johnson,Keldon Johnson,keldon johnson,Turnovers,TOV,0.5,1.21
-Keldon Johnson,Keldon Johnson,keldon johnson,Two Pointers Attempted,FG2A,4.0,5.77
-Keldon Johnson,Keldon Johnson,keldon johnson,Two Pointers Made,FG2M,1.5,2.7
-Landry Shamet,Landry Shamet,landry shamet,3-PT Made,FG3M,0.5,2.12
-Landry Shamet,Landry Shamet,landry shamet,Blks+Stls,SB,0.5,0.6
-Landry Shamet,Landry Shamet,landry shamet,FG Made,FGM,1.5,2.82
-Landry Shamet,Landry Shamet,landry shamet,Fantasy Score,FANTASY,11.5,15.16
-Landry Shamet,Landry Shamet,landry shamet,Free Throws Attempted,FTA,0.5,1.0
-Landry Shamet,Landry Shamet,landry shamet,Free Throws Made,FTM,0.5,0.58
-Landry Shamet,Landry Shamet,landry shamet,Personal Fouls,PF,1.5,2.08
-Landry Shamet,Landry Shamet,landry shamet,Points,PTS,6.0,8.71
-Landry Shamet,Landry Shamet,landry shamet,Pts+Asts,PA,6.5,10.16
-Landry Shamet,Landry Shamet,landry shamet,Pts+Rebs,PR,5.5,10.3
-Landry Shamet,Landry Shamet,landry shamet,Pts+Rebs+Asts,PRA,8.5,11.75
-Landry Shamet,Landry Shamet,landry shamet,Rebounds,REB,1.5,1.59
-Landry Shamet,Landry Shamet,landry shamet,Rebs+Asts,RA,2.5,3.04
-Landry Shamet,Landry Shamet,landry shamet,Two Pointers Made,FG2M,0.5,0.65
-Luke Kornet,Luke Kornet,luke kornet,Blks+Stls,SB,0.5,1.2
-Luke Kornet,Luke Kornet,luke kornet,Blocked Shots,BLK,0.5,0.9
-Luke Kornet,Luke Kornet,luke kornet,Defensive Rebounds,DREB,1.5,2.39
-Luke Kornet,Luke Kornet,luke kornet,FG Attempted,FGA,1.5,3.03
-Luke Kornet,Luke Kornet,luke kornet,Fantasy Score,FANTASY,8.5,13.72
-Luke Kornet,Luke Kornet,luke kornet,Free Throws Attempted,FTA,0.5,1.12
-Luke Kornet,Luke Kornet,luke kornet,Offensive Rebounds,OREB,1.5,2.04
-Luke Kornet,Luke Kornet,luke kornet,Personal Fouls,PF,1.5,1.53
-Luke Kornet,Luke Kornet,luke kornet,Points,PTS,2.5,4.12
-Luke Kornet,Luke Kornet,luke kornet,Pts+Rebs,PR,5.5,8.43
-Luke Kornet,Luke Kornet,luke kornet,Pts+Rebs+Asts,PRA,6.5,9.35
-Luke Kornet,Luke Kornet,luke kornet,Rebounds,REB,2.5,4.31
-Luke Kornet,Luke Kornet,luke kornet,Rebs+Asts,RA,2.5,5.23
-Luke Kornet,Luke Kornet,luke kornet,Turnovers,TOV,0.5,0.63
-Luke Kornet,Luke Kornet,luke kornet,Two Pointers Attempted,FG2A,1.5,2.17
-Mikal Bridges,Mikal Bridges,mikal bridges,Blks+Stls,SB,1.5,1.9
-Mikal Bridges,Mikal Bridges,mikal bridges,Defensive Rebounds,DREB,3.0,3.72
-Mikal Bridges,Mikal Bridges,mikal bridges,FG Made,FGM,5.5,5.88
-Mikal Bridges,Mikal Bridges,mikal bridges,Fantasy Score,FANTASY,26.5,30.26
-Mikal Bridges,Mikal Bridges,mikal bridges,Free Throws Attempted,FTA,1.5,1.59
-Mikal Bridges,Mikal Bridges,mikal bridges,Points,PTS,14.5,16.13
-Mikal Bridges,Mikal Bridges,mikal bridges,Points - 1st 3 Minutes,PTS_3M,0.5,1.4
-Mikal Bridges,Mikal Bridges,mikal bridges,Pts+Asts,PA,17.5,19.1
-Mikal Bridges,Mikal Bridges,mikal bridges,Pts+Rebs,PR,18.5,20.04
-Mikal Bridges,Mikal Bridges,mikal bridges,Pts+Rebs+Asts,PRA,21.5,23.01
-Mikal Bridges,Mikal Bridges,mikal bridges,Rebounds,REB,3.5,3.91
-Mikal Bridges,Mikal Bridges,mikal bridges,Rebs+Asts,RA,6.5,6.88
-Mikal Bridges,Mikal Bridges,mikal bridges,Two Pointers Attempted,FG2A,8.0,8.47
-Mikal Bridges,Mikal Bridges,mikal bridges,Two Pointers Made,FG2M,4.0,5.03
-Miles McBride,Miles McBride,miles mcbride,3-PT Made,FG3M,0.5,1.7
-Miles McBride,Miles McBride,miles mcbride,Blks+Stls,SB,0.5,1.0
-Miles McBride,Miles McBride,miles mcbride,FG Attempted,FGA,4.5,5.97
-Miles McBride,Miles McBride,miles mcbride,FG Made,FGM,1.5,2.71
-Miles McBride,Miles McBride,miles mcbride,Fantasy Score,FANTASY,11.5,17.08
-Miles McBride,Miles McBride,miles mcbride,Free Throws Attempted,FTA,0.5,1.11
-Miles McBride,Miles McBride,miles mcbride,Free Throws Made,FTM,0.5,0.72
-Miles McBride,Miles McBride,miles mcbride,Personal Fouls,PF,1.5,2.27
-Miles McBride,Miles McBride,miles mcbride,Points,PTS,5.5,8.6
-Miles McBride,Miles McBride,miles mcbride,Pts+Asts,PA,4.5,10.17
-Miles McBride,Miles McBride,miles mcbride,Pts+Rebs,PR,6.5,10.75
-Miles McBride,Miles McBride,miles mcbride,Pts+Rebs+Asts,PRA,8.0,12.32
-Miles McBride,Miles McBride,miles mcbride,Rebounds,REB,0.5,2.15
-Miles McBride,Miles McBride,miles mcbride,Rebs+Asts,RA,2.5,3.72
-Miles McBride,Miles McBride,miles mcbride,Two Pointers Made,FG2M,0.5,0.8
-Mitchell Robinson,Mitchell Robinson,mitchell robinson,Defensive Rebounds,DREB,2.5,3.42
-Mitchell Robinson,Mitchell Robinson,mitchell robinson,FG Attempted,FGA,2.5,3.68
-Mitchell Robinson,Mitchell Robinson,mitchell robinson,Free Throws Attempted,FTA,1.5,3.05
-Mitchell Robinson,Mitchell Robinson,mitchell robinson,Free Throws Made,FTM,0.5,1.05
-Mitchell Robinson,Mitchell Robinson,mitchell robinson,Offensive Rebounds,OREB,2.5,3.37
-Mitchell Robinson,Mitchell Robinson,mitchell robinson,Points,PTS,3.5,5.7
-Mitchell Robinson,Mitchell Robinson,mitchell robinson,Pts+Rebs,PR,8.5,12.42
-Mitchell Robinson,Mitchell Robinson,mitchell robinson,Pts+Rebs+Asts,PRA,9.0,13.22
-Mitchell Robinson,Mitchell Robinson,mitchell robinson,Rebounds,REB,5.0,6.72
-Mitchell Robinson,Mitchell Robinson,mitchell robinson,Steals,STL,0.5,0.58
-Mitchell Robinson,Mitchell Robinson,mitchell robinson,Turnovers,TOV,0.5,0.56
-Mitchell Robinson,Mitchell Robinson,mitchell robinson,Two Pointers Attempted,FG2A,2.5,2.77
-OG Anunoby,OG Anunoby,o g anunoby,Defensive Rebounds,DREB,4.5,5.03
-OG Anunoby,OG Anunoby,o g anunoby,Fantasy Score,FANTASY,32.5,37.05
-OG Anunoby,OG Anunoby,o g anunoby,Free Throws Made,FTM,2.5,2.93
-OG Anunoby,OG Anunoby,o g anunoby,Points,PTS,15.5,18.03
-OG Anunoby,OG Anunoby,o g anunoby,Points - 1st 3 Minutes,PTS_3M,0.5,1.67
-OG Anunoby,OG Anunoby,o g anunoby,Pts+Asts,PA,17.5,20.6
-OG Anunoby,OG Anunoby,o g anunoby,Pts+Rebs,PR,21.5,24.37
-OG Anunoby,OG Anunoby,o g anunoby,Pts+Rebs+Asts,PRA,23.5,26.94
-OG Anunoby,OG Anunoby,o g anunoby,Rebounds,REB,5.5,6.34
-OG Anunoby,OG Anunoby,o g anunoby,Rebs+Asts,RA,7.5,8.91
-OG Anunoby,OG Anunoby,o g anunoby,Two Pointers Attempted,FG2A,6.0,6.73
-OG Anunoby,OG Anunoby,o g anunoby,Two Pointers Made,FG2M,3.0,3.88
-Stephon Castle,Stephon Castle,stephon castle,3-PT Attempted,FG3A,4.0,4.17
-Stephon Castle,Stephon Castle,stephon castle,3-PT Made,FG3M,0.5,1.34
-Stephon Castle,Stephon Castle,stephon castle,Blks+Stls,SB,1.5,1.78
-Stephon Castle,Stephon Castle,stephon castle,Fantasy Score,FANTASY,34.0,38.52
-Stephon Castle,Stephon Castle,stephon castle,Offensive Rebounds,OREB,1.5,2.31
-Stephon Castle,Stephon Castle,stephon castle,Personal Fouls,PF,3.5,4.34
-Stephon Castle,Stephon Castle,stephon castle,Points,PTS,16.5,18.72
-Stephon Castle,Stephon Castle,stephon castle,Points - 1st 3 Minutes,PTS_3M,1.5,1.67
-Stephon Castle,Stephon Castle,stephon castle,Pts+Asts,PA,23.5,25.42
-Stephon Castle,Stephon Castle,stephon castle,Pts+Rebs,PR,21.5,24.08
-Stephon Castle,Stephon Castle,stephon castle,Pts+Rebs+Asts,PRA,29.0,30.78
-Stephon Castle,Stephon Castle,stephon castle,Rebounds,REB,5.0,5.36
-Stephon Castle,Stephon Castle,stephon castle,Rebs+Asts,RA,12.0,12.06
-Stephon Castle,Stephon Castle,stephon castle,Turnovers,TOV,2.5,2.67
-Stephon Castle,Stephon Castle,stephon castle,Two Pointers Attempted,FG2A,8.0,8.03
-Victor Wembanyama,Victor Wembanyama,victor wembanyama,Offensive Rebounds,OREB,2.0,2.33
-Victor Wembanyama,Victor Wembanyama,victor wembanyama,Pts+Rebs,PR,39.5,32.61
-Victor Wembanyama,Victor Wembanyama,victor wembanyama,Pts+Rebs+Asts,PRA,42.5,35.37
+De'Aaron Fox,De'Aaron Fox,deaaron fox,3-PT Attempted,FG3A,4.5,4.55
+De'Aaron Fox,De'Aaron Fox,deaaron fox,Assists,AST,5.5,5.69
+De'Aaron Fox,De'Aaron Fox,deaaron fox,Blks+Stls,SB,1.5,1.72
+De'Aaron Fox,De'Aaron Fox,deaaron fox,Fantasy Score,FANTASY,29.0,32.43
+De'Aaron Fox,De'Aaron Fox,deaaron fox,Offensive Rebounds,OREB,0.5,0.65
+De'Aaron Fox,De'Aaron Fox,deaaron fox,Personal Fouls,PF,2.5,2.98
+De'Aaron Fox,De'Aaron Fox,deaaron fox,Pts+Rebs,PR,17.5,18.7
+De'Aaron Fox,De'Aaron Fox,deaaron fox,Pts+Rebs+Asts,PRA,23.5,24.39
+De'Aaron Fox,De'Aaron Fox,deaaron fox,Rebs+Asts,RA,9.0,10.3
+De'Aaron Fox,De'Aaron Fox,deaaron fox,Two Pointers Attempted,FG2A,7.5,9.01
+Devin Vassell,Devin Vassell,devin vassell,Blocked Shots,BLK,0.5,0.6
+Devin Vassell,Devin Vassell,devin vassell,Dunks,DUNKS,0.5,0.57
+Devin Vassell,Devin Vassell,devin vassell,Fantasy Score,FANTASY,25.0,27.91
+Devin Vassell,Devin Vassell,devin vassell,Free Throws Attempted,FTA,1.5,1.98
+Devin Vassell,Devin Vassell,devin vassell,Offensive Rebounds,OREB,0.5,1.2
+Devin Vassell,Devin Vassell,devin vassell,Pts+Rebs+Asts,PRA,19.5,19.63
+Devin Vassell,Devin Vassell,devin vassell,Rebounds,REB,4.5,5.12
+Devin Vassell,Devin Vassell,devin vassell,Rebs+Asts,RA,7.0,7.76
+Devin Vassell,Devin Vassell,devin vassell,Turnovers,TOV,0.5,1.0
+Devin Vassell,Devin Vassell,devin vassell,Two Pointers Attempted,FG2A,3.5,3.77
+Devin Vassell,Devin Vassell,devin vassell,Two Pointers Made,FG2M,1.5,1.55
+Dylan Harper,Dylan Harper,dylan harper,3-PT Attempted,FG3A,2.5,2.85
+Dylan Harper,Dylan Harper,dylan harper,Defensive Rebounds,DREB,3.5,5.06
+Dylan Harper,Dylan Harper,dylan harper,Dunks,DUNKS,0.5,1.06
+Dylan Harper,Dylan Harper,dylan harper,Fantasy Score,FANTASY,24.5,24.72
+Dylan Harper,Dylan Harper,dylan harper,Free Throws Attempted,FTA,2.5,2.59
+Dylan Harper,Dylan Harper,dylan harper,Pts+Rebs,PR,17.5,18.31
+Dylan Harper,Dylan Harper,dylan harper,Rebounds,REB,5.0,5.91
+Harrison Barnes,Harrison Barnes,harrison barnes,Assists,AST,0.5,0.92
+Harrison Barnes,Harrison Barnes,harrison barnes,Pts+Rebs+Asts,PRA,3.5,6.92
+Harrison Barnes,Harrison Barnes,harrison barnes,Rebounds,REB,1.5,2.21
+Jalen Brunson,Jalen Brunson,jalen brunson,3-PT Attempted,FG3A,6.5,6.81
+Jalen Brunson,Jalen Brunson,jalen brunson,Assists,AST,6.0,6.23
+Jalen Brunson,Jalen Brunson,jalen brunson,Blks+Stls,SB,0.5,1.08
+Jalen Brunson,Jalen Brunson,jalen brunson,Defensive Rebounds,DREB,2.5,2.84
+Jalen Brunson,Jalen Brunson,jalen brunson,Fantasy Score,FANTASY,37.5,39.63
+Jalen Brunson,Jalen Brunson,jalen brunson,Rebs+Asts,RA,9.0,9.58
+Jordan Clarkson,Jordan Clarkson,jordan clarkson,Assists,AST,0.5,1.01
+Jordan Clarkson,Jordan Clarkson,jordan clarkson,Pts+Rebs+Asts,PRA,2.5,7.78
+Jose Alvarado,Jose Alvarado,jose alvarado,Points,PTS,2.5,5.0
+Josh Hart,Josh Hart,josh hart,3-PT Attempted,FG3A,4.5,5.63
+Josh Hart,Josh Hart,josh hart,3-PT Made,FG3M,1.5,1.51
+Josh Hart,Josh Hart,josh hart,Assists,AST,4.5,5.05
+Josh Hart,Josh Hart,josh hart,Defensive Rebounds,DREB,7.5,8.07
+Josh Hart,Josh Hart,josh hart,Dunks,DUNKS,0.5,0.82
+Josh Hart,Josh Hart,josh hart,FG Attempted,FGA,9.0,9.06
+Josh Hart,Josh Hart,josh hart,FG Made,FGM,4.0,4.11
+Josh Hart,Josh Hart,josh hart,Fantasy Score,FANTASY,32.5,37.8
+Josh Hart,Josh Hart,josh hart,Offensive Rebounds,OREB,1.5,1.51
+Josh Hart,Josh Hart,josh hart,Points,PTS,11.0,12.24
+Josh Hart,Josh Hart,josh hart,Pts+Asts,PA,16.0,17.29
+Josh Hart,Josh Hart,josh hart,Pts+Rebs,PR,20.0,21.06
+Josh Hart,Josh Hart,josh hart,Pts+Rebs+Asts,PRA,25.5,26.11
+Josh Hart,Josh Hart,josh hart,Turnovers,TOV,1.5,1.71
+Josh Hart,Josh Hart,josh hart,Two Pointers Attempted,FG2A,4.5,5.18
+Josh Hart,Josh Hart,josh hart,Two Pointers Made,FG2M,2.5,2.71
+Julian Champagnie,Julian Champagnie,julian champagnie,3-PT Attempted,FG3A,7.0,7.53
+Julian Champagnie,Julian Champagnie,julian champagnie,3-PT Made,FG3M,2.5,2.71
+Julian Champagnie,Julian Champagnie,julian champagnie,Blks+Stls,SB,0.5,1.82
+Julian Champagnie,Julian Champagnie,julian champagnie,FG Attempted,FGA,9.0,9.43
+Julian Champagnie,Julian Champagnie,julian champagnie,FG Made,FGM,3.5,4.32
+Julian Champagnie,Julian Champagnie,julian champagnie,Fantasy Score,FANTASY,23.5,29.48
+Julian Champagnie,Julian Champagnie,julian champagnie,Free Throws Made,FTM,0.5,1.05
+Julian Champagnie,Julian Champagnie,julian champagnie,Points,PTS,11.0,13.47
+Julian Champagnie,Julian Champagnie,julian champagnie,Pts+Asts,PA,12.5,15.14
+Julian Champagnie,Julian Champagnie,julian champagnie,Pts+Rebs,PR,16.5,19.67
+Julian Champagnie,Julian Champagnie,julian champagnie,Pts+Rebs+Asts,PRA,18.5,21.34
+Julian Champagnie,Julian Champagnie,julian champagnie,Rebounds,REB,6.0,6.2
+Julian Champagnie,Julian Champagnie,julian champagnie,Rebs+Asts,RA,4.5,7.87
+Julian Champagnie,Julian Champagnie,julian champagnie,Steals,STL,0.5,1.1
+Julian Champagnie,Julian Champagnie,julian champagnie,Two Pointers Attempted,FG2A,2.0,2.43
+Julian Champagnie,Julian Champagnie,julian champagnie,Two Pointers Made,FG2M,1.0,1.53
+Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Assists,AST,4.0,4.74
+Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Defensive Rebounds,DREB,8.0,8.75
+Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Dunks,DUNKS,0.5,2.49
+Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Fantasy Score,FANTASY,38.5,39.84
+Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Points - 1st 3 Minutes,PTS_3M,1.5,1.51
+Karl-Anthony Towns,Karl-Anthony Towns,karl anthony towns,Rebs+Asts,RA,21.5,14.82
+Keldon Johnson,Keldon Johnson,keldon johnson,3-PT Attempted,FG3A,2.5,4.4
+Keldon Johnson,Keldon Johnson,keldon johnson,Blks+Stls,SB,0.5,0.82
+Keldon Johnson,Keldon Johnson,keldon johnson,FG Attempted,FGA,5.5,8.85
+Keldon Johnson,Keldon Johnson,keldon johnson,FG Made,FGM,2.5,3.97
+Keldon Johnson,Keldon Johnson,keldon johnson,Fantasy Score,FANTASY,13.5,18.18
+Keldon Johnson,Keldon Johnson,keldon johnson,Offensive Rebounds,OREB,1.5,1.85
+Keldon Johnson,Keldon Johnson,keldon johnson,Points,PTS,6.5,10.16
+Keldon Johnson,Keldon Johnson,keldon johnson,Pts+Asts,PA,6.5,11.53
+Keldon Johnson,Keldon Johnson,keldon johnson,Pts+Rebs,PR,9.5,13.46
+Keldon Johnson,Keldon Johnson,keldon johnson,Pts+Rebs+Asts,PRA,10.0,14.83
+Keldon Johnson,Keldon Johnson,keldon johnson,Steals,STL,0.5,0.7
+Keldon Johnson,Keldon Johnson,keldon johnson,Turnovers,TOV,0.5,1.03
+Keldon Johnson,Keldon Johnson,keldon johnson,Two Pointers Attempted,FG2A,2.5,5.86
+Keldon Johnson,Keldon Johnson,keldon johnson,Two Pointers Made,FG2M,1.5,2.74
+Landry Shamet,Landry Shamet,landry shamet,Blks+Stls,SB,0.5,0.59
+Landry Shamet,Landry Shamet,landry shamet,FG Made,FGM,2.5,2.84
+Landry Shamet,Landry Shamet,landry shamet,Fantasy Score,FANTASY,13.5,15.75
+Landry Shamet,Landry Shamet,landry shamet,Free Throws Attempted,FTA,0.5,0.91
+Landry Shamet,Landry Shamet,landry shamet,Free Throws Made,FTM,0.5,0.52
+Landry Shamet,Landry Shamet,landry shamet,Points,PTS,7.5,9.33
+Landry Shamet,Landry Shamet,landry shamet,Pts+Asts,PA,5.5,10.75
+Landry Shamet,Landry Shamet,landry shamet,Pts+Rebs,PR,5.5,10.95
+Landry Shamet,Landry Shamet,landry shamet,Pts+Rebs+Asts,PRA,7.5,12.37
+Landry Shamet,Landry Shamet,landry shamet,Rebounds,REB,1.5,1.62
+Landry Shamet,Landry Shamet,landry shamet,Steals,STL,0.5,0.53
+Luke Kornet,Luke Kornet,luke kornet,Dunks,DUNKS,0.5,0.58
+Luke Kornet,Luke Kornet,luke kornet,FG Attempted,FGA,1.5,2.68
+Luke Kornet,Luke Kornet,luke kornet,FG Made,FGM,0.5,1.19
+Luke Kornet,Luke Kornet,luke kornet,Free Throws Attempted,FTA,0.5,1.06
+Luke Kornet,Luke Kornet,luke kornet,Offensive Rebounds,OREB,1.5,1.68
+Luke Kornet,Luke Kornet,luke kornet,Personal Fouls,PF,0.5,1.91
+Luke Kornet,Luke Kornet,luke kornet,Points,PTS,0.5,3.84
+Luke Kornet,Luke Kornet,luke kornet,Pts+Rebs,PR,4.0,8.23
+Luke Kornet,Luke Kornet,luke kornet,Pts+Rebs+Asts,PRA,4.5,9.09
+Luke Kornet,Luke Kornet,luke kornet,Rebs+Asts,RA,1.5,5.25
+Luke Kornet,Luke Kornet,luke kornet,Two Pointers Made,FG2M,0.5,0.65
+Mikal Bridges,Mikal Bridges,mikal bridges,Assists,AST,2.5,2.82
+Mikal Bridges,Mikal Bridges,mikal bridges,Blks+Stls,SB,1.5,1.92
+Mikal Bridges,Mikal Bridges,mikal bridges,Dunks,DUNKS,0.5,1.77
+Mikal Bridges,Mikal Bridges,mikal bridges,FG Attempted,FGA,10.0,10.16
+Mikal Bridges,Mikal Bridges,mikal bridges,FG Made,FGM,4.5,5.73
+Mikal Bridges,Mikal Bridges,mikal bridges,Fantasy Score,FANTASY,24.0,30.03
+Mikal Bridges,Mikal Bridges,mikal bridges,Free Throws Attempted,FTA,1.5,1.98
+Mikal Bridges,Mikal Bridges,mikal bridges,Free Throws Made,FTM,0.5,1.36
+Mikal Bridges,Mikal Bridges,mikal bridges,Offensive Rebounds,OREB,0.5,0.7
+Mikal Bridges,Mikal Bridges,mikal bridges,Points,PTS,11.5,16.08
+Mikal Bridges,Mikal Bridges,mikal bridges,Pts+Asts,PA,14.5,18.9
+Mikal Bridges,Mikal Bridges,mikal bridges,Pts+Rebs,PR,15.0,19.99
+Mikal Bridges,Mikal Bridges,mikal bridges,Pts+Rebs+Asts,PRA,17.5,22.81
+Mikal Bridges,Mikal Bridges,mikal bridges,Rebs+Asts,RA,5.5,6.73
+Mikal Bridges,Mikal Bridges,mikal bridges,Turnovers,TOV,0.5,1.22
+Mikal Bridges,Mikal Bridges,mikal bridges,Two Pointers Attempted,FG2A,6.5,8.46
+Mikal Bridges,Mikal Bridges,mikal bridges,Two Pointers Made,FG2M,3.5,4.91
+Miles McBride,Miles McBride,miles mcbride,3-PT Attempted,FG3A,3.5,4.02
+Miles McBride,Miles McBride,miles mcbride,Blks+Stls,SB,0.5,1.05
+Miles McBride,Miles McBride,miles mcbride,FG Attempted,FGA,5.0,5.69
+Miles McBride,Miles McBride,miles mcbride,FG Made,FGM,1.5,2.33
+Miles McBride,Miles McBride,miles mcbride,Free Throws Attempted,FTA,0.5,0.82
+Miles McBride,Miles McBride,miles mcbride,Free Throws Made,FTM,0.5,0.51
+Miles McBride,Miles McBride,miles mcbride,Personal Fouls,PF,1.5,2.25
+Miles McBride,Miles McBride,miles mcbride,Points,PTS,5.5,6.9
+Miles McBride,Miles McBride,miles mcbride,Pts+Asts,PA,6.5,8.69
+Miles McBride,Miles McBride,miles mcbride,Pts+Rebs,PR,5.5,8.87
+Miles McBride,Miles McBride,miles mcbride,Pts+Rebs+Asts,PRA,6.5,10.66
+Miles McBride,Miles McBride,miles mcbride,Steals,STL,0.5,0.64
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Blks+Stls,SB,0.5,1.08
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Blocked Shots,BLK,0.5,0.56
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Defensive Rebounds,DREB,3.0,3.7
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,FG Attempted,FGA,2.5,3.25
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,FG Made,FGM,1.5,1.77
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Free Throws Attempted,FTA,0.5,2.61
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Free Throws Made,FTM,0.5,0.77
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Offensive Rebounds,OREB,2.5,2.62
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Personal Fouls,PF,1.5,1.78
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Points,PTS,3.5,4.78
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Pts+Rebs,PR,8.5,10.86
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Pts+Rebs+Asts,PRA,9.0,11.58
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Rebounds,REB,5.0,6.08
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Rebs+Asts,RA,5.5,6.8
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Steals,STL,0.5,0.52
+Mitchell Robinson,Mitchell Robinson,mitchell robinson,Turnovers,TOV,0.5,0.52
+OG Anunoby,OG Anunoby,o g anunoby,Assists,AST,1.5,2.29
+OG Anunoby,OG Anunoby,o g anunoby,Blocked Shots,BLK,0.5,0.74
+OG Anunoby,OG Anunoby,o g anunoby,Defensive Rebounds,DREB,4.0,5.0
+OG Anunoby,OG Anunoby,o g anunoby,Dunks,DUNKS,1.5,1.52
+OG Anunoby,OG Anunoby,o g anunoby,FG Made,FGM,5.0,5.15
+OG Anunoby,OG Anunoby,o g anunoby,Fantasy Score,FANTASY,29.0,33.72
+OG Anunoby,OG Anunoby,o g anunoby,Free Throws Attempted,FTA,3.5,3.81
+OG Anunoby,OG Anunoby,o g anunoby,Free Throws Made,FTM,2.5,2.83
+OG Anunoby,OG Anunoby,o g anunoby,Personal Fouls,PF,2.5,2.53
+OG Anunoby,OG Anunoby,o g anunoby,Points,PTS,14.5,16.94
+OG Anunoby,OG Anunoby,o g anunoby,Pts+Asts,PA,16.5,19.23
+OG Anunoby,OG Anunoby,o g anunoby,Pts+Rebs,PR,20.5,22.69
+OG Anunoby,OG Anunoby,o g anunoby,Pts+Rebs+Asts,PRA,22.0,24.98
+OG Anunoby,OG Anunoby,o g anunoby,Rebounds,REB,5.5,5.75
+OG Anunoby,OG Anunoby,o g anunoby,Rebounds - 1st 3 Minutes,REB_3M,0.5,0.52
+OG Anunoby,OG Anunoby,o g anunoby,Rebs+Asts,RA,7.0,8.04
+OG Anunoby,OG Anunoby,o g anunoby,Two Pointers Attempted,FG2A,5.5,6.18
+Stephon Castle,Stephon Castle,stephon castle,3-PT Attempted,FG3A,4.0,4.13
+Stephon Castle,Stephon Castle,stephon castle,Defensive Rebounds,DREB,3.5,3.55
+Stephon Castle,Stephon Castle,stephon castle,Dunks,DUNKS,0.5,1.94
+Stephon Castle,Stephon Castle,stephon castle,FG Made,FGM,5.5,5.81
+Stephon Castle,Stephon Castle,stephon castle,Fantasy Score,FANTASY,32.0,36.46
+Stephon Castle,Stephon Castle,stephon castle,Offensive Rebounds,OREB,1.5,2.43
+Stephon Castle,Stephon Castle,stephon castle,Points,PTS,16.5,17.93
+Stephon Castle,Stephon Castle,stephon castle,Pts+Asts,PA,23.0,24.17
+Stephon Castle,Stephon Castle,stephon castle,Pts+Rebs,PR,21.5,23.69
+Stephon Castle,Stephon Castle,stephon castle,Pts+Rebs+Asts,PRA,28.5,29.93
+Stephon Castle,Stephon Castle,stephon castle,Rebounds,REB,5.0,5.76
+Stephon Castle,Stephon Castle,stephon castle,Rebs+Asts,RA,11.5,12.0
+Stephon Castle,Stephon Castle,stephon castle,Two Pointers Made,FG2M,4.5,4.56
+Victor Wembanyama,Victor Wembanyama,victor wembanyama,3-PT Attempted,FG3A,6.0,6.7
+Victor Wembanyama,Victor Wembanyama,victor wembanyama,Double-Double,DD,0.5,0.51
+Victor Wembanyama,Victor Wembanyama,victor wembanyama,Dunks,DUNKS,2.5,4.02
+Victor Wembanyama,Victor Wembanyama,victor wembanyama,Offensive Rebounds,OREB,2.5,2.79
+Victor Wembanyama,Victor Wembanyama,victor wembanyama,Points - 1st 3 Minutes,PTS_3M,1.5,2.18
+Victor Wembanyama,Victor Wembanyama,victor wembanyama,Two Pointers Attempted,FG2A,11.5,11.82
