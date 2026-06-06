@@ -1,0 +1,3 @@
+player_name,team,had_history_before,rows_added,source,league_used,athlete_id,resolution_status
+Courtney Williams + Olivia Miles,MIN,False,0,api:espn:wnba:gamelog,none,,no_history_found
+Pauline Astier,NYL,False,0,api:espn:wnba:gamelog,womens-college-basketball,5345320,api_error

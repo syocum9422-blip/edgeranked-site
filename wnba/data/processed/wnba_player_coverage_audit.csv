@@ -1,0 +1,29 @@
+player_name,team,opponent,has_live_line,has_history,history_source,included,reason
+Kamilla Cardoso,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
+Skylar Diggins,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
+Aliyah Boston,IND,NYL,True,True,csv,True,included
+Caitlin Clark,IND,NYL,True,True,csv,True,included
+Caitlin Clark + Kelsey Mitchell,IND,NYL,True,False,,False,no_history_found
+Kelsey Mitchell,IND,NYL,True,True,csv,True,included
+Lexie Hull,IND,NYL,True,True,csv,True,included
+Sophie Cunningham,IND,NYL,True,True,csv,True,included
+Aliyah Boston + Breanna Stewart,IND/NYL,,True,False,,False,excluded_not_on_canonical_slate
+Aliyah Boston + Jonquel Jones,IND/NYL,,True,False,,False,excluded_not_on_canonical_slate
+Caitlin Clark + Breanna Stewart,IND/NYL,,True,False,,False,excluded_not_on_canonical_slate
+Caitlin Clark + Jonquel Jones,IND/NYL,,True,False,,False,excluded_not_on_canonical_slate
+Caitlin Clark + Marine Johannes,IND/NYL,,True,False,,False,excluded_not_on_canonical_slate
+Kelsey Mitchell + Breanna Stewart,IND/NYL,,True,False,,False,excluded_not_on_canonical_slate
+Kelsey Mitchell + Jonquel Jones,IND/NYL,,True,False,,False,excluded_not_on_canonical_slate
+Dearica Hamby,LAS,,True,True,csv,False,excluded_not_on_canonical_slate
+Kelsey Plum,LAS,,True,True,csv,False,excluded_not_on_canonical_slate
+Nneka Ogwumike,LAS,,True,True,csv,False,excluded_not_on_canonical_slate
+Breanna Stewart,NYL,IND,True,True,csv,True,included
+Jonquel Jones,NYL,IND,True,True,csv,True,included
+Leonie Fiebich,NYL,IND,True,True,csv,True,included
+Marine Johannes,NYL,IND,True,True,csv,True,included
+Satou Sabally,NYL,IND,True,True,csv,True,included
+Bridget Carleton,POR,,True,True,csv,False,excluded_not_on_canonical_slate
+Carla Leite,POR,,True,True,csv,False,excluded_not_on_canonical_slate
+Megan Gustafson,POR,,True,True,csv,False,excluded_not_on_canonical_slate
+Brittney Sykes,TOR,,True,True,csv,False,excluded_not_on_canonical_slate
+Marina Mabrey,TOR,,True,True,csv,False,excluded_not_on_canonical_slate

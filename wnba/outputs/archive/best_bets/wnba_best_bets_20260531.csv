@@ -1,0 +1,2 @@
+DATE,PLAYER,TEAM,MATCHUP,STAT,RAW_STAT,BET,LINE,PROJECTION,EDGE,ABS_EDGE,STDDEV,HIT_RATE,MODEL_CONFIDENCE,BET_CONFIDENCE,CONFIDENCE_LABEL,RESULT,ACTUAL,bet_date,player_name,team,opponent,stat,line,side,sportsbook,odds,hit_rate,edge,projection_mean,projection_median,floor,ceiling,projected_minutes,confidence,confidence_score,line_delta,actual_value,bet_result,bet_quality_score,empty_state_reason,candidate_count,qualified_count
+2026-05-31,,,,,,,,,,,,,,,,,,2026-05-31,,,,,,,,,,,,,,,,,,,,,,no_simulation_rows,0,0

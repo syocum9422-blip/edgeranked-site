@@ -1,0 +1,12 @@
+player_name,team,had_history_before,rows_added,source,league_used,athlete_id,resolution_status
+Gabriela Jaquez,CHI,False,96,api:espn:wnba:gamelog,womens-college-basketball,4858656,backfilled
+Jacy Sheldon,CHI,False,70,api:espn:wnba:gamelog,wnba,4432865,backfilled
+Natasha Cloud,CHI,False,116,api:espn:wnba:gamelog,wnba,2529137,backfilled
+Dearica Hamby + Nneka Ogwumike,LAS,False,0,api:espn:wnba:gamelog,none,,no_history_found
+Kelsey Plum + Dearica Hamby,LAS,False,0,api:espn:wnba:gamelog,none,,no_history_found
+Kelsey Plum + Erica Wheeler,LAS,False,0,api:espn:wnba:gamelog,none,,no_history_found
+Kayla McBride + Olivia Miles,MIN,False,0,api:espn:wnba:gamelog,none,,no_history_found
+Natasha Howard + Nia Coffey,MIN,False,0,api:espn:wnba:gamelog,none,,no_history_found
+Olivia Miles + Courtney Williams,MIN,False,0,api:espn:wnba:gamelog,none,,no_history_found
+Kiki Rice,TOR,False,94,api:espn:wnba:gamelog,womens-college-basketball,4565505,backfilled
+Nyara Sabally + Marina Mabrey,TOR,False,0,api:espn:wnba:gamelog,none,,no_history_found

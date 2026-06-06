@@ -1,0 +1,4 @@
+player_name,team,had_history_before,rows_added,source,athlete_id
+Monique Billings,IND,False,0,api:espn:wnba:gamelog,3142255
+Carla Leite,POR,False,0,api:espn:wnba:gamelog,5208982
+Luisa Geiselsöder,POR,False,0,api:espn:wnba:gamelog,4682797

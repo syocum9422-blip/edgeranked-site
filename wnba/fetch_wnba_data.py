@@ -7,9 +7,10 @@ import ssl
 import time
 import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, time as dt_time, timezone
 from pathlib import Path
 from typing import Optional
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -39,6 +40,9 @@ from wnba_model_utils import (
     setup_logging,
     today_timestamp,
 )
+
+
+EASTERN = ZoneInfo("America/New_York")
 
 
 # Source mode:
@@ -127,6 +131,61 @@ def _build_url(endpoint: str, params: dict) -> str:
     return f"{API_BASE}/{endpoint}?{urllib.parse.urlencode(params)}"
 
 
+def schedule_target_date_et() -> pd.Timestamp:
+    if TODAY_OVERRIDE:
+        return pd.Timestamp(TODAY_OVERRIDE).tz_localize(EASTERN).normalize()
+    return pd.Timestamp.now(tz=EASTERN).normalize()
+
+
+def _event_timestamp_utc(value: object) -> pd.Timestamp:
+    ts = pd.to_datetime(value, utc=True, errors="coerce")
+    if pd.isna(ts):
+        return pd.NaT
+    return ts
+
+
+def _format_utc_iso(ts: pd.Timestamp) -> str:
+    if pd.isna(ts):
+        return ""
+    return ts.tz_convert("UTC").isoformat().replace("+00:00", "Z")
+
+
+def _filter_schedule_to_et_day(frame: pd.DataFrame, target_date: pd.Timestamp, logger, source_label: str) -> pd.DataFrame:
+    if frame.empty:
+        return frame
+
+    target_et = target_date.tz_convert(EASTERN) if target_date.tzinfo else target_date.tz_localize(EASTERN)
+    window_start = target_et.normalize()
+    window_end = window_start + pd.Timedelta(days=1)
+
+    if "start_time_utc" in frame.columns:
+        start_utc = pd.to_datetime(frame["start_time_utc"], utc=True, errors="coerce")
+    else:
+        start_utc = pd.to_datetime(frame.get("start_time"), utc=True, errors="coerce")
+
+    start_et = start_utc.dt.tz_convert(EASTERN)
+    included_mask = start_et.notna() & (start_et >= window_start) & (start_et < window_end)
+
+    filtered = frame.loc[included_mask].copy()
+    filtered["game_date_et"] = start_et.loc[included_mask].dt.strftime("%Y-%m-%d")
+    filtered["start_time_utc"] = start_utc.loc[included_mask].dt.strftime("%Y-%m-%dT%H:%MZ")
+    filtered["included_reason"] = "start_time_within_et_day"
+    if "start_time" not in filtered.columns:
+        filtered["start_time"] = filtered["start_time_utc"]
+    filtered["game_date"] = pd.to_datetime(filtered["game_date_et"]).dt.normalize()
+
+    excluded_count = int((~included_mask).sum())
+    if excluded_count:
+        logger.info(
+            "Excluded %d %s schedule rows outside ET window %s to %s",
+            excluded_count,
+            source_label,
+            window_start.isoformat(),
+            window_end.isoformat(),
+        )
+    return filtered.reset_index(drop=True)
+
+
 def fetch_api_player_games(logger) -> pd.DataFrame:
     frames: list[pd.DataFrame] = []
     for season in HISTORICAL_SEASONS:
@@ -178,7 +237,7 @@ def fetch_api_team_context(logger) -> pd.DataFrame:
 
 
 def fetch_api_schedule_today(logger) -> pd.DataFrame:
-    target_date = today_timestamp()
+    target_date = schedule_target_date_et()
     params = {
         "DayOffset": 0,
         "GameDate": target_date.strftime("%m/%d/%Y"),
@@ -189,46 +248,30 @@ def fetch_api_schedule_today(logger) -> pd.DataFrame:
     game_header = _result_set_to_frame(payload, desired_name="GameHeader")
     if game_header.empty:
         logger.warning("No schedule returned for %s", target_date.date())
-        return pd.DataFrame(columns=["game_date", "home_team", "away_team", "game_id", "start_time"])
+        return pd.DataFrame(columns=["game_date", "home_team", "away_team", "game_id", "start_time", "game_date_et", "start_time_utc", "included_reason"])
 
-    line_score = _result_set_to_frame(payload, desired_name="LineScore")
-    home = line_score[line_score.get("TEAM_CITY_NAME", pd.Series(dtype=str)).notna()].copy() if not line_score.empty else pd.DataFrame()
-    if home.empty:
-        schedule = pd.DataFrame(
-            {
-                "game_date": game_header["GAME_DATE_EST"],
-                "game_id": game_header["GAME_ID"],
-                "home_team": game_header.get("HOME_TEAM_ABBREVIATION"),
-                "away_team": game_header.get("VISITOR_TEAM_ABBREVIATION"),
-                "start_time": game_header.get("GAME_STATUS_TEXT"),
-            }
-        )
-        return schedule
-
-    lines = line_score[["GAME_ID", "TEAM_ABBREVIATION", "TEAM_ID"]].drop_duplicates()
-    schedule_rows = []
-    for game_id, group in lines.groupby("GAME_ID"):
-        if len(group) != 2:
-            continue
-        team_abbrevs = list(group["TEAM_ABBREVIATION"])
-        header_row = game_header.loc[game_header["GAME_ID"] == game_id].iloc[0]
-        schedule_rows.append(
-            {
-                "game_date": header_row["GAME_DATE_EST"],
-                "game_id": game_id,
-                "home_team": team_abbrevs[0],
-                "away_team": team_abbrevs[1],
-                "start_time": header_row.get("GAME_STATUS_TEXT"),
-            }
-        )
-    return pd.DataFrame(schedule_rows)
+    schedule = pd.DataFrame(
+        {
+            "game_id": game_header.get("GAME_ID"),
+            "home_team": game_header.get("HOME_TEAM_ABBREVIATION"),
+            "away_team": game_header.get("VISITOR_TEAM_ABBREVIATION"),
+            "start_time_utc": game_header.get("GAME_DATE_EST"),
+            "start_time": game_header.get("GAME_DATE_EST"),
+        }
+    )
+    schedule = schedule.dropna(subset=["home_team", "away_team", "start_time_utc"]).copy()
+    if schedule.empty:
+        logger.warning("Stats WNBA scoreboard returned no parseable games for %s", target_date.date())
+        return pd.DataFrame(columns=["game_date", "home_team", "away_team", "game_id", "start_time", "game_date_et", "start_time_utc", "included_reason"])
+    return _filter_schedule_to_et_day(schedule, target_date, logger, "stats.wnba.com")
 
 
 def fetch_espn_schedule(logger) -> pd.DataFrame:
     """Fetch WNBA schedule from ESPN API as fallback."""
     import requests as req
 
-    url = "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard"
+    target_date = schedule_target_date_et()
+    url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates={target_date.strftime('%Y%m%d')}"
     try:
         resp = req.get(url, timeout=REQUEST_TIMEOUT_SECONDS)
         resp.raise_for_status()
@@ -239,7 +282,7 @@ def fetch_espn_schedule(logger) -> pd.DataFrame:
 
     events = data.get("events", [])
     if not events:
-        logger.warning("ESPN returned no WNBA events for today")
+        logger.warning("ESPN returned no WNBA events for %s", target_date.date())
         return pd.DataFrame()
 
     rows = []
@@ -251,7 +294,6 @@ def fetch_espn_schedule(logger) -> pd.DataFrame:
         if not competitions:
             continue
 
-        # Get competitors from the first (and usually only) competition
         comp = competitions[0]
         competitors = comp.get("competitors", [])
         if len(competitors) < 2:
@@ -271,19 +313,11 @@ def fetch_espn_schedule(logger) -> pd.DataFrame:
         if not home_abbrev or not away_abbrev:
             continue
 
-        # Parse date to YYYY-MM-DD format
-        game_date = ""
-        try:
-            dt = pd.to_datetime(date_raw, utc=True)
-            game_date = dt.strftime("%Y-%m-%d")
-        except Exception:
-            pass
-
         rows.append({
-            "game_date": game_date,
             "home_team": home_abbrev,
             "away_team": away_abbrev,
             "game_id": event_id,
+            "start_time_utc": _format_utc_iso(_event_timestamp_utc(date_raw)),
             "start_time": date_raw,
         })
 
@@ -291,8 +325,9 @@ def fetch_espn_schedule(logger) -> pd.DataFrame:
         logger.warning("ESPN returned WNBA events but could not parse them")
         return pd.DataFrame()
 
-    logger.info("Fetched %d games from ESPN API", len(rows))
-    return pd.DataFrame(rows)
+    filtered = _filter_schedule_to_et_day(pd.DataFrame(rows), target_date, logger, "espn")
+    logger.info("Fetched %d ET-day WNBA games from ESPN API", len(filtered))
+    return filtered
 
 
 ESPN_INJURIES_URL = "https://www.espn.com/wnba/injuries"
@@ -555,6 +590,51 @@ def resolve_player_status(logger) -> tuple[pd.DataFrame, str]:
     return frame, "missing:empty_rows"
 
 
+def resolve_sportsbook_lines(logger) -> tuple[pd.DataFrame, str]:
+    """Returns (DataFrame, source_label) for WNBA sportsbook/prop lines."""
+    from fetch_wnba_lines import (
+        OffSeasonError,
+        extract_rows,
+        fetch_prizepicks_payload,
+        filter_and_normalize,
+        load_csv_fallback,
+        write_lines,
+    )
+
+    if SOURCE_MODE == "csv":
+        frame, source = load_csv_fallback(logger)
+        logger.info("Sportsbook lines: loaded %d rows from CSV (%s)", len(frame), source)
+        return frame, source
+
+    try:
+        payload, _ = fetch_prizepicks_payload()
+        frame = filter_and_normalize(extract_rows(payload))
+        if frame.empty:
+            raise ValueError("PrizePicks returned 0 usable WNBA lines")
+
+        write_lines(frame, "api:prizepicks", logger)
+        logger.info(
+            "Sportsbook lines: fetched %d PrizePicks rows for %d unique players",
+            len(frame),
+            frame["player_name"].nunique(),
+        )
+        return frame, "api:prizepicks"
+    except OffSeasonError as exc:
+        logger.warning("PrizePicks WNBA lines unavailable: %s", exc)
+        if SOURCE_MODE == "api":
+            raise RuntimeError(f"WNBA_SOURCE_MODE=api but PrizePicks WNBA lines are unavailable: {exc}") from exc
+    except Exception as exc:
+        logger.warning("PrizePicks WNBA lines fetch failed: %s", exc)
+        if SOURCE_MODE == "api":
+            raise
+
+    frame, source = load_csv_fallback(logger)
+    if frame.empty:
+        raise RuntimeError("PrizePicks WNBA lines unavailable and no CSV fallback exists")
+    logger.info("Sportsbook lines: loaded %d rows from CSV fallback (%s)", len(frame), source)
+    return frame, source
+
+
 def main() -> None:
     logger = setup_logging("fetch_wnba_data")
 
@@ -583,10 +663,11 @@ def main() -> None:
     schedule_today.to_csv(CANONICAL_SCHEDULE_TODAY_PATH, index=False)
     logger.info("Saved canonical schedule today: %s rows [source=%s]", len(schedule_today), st_source)
 
-    # Sportsbook lines and player status have no live API fetcher yet; mark as csv:manual
-    sportsbook_lines = normalize_sportsbook_lines(load_csv_or_url(RAW_SPORTSBOOK_LINES_PATH, SPORTSBOOK_LINES_URL, logger))
-    sportsbook_lines["_data_source"] = "csv:manual"
+    sportsbook_lines_raw, sl_source = resolve_sportsbook_lines(logger)
+    sportsbook_lines = normalize_sportsbook_lines(sportsbook_lines_raw)
+    sportsbook_lines["_data_source"] = sl_source
     sportsbook_lines.to_csv(CANONICAL_SPORTSBOOK_LINES_PATH, index=False)
+    logger.info("Saved canonical sportsbook lines: %d rows [source=%s]", len(sportsbook_lines), sl_source)
 
     player_positions = normalize_positions(load_csv_or_url(RAW_PLAYER_POSITIONS_PATH, PLAYER_POSITIONS_URL, logger))
     player_positions["_data_source"] = "csv:manual"

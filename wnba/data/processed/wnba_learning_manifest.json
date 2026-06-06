@@ -1,0 +1,18 @@
+{
+  "accuracy": null,
+  "brier": null,
+  "calibration_by_confidence_bucket": {},
+  "files_updated": [
+    "/home/ubuntu/EdgeRanked/sports/wnba/Best_Bets/graded_bets.csv",
+    "/home/ubuntu/EdgeRanked/sports/wnba/Best_Bets/wnba_bets_history.csv",
+    "/home/ubuntu/EdgeRanked/sports/wnba/learning/errors/projection_errors.csv"
+  ],
+  "games_graded": 0,
+  "generated_at": "2026-06-06T19:19:43.413067-04:00",
+  "history_rows": 1195,
+  "last_graded_date": null,
+  "log_loss": null,
+  "no_new_completed_games": true,
+  "predictions_graded": 0,
+  "projection_error_rows": 0
+}

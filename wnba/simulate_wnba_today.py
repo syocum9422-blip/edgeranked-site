@@ -66,6 +66,33 @@ COMBO_STATS = {
     "sb": (["steals", "blocks"], "SB", "Stl+Blk"),
 }
 
+SIMULATION_DETAIL_COLUMNS = [
+    "player_name",
+    "player_key",
+    "team",
+    "opponent",
+    "stat",
+    "line",
+    "sportsbook",
+    "over_odds",
+    "under_odds",
+    "mean",
+    "median",
+    "floor",
+    "ceiling",
+    "stddev",
+    "p10",
+    "p50",
+    "p90",
+    "over_hit_rate",
+    "under_hit_rate",
+    "projected_minutes",
+    "confidence",
+    "confidence_label",
+    "model_projection",
+    "line_delta",
+]
+
 
 def load_stat_models(base_dir) -> dict[str, dict]:
     return {
@@ -558,7 +585,7 @@ def main() -> None:
     app_view.to_csv(APP_VIEW_PROJECTIONS_PATH, index=False)
     archive_dataframe(projections, PROJECTIONS_ARCHIVE_DIR, "wnba_projections")
 
-    simulation_detail = pd.DataFrame(simulation_rows)
+    simulation_detail = pd.DataFrame(simulation_rows, columns=SIMULATION_DETAIL_COLUMNS)
     simulation_detail.to_csv(SIMULATION_DETAIL_PATH, index=False)
     logger.info("Saved projections to %s and simulation detail to %s", PROJECTIONS_PATH, SIMULATION_DETAIL_PATH)
 

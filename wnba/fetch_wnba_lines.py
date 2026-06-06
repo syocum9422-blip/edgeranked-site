@@ -12,7 +12,7 @@ Usage:
 
 Output:
     data/raw/wnba_sportsbook_lines_raw.csv
-    Columns: player_name, team, opponent, stat, line, over_odds, under_odds, sportsbook, fetched_at, source_mode
+    Columns: player_name, team, opponent, stat, line, over_odds, under_odds, sportsbook, fetched_at, source_mode, _data_source
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ from wnba_model_config import RAW_SPORTSBOOK_LINES_PATH
 from wnba_model_utils import setup_logging
 
 
-WNBA_LEAGUE_ID = "10"
+WNBA_LEAGUE_ID = os.getenv("PRIZEPICKS_WNBA_LEAGUE_ID", "3")
 EASTERN = ZoneInfo("America/New_York")
 SOURCE_MODE = os.getenv("WNBA_SOURCE_MODE", "auto").strip().lower()
 
@@ -155,6 +155,22 @@ def extract_rows(payload):
 
     player_lookup = build_player_lookup(included)
     fetched_at = datetime.now(timezone.utc).isoformat()
+    stat_mapping = {
+        "points": "points",
+        "rebounds": "rebounds",
+        "assists": "assists",
+        "3ptm": "threes_made",
+        "3-pt made": "threes_made",
+        "3pm": "threes_made",
+        "fg3m": "threes_made",
+        "steals": "steals",
+        "blocks": "blocks",
+        "pra": "pra",
+        "pts+rebs": "pr",
+        "pts+asts": "pa",
+        "rebs+asts": "ra",
+        "stls+blks": "sb",
+    }
 
     rows = []
     for proj in data:
@@ -166,31 +182,26 @@ def extract_rows(payload):
         if not player_name:
             continue
 
-        stat = (
-            attrs.get("stat_type")
+        # PrizePicks exposes many variants of the same market. Only keep the
+        # standard board entry for explicitly supported categories.
+        if str(attrs.get("projection_type", "")).strip().lower() != "single stat":
+            continue
+        if attrs.get("discount_name"):
+            continue
+        if str(attrs.get("odds_type", "")).strip().lower() != "standard":
+            continue
+
+        stat_label = (
+            attrs.get("stat_display_name")
+            or attrs.get("stat_type")
             or attrs.get("market")
             or attrs.get("prop_type")
             or ""
         )
-        stat = str(stat).strip().lower()
-
-        # Map PrizePicks stat names to WNBA internal stat names
-        stat_mapping = {
-            "pts": "points",
-            "reb": "rebounds",
-            "ast": "assists",
-            "3pm": "threes_made",
-            "fg3m": "threes_made",
-            "stl": "steals",
-            "blk": "blocks",
-            "points": "points",
-            "rebounds": "rebounds",
-            "assists": "assists",
-            "threes made": "threes_made",
-            "steals": "steals",
-            "blocks": "blocks",
-        }
-        stat = stat_mapping.get(stat, stat)
+        stat_key = str(stat_label).strip().lower()
+        stat = stat_mapping.get(stat_key)
+        if not stat:
+            continue
 
         line = attrs.get("line_score") or attrs.get("line")
         if line is None:
@@ -207,7 +218,10 @@ def extract_rows(payload):
             "under_odds": None,
             "sportsbook": "prizepicks",
             "fetched_at": fetched_at,
-            "source_mode": "prizepicks_api",
+            "source_mode": "api",
+            "_data_source": "api:prizepicks",
+            "_stat_label": str(stat_label).strip(),
+            "_odds_type": str(attrs.get("odds_type", "")).strip(),
         })
 
     df = pd.DataFrame(rows)
@@ -224,15 +238,13 @@ def filter_and_normalize(df):
     df["player_name"] = df["player_name"].astype(str).str.strip()
     df["stat"] = df["stat"].astype(str).str.strip().str.lower()
 
-    # Filter to only supported stat types
-    valid_stats = {"points", "rebounds", "assists", "threes_made", "steals", "blocks",
-                   "pra", "pr", "pa", "ra", "sb"}
-    df = df[df["stat"].isin(valid_stats)]
-
     if df.empty:
         return df
 
-    # For duplicates (same player+stat), keep the first occurrence
+    # Prefer the most recently updated standard row per player/stat when duplicates exist.
+    sort_cols = [col for col in ["fetched_at"] if col in df.columns]
+    if sort_cols:
+        df = df.sort_values(sort_cols, ascending=False)
     df = df.drop_duplicates(subset=["player_name", "stat"], keep="first")
 
     return df.reset_index(drop=True)
@@ -263,8 +275,31 @@ def write_lines(df, source_mode, logger):
         logger.error("Cannot write empty lines DataFrame to %s", RAW_SPORTSBOOK_LINES_PATH)
         raise ValueError("No WNBA lines to write")
 
+    df = df.copy()
+    fetched_at = datetime.now(timezone.utc).isoformat()
+    if str(source_mode).startswith("api:prizepicks") or source_mode == "prizepicks_api":
+        df["sportsbook"] = "prizepicks"
+        df["source_mode"] = "api"
+        df["_data_source"] = "api:prizepicks"
+        if "fetched_at" not in df.columns or df["fetched_at"].isna().all():
+            df["fetched_at"] = fetched_at
+    elif "_data_source" not in df.columns:
+        df["_data_source"] = source_mode
+
     # Ensure columns are in expected order
-    columns = ["player_name", "team", "opponent", "stat", "line", "over_odds", "under_odds", "sportsbook", "fetched_at", "source_mode"]
+    columns = [
+        "player_name",
+        "team",
+        "opponent",
+        "stat",
+        "line",
+        "over_odds",
+        "under_odds",
+        "sportsbook",
+        "fetched_at",
+        "source_mode",
+        "_data_source",
+    ]
     for col in columns:
         if col not in df.columns:
             df[col] = None
@@ -311,29 +346,10 @@ def main():
             write_lines(df, source, logger)
             return
 
-        # Check for tiny slate (likely off-season)
         unique_players = filtered_df["player_name"].nunique()
         logger.info("PrizePicks returned %d lines for %d unique players", len(filtered_df), unique_players)
 
-        if unique_players < 5:
-            logger.warning("PrizePicks returned only %d players (off-season indicator)", unique_players)
-            if SOURCE_MODE == "api":
-                raise ValueError(
-                    f"WNBA_SOURCE_MODE=api but PrizePicks returned only {unique_players} players. "
-                    "This likely means the WNBA season is off-season. "
-                    "Use WNBA_SOURCE_MODE=auto to fall back to CSV."
-                )
-            # auto mode: warn and fall back to CSV
-            logger.warning("Tiny WNBA slate from PrizePicks; falling back to CSV")
-            csv_df, csv_source = load_csv_fallback(logger)
-            if not csv_df.empty:
-                write_lines(csv_df, csv_source, logger)
-            else:
-                # Still write the PrizePicks data even if small, better than nothing
-                write_lines(filtered_df, "prizepicks_api:small_slate", logger)
-            return
-
-        write_lines(filtered_df, "prizepicks_api", logger)
+        write_lines(filtered_df, "api:prizepicks", logger)
 
         # Print sample
         logger.info("Sample lines:")

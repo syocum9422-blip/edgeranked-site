@@ -1,0 +1,3 @@
+player_name,team,had_history_before,rows_added,source,league_used,athlete_id,resolution_status
+Han Xu,NYL,False,8,api:espn:wnba:gamelog,wnba,4337216,backfilled
+Jovana Nogic,PHX,False,0,api:espn:wnba:gamelog,none,3906769,no_history_found

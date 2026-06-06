@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
+
 import numpy as np
 import pandas as pd
 
@@ -12,6 +14,12 @@ CALIBRATION_REPORT_PATH = PROCESSED_DIR / "wnba_calibration_report.csv"
 BEST_BETS_CALIBRATION_REPORT_PATH = BEST_BETS_DIR / "calibration_report.txt"
 BEST_BETS_CALIBRATION_SUMMARY_PATH = BEST_BETS_DIR / "calibration_summary.csv"
 CALIBRATION_FACTORS_PATH = BEST_BETS_DIR / "calibration_factors.json"
+LEARNING_DIR = BEST_BETS_DIR.parent / "learning"
+CONFIDENCE_CALIBRATION_SUMMARY_PATH = LEARNING_DIR / "confidence_calibration_summary.csv"
+
+
+def created_at_utc() -> str:
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
 def bucket_probabilities(series: pd.Series) -> pd.Series:
@@ -26,12 +34,29 @@ def smoothed_rate(wins: int, losses: int, alpha: int = 4, beta: int = 4) -> floa
 
 
 def build_factors(graded: pd.DataFrame) -> dict:
+    timestamp = created_at_utc()
+    wins_total = int((graded["bet_result"] == "win").sum())
+    losses_total = int((graded["bet_result"] == "loss").sum())
     factors = {
-        "metadata": {"graded_bets": int(len(graded))},
+        "metadata": {
+            "graded_bets": int(len(graded)),
+            "wins": wins_total,
+            "losses": losses_total,
+            "overall_win_rate": round(smoothed_rate(wins_total, losses_total, 5, 5), 4) if len(graded) else None,
+            "created_at_utc": timestamp,
+        },
+        "global": {},
         "side": {},
         "stat_side": {},
+        "stat_side_confidence_bucket": {},
         "confidence_label": {},
         "hit_rate_bucket": {},
+    }
+    factors["global"]["ALL"] = {
+        "wins": wins_total,
+        "losses": losses_total,
+        "bets": wins_total + losses_total,
+        "win_rate": round(smoothed_rate(wins_total, losses_total, 5, 5), 4) if len(graded) else None,
     }
     for side, group in graded.groupby("side"):
         wins = int((group["bet_result"] == "win").sum())
@@ -71,11 +96,85 @@ def build_factors(graded: pd.DataFrame) -> dict:
                 "bets": wins + losses,
                 "win_rate": round(smoothed_rate(wins, losses, 4, 4), 4),
             }
+    if {"confidence_label", "prob_bucket"}.issubset(graded.columns):
+        grouped = graded.dropna(subset=["confidence_label", "prob_bucket"])
+        for (stat, side, label, bucket), group in grouped.groupby(["stat", "side", "confidence_label", "prob_bucket"]):
+            wins = int((group["bet_result"] == "win").sum())
+            losses = int((group["bet_result"] == "loss").sum())
+            factors["stat_side_confidence_bucket"][
+                f"{str(stat).upper()}::{str(side).upper()}::{str(label).title()}::{str(bucket)}"
+            ] = {
+                "wins": wins,
+                "losses": losses,
+                "bets": wins + losses,
+                "win_rate": round(smoothed_rate(wins, losses, 3, 3), 4),
+            }
     return factors
+
+
+def build_confidence_calibration_summary(bets: pd.DataFrame) -> pd.DataFrame:
+    columns = [
+        "confidence_label",
+        "stat",
+        "side",
+        "total_bets",
+        "wins",
+        "losses",
+        "pushes",
+        "win_rate",
+        "avg_predicted_hit_rate",
+        "calibration_gap",
+        "created_at_utc",
+    ]
+    if bets.empty:
+        return pd.DataFrame(columns=columns)
+
+    summary_frame = bets[bets["bet_result"].isin(["win", "loss", "push"])].copy()
+    if summary_frame.empty:
+        return pd.DataFrame(columns=columns)
+
+    if "CONFIDENCE_LABEL" in summary_frame.columns:
+        confidence_series = summary_frame["CONFIDENCE_LABEL"]
+    elif "confidence" in summary_frame.columns:
+        confidence_series = summary_frame["confidence"]
+    else:
+        confidence_series = pd.Series(["Unknown"] * len(summary_frame), index=summary_frame.index)
+    summary_frame["confidence_label"] = confidence_series.fillna("Unknown").astype(str).str.title()
+    summary_frame["hit_rate"] = pd.to_numeric(summary_frame.get("hit_rate"), errors="coerce")
+
+    rows = []
+    timestamp = created_at_utc()
+    for (confidence_label, stat, side), group in summary_frame.groupby(["confidence_label", "stat", "side"], dropna=False):
+        wins = int((group["bet_result"] == "win").sum())
+        losses = int((group["bet_result"] == "loss").sum())
+        pushes = int((group["bet_result"] == "push").sum())
+        decisions = wins + losses
+        avg_predicted_hit_rate = pd.to_numeric(group["hit_rate"], errors="coerce").mean()
+        win_rate = (wins / decisions) if decisions else np.nan
+        rows.append(
+            {
+                "confidence_label": str(confidence_label),
+                "stat": str(stat),
+                "side": str(side),
+                "total_bets": int(len(group)),
+                "wins": wins,
+                "losses": losses,
+                "pushes": pushes,
+                "win_rate": win_rate,
+                "avg_predicted_hit_rate": avg_predicted_hit_rate,
+                "calibration_gap": win_rate - avg_predicted_hit_rate if pd.notna(win_rate) and pd.notna(avg_predicted_hit_rate) else np.nan,
+                "created_at_utc": timestamp,
+            }
+        )
+    return pd.DataFrame(rows, columns=columns).sort_values(
+        ["confidence_label", "stat", "side"],
+        kind="stable",
+    ).reset_index(drop=True)
 
 
 def main() -> None:
     logger = setup_logging("calibrate_wnba_model")
+    LEARNING_DIR.mkdir(parents=True, exist_ok=True)
     if not BETTING_RECORD_PATH.exists():
         raise FileNotFoundError(f"Bet history not found: {BETTING_RECORD_PATH}")
 
@@ -96,12 +195,15 @@ def main() -> None:
         )
         empty_report.to_csv(CALIBRATION_REPORT_PATH, index=False)
         empty_report.to_csv(BEST_BETS_CALIBRATION_SUMMARY_PATH, index=False)
+        build_confidence_calibration_summary(bets).to_csv(CONFIDENCE_CALIBRATION_SUMMARY_PATH, index=False)
         with open(CALIBRATION_FACTORS_PATH, "w", encoding="utf-8") as handle:
             json.dump(
                 {
-                    "metadata": {"graded_bets": 0},
+                    "metadata": {"graded_bets": 0, "created_at_utc": created_at_utc()},
+                    "global": {},
                     "side": {},
                     "stat_side": {},
+                    "stat_side_confidence_bucket": {},
                     "confidence_label": {},
                     "hit_rate_bucket": {},
                 },
@@ -130,6 +232,7 @@ def main() -> None:
     report["calibration_gap"] = report["actual_win_rate"] - report["avg_hit_rate"]
     report.to_csv(CALIBRATION_REPORT_PATH, index=False)
     report.to_csv(BEST_BETS_CALIBRATION_SUMMARY_PATH, index=False)
+    build_confidence_calibration_summary(bets).to_csv(CONFIDENCE_CALIBRATION_SUMMARY_PATH, index=False)
 
     factors = build_factors(graded)
     with open(CALIBRATION_FACTORS_PATH, "w", encoding="utf-8") as handle:

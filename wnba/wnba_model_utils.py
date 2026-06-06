@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import math
+import os
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Tuple
 
@@ -64,7 +65,12 @@ def ensure_directories() -> None:
 
 
 def today_timestamp() -> pd.Timestamp:
-    return pd.Timestamp(TODAY_OVERRIDE).normalize() if TODAY_OVERRIDE else pd.Timestamp.today().normalize()
+    selected_slate_date = os.environ.get("WNBA_SELECTED_SLATE_DATE")
+    if selected_slate_date:
+        return pd.Timestamp(selected_slate_date).normalize()
+    if TODAY_OVERRIDE:
+        return pd.Timestamp(TODAY_OVERRIDE).normalize()
+    return pd.Timestamp.today().normalize()
 
 
 def safe_read_csv(path: Path, required: bool = False, logger: Optional[logging.Logger] = None) -> pd.DataFrame:
@@ -90,7 +96,7 @@ def standardize_team_abbrev(value: object) -> str:
     if pd.isna(value):
         return ""
     mapping = {
-        "las": "LVA",
+        "las": "LAS",
         "lv": "LVA",
         "veg": "LVA",
         "pho": "PHX",
@@ -100,6 +106,7 @@ def standardize_team_abbrev(value: object) -> str:
         "conn": "CON",
         "ct": "CON",
         "wash": "WAS",
+        "wsh": "WAS",
         "gs": "GSV",
         "gsv": "GSV",
         "la": "LAS",
@@ -109,6 +116,8 @@ def standardize_team_abbrev(value: object) -> str:
         "min": "MIN",
         "sea": "SEA",
         "atl": "ATL",
+        "pdx": "POR",
+        "por": "POR",
     }
     token = str(value).upper().strip()
     return mapping.get(token.lower(), token)
@@ -438,7 +447,8 @@ def build_regression_pipeline(feature_frame: pd.DataFrame) -> Tuple[Pipeline, Pi
         transformers=[
             ("numeric", SimpleImputer(strategy="median"), numeric),
             ("categorical", Pipeline([("imputer", SimpleImputer(strategy="most_frequent")), ("encoder", OneHotEncoder(handle_unknown="ignore"))]), categorical),
-        ]
+        ],
+        sparse_threshold=0.0,
     )
 
     ridge_model = Pipeline(

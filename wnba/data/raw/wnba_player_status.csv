@@ -1,14 +1,1 @@
-player_name,team,position,est_return_date,status,status_text,comment,fetched_at,_data_source,player_key
-Azura Stevens,CHICAGO SKY,F,May 9,day-to-day,Day-To-Day,"Apr 30: General manager Jeff Pagliocca said Thursday that Stevens (knee) has resumed full basketball activities and is ""hopefully a few weeks away"" from returning to game action, Jack Maloney of CBS Sports reports.",2026-05-08T01:25:30.780667+00:00,api:espn_injuries,azura stevens
-Skylar Diggins,CHICAGO SKY,G,May 9,day-to-day,Day-To-Day,,2026-05-08T01:25:30.780796+00:00,api:espn_injuries,skylar diggins
-Elizabeth Williams,CHICAGO SKY,C,May 9,day-to-day,Day-To-Day,,2026-05-08T01:25:30.780877+00:00,api:espn_injuries,elizabeth williams
-Aziaha James,DALLAS WINGS,G,May 9,day-to-day,Day-To-Day,"May 6: James has a sprained ankle and was unable to practice Wednesday, Grant Afseth of Dallas Hoops Journal reports.",2026-05-08T01:25:30.781032+00:00,api:espn_injuries,aziaha james
-Alanna Smith,DALLAS WINGS,F,May 9,day-to-day,Day-To-Day,"May 6: Smith has been diagnosed with a nasal fracture and was unable to practice Wednesday, Grant Afseth of Dallas Hoops Journal reports.",2026-05-08T01:25:30.781104+00:00,api:espn_injuries,alanna smith
-Awak Kuier,DALLAS WINGS,F,May 9,day-to-day,Day-To-Day,,2026-05-08T01:25:30.781172+00:00,api:espn_injuries,awak kuier
-Monique Billings,INDIANA FEVER,F,May 9,day-to-day,Day-To-Day,"May 5: Billings (ankle) will be a limited participant at Tuesday's practice, Chloe Peterson of The Indianapolis Star reports.",2026-05-08T01:25:30.781319+00:00,api:espn_injuries,monique billings
-Lexie Hull,INDIANA FEVER,G,May 9,day-to-day,Day-To-Day,"May 5: Hull (hamstring) said she expects to play Saturday against the Wings, according to Brian Haenchen of Indy Star Sports.",2026-05-08T01:25:30.781384+00:00,api:espn_injuries,lexie hull
-Justine Pissott,INDIANA FEVER,G,May 9,day-to-day,Day-To-Day,,2026-05-08T01:25:30.781446+00:00,api:espn_injuries,justine pissott
-Janiah Barker,LAS VEGAS ACES,F,May 9,day-to-day,Day-To-Day,,2026-05-08T01:25:30.781577+00:00,api:espn_injuries,janiah barker
-Noemie Brochant,PHOENIX MERCURY,F,May 9,day-to-day,Day-To-Day,,2026-05-08T01:25:30.781707+00:00,api:espn_injuries,noemie brochant
-Jovana Nogic,PHOENIX MERCURY,G,May 9,day-to-day,Day-To-Day,,2026-05-08T01:25:30.781783+00:00,api:espn_injuries,jovana nogic
-Nyara Sabally,TORONTO TEMPO,F,May 8,day-to-day,Day-To-Day,"May 7: Sabally (concussion) is questionable for Friday's game against Washington, Zulfi Sheikh of Sportsnet.ca reports.",2026-05-08T01:25:30.781917+00:00,api:espn_injuries,nyara sabally
+_data_source
