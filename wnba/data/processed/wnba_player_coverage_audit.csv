@@ -1,15 +1,5 @@
 player_name,team,opponent,has_live_line,has_history,history_source,included,reason
-Azurá Stevens,CHI,TOR,True,True,csv,False,excluded_by_status_or_filter
-Jacy Sheldon,CHI,TOR,True,True,csv,True,included
-Kamilla Cardoso,CHI,TOR,True,True,csv,True,included
-Skylar Diggins,CHI,TOR,True,True,csv,True,included
-Kamilla Cardoso + Brittney Sykes,CHI/TOR,,True,False,,False,excluded_not_on_canonical_slate
-Kamilla Cardoso + Marina Mabrey,CHI/TOR,,True,False,,False,excluded_not_on_canonical_slate
-Kamilla Cardoso + Nyara Sabally,CHI/TOR,,True,False,,False,excluded_not_on_canonical_slate
-Skylar Diggins + Brittney Sykes,CHI/TOR,,True,False,,False,excluded_not_on_canonical_slate
-Skylar Diggins + Marina Mabrey,CHI/TOR,,True,False,,False,excluded_not_on_canonical_slate
-Skylar Diggins + Nyara Sabally,CHI/TOR,,True,False,,False,excluded_not_on_canonical_slate
-Brittney Griner,CON,,True,True,csv,False,excluded_not_on_canonical_slate
+Aneesah Morrow,CON,,True,True,csv,False,excluded_not_on_canonical_slate
 Leila Lacan,CON,,True,True,csv,False,excluded_not_on_canonical_slate
 Aliyah Boston,IND,,True,True,csv,False,excluded_not_on_canonical_slate
 Caitlin Clark,IND,,True,True,csv,False,excluded_not_on_canonical_slate
@@ -45,9 +35,6 @@ Awa Fam,SEA,,True,True,csv,False,excluded_not_on_canonical_slate
 Dominique Malonga,SEA,,True,True,csv,False,excluded_not_on_canonical_slate
 Flau'jae Johnson,SEA,,True,True,csv,False,excluded_not_on_canonical_slate
 Natisha Hiedeman,SEA,,True,True,csv,False,excluded_not_on_canonical_slate
-Brittney Sykes,TOR,CHI,True,True,csv,True,included
-Marina Mabrey,TOR,CHI,True,True,csv,True,included
-Nyara Sabally,TOR,CHI,True,True,csv,True,included
 Kiki Iriafen,WAS,,True,True,csv,False,excluded_not_on_canonical_slate
 Shakira Austin,WAS,,True,True,csv,False,excluded_not_on_canonical_slate
 Sonia Citron,WAS,,True,True,csv,False,excluded_not_on_canonical_slate

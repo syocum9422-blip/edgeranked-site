@@ -1,14 +1,14 @@
 player_name,team,position,est_return_date,status,status_text,comment,fetched_at,_data_source,player_key
-Kennedy Burke,CONNECTICUT SUN,G,Jun 8,day-to-day,Day-To-Day,,2026-06-07T18:01:22.677270+00:00,api:espn_injuries,kennedy burke
-Li Yueru,DALLAS WINGS,C,Jun 9,day-to-day,Day-To-Day,,2026-06-07T18:01:22.677460+00:00,api:espn_injuries,li yueru
-Odyssey Sims,DALLAS WINGS,G,Jun 9,day-to-day,Day-To-Day,Jun 5: Sims won't return to Friday's game against the Sparks due to a left ankle injury.,2026-06-07T18:01:22.677540+00:00,api:espn_injuries,odyssey sims
-Ashten Prechtel,GOLDEN STATE VALKYRIES,F,Jun 9,day-to-day,Day-To-Day,,2026-06-07T18:01:22.677685+00:00,api:espn_injuries,ashten prechtel
-Chennedy Carter,LAS VEGAS ACES,G,Jun 8,day-to-day,Day-To-Day,,2026-06-07T18:01:22.677839+00:00,api:espn_injuries,chennedy carter
-Liatu King,MINNESOTA LYNX,F,Jun 9,day-to-day,Day-To-Day,,2026-06-07T18:01:22.677973+00:00,api:espn_injuries,liatu king
-Anneli Maley,NEW YORK LIBERTY,F,Jun 8,day-to-day,Day-To-Day,,2026-06-07T18:01:22.678114+00:00,api:espn_injuries,anneli maley
-Alyssa Thomas,PHOENIX MERCURY,F,Jun 9,day-to-day,Day-To-Day,,2026-06-07T18:01:22.678245+00:00,api:espn_injuries,alyssa thomas
-Kahleah Copper,PHOENIX MERCURY,G,Jun 9,day-to-day,Day-To-Day,,2026-06-07T18:01:22.678309+00:00,api:espn_injuries,kahleah copper
-Sarah Ashlee Barker,PORTLAND FIRE,G,Jun 7,day-to-day,Day-To-Day,Jun 6: Barker (quadriceps) is probable for Sunday's game against the Sparks.,2026-06-07T18:01:22.678441+00:00,api:espn_injuries,sarah ashlee barker
-Karlie Samuelson,PORTLAND FIRE,G,Jun 7,day-to-day,Day-To-Day,Jun 6: Samuelson is probable for Sunday's game in Las Vegas due to a right Achilles injury.,2026-06-07T18:01:22.678505+00:00,api:espn_injuries,karlie samuelson
-Lexie Brown,SEATTLE STORM,G,Jun 8,day-to-day,Day-To-Day,,2026-06-07T18:01:22.678634+00:00,api:espn_injuries,lexie brown
-Darianna Littlepage-Buggs,WASHINGTON MYSTICS,G,Jun 8,day-to-day,Day-To-Day,,2026-06-07T18:01:22.678828+00:00,api:espn_injuries,darianna littlepage-buggs
+Kennedy Burke,CONNECTICUT SUN,G,Jun 8,day-to-day,Day-To-Day,Jun 7: Burke (illness) is listed as questionable for Monday's game against the Liberty.,2026-06-07T22:31:21.633333+00:00,api:espn_injuries,kennedy burke
+Li Yueru,DALLAS WINGS,C,Jun 9,day-to-day,Day-To-Day,,2026-06-07T22:31:21.633522+00:00,api:espn_injuries,li yueru
+Odyssey Sims,DALLAS WINGS,G,Jun 9,day-to-day,Day-To-Day,Jun 5: Sims won't return to Friday's game against the Sparks due to a left ankle injury.,2026-06-07T22:31:21.633601+00:00,api:espn_injuries,odyssey sims
+Ashten Prechtel,GOLDEN STATE VALKYRIES,F,Jun 9,day-to-day,Day-To-Day,,2026-06-07T22:31:21.633745+00:00,api:espn_injuries,ashten prechtel
+Chennedy Carter,LAS VEGAS ACES,G,Jun 8,day-to-day,Day-To-Day,,2026-06-07T22:31:21.633900+00:00,api:espn_injuries,chennedy carter
+Liatu King,MINNESOTA LYNX,F,Jun 9,day-to-day,Day-To-Day,,2026-06-07T22:31:21.634035+00:00,api:espn_injuries,liatu king
+Anneli Maley,NEW YORK LIBERTY,F,Jun 8,day-to-day,Day-To-Day,,2026-06-07T22:31:21.634167+00:00,api:espn_injuries,anneli maley
+Alyssa Thomas,PHOENIX MERCURY,F,Jun 9,day-to-day,Day-To-Day,,2026-06-07T22:31:21.634298+00:00,api:espn_injuries,alyssa thomas
+Kahleah Copper,PHOENIX MERCURY,G,Jun 9,day-to-day,Day-To-Day,,2026-06-07T22:31:21.634362+00:00,api:espn_injuries,kahleah copper
+Sarah Ashlee Barker,PORTLAND FIRE,G,Jun 7,day-to-day,Day-To-Day,Jun 6: Barker (quadriceps) is probable for Sunday's game against the Sparks.,2026-06-07T22:31:21.634491+00:00,api:espn_injuries,sarah ashlee barker
+Karlie Samuelson,PORTLAND FIRE,G,Jun 7,day-to-day,Day-To-Day,Jun 6: Samuelson is probable for Sunday's game in Las Vegas due to a right Achilles injury.,2026-06-07T22:31:21.634555+00:00,api:espn_injuries,karlie samuelson
+Lexie Brown,SEATTLE STORM,G,Jun 8,day-to-day,Day-To-Day,,2026-06-07T22:31:21.634697+00:00,api:espn_injuries,lexie brown
+Darianna Littlepage-Buggs,WASHINGTON MYSTICS,G,Jun 8,day-to-day,Day-To-Day,,2026-06-07T22:31:21.634842+00:00,api:espn_injuries,darianna littlepage-buggs

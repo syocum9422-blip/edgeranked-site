@@ -1,6 +1,5 @@
 team,source_schedule,source_prizepicks,included,reason
-CHI,True,True,True,scheduled_and_live_prizepicks
-CHI/TOR,False,True,False,excluded_not_on_canonical_slate
+CHI,True,False,True,scheduled
 CON,False,True,False,excluded_not_on_canonical_slate
 IND,False,True,False,excluded_not_on_canonical_slate
 LAS,True,True,True,scheduled_and_live_prizepicks
@@ -9,5 +8,5 @@ NYL,False,True,False,excluded_not_on_canonical_slate
 PDX/LAS,False,True,False,excluded_not_on_canonical_slate
 POR,True,True,True,scheduled_and_live_prizepicks
 SEA,False,True,False,excluded_not_on_canonical_slate
-TOR,True,True,True,scheduled_and_live_prizepicks
+TOR,True,False,True,scheduled
 WAS,False,True,False,excluded_not_on_canonical_slate

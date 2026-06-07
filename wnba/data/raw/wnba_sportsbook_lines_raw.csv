@@ -1,174 +1,137 @@
 player_name,team,opponent,stat,line,over_odds,under_odds,sportsbook,fetched_at,source_mode,_data_source
-Skylar Diggins + Brittney Sykes,CHI/TOR,,points,35.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kelsey Mitchell,IND,,points,19.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Aliyah Boston,IND,,pra,24.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Caitlin Clark,IND,,pr,22.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kiki Iriafen,WAS,,pr,22.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Shakira Austin,WAS,,pr,22.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Sonia Citron,WAS,,pra,22.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Aliyah Boston,IND,,pr,21.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kelsey Mitchell,IND,,pa,21.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Sonia Citron,WAS,,pa,19.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Sonia Citron,WAS,,pr,18.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Caitlin Clark,IND,,pa,26.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Caitlin Clark,IND,,points,17.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Shakira Austin,WAS,,pa,17.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Aliyah Boston,IND,,pa,16.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Shakira Austin,WAS,,points,15.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Sonia Citron,WAS,,points,14.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Aliyah Boston,IND,,points,14.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kiki Iriafen,WAS,,points,13.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Caitlin Clark,IND,,ra,12.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Shakira Austin,WAS,,pra,25.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Caitlin Clark,IND,,pra,30.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Ariel Atkins,LAS,,points,10.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Carla Leite,PDX,,ra,7.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Nneka Ogwumike,LAS,,ra,9.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Sarah Ashlee Barker,PDX,,points,9.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kelsey Plum + Erica Wheeler,LAS,,assists,9.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Erica Wheeler,LAS,,points,8.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kelsey Plum,LAS,,ra,7.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Dearica Hamby,LAS,,rebounds,7.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Nneka Ogwumike,LAS,,rebounds,7.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Erica Wheeler,LAS,,ra,7.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Sarah Ashlee Barker,PDX,,ra,6.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Ariel Atkins,LAS,,steals,1.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kelsey Plum,LAS,,assists,5.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Carla Leite,PDX,,assists,5.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Erica Wheeler,LAS,,assists,4.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Emily Engstler,PDX,,rebounds,4.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Sarah Ashlee Barker,PDX,,rebounds,4.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Cameron Brink,LAS,,rebounds,4.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Megan Gustafson,PDX,,rebounds,4.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Bridget Carleton,PDX,,rebounds,3.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Shakira Austin,WAS,,ra,10.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Aliyah Boston,IND,,rebounds,7.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Shakira Austin,WAS,,rebounds,7.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Chelsea Gray,LVA,,points,11.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Jackie Young,LVA,,points,17.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-NaLyssa Smith,LVA,,pr,17.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Natisha Hiedeman,SEA,,pa,16.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Flau'jae Johnson,SEA,,pr,16.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Chelsea Gray,LVA,,pr,15.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Dominique Malonga,SEA,,pr,14.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Awa Fam,SEA,,pr,14.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Natisha Hiedeman,SEA,,points,12.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Flau'jae Johnson,SEA,,points,11.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Breanna Stewart,NYL,,pra,30.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Jackie Young,LVA,,ra,11.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Chelsea Gray,LVA,,ra,10.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-NaLyssa Smith,LVA,,points,10.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Dominique Malonga,SEA,,points,9.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Awa Fam,SEA,,points,9.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Chelsea Gray,LVA,,assists,6.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-NaLyssa Smith,LVA,,rebounds,6.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Jackie Young,LVA,,rebounds,4.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Chelsea Gray,LVA,,pa,18.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Chelsea Gray,LVA,,pra,22.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Jackie Young,LVA,,pa,23.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-A'ja Wilson,LVA,,points,25.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Breanna Stewart,NYL,,pr,27.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Jonquel Jones,NYL,,pra,25.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Jonquel Jones,NYL,,pr,22.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Leila Lacan,CON,,pra,20.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Breanna Stewart,NYL,,points,19.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Brittney Griner,CON,,pr,18.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Leila Lacan,CON,,pa,17.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Jonquel Jones,NYL,,pa,15.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Jonquel Jones,NYL,,points,13.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Brittney Griner,CON,,points,12.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Leila Lacan,CON,,points,12.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Jonquel Jones,NYL,,ra,11.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Breanna Stewart,NYL,,rebounds,7.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-A'ja Wilson,LVA,,pra,38.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-A'ja Wilson,LVA,,pr,35.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-A'ja Wilson,LVA,,pa,28.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Jackie Young,LVA,,pra,28.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Carla Leite + Erica Wheeler,PDX/LAS,,assists,10.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Emily Engstler,PDX,,points,10.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Skylar Diggins + Marina Mabrey,CHI/TOR,,points,35.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Azurá Stevens,CHI,,points,9.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Azurá Stevens,CHI,,pra,14.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kamilla Cardoso,CHI,,points,13.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Azurá Stevens,CHI,,pr,13.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Nyara Sabally,TOR,,pa,12.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kamilla Cardoso,CHI,,ra,11.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Azurá Stevens,CHI,,pa,11.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Nyara Sabally,TOR,,points,10.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kamilla Cardoso,CHI,,rebounds,9.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Skylar Diggins,CHI,,ra,9.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kamilla Cardoso,CHI,,pa,16.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Skylar Diggins + Brittney Sykes,CHI/TOR,,assists,9.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Brittney Sykes,TOR,,ra,8.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Jacy Sheldon,CHI,,points,6.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Azurá Stevens,CHI,,rebounds,4.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Brittney Sykes,TOR,,rebounds,4.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Marina Mabrey,TOR,,rebounds,4.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Brittney Sykes,TOR,,assists,4.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Carla Leite + Kelsey Plum,PDX/LAS,,points,36.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kamilla Cardoso + Nyara Sabally,CHI/TOR,,rebounds,15.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Skylar Diggins,CHI,,points,16.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Carla Leite + Kelsey Plum,PDX/LAS,,assists,10.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Brittney Sykes,TOR,,pr,23.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kamilla Cardoso + Brittney Sykes,CHI/TOR,,points,33.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kamilla Cardoso + Marina Mabrey,CHI/TOR,,points,32.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Brittney Sykes,TOR,,pra,27.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kamilla Cardoso,CHI,,pra,26.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Skylar Diggins + Nyara Sabally,CHI/TOR,,points,26.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Marina Mabrey,TOR,,pra,25.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Skylar Diggins,CHI,,pra,25.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Brittney Sykes,TOR,,pa,23.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kamilla Cardoso,CHI,,pr,23.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Nyara Sabally,TOR,,pr,16.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kamilla Cardoso + Nyara Sabally,CHI/TOR,,points,23.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Marina Mabrey,TOR,,pr,22.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Marina Mabrey,TOR,,pa,22.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Skylar Diggins,CHI,,pa,21.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Skylar Diggins,CHI,,pr,19.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Brittney Sykes,TOR,,points,19.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Marina Mabrey,TOR,,points,18.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Nyara Sabally,TOR,,pra,18.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Bridget Carleton + Kelsey Plum,PDX/LAS,,points,35.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Carla Leite + Dearica Hamby,PDX/LAS,,points,30.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kelsey Plum,LAS,,pra,29.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Erica Wheeler,LAS,,pa,13.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Dearica Hamby,LAS,,points,15.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Megan Gustafson,PDX,,pr,15.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Erica Wheeler,LAS,,pra,15.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Emily Engstler,PDX,,pr,15.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Nneka Ogwumike,LAS,,points,14.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Carla Leite,PDX,,points,14.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Sarah Ashlee Barker,PDX,,pr,14.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Bridget Carleton,PDX,,points,13.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Ariel Atkins,LAS,,pr,13.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Carla Leite + Nneka Ogwumike,PDX/LAS,,points,29.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Cameron Brink,LAS,,pr,12.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Ariel Atkins,LAS,,pa,12.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Sarah Ashlee Barker,PDX,,pa,12.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Sarah Ashlee Barker + Dearica Hamby,PDX/LAS,,rebounds,12.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Sarah Ashlee Barker + Nneka Ogwumike,PDX/LAS,,rebounds,12.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Megan Gustafson,PDX,,points,11.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Dearica Hamby,LAS,,ra,10.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Erica Wheeler,LAS,,pr,10.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Emily Engstler,PDX,,pra,16.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Ariel Atkins,LAS,,pra,16.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Megan Gustafson,PDX,,pra,16.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Sarah Ashlee Barker,PDX,,pra,16.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Bridget Carleton + Dearica Hamby,PDX/LAS,,points,29.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Bridget Carleton + Nneka Ogwumike,PDX/LAS,,points,28.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kelsey Plum,LAS,,pa,27.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Dearica Hamby,LAS,,pra,26.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Nneka Ogwumike,LAS,,pra,24.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Dearica Hamby,LAS,,pr,23.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kelsey Plum,LAS,,pr,23.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Carla Leite,PDX,,pra,22.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Nneka Ogwumike,LAS,,pr,22.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Kelsey Plum,LAS,,points,21.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Carla Leite,PDX,,pa,20.0,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Bridget Carleton,PDX,,pra,19.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Dearica Hamby,LAS,,pa,19.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Bridget Carleton,PDX,,pr,17.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Carla Leite,PDX,,pr,17.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Nneka Ogwumike,LAS,,pa,17.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Bridget Carleton,PDX,,pa,16.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
-Chelsea Gray,LVA,,threes_made,1.5,,,prizepicks,2026-06-07T18:01:22.473589+00:00,api,api:prizepicks
+Carla Leite + Kelsey Plum,PDX/LAS,,points,37.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Jonquel Jones,NYL,,pr,22.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Caitlin Clark,IND,,ra,12.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Shakira Austin,WAS,,ra,10.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Shakira Austin,WAS,,rebounds,7.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Breanna Stewart,NYL,,pra,30.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Breanna Stewart,NYL,,pr,27.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Jonquel Jones,NYL,,pra,25.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Breanna Stewart,NYL,,pa,22.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Bridget Carleton + Kelsey Plum,PDX/LAS,,points,36.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Leila Lacan,CON,,pra,20.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Breanna Stewart,NYL,,points,19.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Leila Lacan,CON,,pa,18.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Jonquel Jones,NYL,,pa,16.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Leila Lacan,CON,,pr,15.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Jonquel Jones,NYL,,points,13.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Aliyah Boston,IND,,points,13.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Kiki Iriafen,WAS,,points,13.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Sonia Citron,WAS,,points,14.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Shakira Austin,WAS,,points,15.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Aliyah Boston,IND,,pa,16.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Shakira Austin,WAS,,pa,17.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Caitlin Clark,IND,,points,17.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Sonia Citron,WAS,,pr,18.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Kelsey Mitchell,IND,,points,19.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Sonia Citron,WAS,,pa,19.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Aliyah Boston,IND,,pr,21.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Kelsey Mitchell,IND,,pa,21.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Sonia Citron,WAS,,pra,22.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Shakira Austin,WAS,,pr,22.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Kiki Iriafen,WAS,,pr,22.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Caitlin Clark,IND,,pr,22.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Aliyah Boston,IND,,pra,23.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Leila Lacan,CON,,points,13.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Aneesah Morrow,CON,,points,12.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Jonquel Jones,NYL,,ra,11.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Chelsea Gray,LVA,,pr,15.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Jackie Young,LVA,,rebounds,4.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Jackie Young,LVA,,assists,6.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+NaLyssa Smith,LVA,,rebounds,6.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Chelsea Gray,LVA,,assists,6.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Awa Fam,SEA,,points,9.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Dominique Malonga,SEA,,points,9.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+NaLyssa Smith,LVA,,points,10.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Chelsea Gray,LVA,,ra,10.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Flau'jae Johnson,SEA,,points,11.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Jackie Young,LVA,,ra,11.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Chelsea Gray,LVA,,points,11.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Natisha Hiedeman,SEA,,points,12.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Awa Fam,SEA,,pr,14.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Dominique Malonga,SEA,,pr,14.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Flau'jae Johnson,SEA,,pr,16.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Breanna Stewart,NYL,,rebounds,7.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Natisha Hiedeman,SEA,,pa,16.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+NaLyssa Smith,LVA,,pr,17.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Jackie Young,LVA,,points,17.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Chelsea Gray,LVA,,pa,18.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Chelsea Gray,LVA,,pra,22.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Jackie Young,LVA,,pr,22.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Jackie Young,LVA,,pa,23.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+A'ja Wilson,LVA,,points,25.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Jackie Young,LVA,,pra,28.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+A'ja Wilson,LVA,,pa,28.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+A'ja Wilson,LVA,,pr,35.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+A'ja Wilson,LVA,,pra,38.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Jonquel Jones,NYL,,assists,2.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Leila Lacan,CON,,ra,7.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Shakira Austin,WAS,,pra,25.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Caitlin Clark,IND,,pa,26.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Caitlin Clark,IND,,pra,30.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Dearica Hamby,LAS,,pa,18.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Cameron Brink,LAS,,pra,14.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Emily Engstler,PDX,,pr,15.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Carla Leite,PDX,,points,15.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Nneka Ogwumike,LAS,,points,15.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Megan Gustafson,PDX,,pra,15.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Bridget Carleton,PDX,,pa,15.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Dearica Hamby,LAS,,points,15.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Erica Wheeler,LAS,,pra,16.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Emily Engstler,PDX,,pra,16.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Sarah Ashlee Barker,PDX,,pra,16.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Carla Leite,PDX,,pr,16.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Ariel Atkins,LAS,,pra,17.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Bridget Carleton,PDX,,pr,17.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Nneka Ogwumike,LAS,,pa,18.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Bridget Carleton,PDX,,pra,19.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Ariel Atkins,LAS,,pr,14.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Carla Leite,PDX,,pa,20.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Nneka Ogwumike,LAS,,pr,22.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Kelsey Plum,LAS,,points,22.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Carla Leite,PDX,,pra,23.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Dearica Hamby,LAS,,pr,23.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Kelsey Plum,LAS,,pr,24.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Nneka Ogwumike,LAS,,pra,25.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Dearica Hamby,LAS,,pra,26.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Kelsey Plum,LAS,,pa,27.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Bridget Carleton + Nneka Ogwumike,PDX/LAS,,points,29.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Bridget Carleton + Dearica Hamby,PDX/LAS,,points,29.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Carla Leite + Nneka Ogwumike,PDX/LAS,,points,30.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Kelsey Plum,LAS,,pra,30.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Carla Leite + Dearica Hamby,PDX/LAS,,points,30.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Sarah Ashlee Barker,PDX,,pr,14.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Megan Gustafson,PDX,,pr,14.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Ariel Atkins,LAS,,steals,1.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Erica Wheeler,LAS,,points,8.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Bridget Carleton,PDX,,rebounds,3.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Megan Gustafson,PDX,,rebounds,4.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Sarah Ashlee Barker,PDX,,rebounds,4.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Cameron Brink,LAS,,rebounds,4.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Erica Wheeler,LAS,,assists,4.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Carla Leite,PDX,,assists,5.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Kelsey Plum,LAS,,assists,6.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Sarah Ashlee Barker,PDX,,ra,6.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Carla Leite,PDX,,ra,7.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Erica Wheeler,LAS,,ra,7.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Nneka Ogwumike,LAS,,rebounds,7.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Dearica Hamby,LAS,,rebounds,7.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Kelsey Plum,LAS,,ra,7.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Cameron Brink,LAS,,points,8.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Kelsey Plum + Erica Wheeler,LAS,,assists,9.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Bridget Carleton,PDX,,points,14.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Sarah Ashlee Barker,PDX,,points,9.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Nneka Ogwumike,LAS,,ra,9.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Carla Leite + Erica Wheeler,PDX/LAS,,assists,10.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Emily Engstler,PDX,,points,10.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Megan Gustafson,PDX,,points,10.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Ariel Atkins,LAS,,points,11.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Carla Leite + Kelsey Plum,PDX/LAS,,assists,11.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Erica Wheeler,LAS,,pr,11.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Sarah Ashlee Barker + Nneka Ogwumike,PDX/LAS,,rebounds,12.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Sarah Ashlee Barker + Dearica Hamby,PDX/LAS,,rebounds,12.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Sarah Ashlee Barker,PDX,,pa,12.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Cameron Brink,LAS,,pr,12.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Erica Wheeler,LAS,,pa,13.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Ariel Atkins,LAS,,pa,14.0,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
+Chelsea Gray,LVA,,threes_made,1.5,,,prizepicks,2026-06-07T22:31:21.301725+00:00,api,api:prizepicks
