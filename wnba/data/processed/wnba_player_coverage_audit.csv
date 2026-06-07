@@ -1,5 +1,6 @@
 player_name,team,opponent,has_live_line,has_history,history_source,included,reason
 Azurá Stevens,CHI,TOR,True,True,csv,False,excluded_by_status_or_filter
+Jacy Sheldon,CHI,TOR,True,True,csv,True,included
 Kamilla Cardoso,CHI,TOR,True,True,csv,True,included
 Skylar Diggins,CHI,TOR,True,True,csv,True,included
 Kamilla Cardoso + Brittney Sykes,CHI/TOR,,True,False,,False,excluded_not_on_canonical_slate
