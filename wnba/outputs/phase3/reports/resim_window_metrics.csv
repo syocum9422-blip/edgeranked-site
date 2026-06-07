@@ -1,0 +1,4 @@
+window_days,n_bets,A_brier,C_brier,A_log_loss,C_log_loss,A_coverage_56,C_coverage_56,coverage_reduction_pct,A_qual_winrate,C_qual_winrate
+7,195,0.2413,0.2451,0.6763,0.6845,107,109,-1.87,0.6636,0.6606
+14,399,0.2327,0.2327,0.6571,0.6576,246,243,1.22,0.6543,0.6583
+30,941,0.2293,0.2309,0.6497,0.6532,635,634,0.16,0.6458,0.6437

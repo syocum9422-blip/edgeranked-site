@@ -1,0 +1,63 @@
+{
+  "generated_at_utc": "2026-06-07T01:07:34.212316+00:00",
+  "recommendation": "INSUFFICIENT_DATA",
+  "reason": "1 canary run(s); need >= 3",
+  "canary_runs": 1,
+  "consecutive_passing_weeks": 0,
+  "consecutive_failing_weeks": 1,
+  "criteria": {
+    "window": "30d",
+    "noise_tolerance": 0.005,
+    "min_weeks": 3,
+    "consec_pass_required": 3,
+    "rollback_fail_required": 2
+  },
+  "latest_run": {
+    "generated_at_utc": "2026-06-07T00:59:51.205452+00:00",
+    "data_through": "2026-06-06",
+    "C_brier": 0.2524,
+    "A_brier": 0.2553,
+    "C_log_loss": 0.6989,
+    "A_log_loss": 0.7057,
+    "C_coverage": 678,
+    "A_coverage": 687,
+    "C_proj_mae": 1.6122,
+    "A_proj_mae": 1.5867,
+    "C_minutes_mae": 4.9657,
+    "A_minutes_mae": 5.0271,
+    "pass": false,
+    "material_regression": false,
+    "gates": {
+      "brier_improves": true,
+      "log_loss_improves": true,
+      "coverage_reduction_under_5pct": true,
+      "no_proj_mae_regression": false,
+      "no_minutes_mae_regression": true
+    }
+  },
+  "history": [
+    {
+      "generated_at_utc": "2026-06-07T00:59:51.205452+00:00",
+      "data_through": "2026-06-06",
+      "C_brier": 0.2524,
+      "A_brier": 0.2553,
+      "C_log_loss": 0.6989,
+      "A_log_loss": 0.7057,
+      "C_coverage": 678,
+      "A_coverage": 687,
+      "C_proj_mae": 1.6122,
+      "A_proj_mae": 1.5867,
+      "C_minutes_mae": 4.9657,
+      "A_minutes_mae": 5.0271,
+      "pass": false,
+      "material_regression": false,
+      "gates": {
+        "brier_improves": true,
+        "log_loss_improves": true,
+        "coverage_reduction_under_5pct": true,
+        "no_proj_mae_regression": false,
+        "no_minutes_mae_regression": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+window_days,cutoff,train_rows,valid_rows,A_live_production_mae,A_live_production_rmse,A_live_production_bias,B_retrain_base_mae,B_retrain_base_rmse,B_retrain_base_bias,C_plus_rolling_min_mae,C_plus_rolling_min_rmse,C_plus_rolling_min_bias,D_plus_rolling_rotation_mae,D_plus_rolling_rotation_rmse,D_plus_rolling_rotation_bias
+7,2026-05-31,9255,359,4.3756,5.6014,0.7988,4.2094,5.3789,-0.593,4.1383,5.3515,-0.5181,4.1917,5.3727,-0.5367
+14,2026-05-24,8807,807,4.4648,5.8723,1.3834,4.1791,5.4323,0.3498,4.1566,5.4338,0.259,4.1984,5.4591,0.3572
+30,2026-05-08,7859,1755,5.026,6.6213,1.6731,5.0149,6.5901,1.5739,4.957,6.4999,1.2084,4.9698,6.5103,1.4146

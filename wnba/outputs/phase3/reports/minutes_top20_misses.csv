@@ -1,0 +1,21 @@
+slate_date,player_name,team,opponent,position_grp,role,projected_minutes,actual_minutes,error,absolute_error,season_avg_minutes,minutes_rolling_mean_5,vol_last5,injury_return,experience
+2026-06-04,Nia Coffey,MIN,GSV,UNK,bench,9.52,35.0,-25.48,25.48,15.35,25.8,3.27,normal,veteran
+2026-05-27,Nia Coffey,MIN,ATL,UNK,bench,8.77,31.0,-22.23,22.23,15.08,25.2,3.19,normal,veteran
+2026-05-10,Marine Johannes,NYL,WAS,UNK,bench,14.96,37.0,-22.04,22.04,18.58,14.0,10.75,normal,veteran
+2026-05-25,Satou Sabally,NYL,POR,UNK,starter,25.56,4.0,21.56,21.56,30.23,22.6,4.51,normal,veteran
+2026-05-24,Maddy Siegrist,DAL,NYL,UNK,bench,27.53,6.0,21.53,21.53,18.05,13.6,5.77,normal,veteran
+2026-05-08,Tiffany Hayes,GSV,SEA,UNK,starter,24.37,4.0,20.37,20.37,25.14,28.2,4.49,return(10d+ rest),veteran
+2026-05-31,Chennedy Carter,LVA,GSV,UNK,starter,28.53,9.0,19.53,19.53,25.3,22.6,2.88,normal,veteran
+2026-05-12,Marine Johannes,NYL,POR,UNK,bench,13.59,33.0,-19.41,19.41,18.8,17.0,14.85,normal,veteran
+2026-05-17,Rickea Jackson,CHI,MIN,UNK,starter,30.06,11.0,19.06,19.06,30.0,29.8,8.44,normal,veteran
+2026-05-15,Skylar Diggins,CHI,PHX,UNK,starter,30.78,12.0,18.78,18.78,31.41,32.0,2.92,normal,veteran
+2026-05-08,Lauren Betts,WAS,TOR,UNK,bench,30.65,12.0,18.65,18.65,21.86,31.0,6.78,return(10d+ rest),veteran
+2026-06-01,DeWanna Bonner,PHX,MIN,F,starter,25.29,7.0,18.29,18.29,28.45,26.0,3.74,normal,veteran
+2026-06-06,Nia Coffey,MIN,SEA,UNK,bench,9.09,27.0,-17.91,17.91,15.51,27.8,5.17,normal,veteran
+2026-05-24,Lauren Betts,WAS,SEA,UNK,bench,29.89,13.0,16.89,16.89,21.54,19.4,10.62,normal,veteran
+2026-05-08,Georgia Amoore,WAS,TOR,UNK,starter,36.71,20.0,16.71,16.71,36.0,38.0,2.92,return(10d+ rest),veteran
+2026-05-18,Alanna Smith,DAL,WAS,UNK,starter,23.69,7.0,16.69,16.69,26.47,22.4,4.28,normal,veteran
+2026-05-17,Stefanie Dolson,SEA,IND,UNK,bench,13.59,30.0,-16.41,16.41,18.44,20.4,4.67,normal,veteran
+2026-05-28,Jessica Shepard,DAL,LVA,UNK,bench,21.93,38.0,-16.07,16.07,23.65,30.6,2.19,normal,veteran
+2026-05-17,Nia Coffey,MIN,CHI,UNK,bench,9.12,25.0,-15.88,15.88,14.83,21.4,9.18,normal,veteran
+2026-05-23,Nia Coffey,MIN,CHI,UNK,bench,9.28,25.0,-15.72,15.72,15.0,26.4,4.1,normal,veteran

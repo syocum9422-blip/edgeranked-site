@@ -1,0 +1,15 @@
+{
+  "decision": "DO_NOT_PROMOTE",
+  "gates": {
+    "minutes_mae_improves_all_windows": true,
+    "minutes_rmse_improves_all_windows": true,
+    "brier_improves_or_neutral": true,
+    "log_loss_improves_or_neutral": true,
+    "coverage_reduction_under_5pct": false
+  },
+  "coverage_reduction_pct": 10.63,
+  "shadow_model": "variant C = retrain on 2026 + add minutes_rolling_mean/std_3/5/10 (exclude rotation feats from regressor)",
+  "gates_passed": 4,
+  "gates_total": 5,
+  "note": "4/5 gates pass. Coverage gate fails at -10.6% (first-order propagation estimate). Minutes & calibration gates pass decisively."
+}

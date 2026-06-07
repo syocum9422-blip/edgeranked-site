@@ -1,0 +1,50 @@
+{
+  "manifest_version": 1,
+  "candidate": "Variant C \u2014 minutes-driven stat architecture",
+  "decision": "INSUFFICIENT_DATA",
+  "decided_at_utc": "2026-06-07T01:07:34.212316+00:00",
+  "evidence": {
+    "canary_runs": 1,
+    "consecutive_passing_weeks": 0,
+    "primary_window": "30d",
+    "latest": {
+      "generated_at_utc": "2026-06-07T00:59:51.205452+00:00",
+      "data_through": "2026-06-06",
+      "C_brier": 0.2524,
+      "A_brier": 0.2553,
+      "C_log_loss": 0.6989,
+      "A_log_loss": 0.7057,
+      "C_coverage": 678,
+      "A_coverage": 687,
+      "C_proj_mae": 1.6122,
+      "A_proj_mae": 1.5867,
+      "C_minutes_mae": 4.9657,
+      "A_minutes_mae": 5.0271,
+      "pass": false,
+      "material_regression": false,
+      "gates": {
+        "brier_improves": true,
+        "log_loss_improves": true,
+        "coverage_reduction_under_5pct": true,
+        "no_proj_mae_regression": false,
+        "no_minutes_mae_regression": true
+      }
+    }
+  },
+  "artifacts_to_promote": [
+    "outputs/phase6/patches/PATCH_B_minutes_driven.md"
+  ],
+  "files_changed_on_promote": [
+    "simulate_wnba_today.py",
+    "wnba_model_utils.py",
+    "data/models/wnba_*_rate_model.joblib (new)",
+    "data/processed/wnba_training_dataset.csv (rebuild)",
+    "models/wnba_minutes_model.joblib (retrain)"
+  ],
+  "preconditions": [
+    "dataset rebuilt to current season",
+    "backup created",
+    "rollback path verified"
+  ],
+  "rollback": "restore listed files from backups/wnba_phase6_<TS>/ and backups/wnba_phase3_20260607_001016/"
+}

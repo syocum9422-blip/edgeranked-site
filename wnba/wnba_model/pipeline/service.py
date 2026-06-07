@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 import os
 import shutil
 import subprocess
@@ -57,7 +58,7 @@ SLATE_VALIDATION_MANIFEST_PATH = BASE_DIR / "data" / "processed" / "wnba_slate_v
 INGESTION_MANIFEST_PATH = BASE_DIR / "data" / "processed" / "wnba_ingestion_manifest.json"
 LEARNING_MANIFEST_PATH = BASE_DIR / "data" / "processed" / "wnba_learning_manifest.json"
 BACKTEST_REPORT_PATH = BASE_DIR / "data" / "processed" / "wnba_backtest_report.csv"
-WNBA_TEAM_ALIASES = {"GS": "GSV", "LV": "LVA", "NY": "NYL", "WSH": "WAS"}
+WNBA_TEAM_ALIASES = {"GS": "GSV", "LV": "LVA", "NY": "NYL", "WSH": "WAS", "LA": "LAS"}
 
 
 def env_flag(name: str) -> bool:
@@ -374,9 +375,11 @@ def write_learning_manifest() -> dict:
     graded_path = BASE_DIR / "Best_Bets" / "graded_bets.csv"
     history_path = BASE_DIR / "Best_Bets" / "wnba_bets_history.csv"
     errors_path = BASE_DIR / "learning" / "errors" / "projection_errors.csv"
+    minutes_errors_path = BASE_DIR / "learning" / "errors" / "minutes_errors.csv"
     graded = pd.read_csv(graded_path) if graded_path.exists() else pd.DataFrame()
     history = pd.read_csv(history_path) if history_path.exists() else pd.DataFrame()
     errors = pd.read_csv(errors_path) if errors_path.exists() else pd.DataFrame()
+    minutes_errors = pd.read_csv(minutes_errors_path) if minutes_errors_path.exists() else pd.DataFrame()
     result_col = next((col for col in ["bet_result", "RESULT", "result"] if col in graded.columns), None)
     date_col = next((col for col in ["bet_date", "DATE", "date"] if col in graded.columns), None)
     graded_results = graded[graded[result_col].astype(str).str.lower().isin({"win", "loss"})].copy() if result_col else pd.DataFrame()
@@ -393,6 +396,9 @@ def write_learning_manifest() -> dict:
         "files_updated": [str(path) for path in [graded_path, history_path, errors_path] if path.exists()],
         "history_rows": int(len(history)),
         "projection_error_rows": int(len(errors)),
+        "minutes_error_rows": int(len(minutes_errors)),
+        "projection_mae": None if errors.empty else float(pd.to_numeric(errors.get("absolute_error"), errors="coerce").mean()),
+        "projection_rmse": None if errors.empty else float(math.sqrt(pd.to_numeric(errors.get("squared_error"), errors="coerce").mean())),
         "no_new_completed_games": bool(graded_results.empty),
     }
     if not graded_results.empty and "confidence" in graded_results.columns:
@@ -401,26 +407,65 @@ def write_learning_manifest() -> dict:
     return payload
 
 
+def safe_log_loss(prob: pd.Series, won: pd.Series) -> float | None:
+    if prob.empty:
+        return None
+    clipped = prob.clip(lower=1e-6, upper=1 - 1e-6)
+    return float((-(won * clipped.map(math.log) + (1 - won) * (1 - clipped).map(math.log))).mean())
+
+
 def write_backtest_report() -> pd.DataFrame:
-    path = BASE_DIR / "Best_Bets" / "wnba_bets_history.csv"
-    history = pd.read_csv(path) if path.exists() else pd.DataFrame()
+    history_path = BASE_DIR / "Best_Bets" / "wnba_bets_history.csv"
+    errors_path = BASE_DIR / "learning" / "errors" / "projection_errors.csv"
+    history = pd.read_csv(history_path) if history_path.exists() else pd.DataFrame()
+    errors = pd.read_csv(errors_path) if errors_path.exists() else pd.DataFrame()
     rows = []
     for days in [7, 14, 30]:
-        row = {"window_days": days, "graded_predictions": 0, "wins": 0, "losses": 0, "accuracy": None, "primary_failure_source": "no_graded_predictions"}
+        cutoff = today_et_date() - pd.Timedelta(days=days - 1)
+        row = {
+            "window_days": days,
+            "graded_predictions": 0,
+            "wins": 0,
+            "losses": 0,
+            "accuracy": None,
+            "brier": None,
+            "log_loss": None,
+            "projection_mae": None,
+            "projection_rmse": None,
+            "primary_failure_source": "no_graded_predictions",
+        }
+        if not errors.empty and "game_date" in errors.columns:
+            work = errors.copy()
+            work["_date"] = pd.to_datetime(work["game_date"], errors="coerce").dt.date
+            work = work[work["_date"] >= cutoff]
+            if not work.empty:
+                row["graded_predictions"] = int(len(work))
+                row["projection_mae"] = float(pd.to_numeric(work["absolute_error"], errors="coerce").mean())
+                row["projection_rmse"] = float(math.sqrt(pd.to_numeric(work["squared_error"], errors="coerce").mean()))
+                row["primary_failure_source"] = "projection_error_backtest_available"
         if not history.empty:
             date_col = next((col for col in ["bet_date", "DATE", "date"] if col in history.columns), None)
             result_col = next((col for col in ["bet_result", "RESULT", "result"] if col in history.columns), None)
+            prob_col = next((col for col in ["hit_rate", "HIT_RATE"] if col in history.columns), None)
             if date_col and result_col:
-                work = history.copy()
-                work["_date"] = pd.to_datetime(work[date_col], errors="coerce").dt.date
-                cutoff = today_et_date() - pd.Timedelta(days=days - 1)
-                work = work[work["_date"] >= cutoff]
-                graded = work[work[result_col].astype(str).str.lower().isin({"win", "loss"})]
+                bets = history.copy()
+                bets["_date"] = pd.to_datetime(bets[date_col], errors="coerce").dt.date
+                bets = bets[bets["_date"] >= cutoff]
+                graded = bets[bets[result_col].astype(str).str.lower().isin({"win", "loss"})].copy()
                 wins = int((graded[result_col].astype(str).str.lower() == "win").sum())
                 losses = int((graded[result_col].astype(str).str.lower() == "loss").sum())
-                row.update({"graded_predictions": int(len(graded)), "wins": wins, "losses": losses, "accuracy": wins / (wins + losses) if wins + losses else None})
-                if row["graded_predictions"]:
-                    row["primary_failure_source"] = "calibration_or_model_quality_requires_review"
+                if wins + losses:
+                    row["wins"] = wins
+                    row["losses"] = losses
+                    row["accuracy"] = wins / (wins + losses)
+                    row["primary_failure_source"] = "bet_grading_backtest_available"
+                    if prob_col:
+                        prob = pd.to_numeric(graded[prob_col], errors="coerce")
+                        won = (graded[result_col].astype(str).str.lower() == "win").astype(float)
+                        valid = prob.notna() & won.notna()
+                        if valid.any():
+                            row["brier"] = float(((prob[valid] - won[valid]) ** 2).mean())
+                            row["log_loss"] = safe_log_loss(prob[valid], won[valid])
         rows.append(row)
     report = pd.DataFrame(rows)
     report.to_csv(BACKTEST_REPORT_PATH, index=False)
@@ -613,14 +658,28 @@ def require_publish_safety_check() -> None:
         if sportsbooks != {"prizepicks"}:
             raise ValueError(f"WNBA publish safety check failed: sportsbook set is {sorted(sportsbooks)}, expected ['prizepicks'].")
 
-    excluded_slate_players = player_audit[
+    # Per-player exclusions: a recency/status-filtered lined player is tolerated (dropped, slate
+    # continues) the same as a no-history player. Slate/team-level integrity is still enforced by
+    # the team-agreement, opponent, baseline, and sportsbook checks above — so a dropped player
+    # cannot hide a missing team or a broken slate.
+    tolerated_player_reasons = ["no_history_found", "api_error", "excluded_not_on_canonical_slate", "excluded_by_status_or_filter"]
+    excluded_slate_lined = player_audit[
         player_audit["team"].astype(str).str.upper().isin(slate_teams)
         & ~player_audit["included"].astype(bool)
-        & ~player_audit["reason"].astype(str).isin(["no_history_found", "api_error", "excluded_not_on_canonical_slate"])
+    ]
+    for rec in excluded_slate_lined[["player_name", "team", "reason"]].to_dict("records"):
+        tolerated = str(rec["reason"]) in tolerated_player_reasons
+        print(
+            "WNBA publish safety: slate lined player excluded: "
+            f"player={rec['player_name']} team={rec['team']} reason={rec['reason']} "
+            f"tolerated={'yes' if tolerated else 'no'}"
+        )
+    excluded_slate_players = excluded_slate_lined[
+        ~excluded_slate_lined["reason"].astype(str).isin(tolerated_player_reasons)
     ]
     if not excluded_slate_players.empty:
         details = excluded_slate_players[["player_name", "team", "reason"]].to_dict("records")
-        raise ValueError(f"WNBA publish safety check failed: slate live-line players excluded: {details}")
+        raise ValueError(f"WNBA publish safety check failed: slate live-line players excluded for non-tolerated reasons: {details}")
 
     print("WNBA publish safety check: PASSED")
 

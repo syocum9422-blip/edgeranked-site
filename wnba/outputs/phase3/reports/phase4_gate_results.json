@@ -1,0 +1,13 @@
+{
+  "gates": {
+    "minutes_mae_improves": true,
+    "minutes_rmse_improves": true,
+    "brier_improves": false,
+    "log_loss_improves": false,
+    "coverage_within_5pct_or_recovered": true
+  },
+  "coverage_neutral": true,
+  "brier_logloss": "neutral (14/30d CI incl 0); 7d marginally worse",
+  "minutes": "improves all windows",
+  "note": "betting metrics architecturally decoupled from minutes model"
+}

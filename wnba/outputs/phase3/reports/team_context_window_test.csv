@@ -1,0 +1,4 @@
+config,valid_rows,mae,rmse
+C (current ctx=last10),1755,4.9654,6.5043
+C + rolling5 ctx,1755,4.9581,6.502
+C + season ctx,1755,4.9467,6.494

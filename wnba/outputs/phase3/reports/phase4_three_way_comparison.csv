@@ -1,0 +1,4 @@
+config,minutes_MAE,minutes_RMSE,brier,log_loss,coverage_56,play_count,qual_winrate
+A) Production,5.026,6.6213,0.2293,0.6497,635,635,0.6458
+B) Variant C @0.56,4.957,6.4999,0.2309,0.6532,634,634,0.6437
+C) Variant C + opt thr (=0.56),4.957,6.4999,0.2309,0.6532,634,634,0.6437

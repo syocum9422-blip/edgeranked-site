@@ -333,10 +333,24 @@ def build_player_coverage_audit(
 
 
 
-def validate_today_features(today_features: pd.DataFrame, team_map: pd.DataFrame, player_audit: pd.DataFrame) -> None:
+# Per-player exclusion reasons that are tolerated: the player is dropped and the slate
+# continues (slate/team-level integrity is still enforced by the checks below). A
+# recency/status-filtered player (`excluded_by_status_or_filter`) is tolerated the same way
+# a no-history player is — dropping one lined player must not fail an otherwise-valid slate.
+TOLERATED_PLAYER_EXCLUSION_REASONS = {
+    "excluded_not_on_canonical_slate",
+    "no_history_found",
+    "api_error",
+    "excluded_by_status_or_filter",
+}
+
+
+def validate_today_features(today_features: pd.DataFrame, team_map: pd.DataFrame, player_audit: pd.DataFrame, logger=None) -> None:
     canonical_slate_teams = set(team_map["team"].dropna().astype(str))
     canonical_live_players = player_audit[player_audit["team"].astype(str).isin(canonical_slate_teams)].copy()
 
+    # Slate-level integrity (NOT relaxed): empty projections, UNKNOWN opponents, placeholder
+    # rows, and any missing canonical team all remain fatal / fail-closed.
     if today_features.empty:
         raise ValueError("WNBA today features are empty.")
     if (today_features["opponent"].astype(str).str.upper() == "UNKNOWN").any():
@@ -349,13 +363,27 @@ def validate_today_features(today_features: pd.DataFrame, team_map: pd.DataFrame
     if missing_canonical_teams:
         raise ValueError(f"WNBA today features are missing canonical slate teams: {missing_canonical_teams}")
 
-    excluded_canonical = canonical_live_players[
-        (~canonical_live_players["included"].astype(bool))
-        & (~canonical_live_players["reason"].astype(str).isin(["excluded_not_on_canonical_slate", "no_history_found", "api_error"]))
+    # Per-player exclusions: log every excluded canonical-slate lined player with whether the
+    # exclusion was tolerated, then fail closed only for non-tolerated reasons.
+    excluded_live = canonical_live_players[~canonical_live_players["included"].astype(bool)]
+    for rec in excluded_live[["player_name", "team", "reason"]].to_dict("records"):
+        tolerated = str(rec["reason"]) in TOLERATED_PLAYER_EXCLUSION_REASONS
+        message = (
+            "WNBA canonical-slate lined player excluded: "
+            f"player={rec['player_name']} team={rec['team']} reason={rec['reason']} "
+            f"tolerated={'yes' if tolerated else 'no'}"
+        )
+        if logger is not None:
+            (logger.warning if not tolerated else logger.info)(message)
+        else:
+            print(message)
+
+    fatal_excluded = excluded_live[
+        ~excluded_live["reason"].astype(str).isin(TOLERATED_PLAYER_EXCLUSION_REASONS)
     ]
-    if not excluded_canonical.empty:
-        details = excluded_canonical[["player_name", "team", "reason"]].to_dict("records")
-        raise ValueError(f"WNBA canonical-slate live-line players were excluded: {details}")
+    if not fatal_excluded.empty:
+        details = fatal_excluded[["player_name", "team", "reason"]].to_dict("records")
+        raise ValueError(f"WNBA canonical-slate live-line players were excluded for non-tolerated reasons: {details}")
 
 def latest_team_snapshot(dataset: pd.DataFrame) -> pd.DataFrame:
     columns = ["team", "pace_last_10", "off_rating_last_10", "def_rating_last_10", "team_points_last_10", "opp_points_last_10"]
@@ -470,7 +498,7 @@ def main() -> None:
 
     player_audit = build_player_coverage_audit(prizepicks_lines, latest, today_features, team_map)
     player_audit.to_csv(PLAYER_COVERAGE_AUDIT_PATH, index=False)
-    validate_today_features(today_features, team_map, player_audit)
+    validate_today_features(today_features, team_map, player_audit, logger)
 
     today_features.to_csv(TODAY_FEATURES_PATH, index=False)
     logger.info("Saved today's features to %s for %s players", TODAY_FEATURES_PATH, len(today_features))

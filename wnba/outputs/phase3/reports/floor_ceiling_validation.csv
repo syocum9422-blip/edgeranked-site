@@ -1,0 +1,3 @@
+method,nominal,empirical_coverage,mean_width
+FIXED (league std),0.8,0.6689,11.537
+VOLAWARE (per-player),0.8,0.6365,11.991

@@ -332,7 +332,9 @@ def fetch_espn_schedule(logger) -> pd.DataFrame:
 
 ESPN_INJURIES_URL = "https://www.espn.com/wnba/injuries"
 ESPN_INJURIES_HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+    # NOTE: ESPN serves a ~2KB bot-protection stub to detailed desktop-Chrome UA strings.
+    # A generic Mozilla/5.0 receives the full page. Do not "modernize" this UA. See Phase 6.
+    "User-Agent": "Mozilla/5.0",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.9",
 }
@@ -373,6 +375,14 @@ def fetch_espn_injuries(logger) -> pd.DataFrame:
     with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT_SECONDS, context=context) as response:
         html = response.read().decode("utf-8")
     logger.info("Fetched ESPN injuries page (%d bytes)", len(html))
+    if len(html) < 5000:
+        # A <5KB body is a bot-protection stub, not a real (empty) injury report. Raise so
+        # resolve_player_status() logs a fetch failure and falls back, instead of silently
+        # recording "no injuries". See Phase 6.
+        raise RuntimeError(
+            f"ESPN injuries page returned only {len(html)} bytes (<5KB) — bot-protection stub; "
+            "refusing to parse as 'no injuries'"
+        )
 
     soup = BeautifulSoup(html, "html.parser")
     rows = []

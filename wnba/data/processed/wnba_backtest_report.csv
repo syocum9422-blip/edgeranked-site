@@ -1,4 +1,4 @@
-window_days,graded_predictions,wins,losses,accuracy,primary_failure_source
-7,0,0,0,,no_graded_predictions
-14,0,0,0,,no_graded_predictions
-30,0,0,0,,no_graded_predictions
+window_days,graded_predictions,wins,losses,accuracy,brier,log_loss,projection_mae,projection_rmse,primary_failure_source
+7,792,109,74,0.5956284153005464,0.33390294745081417,1.1610542090334501,1.9932323232323235,3.3357344003830685,bet_grading_backtest_available
+14,1476,210,164,0.5614973262032086,0.3602772113729919,1.2696879508636267,2.020067750677507,3.3608756440622654,bet_grading_backtest_available
+30,3528,495,363,0.5769230769230769,0.34916187612295924,1.2378570596253962,2.0048015873015874,3.3689019234860527,bet_grading_backtest_available

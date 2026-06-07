@@ -38,6 +38,11 @@ MAX_BETS_PER_PLAYER = 2
 MAX_BETS_PER_STAT = 6
 CALIBRATION_FACTORS_PATH = BEST_BETS_DIR / "calibration_factors.json"
 CALIBRATION_MAX_AGE_DAYS = 45
+MAX_CALIBRATED_HIT_RATE = 0.82
+LOW_CONFIDENCE_HIT_RATE_CAP = 0.62
+LOW_MINUTES_HIT_RATE_CAP = 0.62
+UNCERTAIN_MINUTES_HIT_RATE_CAP = 0.68
+SMALL_EDGE_HIT_RATE_CAP = 0.70
 BEST_BET_COLUMNS = [
     "DATE",
     "PLAYER",
@@ -281,8 +286,45 @@ def apply_calibrated_hit_rate(raw_hit_rate: object, stat: object, side: str, con
         calibrated = ((1.0 - weight) * calibrated) + (weight * rate)
         applied_steps.append(f"{label}:{bets}")
 
-    calibrated = max(0.01, min(calibrated, 0.99))
+    calibrated = max(0.01, min(calibrated, MAX_CALIBRATED_HIT_RATE))
     return calibrated, bool(applied_steps), applied_steps
+
+
+def apply_confidence_guardrails(hit_rate: object, row: pd.Series, confidence_label: object) -> tuple[float, list[str]]:
+    calibrated = float(pd.to_numeric(hit_rate, errors="coerce"))
+    if pd.isna(calibrated):
+        return calibrated, []
+
+    cap = MAX_CALIBRATED_HIT_RATE
+    steps: list[str] = []
+
+    confidence_key = str(confidence_label).strip().lower()
+    if confidence_key in {"low", "unknown", "nan", ""}:
+        cap = min(cap, LOW_CONFIDENCE_HIT_RATE_CAP)
+        steps.append("low-confidence-cap")
+
+    projected_minutes = pd.to_numeric(row.get("projected_minutes"), errors="coerce")
+    if pd.notna(projected_minutes):
+        if projected_minutes < 15:
+            cap = min(cap, LOW_MINUTES_HIT_RATE_CAP)
+            steps.append("low-minutes-cap")
+        elif projected_minutes < 22:
+            cap = min(cap, UNCERTAIN_MINUTES_HIT_RATE_CAP)
+            steps.append("uncertain-minutes-cap")
+
+    line_delta = pd.to_numeric(row.get("line_delta"), errors="coerce")
+    if pd.isna(line_delta):
+        mean_value = pd.to_numeric(row.get("mean"), errors="coerce")
+        line_value = pd.to_numeric(row.get("line"), errors="coerce")
+        if pd.notna(mean_value) and pd.notna(line_value):
+            line_delta = mean_value - line_value
+    if pd.notna(line_delta) and abs(float(line_delta)) < 1.5:
+        cap = min(cap, SMALL_EDGE_HIT_RATE_CAP)
+        steps.append("small-edge-cap")
+
+    if calibrated > cap:
+        calibrated = cap
+    return max(0.01, min(calibrated, MAX_CALIBRATED_HIT_RATE)), steps
 
 
 def rank_bets(simulation_detail: pd.DataFrame, logger) -> pd.DataFrame:
@@ -315,6 +357,13 @@ def rank_bets(simulation_detail: pd.DataFrame, logger) -> pd.DataFrame:
             row.get("confidence_label", row.get("confidence")),
             calibration_factors,
         )
+        confidence_label = row.get("confidence_label", row.get("confidence"))
+        over_hit_rate, over_guardrails = apply_confidence_guardrails(over_hit_rate, row, confidence_label)
+        under_hit_rate, under_guardrails = apply_confidence_guardrails(under_hit_rate, row, confidence_label)
+        over_steps = over_steps + over_guardrails
+        under_steps = under_steps + under_guardrails
+        over_applied = over_applied or bool(over_guardrails)
+        under_applied = under_applied or bool(under_guardrails)
         over_edge = over_hit_rate - over_implied
         under_edge = under_hit_rate - under_implied
 

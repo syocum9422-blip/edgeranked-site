@@ -1,0 +1,4 @@
+volatility_segment,n,fixed_width,volaware_width,fixed_coverage,volaware_coverage
+mid,871,11.54,12.91,0.667,0.718
+stable(<=4),620,11.53,6.34,0.7,0.424
+volatile(>=7),264,11.55,22.21,0.602,0.867

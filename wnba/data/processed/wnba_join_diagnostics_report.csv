@@ -1,0 +1,12 @@
+metric,value,detail
+prediction_player_rows,757,
+prediction_stat_rows,4542,
+actual_player_rows_in_scope,1860,
+matched_projection_stat_rows,3678,
+matched_minutes_rows,613,
+unmatched_projection_stat_rows,864,
+unmatched_minutes_rows,144,
+unmatched_predictions_by_reason,60,missing_projected_or_actual_value
+unmatched_predictions_by_reason,462,no_actual_rows_for_game_date
+unmatched_predictions_by_reason,342,no_safe_player_match
+unmatched_actual_player_rows,1239,no_projection_for_player_team_date

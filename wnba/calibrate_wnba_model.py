@@ -96,6 +96,12 @@ def build_factors(graded: pd.DataFrame) -> dict:
                 "bets": wins + losses,
                 "win_rate": round(smoothed_rate(wins, losses, 4, 4), 4),
             }
+    if "confidence_label" not in graded.columns:
+        if "CONFIDENCE_LABEL" in graded.columns:
+            graded["confidence_label"] = graded["CONFIDENCE_LABEL"]
+        elif "confidence" in graded.columns:
+            graded["confidence_label"] = graded["confidence"].astype(str).str.title()
+
     if {"confidence_label", "prob_bucket"}.issubset(graded.columns):
         grouped = graded.dropna(subset=["confidence_label", "prob_bucket"])
         for (stat, side, label, bucket), group in grouped.groupby(["stat", "side", "confidence_label", "prob_bucket"]):

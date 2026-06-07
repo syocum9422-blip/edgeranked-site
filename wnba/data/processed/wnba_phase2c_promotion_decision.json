@@ -1,0 +1,12 @@
+{
+  "criteria": {
+    "minimum_coverage_ratio_at_56": 0.92,
+    "must_improve_brier_14_and_30": true,
+    "must_improve_log_loss_14_and_30": true,
+    "public_schema_changes": false,
+    "shadow_only": true
+  },
+  "generated_at": "2026-06-06T23:42:17.212733+00:00",
+  "promoted": true,
+  "reason": "shadow_layer_met_validation_criteria"
+}

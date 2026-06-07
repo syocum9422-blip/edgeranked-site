@@ -1,0 +1,10 @@
+window_days,metric,before_production,after_shadow_C,improved
+7,minutes_MAE,4.3756,4.1383,True
+7,minutes_RMSE,5.6014,5.3515,True
+14,minutes_MAE,4.4648,4.1566,True
+14,minutes_RMSE,5.8723,5.4338,True
+30,minutes_MAE,5.026,4.957,True
+30,minutes_RMSE,6.6213,6.4999,True
+30,brier,0.3562,0.3294,True
+30,log_loss,1.269,1.0264,True
+30,coverage_at_56,941.0,841.0,False

@@ -1,0 +1,117 @@
+{
+  "confidence_bucket": {
+    "65-70": {
+      "rate": 0.5196600299973532,
+      "support": 24
+    },
+    "70-80": {
+      "rate": 0.5793773244766375,
+      "support": 151
+    },
+    "80-90": {
+      "rate": 0.5104018738127294,
+      "support": 186
+    },
+    "90+": {
+      "rate": 0.5933019392526385,
+      "support": 539
+    }
+  },
+  "generated_at": "2026-06-06T23:42:15.931961+00:00",
+  "global_rate": 0.5690968443960827,
+  "minutes_bucket": {
+    "10-18": {
+      "rate": 0.47650235079146736,
+      "support": 119
+    },
+    "18-24": {
+      "rate": 0.5997559038908331,
+      "support": 108
+    },
+    "24-30": {
+      "rate": 0.5760447607564039,
+      "support": 404
+    },
+    "30-35": {
+      "rate": 0.5788605890706553,
+      "support": 255
+    }
+  },
+  "player_stat": {
+    "Alyssa Thomas::pra": {
+      "rate": 0.599296242386558,
+      "support": 17
+    },
+    "Breanna Stewart::pr": {
+      "rate": 0.5886108088501995,
+      "support": 15
+    },
+    "Chelsea Gray::pa": {
+      "rate": 0.5714695925522911,
+      "support": 12
+    },
+    "Chelsea Gray::points": {
+      "rate": 0.5499426118323968,
+      "support": 13
+    },
+    "Gabby Williams::pr": {
+      "rate": 0.5714695925522911,
+      "support": 12
+    },
+    "Gabby Williams::pra": {
+      "rate": 0.586309229399545,
+      "support": 17
+    }
+  },
+  "sample_rows": 919,
+  "stat_side": {
+    "assists::over": {
+      "rate": 0.5207192422269394,
+      "support": 21
+    },
+    "assists::under": {
+      "rate": 0.5537696253691902,
+      "support": 30
+    },
+    "pa::over": {
+      "rate": 0.5508631591330176,
+      "support": 34
+    },
+    "pa::under": {
+      "rate": 0.5464828530309944,
+      "support": 84
+    },
+    "points::over": {
+      "rate": 0.5616180458400263,
+      "support": 86
+    },
+    "points::under": {
+      "rate": 0.5527944203364055,
+      "support": 126
+    },
+    "pr::over": {
+      "rate": 0.5670217880912013,
+      "support": 46
+    },
+    "pr::under": {
+      "rate": 0.5809147949046931,
+      "support": 161
+    },
+    "pra::over": {
+      "rate": 0.4859531110891285,
+      "support": 48
+    },
+    "pra::under": {
+      "rate": 0.621391538116879,
+      "support": 164
+    },
+    "ra::under": {
+      "rate": 0.5741390672653987,
+      "support": 31
+    },
+    "rebounds::under": {
+      "rate": 0.6519508782838489,
+      "support": 44
+    }
+  }
+}
