@@ -9,13 +9,13 @@
     "WAS"
   ],
   "error": "",
-  "excluded_players": 60,
+  "excluded_players": 56,
   "excluded_reasons": {
-    "excluded_not_on_canonical_slate": 44,
-    "no_history_found": 16
+    "excluded_not_on_canonical_slate": 41,
+    "no_history_found": 15
   },
-  "generated_at": "2026-06-08T14:02:24.969457-04:00",
-  "included_players": 31,
+  "generated_at": "2026-06-08T18:32:27.322865-04:00",
+  "included_players": 32,
   "message": "WNBA refresh passed.",
   "projected_teams": [
     "CON",

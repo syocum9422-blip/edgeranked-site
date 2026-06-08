@@ -1,13 +1,11 @@
 player_name,team,position,est_return_date,status,status_text,comment,fetched_at,_data_source,player_key
-Kennedy Burke,CONNECTICUT SUN,G,Jun 8,day-to-day,Day-To-Day,Jun 7: Burke (illness) is listed as questionable for Monday's game against the Liberty.,2026-06-08T18:01:23.937863+00:00,api:espn_injuries,kennedy burke
-Li Yueru,DALLAS WINGS,C,Jun 9,day-to-day,Day-To-Day,,2026-06-08T18:01:23.938052+00:00,api:espn_injuries,li yueru
-Odyssey Sims,DALLAS WINGS,G,Jun 9,day-to-day,Day-To-Day,Jun 5: Sims won't return to Friday's game against the Sparks due to a left ankle injury.,2026-06-08T18:01:23.938130+00:00,api:espn_injuries,odyssey sims
-Ashten Prechtel,GOLDEN STATE VALKYRIES,F,Jun 9,day-to-day,Day-To-Day,,2026-06-08T18:01:23.938272+00:00,api:espn_injuries,ashten prechtel
-Aliyah Boston,INDIANA FEVER,C,Jun 8,day-to-day,Day-To-Day,Jun 7: Boston (lower leg) is listed as questionable for Monday's game against the Mystics.,2026-06-08T18:01:23.938410+00:00,api:espn_injuries,aliyah boston
-Caitlin Clark,INDIANA FEVER,G,Jun 8,day-to-day,Day-To-Day,Jun 7: Clark (back) is listed as probable for Monday's game against the Mystics.,2026-06-08T18:01:23.938478+00:00,api:espn_injuries,caitlin clark
-Chennedy Carter,LAS VEGAS ACES,G,Jun 8,day-to-day,Day-To-Day,Jun 7: Carter (leg) is listed as questionable for Monday's game against the Storm.,2026-06-08T18:01:23.938614+00:00,api:espn_injuries,chennedy carter
-Liatu King,MINNESOTA LYNX,F,Jun 9,day-to-day,Day-To-Day,,2026-06-08T18:01:23.938762+00:00,api:espn_injuries,liatu king
-Alyssa Thomas,PHOENIX MERCURY,F,Jun 9,day-to-day,Day-To-Day,,2026-06-08T18:01:23.938908+00:00,api:espn_injuries,alyssa thomas
-Kahleah Copper,PHOENIX MERCURY,G,Jun 9,day-to-day,Day-To-Day,,2026-06-08T18:01:23.938973+00:00,api:espn_injuries,kahleah copper
-Serah Williams,PORTLAND FIRE,C,Jun 11,day-to-day,Day-To-Day,,2026-06-08T18:01:23.939103+00:00,api:espn_injuries,serah williams
-Kiki Rice,TORONTO TEMPO,G,Jun 10,day-to-day,Day-To-Day,,2026-06-08T18:01:23.939234+00:00,api:espn_injuries,kiki rice
+Li Yueru,DALLAS WINGS,C,Jun 9,day-to-day,Day-To-Day,,2026-06-08T22:31:22.139047+00:00,api:espn_injuries,li yueru
+Odyssey Sims,DALLAS WINGS,G,Jun 9,day-to-day,Day-To-Day,Jun 5: Sims won't return to Friday's game against the Sparks due to a left ankle injury.,2026-06-08T22:31:22.139172+00:00,api:espn_injuries,odyssey sims
+Ashten Prechtel,GOLDEN STATE VALKYRIES,F,Jun 9,day-to-day,Day-To-Day,,2026-06-08T22:31:22.139414+00:00,api:espn_injuries,ashten prechtel
+Aliyah Boston,INDIANA FEVER,C,Jun 8,day-to-day,Day-To-Day,"Jun 8: Boston (leg) participated in Monday's morning shootaround, Chloe Peterson of The Indianapolis Star reports.",2026-06-08T22:31:22.139566+00:00,api:espn_injuries,aliyah boston
+Caitlin Clark,INDIANA FEVER,G,Jun 8,day-to-day,Day-To-Day,Jun 7: Clark (back) is listed as probable for Monday's game against the Mystics.,2026-06-08T22:31:22.139637+00:00,api:espn_injuries,caitlin clark
+Liatu King,MINNESOTA LYNX,F,Jun 9,day-to-day,Day-To-Day,,2026-06-08T22:31:22.139794+00:00,api:espn_injuries,liatu king
+Alyssa Thomas,PHOENIX MERCURY,F,Jun 9,day-to-day,Day-To-Day,,2026-06-08T22:31:22.139932+00:00,api:espn_injuries,alyssa thomas
+Kahleah Copper,PHOENIX MERCURY,G,Jun 9,day-to-day,Day-To-Day,,2026-06-08T22:31:22.139997+00:00,api:espn_injuries,kahleah copper
+Serah Williams,PORTLAND FIRE,C,Jun 11,day-to-day,Day-To-Day,,2026-06-08T22:31:22.140142+00:00,api:espn_injuries,serah williams
+Kiki Rice,TORONTO TEMPO,G,Jun 10,day-to-day,Day-To-Day,,2026-06-08T22:31:22.140271+00:00,api:espn_injuries,kiki rice

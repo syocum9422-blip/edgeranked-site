@@ -4,13 +4,10 @@ Angel Reese,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
 Rhyne Howard,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
 Kamilla Cardoso,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
 Skylar Diggins,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
-Aneesah Morrow,CON,NYL,True,True,csv,True,included
-Aneesah Morrow + Leila Lacan,CON,NYL,True,False,,False,no_history_found
+Aaliyah Edwards,CON,NYL,True,True,csv,True,included
 Diamond Miller,CON,NYL,True,True,csv,True,included
 Leila Lacan,CON,NYL,True,True,csv,True,included
 Saniya Rivers,CON,NYL,True,True,csv,True,included
-Aneesah Morrow + Jonquel Jones,CON/NYL,,True,False,,False,excluded_not_on_canonical_slate
-Aneesah Morrow + Satou Sabally,CON/NYL,,True,False,,False,excluded_not_on_canonical_slate
 Leila Lacan + Pauline Astier,CON/NYL,,True,False,,False,excluded_not_on_canonical_slate
 Leila Lacan + Satou Sabally,CON/NYL,,True,False,,False,excluded_not_on_canonical_slate
 Arike Ogunbowale,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
@@ -65,7 +62,6 @@ Leonie Fiebich,NYL,CON,True,True,csv,True,included
 Marine Johannes,NYL,CON,True,True,csv,True,included
 Pauline Astier,NYL,CON,True,True,csv,True,included
 Satou Sabally,NYL,CON,True,True,csv,True,included
-Breanna Stewart + Aneesah Morrow,NYL/CON,,True,False,,False,excluded_not_on_canonical_slate
 Breanna Stewart + Leila Lacan,NYL/CON,,True,False,,False,excluded_not_on_canonical_slate
 Jonquel Jones + Leila Lacan,NYL/CON,,True,False,,False,excluded_not_on_canonical_slate
 Alyssa Thomas,PHX,,True,True,csv,False,excluded_not_on_canonical_slate
@@ -79,6 +75,7 @@ Natisha Hiedeman,SEA,LVA,True,True,csv,True,included
 Stefanie Dolson,SEA,LVA,True,True,csv,True,included
 Natisha Hiedeman + Chelsea Gray,SEA/LVA,,True,False,,False,excluded_not_on_canonical_slate
 Natisha Hiedeman + NaLyssa Smith,SEA/LVA,,True,False,,False,excluded_not_on_canonical_slate
+Georgia Amoore,WAS,IND,True,True,csv,True,included
 Kiki Iriafen,WAS,IND,True,True,csv,True,included
 Michaela Onyenwere,WAS,IND,True,True,csv,True,included
 Shakira Austin,WAS,IND,True,True,csv,True,included
