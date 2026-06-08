@@ -1,262 +1,269 @@
 player_name,team,opponent,stat,line,over_odds,under_odds,sportsbook,fetched_at,source_mode,_data_source,_stat_label,_odds_type,player_key
-Jackie Young + Caitlin Clark,LVA/IND,,threes_made,4.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,3PTM,standard,jackie young + caitlin clark
-Chelsea Gray,LVA,,ra,10.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,chelsea gray
-Natisha Hiedeman + Chelsea Gray,SEA/LVA,,assists,10.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Assists,standard,natisha hiedeman + chelsea gray
-NaLyssa Smith,LVA,,points,10.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,nalyssa smith
-A'ja Wilson,LVA,,rebounds,10.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,a'ja wilson
-Dominique Malonga + Flau'jae Johnson,SEA,,rebounds,10.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,dominique malonga + flau'jae johnson
-Jackie Young + Natisha Hiedeman,LVA/SEA,,assists,10.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Assists,standard,jackie young + natisha hiedeman
-Dominique Malonga,SEA,,points,9.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,dominique malonga
-Awa Fam,SEA,,points,9.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,awa fam
-Jewell Loyd,LVA,,points,8.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,jewell loyd
-Chelsea Gray,LVA,,assists,6.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Assists,standard,chelsea gray
-NaLyssa Smith,LVA,,rebounds,6.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,nalyssa smith
-Jade Melbourne,SEA,,points,6.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,jade melbourne
-Jackie Young,LVA,,assists,6.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Assists,standard,jackie young
-Awa Fam,SEA,,rebounds,5.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,awa fam
-Dominique Malonga,SEA,,rebounds,5.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,dominique malonga
-Flau'jae Johnson,SEA,,rebounds,5.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,flau'jae johnson
-Jackie Young,LVA,,rebounds,4.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,jackie young
-Chelsea Gray,LVA,,rebounds,4.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,chelsea gray
-Natisha Hiedeman,SEA,,assists,4.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Assists,standard,natisha hiedeman
-Jewell Loyd,LVA,,rebounds,2.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,jewell loyd
-Chelsea Gray,LVA,,threes_made,1.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,3PTM,standard,chelsea gray
-Jewell Loyd,LVA,,threes_made,1.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,3PTM,standard,jewell loyd
-Angel Reese,ATL,,pra,28.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,angel reese
-Allisha Gray,ATL,,pra,25.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,allisha gray
-Angel Reese,ATL,,pr,25.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,angel reese
-Kamilla Cardoso,CHI,,pra,24.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,kamilla cardoso
-Rhyne Howard,ATL,,pra,24.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,rhyne howard
-Skylar Diggins,CHI,,pra,24.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,skylar diggins
-Allisha Gray,ATL,,pr,23.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,allisha gray
-Kamilla Cardoso,CHI,,pr,22.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,kamilla cardoso
-Jewell Loyd,LVA,,pr,10.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,jewell loyd
-Flau'jae Johnson,SEA,,points,11.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,flau'jae johnson
-Skylar Diggins,CHI,,pa,21.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,skylar diggins
-Jackie Young,LVA,,ra,11.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,jackie young
-Natisha Hiedeman + Chelsea Gray,SEA/LVA,,points,24.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,natisha hiedeman + chelsea gray
-Jackie Young,LVA,,pa,23.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,jackie young
-Chelsea Gray,LVA,,pra,22.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,chelsea gray
-Natisha Hiedeman + NaLyssa Smith,SEA/LVA,,points,22.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,natisha hiedeman + nalyssa smith
-Jackie Young,LVA,,pr,22.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,jackie young
-Chelsea Gray + NaLyssa Smith,LVA,,points,21.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,chelsea gray + nalyssa smith
-Chelsea Gray,LVA,,pa,18.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,chelsea gray
-Natisha Hiedeman,SEA,,pra,18.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,natisha hiedeman
-Jackie Young,LVA,,points,17.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,jackie young
-NaLyssa Smith,LVA,,pra,17.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,nalyssa smith
-Flau'jae Johnson,SEA,,pra,17.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,flau'jae johnson
-NaLyssa Smith,LVA,,pr,17.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,nalyssa smith
-Natisha Hiedeman,SEA,,pa,16.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,natisha hiedeman
-A'ja Wilson + NaLyssa Smith,LVA,,rebounds,16.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,a'ja wilson + nalyssa smith
-Flau'jae Johnson,SEA,,pr,16.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,flau'jae johnson
-Chelsea Gray,LVA,,pr,15.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,chelsea gray
-Dominique Malonga,SEA,,pra,15.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,dominique malonga
-A'ja Wilson + Dominique Malonga,LVA/SEA,,rebounds,15.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,a'ja wilson + dominique malonga
-A'ja Wilson + Flau'jae Johnson,LVA/SEA,,rebounds,15.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,a'ja wilson + flau'jae johnson
-Dominique Malonga,SEA,,pr,14.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,dominique malonga
-Awa Fam,SEA,,pr,14.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,awa fam
-A'ja Wilson,LVA,,ra,13.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,a'ja wilson
-Natisha Hiedeman,SEA,,points,12.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,natisha hiedeman
-Jackie Young + Chelsea Gray,LVA,,assists,12.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Assists,standard,jackie young + chelsea gray
-Chelsea Gray,LVA,,points,11.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,chelsea gray
-Jewell Loyd,LVA,,pra,11.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,jewell loyd
-Jade Melbourne,SEA,,pra,11.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,jade melbourne
-NaLyssa Smith + Dominique Malonga,LVA/SEA,,rebounds,11.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,nalyssa smith + dominique malonga
-NaLyssa Smith + Flau'jae Johnson,LVA/SEA,,rebounds,11.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,nalyssa smith + flau'jae johnson
-Allisha Gray,ATL,,pa,21.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,allisha gray
-Rhyne Howard,ATL,,pa,20.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,rhyne howard
-Marine Johannes + Caitlin Clark,NYL/IND,,threes_made,5.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,3PTM,standard,marine johannes + caitlin clark
-Courtney Williams,MIN,,points,16.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,courtney williams
-Natasha Howard,MIN,,points,15.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,natasha howard
-Arike Ogunbowale,DAL,,points,14.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,arike ogunbowale
-Azzi Fudd,DAL,,points,14.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,azzi fudd
-Kayla McBride,MIN,,points,13.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,kayla mcbride
-Jessica Shepard,DAL,,points,12.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,jessica shepard
-Paige Bueckers,DAL,,ra,9.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,paige bueckers
-Natasha Howard,MIN,,rebounds,7.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,natasha howard
-Jessica Shepard,DAL,,assists,4.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Assists,standard,jessica shepard
-Azzi Fudd,DAL,,threes_made,1.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,3PTM,standard,azzi fudd
-Alyssa Thomas,PHX,,pra,32.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,alyssa thomas
-Alyssa Thomas,PHX,,pa,23.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,alyssa thomas
-Alyssa Thomas,PHX,,pr,23.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,alyssa thomas
-Kahleah Copper,PHX,,pr,21.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,kahleah copper
-Veronica Burton,GSV,,pra,21.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,veronica burton
-Gabby Williams,GSV,,pra,20.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,gabby williams
-Kahleah Copper,PHX,,points,18.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,kahleah copper
-Veronica Burton,GSV,,pa,18.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,veronica burton
-Gabby Williams,GSV,,pr,17.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,gabby williams
-Janelle Salaün,GSV,,pr,17.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,janelle salaün
-Alyssa Thomas,PHX,,ra,16.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,alyssa thomas
-Gabby Williams,GSV,,pa,16.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,gabby williams
-Alyssa Thomas,PHX,,points,15.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,alyssa thomas
-Veronica Burton,GSV,,pr,15.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,veronica burton
-Kayla Thornton,GSV,,pr,15.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,kayla thornton
-Gabby Williams,GSV,,points,13.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,gabby williams
-Janelle Salaün,GSV,,points,13.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,janelle salaün
-Veronica Burton,GSV,,points,12.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,veronica burton
-Gabby Williams,GSV,,ra,6.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,gabby williams
-Kayla Thornton,GSV,,rebounds,5.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,kayla thornton
-Jessica Shepard,DAL,,ra,15.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,jessica shepard
-Olivia Miles,MIN,,points,16.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,olivia miles
-Rhyne Howard,ATL,,pr,20.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,rhyne howard
-Jessica Shepard,DAL,,pa,16.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,jessica shepard
-Allisha Gray,ATL,,points,18.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,allisha gray
-Skylar Diggins,CHI,,pr,18.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,skylar diggins
-Rhyne Howard,ATL,,points,17.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,rhyne howard
-Angel Reese,ATL,,pa,16.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,angel reese
-Kamilla Cardoso,CHI,,pa,15.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,kamilla cardoso
-Skylar Diggins,CHI,,points,15.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,skylar diggins
-Angel Reese,ATL,,ra,14.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,angel reese
-Angel Reese,ATL,,points,13.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,angel reese
-Kamilla Cardoso,CHI,,points,12.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,kamilla cardoso
-Angel Reese,ATL,,rebounds,11.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,angel reese
-Kamilla Cardoso,CHI,,ra,11.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,kamilla cardoso
-Kamilla Cardoso,CHI,,rebounds,9.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,kamilla cardoso
-Skylar Diggins,CHI,,ra,8.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,skylar diggins
-Rhyne Howard,ATL,,ra,6.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,rhyne howard
-Kamilla Cardoso,CHI,,assists,2.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Assists,standard,kamilla cardoso
-Paige Bueckers,DAL,,pra,28.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,paige bueckers
-Jessica Shepard,DAL,,pra,28.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,jessica shepard
-Olivia Miles,MIN,,pra,27.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,olivia miles
-Courtney Williams,MIN,,pra,26.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,courtney williams
-Paige Bueckers,DAL,,pa,24.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,paige bueckers
-Jessica Shepard,DAL,,pr,23.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,jessica shepard
-Olivia Miles,MIN,,pa,22.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,olivia miles
-Natasha Howard,MIN,,pr,22.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,natasha howard
-Courtney Williams,MIN,,pr,22.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,courtney williams
-Paige Bueckers,DAL,,pr,21.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,paige bueckers
-Olivia Miles,MIN,,pr,21.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,olivia miles
-Courtney Williams,MIN,,pa,20.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,courtney williams
-Paige Bueckers,DAL,,points,18.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,paige bueckers
-Kayla McBride,MIN,,pr,17.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,kayla mcbride
-A'ja Wilson,LVA,,points,25.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,a'ja wilson
-Jackie Young + NaLyssa Smith,LVA,,points,27.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,jackie young + nalyssa smith
-Jackie Young,LVA,,pra,28.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,jackie young
-Shakira Austin,WAS,,points,15.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,shakira austin
-Shakira Austin + Aliyah Boston,WAS/IND,,rebounds,14.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,shakira austin + aliyah boston
-Kiki Iriafen,WAS,,points,13.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,kiki iriafen
-Aliyah Boston,IND,,points,13.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,aliyah boston
-Shakira Austin + Monique Billings,WAS/IND,,rebounds,13.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,shakira austin + monique billings
-Caitlin Clark,IND,,ra,12.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,caitlin clark
-Monique Billings,IND,,pra,12.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,monique billings
-Aliyah Boston + Monique Billings,IND,,rebounds,12.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,aliyah boston + monique billings
-Caitlin Clark + Sonia Citron,IND/WAS,,assists,12.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Assists,standard,caitlin clark + sonia citron
-Monique Billings,IND,,pr,12.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,monique billings
-Sophie Cunningham,IND,,pra,11.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,sophie cunningham
-Shakira Austin,WAS,,ra,10.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,shakira austin
-Lexie Hull,IND,,pra,10.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,lexie hull
-Aliyah Boston,IND,,ra,9.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,aliyah boston
-Kiki Iriafen,WAS,,rebounds,9.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,kiki iriafen
-Caitlin Clark,IND,,assists,8.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Assists,standard,caitlin clark
-Shakira Austin,WAS,,rebounds,7.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,shakira austin
-Sonia Citron,WAS,,ra,7.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,sonia citron
-Sophie Cunningham,IND,,points,7.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,sophie cunningham
-Aliyah Boston,IND,,rebounds,7.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,aliyah boston
-Monique Billings,IND,,points,6.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,monique billings
-Michaela Onyenwere,WAS,,points,6.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,michaela onyenwere
-Lexie Hull,IND,,points,5.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,lexie hull
-Caitlin Clark,IND,,rebounds,4.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,caitlin clark
-Kelsey Mitchell + Caitlin Clark,IND,,threes_made,4.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,3PTM,standard,kelsey mitchell + caitlin clark
-Lexie Hull,IND,,rebounds,3.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,lexie hull
-Breanna Stewart + Aneesah Morrow,NYL/CON,,points,33.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,breanna stewart + aneesah morrow
-Breanna Stewart + Jonquel Jones,NYL,,points,33.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,breanna stewart + jonquel jones
-Breanna Stewart + Leila Lacan,NYL/CON,,points,32.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,breanna stewart + leila lacan
-Breanna Stewart + Satou Sabally,NYL,,points,32.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,breanna stewart + satou sabally
-Kiki Iriafen + Monique Billings,WAS/IND,,rebounds,14.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,kiki iriafen + monique billings
-Sonia Citron,WAS,,points,15.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,sonia citron
-A'ja Wilson,LVA,,pa,28.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,a'ja wilson
-Kiki Iriafen + Aliyah Boston,WAS/IND,,rebounds,16.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,kiki iriafen + aliyah boston
-Kelsey Mitchell + Caitlin Clark,IND,,points,38.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,kelsey mitchell + caitlin clark
-Kelsey Mitchell + Sonia Citron,IND/WAS,,points,34.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,kelsey mitchell + sonia citron
-Kelsey Mitchell + Shakira Austin,IND/WAS,,points,34.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,kelsey mitchell + shakira austin
-Caitlin Clark + Sonia Citron,IND/WAS,,points,33.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,caitlin clark + sonia citron
-Caitlin Clark + Shakira Austin,IND/WAS,,points,33.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,caitlin clark + shakira austin
-Kelsey Mitchell + Kiki Iriafen,IND/WAS,,points,33.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,kelsey mitchell + kiki iriafen
-Caitlin Clark + Kiki Iriafen,IND/WAS,,points,32.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,caitlin clark + kiki iriafen
-Caitlin Clark,IND,,pra,31.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,caitlin clark
-Sonia Citron + Shakira Austin,WAS,,points,29.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,sonia citron + shakira austin
-Shakira Austin + Kiki Iriafen,WAS,,points,28.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,shakira austin + kiki iriafen
-Sonia Citron + Kiki Iriafen,WAS,,points,28.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,sonia citron + kiki iriafen
-Caitlin Clark,IND,,pa,26.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,caitlin clark
-Shakira Austin,WAS,,pra,25.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,shakira austin
-Kiki Iriafen,WAS,,pra,24.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,kiki iriafen
-Aliyah Boston,IND,,pra,23.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,aliyah boston
-Shakira Austin,WAS,,pr,23.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,shakira austin
-Caitlin Clark,IND,,pr,22.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,caitlin clark
-Kiki Iriafen,WAS,,pr,22.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,kiki iriafen
-Sonia Citron,WAS,,pra,22.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,sonia citron
-Kelsey Mitchell,IND,,pra,22.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,kelsey mitchell
-Kelsey Mitchell,IND,,pa,21.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,kelsey mitchell
-Aliyah Boston,IND,,pr,21.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,aliyah boston
-Kelsey Mitchell,IND,,points,19.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,kelsey mitchell
-Sonia Citron,WAS,,pa,19.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,sonia citron
-Caitlin Clark,IND,,points,18.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,caitlin clark
-Sonia Citron,WAS,,pr,18.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,sonia citron
-Shakira Austin,WAS,,pa,17.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,shakira austin
-Shakira Austin + Kiki Iriafen,WAS,,rebounds,16.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,shakira austin + kiki iriafen
-Aliyah Boston,IND,,pa,16.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,aliyah boston
-Breanna Stewart,NYL,,pra,30.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,breanna stewart
-Breanna Stewart,NYL,,pr,27.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,breanna stewart
-Aneesah Morrow + Jonquel Jones,CON/NYL,,points,27.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,aneesah morrow + jonquel jones
-Aneesah Morrow + Leila Lacan,CON,,points,26.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,aneesah morrow + leila lacan
-Saniya Rivers,CON,,pa,12.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,saniya rivers
-Jonquel Jones,NYL,,ra,11.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,jonquel jones
-Diamond Miller,CON,,pra,11.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,diamond miller
-Aneesah Morrow,CON,,rebounds,11.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,aneesah morrow
-Breanna Stewart,NYL,,ra,11.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,breanna stewart
-Marine Johannes,NYL,,points,10.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,marine johannes
-Diamond Miller,CON,,pr,10.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,diamond miller
-Jonquel Jones,NYL,,rebounds,9.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,jonquel jones
-Leila Lacan + Pauline Astier,CON/NYL,,assists,9.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Assists,standard,leila lacan + pauline astier
-Saniya Rivers,CON,,points,8.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,saniya rivers
-Diamond Miller,CON,,points,8.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,diamond miller
-Breanna Stewart,NYL,,rebounds,8.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,breanna stewart
-Leila Lacan,CON,,ra,7.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,leila lacan
-Leonie Fiebich,NYL,,points,7.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,leonie fiebich
-Pauline Astier,NYL,,ra,7.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebs+Asts,standard,pauline astier
-Leila Lacan,CON,,assists,5.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Assists,standard,leila lacan
-Satou Sabally,NYL,,rebounds,4.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,satou sabally
-Pauline Astier,NYL,,assists,4.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Assists,standard,pauline astier
-Jonquel Jones,NYL,,assists,2.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Assists,standard,jonquel jones
-Marine Johannes,NYL,,threes_made,2.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,3PTM,standard,marine johannes
-Marine Johannes,NYL,,assists,2.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Assists,standard,marine johannes
-A'ja Wilson + Jackie Young,LVA,,points,43.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,a'ja wilson + jackie young
-A'ja Wilson,LVA,,pra,38.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,a'ja wilson
-A'ja Wilson + Natisha Hiedeman,LVA/SEA,,points,37.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,a'ja wilson + natisha hiedeman
-A'ja Wilson + Chelsea Gray,LVA,,points,37.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,a'ja wilson + chelsea gray
-A'ja Wilson,LVA,,pr,35.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,a'ja wilson
-A'ja Wilson + NaLyssa Smith,LVA,,points,35.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,a'ja wilson + nalyssa smith
-Jackie Young + Natisha Hiedeman,LVA/SEA,,points,29.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,jackie young + natisha hiedeman
-Jackie Young + Chelsea Gray,LVA,,points,29.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,jackie young + chelsea gray
-Leonie Fiebich,NYL,,pra,12.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,leonie fiebich
-Satou Sabally,NYL,,points,12.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,satou sabally
-Pauline Astier,NYL,,pr,13.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,pauline astier
-Leila Lacan,CON,,pa,18.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,leila lacan
-Aneesah Morrow + Satou Sabally,CON/NYL,,points,26.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,aneesah morrow + satou sabally
-Jonquel Jones + Leila Lacan,NYL/CON,,points,26.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,jonquel jones + leila lacan
-Jonquel Jones + Satou Sabally,NYL,,points,26.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,jonquel jones + satou sabally
-Jonquel Jones,NYL,,pra,25.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,jonquel jones
-Aneesah Morrow,CON,,pr,25.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,aneesah morrow
-Aneesah Morrow,CON,,pra,25.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,aneesah morrow
-Leila Lacan + Satou Sabally,CON/NYL,,points,25.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,leila lacan + satou sabally
-Jonquel Jones,NYL,,pr,22.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,jonquel jones
-Breanna Stewart,NYL,,pa,22.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,breanna stewart
-Leila Lacan,CON,,pra,20.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,leila lacan
-Aneesah Morrow + Jonquel Jones,CON/NYL,,rebounds,20.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,aneesah morrow + jonquel jones
-Breanna Stewart,NYL,,points,19.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,breanna stewart
-Breanna Stewart + Aneesah Morrow,NYL/CON,,rebounds,19.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,breanna stewart + aneesah morrow
-Pauline Astier,NYL,,pra,17.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,pauline astier
-Marine Johannes,NYL,,pr,13.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,marine johannes
-Satou Sabally,NYL,,pra,17.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,satou sabally
-Breanna Stewart + Jonquel Jones,NYL,,rebounds,17.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Rebounds,standard,breanna stewart + jonquel jones
-Satou Sabally,NYL,,pr,16.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,satou sabally
-Jonquel Jones,NYL,,pa,16.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,jonquel jones
-Leila Lacan,CON,,pr,15.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Rebs,standard,leila lacan
-Marine Johannes,NYL,,pra,15.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,marine johannes
-Pauline Astier,NYL,,pa,14.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,pauline astier
-Aneesah Morrow,CON,,points,14.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,aneesah morrow
-Jonquel Jones,NYL,,points,13.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,jonquel jones
-Marine Johannes,NYL,,pa,13.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Pts+Asts,standard,marine johannes
-Saniya Rivers,CON,,pra,13.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,PRA,standard,saniya rivers
-Leila Lacan,CON,,points,13.0,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Points,standard,leila lacan
-Gabby Williams,GSV,,assists,2.5,,,prizepicks,2026-06-08T11:32:05.899705+00:00,api,api:prizepicks,Assists,standard,gabby williams
+Kelsey Mitchell + Caitlin Clark,IND,,points,38.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,kelsey mitchell + caitlin clark
+Jewell Loyd,LVA,,rebounds,2.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,jewell loyd
+Jackie Young + Natisha Hiedeman,LVA/SEA,,assists,10.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Assists,standard,jackie young + natisha hiedeman
+Dominique Malonga,SEA,,points,9.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,dominique malonga
+Awa Fam,SEA,,points,9.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,awa fam
+Jewell Loyd,LVA,,points,8.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,jewell loyd
+NaLyssa Smith,LVA,,rebounds,6.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,nalyssa smith
+Jade Melbourne,SEA,,points,6.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,jade melbourne
+Jackie Young,LVA,,assists,6.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Assists,standard,jackie young
+Awa Fam,SEA,,rebounds,5.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,awa fam
+Dominique Malonga,SEA,,rebounds,5.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,dominique malonga
+Flau'jae Johnson,SEA,,rebounds,5.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,flau'jae johnson
+Stefanie Dolson,SEA,,points,5.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,stefanie dolson
+Jackie Young,LVA,,rebounds,4.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,jackie young
+Chelsea Gray,LVA,,rebounds,4.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,chelsea gray
+Natisha Hiedeman,SEA,,assists,4.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Assists,standard,natisha hiedeman
+Jackie Young,LVA,,threes_made,1.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,3PTM,standard,jackie young
+A'ja Wilson,LVA,,rebounds,10.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,a'ja wilson
+Jewell Loyd,LVA,,threes_made,1.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,3PTM,standard,jewell loyd
+Flau'jae Johnson,SEA,,steals,1.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Steals,standard,flau'jae johnson
+Angel Reese,ATL,,pra,28.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,angel reese
+Allisha Gray,ATL,,pra,25.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,allisha gray
+Angel Reese,ATL,,pr,25.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,angel reese
+Kamilla Cardoso,CHI,,pra,24.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,kamilla cardoso
+Rhyne Howard,ATL,,pra,24.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,rhyne howard
+Skylar Diggins,CHI,,pra,24.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,skylar diggins
+Allisha Gray,ATL,,pr,23.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,allisha gray
+Allisha Gray,ATL,,pa,21.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,allisha gray
+Kamilla Cardoso,CHI,,pr,21.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,kamilla cardoso
+Skylar Diggins,CHI,,pa,21.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,skylar diggins
+Rhyne Howard,ATL,,pa,20.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,rhyne howard
+Rhyne Howard,ATL,,pr,20.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,rhyne howard
+Dominique Malonga + Flau'jae Johnson,SEA,,rebounds,10.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,dominique malonga + flau'jae johnson
+NaLyssa Smith,LVA,,points,10.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,nalyssa smith
+Skylar Diggins,CHI,,pr,18.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,skylar diggins
+Dominique Malonga,SEA,,pra,15.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,dominique malonga
+Jackie Young,LVA,,pa,22.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,jackie young
+Natisha Hiedeman + NaLyssa Smith,SEA/LVA,,points,22.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,natisha hiedeman + nalyssa smith
+Jackie Young,LVA,,pr,21.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,jackie young
+Chelsea Gray,LVA,,pra,21.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,chelsea gray
+Chelsea Gray + NaLyssa Smith,LVA,,points,21.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,chelsea gray + nalyssa smith
+Natisha Hiedeman,SEA,,pra,18.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,natisha hiedeman
+Chelsea Gray,LVA,,pa,17.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,chelsea gray
+NaLyssa Smith,LVA,,pra,17.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,nalyssa smith
+Flau'jae Johnson,SEA,,pra,17.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,flau'jae johnson
+Jackie Young,LVA,,points,16.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,jackie young
+NaLyssa Smith,LVA,,pr,16.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,nalyssa smith
+Natisha Hiedeman,SEA,,pa,16.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,natisha hiedeman
+A'ja Wilson + NaLyssa Smith,LVA,,rebounds,16.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,a'ja wilson + nalyssa smith
+Flau'jae Johnson,SEA,,pr,16.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,flau'jae johnson
+A'ja Wilson + Dominique Malonga,LVA/SEA,,rebounds,15.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,a'ja wilson + dominique malonga
+Natisha Hiedeman + Chelsea Gray,SEA/LVA,,assists,10.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Assists,standard,natisha hiedeman + chelsea gray
+A'ja Wilson + Flau'jae Johnson,LVA/SEA,,rebounds,15.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,a'ja wilson + flau'jae johnson
+Dominique Malonga,SEA,,pr,14.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,dominique malonga
+Awa Fam,SEA,,pr,14.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,awa fam
+A'ja Wilson,LVA,,ra,13.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,a'ja wilson
+Natisha Hiedeman,SEA,,points,12.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,natisha hiedeman
+Jackie Young + Chelsea Gray,LVA,,assists,12.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Assists,standard,jackie young + chelsea gray
+Jewell Loyd,LVA,,pra,11.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,jewell loyd
+Jade Melbourne,SEA,,pra,11.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,jade melbourne
+NaLyssa Smith + Dominique Malonga,LVA/SEA,,rebounds,11.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,nalyssa smith + dominique malonga
+NaLyssa Smith + Flau'jae Johnson,LVA/SEA,,rebounds,11.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,nalyssa smith + flau'jae johnson
+Flau'jae Johnson,SEA,,points,11.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,flau'jae johnson
+Chelsea Gray,LVA,,points,11.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,chelsea gray
+Jackie Young,LVA,,ra,10.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,jackie young
+Jewell Loyd,LVA,,pr,10.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,jewell loyd
+Allisha Gray,ATL,,points,18.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,allisha gray
+Rhyne Howard,ATL,,points,17.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,rhyne howard
+Kelsey Mitchell + Sonia Citron,IND/WAS,,points,34.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,kelsey mitchell + sonia citron
+Janelle Salaün,GSV,,pr,17.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,janelle salaün
+Paige Bueckers,DAL,,ra,9.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,paige bueckers
+Natasha Howard,MIN,,rebounds,7.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,natasha howard
+Olivia Miles,MIN,,assists,6.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Assists,standard,olivia miles
+Jessica Shepard,DAL,,assists,4.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Assists,standard,jessica shepard
+Azzi Fudd,DAL,,threes_made,1.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,3PTM,standard,azzi fudd
+Alyssa Thomas,PHX,,pra,31.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,alyssa thomas
+Alyssa Thomas,PHX,,pr,24.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,alyssa thomas
+Alyssa Thomas,PHX,,pa,23.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,alyssa thomas
+Veronica Burton,GSV,,pra,22.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,veronica burton
+Kahleah Copper,PHX,,pr,21.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,kahleah copper
+Gabby Williams,GSV,,pra,20.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,gabby williams
+Kahleah Copper,PHX,,points,18.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,kahleah copper
+Veronica Burton,GSV,,pa,18.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,veronica burton
+Gabby Williams,GSV,,pr,17.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,gabby williams
+Gabby Williams,GSV,,pa,16.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,gabby williams
+Kayla McBride,MIN,,points,13.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,kayla mcbride
+Alyssa Thomas,PHX,,ra,16.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,alyssa thomas
+Alyssa Thomas,PHX,,points,15.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,alyssa thomas
+Veronica Burton,GSV,,pr,15.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,veronica burton
+Kayla Thornton,GSV,,pr,15.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,kayla thornton
+Gabby Williams,GSV,,points,13.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,gabby williams
+Janelle Salaün,GSV,,points,13.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,janelle salaün
+Veronica Burton,GSV,,points,12.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,veronica burton
+Kayla Thornton,GSV,,points,10.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,kayla thornton
+Veronica Burton,GSV,,ra,9.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,veronica burton
+Gabby Williams,GSV,,ra,6.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,gabby williams
+Veronica Burton,GSV,,assists,6.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Assists,standard,veronica burton
+Kayla Thornton,GSV,,rebounds,5.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,kayla thornton
+Gabby Williams,GSV,,assists,2.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Assists,standard,gabby williams
+Jessica Shepard,DAL,,points,12.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,jessica shepard
+Azzi Fudd,DAL,,points,14.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,azzi fudd
+Angel Reese,ATL,,pa,16.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,angel reese
+Courtney Williams,MIN,,pra,26.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,courtney williams
+Kamilla Cardoso,CHI,,pa,15.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,kamilla cardoso
+Skylar Diggins,CHI,,points,15.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,skylar diggins
+Angel Reese,ATL,,ra,14.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,angel reese
+Angel Reese,ATL,,points,13.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,angel reese
+Kamilla Cardoso,CHI,,points,12.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,kamilla cardoso
+Kamilla Cardoso,CHI,,ra,12.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,kamilla cardoso
+Angel Reese,ATL,,rebounds,11.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,angel reese
+Kamilla Cardoso,CHI,,rebounds,9.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,kamilla cardoso
+Skylar Diggins,CHI,,ra,8.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,skylar diggins
+Rhyne Howard,ATL,,ra,6.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,rhyne howard
+Kamilla Cardoso,CHI,,assists,2.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Assists,standard,kamilla cardoso
+Paige Bueckers,DAL,,pra,28.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,paige bueckers
+Jessica Shepard,DAL,,pra,28.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,jessica shepard
+Olivia Miles,MIN,,pra,27.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,olivia miles
+Paige Bueckers,DAL,,pa,24.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,paige bueckers
+Arike Ogunbowale,DAL,,points,14.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,arike ogunbowale
+Jessica Shepard,DAL,,pr,23.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,jessica shepard
+Paige Bueckers,DAL,,pr,22.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,paige bueckers
+Olivia Miles,MIN,,pa,22.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,olivia miles
+Natasha Howard,MIN,,pr,22.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,natasha howard
+Courtney Williams,MIN,,pr,22.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,courtney williams
+Olivia Miles,MIN,,pr,21.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,olivia miles
+Courtney Williams,MIN,,pa,20.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,courtney williams
+Paige Bueckers,DAL,,points,18.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,paige bueckers
+Kayla McBride,MIN,,pr,17.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,kayla mcbride
+Jessica Shepard,DAL,,pa,16.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,jessica shepard
+Olivia Miles,MIN,,points,16.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,olivia miles
+Courtney Williams,MIN,,points,16.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,courtney williams
+Jessica Shepard,DAL,,ra,15.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,jessica shepard
+Natasha Howard,MIN,,points,15.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,natasha howard
+Natisha Hiedeman + Chelsea Gray,SEA/LVA,,points,23.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,natisha hiedeman + chelsea gray
+A'ja Wilson,LVA,,points,25.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,a'ja wilson
+Jackie Young + NaLyssa Smith,LVA,,points,27.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,jackie young + nalyssa smith
+Sophie Cunningham,IND,,points,7.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,sophie cunningham
+Shakira Austin + Monique Billings,WAS/IND,,rebounds,13.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,shakira austin + monique billings
+Caitlin Clark,IND,,ra,12.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,caitlin clark
+Monique Billings,IND,,pra,12.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,monique billings
+Aliyah Boston + Monique Billings,IND,,rebounds,12.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,aliyah boston + monique billings
+Caitlin Clark + Sonia Citron,IND/WAS,,assists,12.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Assists,standard,caitlin clark + sonia citron
+Monique Billings,IND,,pr,11.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,monique billings
+Sophie Cunningham,IND,,pra,11.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,sophie cunningham
+Shakira Austin,WAS,,ra,10.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,shakira austin
+Lexie Hull,IND,,pra,10.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,lexie hull
+Aliyah Boston,IND,,ra,9.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,aliyah boston
+Lexie Hull,IND,,pr,9.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,lexie hull
+Kiki Iriafen,WAS,,rebounds,9.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,kiki iriafen
+Caitlin Clark,IND,,assists,8.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Assists,standard,caitlin clark
+Shakira Austin,WAS,,rebounds,7.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,shakira austin
+Michaela Onyenwere,WAS,,points,7.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,michaela onyenwere
+Kiki Iriafen,WAS,,points,13.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,kiki iriafen
+Aliyah Boston,IND,,rebounds,7.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,aliyah boston
+Sonia Citron,WAS,,ra,6.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,sonia citron
+Monique Billings,IND,,points,6.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,monique billings
+Lexie Hull,IND,,points,5.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,lexie hull
+Caitlin Clark,IND,,rebounds,4.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,caitlin clark
+Kelsey Mitchell + Caitlin Clark,IND,,threes_made,4.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,3PTM,standard,kelsey mitchell + caitlin clark
+Shakira Austin,WAS,,steals,0.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Steals,standard,shakira austin
+Breanna Stewart + Aneesah Morrow,NYL/CON,,points,33.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,breanna stewart + aneesah morrow
+Breanna Stewart + Jonquel Jones,NYL,,points,33.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,breanna stewart + jonquel jones
+Breanna Stewart + Leila Lacan,NYL/CON,,points,32.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,breanna stewart + leila lacan
+Breanna Stewart + Satou Sabally,NYL,,points,32.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,breanna stewart + satou sabally
+Breanna Stewart,NYL,,pra,30.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,breanna stewart
+Breanna Stewart,NYL,,pr,27.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,breanna stewart
+Aneesah Morrow + Jonquel Jones,CON/NYL,,points,27.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,aneesah morrow + jonquel jones
+Aliyah Boston,IND,,points,13.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,aliyah boston
+Shakira Austin + Aliyah Boston,WAS/IND,,rebounds,14.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,shakira austin + aliyah boston
+Jackie Young,LVA,,pra,27.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,jackie young
+Kiki Iriafen,WAS,,pr,22.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,kiki iriafen
+Kelsey Mitchell + Shakira Austin,IND/WAS,,points,34.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,kelsey mitchell + shakira austin
+Caitlin Clark + Sonia Citron,IND/WAS,,points,33.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,caitlin clark + sonia citron
+Caitlin Clark + Shakira Austin,IND/WAS,,points,33.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,caitlin clark + shakira austin
+Kelsey Mitchell + Kiki Iriafen,IND/WAS,,points,33.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,kelsey mitchell + kiki iriafen
+Caitlin Clark,IND,,pra,32.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,caitlin clark
+Caitlin Clark + Kiki Iriafen,IND/WAS,,points,32.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,caitlin clark + kiki iriafen
+Sonia Citron + Shakira Austin,WAS,,points,29.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,sonia citron + shakira austin
+Shakira Austin + Kiki Iriafen,WAS,,points,28.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,shakira austin + kiki iriafen
+Sonia Citron + Kiki Iriafen,WAS,,points,28.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,sonia citron + kiki iriafen
+Caitlin Clark,IND,,pa,27.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,caitlin clark
+Shakira Austin,WAS,,pra,25.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,shakira austin
+Kiki Iriafen,WAS,,pra,24.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,kiki iriafen
+Aliyah Boston,IND,,pra,23.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,aliyah boston
+Caitlin Clark,IND,,pr,23.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,caitlin clark
+Shakira Austin,WAS,,pr,22.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,shakira austin
+Kiki Iriafen + Monique Billings,WAS/IND,,rebounds,14.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,kiki iriafen + monique billings
+Sonia Citron,WAS,,pra,22.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,sonia citron
+Kelsey Mitchell,IND,,pra,22.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,kelsey mitchell
+Kelsey Mitchell,IND,,pa,21.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,kelsey mitchell
+Aliyah Boston,IND,,pr,20.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,aliyah boston
+Kelsey Mitchell,IND,,points,19.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,kelsey mitchell
+Sonia Citron,WAS,,pa,19.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,sonia citron
+Caitlin Clark,IND,,points,18.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,caitlin clark
+Sonia Citron,WAS,,pr,18.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,sonia citron
+Shakira Austin,WAS,,pa,17.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,shakira austin
+Shakira Austin + Kiki Iriafen,WAS,,rebounds,16.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,shakira austin + kiki iriafen
+Aliyah Boston,IND,,pa,16.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,aliyah boston
+Kiki Iriafen + Aliyah Boston,WAS/IND,,rebounds,16.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,kiki iriafen + aliyah boston
+Shakira Austin,WAS,,points,15.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,shakira austin
+Sonia Citron,WAS,,points,15.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,sonia citron
+Aneesah Morrow + Leila Lacan,CON,,points,26.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,aneesah morrow + leila lacan
+Aneesah Morrow + Satou Sabally,CON/NYL,,points,26.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,aneesah morrow + satou sabally
+Jonquel Jones + Leila Lacan,NYL/CON,,points,26.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,jonquel jones + leila lacan
+Satou Sabally,NYL,,rebounds,4.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,satou sabally
+Breanna Stewart,NYL,,ra,11.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,breanna stewart
+Marine Johannes,NYL,,points,10.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,marine johannes
+Diamond Miller,CON,,pr,10.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,diamond miller
+Pauline Astier,NYL,,points,9.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,pauline astier
+Jonquel Jones,NYL,,rebounds,9.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,jonquel jones
+Leila Lacan + Pauline Astier,CON/NYL,,assists,9.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Assists,standard,leila lacan + pauline astier
+Saniya Rivers,CON,,points,8.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,saniya rivers
+Diamond Miller,CON,,points,8.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,diamond miller
+Breanna Stewart,NYL,,rebounds,8.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,breanna stewart
+Leila Lacan,CON,,ra,7.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,leila lacan
+Leonie Fiebich,NYL,,points,7.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,leonie fiebich
+Pauline Astier,NYL,,ra,7.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,pauline astier
+Leila Lacan,CON,,assists,5.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Assists,standard,leila lacan
+Marine Johannes,NYL,,ra,5.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,marine johannes
+Pauline Astier,NYL,,assists,4.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Assists,standard,pauline astier
+Jonquel Jones + Satou Sabally,NYL,,points,26.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,jonquel jones + satou sabally
+Jonquel Jones,NYL,,assists,2.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Assists,standard,jonquel jones
+Marine Johannes,NYL,,threes_made,2.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,3PTM,standard,marine johannes
+Breanna Stewart,NYL,,steals,1.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Steals,standard,breanna stewart
+Jonquel Jones,NYL,,steals,0.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Steals,standard,jonquel jones
+Saniya Rivers,CON,,steals,0.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Steals,standard,saniya rivers
+A'ja Wilson + Jackie Young,LVA,,points,43.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,a'ja wilson + jackie young
+A'ja Wilson,LVA,,pra,38.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,a'ja wilson
+A'ja Wilson + Natisha Hiedeman,LVA/SEA,,points,38.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,a'ja wilson + natisha hiedeman
+A'ja Wilson + Chelsea Gray,LVA,,points,37.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,a'ja wilson + chelsea gray
+A'ja Wilson,LVA,,pr,35.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,a'ja wilson
+A'ja Wilson + NaLyssa Smith,LVA,,points,35.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,a'ja wilson + nalyssa smith
+Jackie Young + Natisha Hiedeman,LVA/SEA,,points,29.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,jackie young + natisha hiedeman
+Jackie Young + Chelsea Gray,LVA,,points,29.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,jackie young + chelsea gray
+A'ja Wilson,LVA,,pa,28.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,a'ja wilson
+Aneesah Morrow,CON,,rebounds,11.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,aneesah morrow
+Diamond Miller,CON,,pra,11.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,diamond miller
+Jonquel Jones,NYL,,ra,11.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebs+Asts,standard,jonquel jones
+Saniya Rivers,CON,,pa,12.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,saniya rivers
+Jonquel Jones,NYL,,pra,25.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,jonquel jones
+Aneesah Morrow,CON,,pra,25.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,aneesah morrow
+Leila Lacan + Satou Sabally,CON/NYL,,points,25.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,leila lacan + satou sabally
+Aneesah Morrow,CON,,pr,24.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,aneesah morrow
+Jonquel Jones,NYL,,pr,22.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,jonquel jones
+Breanna Stewart,NYL,,pa,22.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,breanna stewart
+Leila Lacan,CON,,pra,20.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,leila lacan
+Aneesah Morrow + Jonquel Jones,CON/NYL,,rebounds,20.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,aneesah morrow + jonquel jones
+Breanna Stewart,NYL,,points,19.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,breanna stewart
+Breanna Stewart + Aneesah Morrow,NYL/CON,,rebounds,19.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,breanna stewart + aneesah morrow
+Leila Lacan,CON,,pa,17.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,leila lacan
+Pauline Astier,NYL,,pra,17.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,pauline astier
+Satou Sabally,NYL,,pra,17.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,satou sabally
+Breanna Stewart + Jonquel Jones,NYL,,rebounds,17.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Rebounds,standard,breanna stewart + jonquel jones
+Satou Sabally,NYL,,pr,16.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,satou sabally
+Jonquel Jones,NYL,,pa,16.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,jonquel jones
+Leila Lacan,CON,,pr,15.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,leila lacan
+Marine Johannes,NYL,,pra,15.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,marine johannes
+Pauline Astier,NYL,,pa,14.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,pauline astier
+Jonquel Jones,NYL,,points,13.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,jonquel jones
+Aneesah Morrow,CON,,points,13.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,aneesah morrow
+Marine Johannes,NYL,,pa,13.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Asts,standard,marine johannes
+Saniya Rivers,CON,,pra,13.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,saniya rivers
+Leila Lacan,CON,,points,13.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,leila lacan
+Pauline Astier,NYL,,pr,13.0,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,pauline astier
+Satou Sabally,NYL,,points,12.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Points,standard,satou sabally
+Marine Johannes,NYL,,pr,12.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,Pts+Rebs,standard,marine johannes
+Leonie Fiebich,NYL,,pra,12.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,PRA,standard,leonie fiebich
+Kahleah Copper,PHX,,threes_made,1.5,,,prizepicks,2026-06-08T18:01:23.698117+00:00,api,api:prizepicks,3PTM,standard,kahleah copper

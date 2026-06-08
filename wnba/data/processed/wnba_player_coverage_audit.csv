@@ -46,7 +46,6 @@ Jackie Young + Chelsea Gray,LVA,SEA,True,False,,False,no_history_found
 Jackie Young + NaLyssa Smith,LVA,SEA,True,False,,False,no_history_found
 Jewell Loyd,LVA,SEA,True,True,csv,True,included
 NaLyssa Smith,LVA,SEA,True,True,csv,True,included
-Jackie Young + Caitlin Clark,LVA/IND,,True,False,,False,excluded_not_on_canonical_slate
 A'ja Wilson + Dominique Malonga,LVA/SEA,,True,False,,False,excluded_not_on_canonical_slate
 A'ja Wilson + Flau'jae Johnson,LVA/SEA,,True,False,,False,excluded_not_on_canonical_slate
 A'ja Wilson + Natisha Hiedeman,LVA/SEA,,True,False,,False,excluded_not_on_canonical_slate
@@ -69,7 +68,6 @@ Satou Sabally,NYL,CON,True,True,csv,True,included
 Breanna Stewart + Aneesah Morrow,NYL/CON,,True,False,,False,excluded_not_on_canonical_slate
 Breanna Stewart + Leila Lacan,NYL/CON,,True,False,,False,excluded_not_on_canonical_slate
 Jonquel Jones + Leila Lacan,NYL/CON,,True,False,,False,excluded_not_on_canonical_slate
-Marine Johannes + Caitlin Clark,NYL/IND,,True,False,,False,excluded_not_on_canonical_slate
 Alyssa Thomas,PHX,,True,True,csv,False,excluded_not_on_canonical_slate
 Kahleah Copper,PHX,,True,True,csv,False,excluded_not_on_canonical_slate
 Awa Fam,SEA,LVA,True,True,csv,True,included
@@ -78,6 +76,7 @@ Dominique Malonga + Flau'jae Johnson,SEA,LVA,True,False,,False,no_history_found
 Flau'jae Johnson,SEA,LVA,True,True,csv,True,included
 Jade Melbourne,SEA,LVA,True,True,csv,True,included
 Natisha Hiedeman,SEA,LVA,True,True,csv,True,included
+Stefanie Dolson,SEA,LVA,True,True,csv,True,included
 Natisha Hiedeman + Chelsea Gray,SEA/LVA,,True,False,,False,excluded_not_on_canonical_slate
 Natisha Hiedeman + NaLyssa Smith,SEA/LVA,,True,False,,False,excluded_not_on_canonical_slate
 Kiki Iriafen,WAS,IND,True,True,csv,True,included
