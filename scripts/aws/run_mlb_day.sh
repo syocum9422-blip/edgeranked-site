@@ -222,19 +222,11 @@ mkdir -p "$LIVE/mlb/outputs"
 mkdir -p "$LIVE/data/mlb"
 mkdir -p "$LIVE/data/normalized"
 
-# List of files to publish from model outputs
+# Keep this early publish block only for pitcher_props_today.csv because it
+# applies the sanitize-on-fail gate for broken ceiling probability columns.
+# All other public artifacts are published once by FINAL SYNC below.
 PUBLISH_FILES=(
-    "betting_sheet_today.csv"
-    "betting_sheet_mobile_today.csv"
-    "hitter_summary_today.csv"
-    "hitter_predictions_full.csv"
-    "hitter_predictions_today.csv"
-    "fantasy_projections_today.csv"
-    "mlb_pitcher_projections_today.csv"
     "pitcher_props_today.csv"
-    "lines_today.csv"
-    "lines_today_audit.json"
-    "lines_today_raw.csv"
 )
 
 FAILED=0
