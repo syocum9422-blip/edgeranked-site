@@ -50,6 +50,10 @@ fi
 
 export EDGERANKED_PGA_BASE_DIR="$PGA_PIPELINE_DIR"
 export EDGERANKED_LIVE_SITE_DIR="$LIVE_SITE_DIR"
+# Enable the validated hole-by-hole PGA simulation engine for production
+# runs.  Operators can pin the legacy engine by exporting
+# PGA_HOLE_BY_HOLE_SIM=0 in $EDGERANKED_ENV_FILE before this script runs.
+export PGA_HOLE_BY_HOLE_SIM="${PGA_HOLE_BY_HOLE_SIM:-1}"
 
 cd "$PGA_PIPELINE_DIR"
 

@@ -45,7 +45,8 @@ class User(db.Model):
     @property
     def is_subscribed(self):
         """Check if user has active subscription."""
-        if self.subscription_status != "active":
+        # "trialing" grants the same premium access as "active" (3-day free trial).
+        if self.subscription_status not in ("active", "trialing"):
             return False
         if self.subscription_current_period_end:
             return self.subscription_current_period_end > datetime.now(ET)

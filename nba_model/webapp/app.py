@@ -1,8 +1,11 @@
 import csv
 import json
 from nba_model.webapp.mlb_weather_view import register_mlb_weather_routes
+from nba_model.webapp.mlb_hr_threat_view import register_mlb_hr_threat_routes
 import logging
 import os
+import re
+import unicodedata
 import urllib.request
 from datetime import date, datetime, timedelta
 from html import escape
@@ -28,7 +31,11 @@ from nba_model.settings import (
     RESULTS_PAGE_PATH,
     TEAMS_TODAY_PATH,
 )
-from nba_model.webapp.wnba_views import register_wnba_routes
+from nba_model.webapp.soccer_views import register_soccer_routes
+from nba_model.webapp.wnba_views import register_wnba_routes, render_wnba_player_name_html
+from nba_model.webapp import seo_tiers
+from nba_model.webapp import mlb_results_archive
+from nba_model.webapp import mlb_stadiums
 
 
 ET = ZoneInfo("America/New_York")
@@ -145,16 +152,59 @@ MLB_FILES = {
     "pitcher_predictions": MLB_OUTPUT_DIR / "mlb_pitcher_projections_today.csv",
     "hitters": MLB_OUTPUT_DIR / "hitter_summary_today.csv",
     "hitters_full": MLB_CANONICAL_OUTPUT_DIR / "hitter_predictions_full.csv",
+    "hitters_public_safe": MLB_OUTPUT_DIR / "hitter_predictions_public_safe.csv",
     "hitters_site": MLB_SITE_OUTPUT_DIR / "hitter_summary_today.csv",
     "fantasy": MLB_OUTPUT_DIR / "fantasy_projections_today.csv",
     "history": MLB_OUTPUT_DIR / "bet_history.csv",
     "record": MLB_OUTPUT_DIR / "daily_betting_summary.csv",
     "hitter_tracking": MLB_OUTPUT_DIR / "hitter_tracking.csv",
     "pitcher_tracking": MLB_OUTPUT_DIR / "pitcher_tracking.csv",
+    "team_batting_k": MLB_DATA_DIR / "team_batting_k_pct_season.csv",
     "lines": MLB_DATA_DIR / "lines_today.csv",
     "normalized_lines": MLB_NORMALIZED_DATA_DIR / "lines_today.csv",
     "validation_manifest": MLB_SITE_OUTPUT_DIR / "validation_manifest.json",
+    "weather": MLB_OUTPUT_DIR / "mlb_weather_today.json",
 }
+# Public-facing hitter board source. Prefers the availability-filtered
+# `hitter_predictions_public_safe.csv` (which excludes IL/Out, Lineup Risk, and
+# catcher_rest_risk rows); falls back to the unfiltered full board only if the
+# public-safe artifact is missing/unreadable, and logs the fallback so it's
+# visible in the service journal. The internal full CSV is never modified.
+_PUBLIC_SAFE_HITTER_FALLBACK_WARNED = False
+
+
+def _mlb_public_facing_hitter_source():
+    """Return the public-facing hitter CSV path with a public-safe-first preference.
+
+    Returns the path that actually exists on disk; if neither file is present,
+    returns None. Callers can pass the result to the existing source-resolution
+    logic and still treat it as "the full slate board" for filtering purposes.
+    """
+    global _PUBLIC_SAFE_HITTER_FALLBACK_WARNED
+    public_safe = MLB_FILES["hitters_public_safe"]
+    full = MLB_OUTPUT_DIR / "hitter_predictions_full.csv"
+    if public_safe.exists():
+        _PUBLIC_SAFE_HITTER_FALLBACK_WARNED = False
+        return public_safe
+    if full.exists():
+        if not _PUBLIC_SAFE_HITTER_FALLBACK_WARNED:
+            LOGGER.warning(
+                "MLB public-safe hitter CSV missing at %s; falling back to %s "
+                "(may include Lineup Risk / IL / Out / catcher_rest_risk rows). "
+                "Run build_public_safe_hitters.py to restore the filtered view.",
+                public_safe, full,
+            )
+            _PUBLIC_SAFE_HITTER_FALLBACK_WARNED = True
+        return full
+    return None
+
+
+_PUBLIC_FACING_HITTER_FILE_NAMES = {
+    "hitter_predictions_public_safe.csv",
+    "hitter_predictions_full.csv",
+}
+
+
 MLB_REALISM_FIELD_DISPLAY = [
     ("blended_hr_prob_v2", "Blend HR %"),
     ("blended_hit_2plus_prob_v2", "Blend 2+ Hit %"),
@@ -210,15 +260,90 @@ ROOT_NAV_ITEMS = [
     ("NBA", "/nba"),
     ("MLB", "/mlb"),
     ("WNBA", "/wnba"),
+    ("Soccer", "/soccer"),
     ("PGA", "/pga"),
     ("UFC", "/ufc"),
     ("Pricing", "/pricing"),
     ("About", "/about"),
 ]
+PREVIEW_PAGE_SPECS = {
+    "mlb": {
+        "route": "/mlb-preview",
+        "title": "MLB Analytics Preview | EdgeRanked AI",
+        "heading": "MLB Analytics Preview",
+        "description": "Public MLB analytics preview from EdgeRanked AI with sample power, pitcher strikeout, and weather-context cards.",
+        "intro": [
+            "A quick look at how EdgeRanked AI organizes MLB projections for daily research.",
+            "The public preview shows a few live examples. Full sortable hitter, pitcher, and weather boards stay inside the premium experience.",
+        ],
+        "metrics": [
+            ("Markets Covered", "Hitters + Pitchers", "Power, hits, total bases, RBI, stolen bases, hitter strikeouts, and pitcher strikeouts."),
+            ("Refresh Cadence", "Daily Slate", "Samples come from current projection outputs when clean fields are available."),
+            ("Premium Depth", "Full Boards", "Premium members get sortable boards, filters, context, and daily updates."),
+        ],
+        "cards": [],
+        "cta": "Unlock Full MLB Board",
+        "premium_links": [
+            ("Full Hitter Board", "Open the existing premium MLB hitter projections.", "/mlb/projections", "Premium"),
+            ("Full Pitcher Board", "Open the existing premium pitcher strikeout board.", "/mlb/pitcher-strikeouts", "Premium"),
+        ],
+    },
+    "nba": {
+        "route": "/nba-preview",
+        "title": "NBA Analytics Preview | EdgeRanked AI",
+        "heading": "NBA Analytics Preview",
+        "description": "Public NBA analytics preview from EdgeRanked AI with sample player projection cards for points, PRA, and fantasy markets.",
+        "intro": [
+            "A clean preview of the NBA projection workflow built for player-prop research.",
+            "These samples show the shape of the data. Full player tables, filters, and daily board updates remain premium.",
+        ],
+        "metrics": [
+            ("Markets Covered", "Core + Combo", "Points, rebounds, assists, threes, PRA, fantasy, defensive stats, and combo markets."),
+            ("Projection View", "Player-Level", "Preview samples surface top available players without exposing the full board."),
+            ("Premium Depth", "Full Dashboard", "Premium members get the sortable NBA projection explorer and top-play context."),
+        ],
+        "cards": [],
+        "cta": "Access Full NBA Projections",
+        "premium_links": [
+            ("NBA Projection Explorer", "Open the existing premium NBA projection board.", "/nba/projections", "Premium"),
+        ],
+    },
+    "wnba": {
+        "route": "/wnba-preview",
+        "title": "WNBA Analytics Preview | EdgeRanked AI",
+        "heading": "WNBA Analytics Preview",
+        "description": "Public WNBA analytics preview from EdgeRanked AI with sample player projection cards and premium dashboard links.",
+        "intro": [
+            "A focused preview of WNBA player projection research inside EdgeRanked AI.",
+            "Samples use current available projection rows. Full WNBA dashboards and daily updates remain premium.",
+        ],
+        "metrics": [
+            ("Markets Covered", "Player Props", "Scoring, rebounds, assists, combo context, and top-play organization."),
+            ("Projection View", "Player-Level", "Preview samples show available categories without exposing the full board."),
+            ("Premium Depth", "Full Dashboard", "Premium members get the WNBA projection dashboard and top-play context."),
+        ],
+        "cards": [],
+        "cta": "Unlock WNBA Projection Dashboard",
+        "premium_links": [
+            ("WNBA Projection Dashboard", "Open the existing premium WNBA projection board.", "/wnba/projections", "Premium"),
+        ],
+    },
+}
 NBA_NAV_ITEMS = [("Overview", "/nba"), ("Projections", "/nba/projections"), ("Top Plays", "/nba/best-bets"), ("History", "/nba/history")]
 UFC_NAV_ITEMS = [("Overview", "/ufc"), ("Fight Card", "/ufc/fights"), ("Props", "/ufc/props")]
 PGA_NAV_ITEMS = [("Overview", "/pga"), ("Best Bets", "/pga/best-bets"), ("Leaderboard", "/pga/leaderboard")]
-MLB_PRIMARY_NAV = [("Overview", "/mlb"), ("Top Plays", "/mlb/best-bets"), ("Pitchers", "/mlb/pitcher-strikeouts"), ("Hitters", "/mlb/projections"), ("Weather", "/mlb/weather")]
+MLB_PRIMARY_NAV = [
+    ("Overview", "/mlb"),
+    ("Top Plays", "/mlb/best-bets"),
+    ("Pitchers", "/mlb/pitcher-strikeouts"),
+    ("Hitters", "/mlb/projections"),
+    ("Home Run Threats", "/mlb/home-run-threats"),
+    ("Intel", "/mlb/intel"),
+    ("Matchup History", "/mlb/matchup-history"),
+    ("Weather", "/mlb/weather"),
+    ("Results", "/mlb/results"),
+    ("Stadiums", "/mlb/stadiums"),
+]
 MLB_HITTER_NAV = [
     ("Full Board", "/mlb/hitter-board"),
     ("Hit Targets", "/mlb/projections"),
@@ -634,6 +759,16 @@ def normalize_player_key(value):
     return " ".join(normalize_text(value).lower().split())
 
 
+def slugify_player_name(value):
+    text = normalize_text(value)
+    if not text:
+        return ""
+    decomposed = unicodedata.normalize("NFKD", text)
+    ascii_text = decomposed.encode("ascii", "ignore").decode("ascii").lower()
+    ascii_text = ascii_text.replace("'", "").replace("'", "").replace("'", "")
+    return re.sub(r"[^a-z0-9]+", "-", ascii_text).strip("-")
+
+
 def normalize_profile_key(player, team=""):
     player_key = normalize_player_key(player)
     team_key = normalize_text(team).upper()
@@ -1003,9 +1138,238 @@ def load_mlb_best_bets():
     }
 
 
+# Pitcher names that should never reach the live cards. Matched case-insensitively
+# after normalization — these come from upstream rows where the probable starter
+# never resolved to a real player (TBD, Unknown, etc.).
+_MLB_UNRESOLVED_PITCHER_TOKENS = {
+    "", "unknown", "unknown pitcher", "tbd", "tba", "pitcher",
+    "pitcher pending", "n/a", "na", "none", "null",
+}
+
+_MLB_UNRESOLVED_DIAG_CACHE = {"source_mtime": None, "fingerprint": None}
+
+
+def _mlb_pitcher_id_lookup_from_projections():
+    """Build a {pitcher_name_lower: pitcher_id} from the projections CSV, used
+    only to enrich diagnostics. Returns {} on any read failure — never raises
+    into the render path."""
+    try:
+        path = MLB_FILES.get("pitcher_predictions")
+        if path is None or not path.exists():
+            return {}
+        df = read_csv_df(path)
+        if df.empty:
+            return {}
+        name_col = find_first_column(df, ["pitcher_name", "Pitcher", "player_name"])
+        id_col = find_first_column(df, ["pitcher_id", "Pitcher_ID", "player_id"])
+        if not name_col or not id_col:
+            return {}
+        out = {}
+        for _, raw in df.iterrows():
+            key = str(raw.get(name_col) or "").strip().lower()
+            if not key:
+                continue
+            raw_id = raw.get(id_col)
+            # Keep literal "0" so unresolved upstream rows surface in diagnostics
+            # instead of being silently blanked by Python's truthiness rules.
+            out[key] = "" if raw_id is None else str(raw_id).strip()
+        return out
+    except Exception:
+        return {}
+
+
+def _write_mlb_unresolved_pitchers_diagnostic(unresolved_rows, source_path):
+    """Persist unresolved/TBD pitcher rows to mlb/outputs/unresolved_pitchers_today.csv
+    for ops visibility. Idempotent per source-CSV mtime + row fingerprint so we
+    don't churn the file on every web request. Never raises into the render path."""
+    if MLB_OUTPUT_DIR is None:
+        return
+    target = MLB_OUTPUT_DIR / "unresolved_pitchers_today.csv"
+    fieldnames = [
+        "date", "team", "opponent",
+        "raw_pitcher_name", "normalized_pitcher_name",
+        "pitcher_id", "failure_reason",
+    ]
+    try:
+        mtime = source_path.stat().st_mtime
+    except OSError:
+        mtime = None
+    fingerprint = tuple(sorted(
+        (r.get("raw_pitcher_name") or "", r.get("team") or "", r.get("failure_reason") or "")
+        for r in unresolved_rows
+    ))
+    cache = _MLB_UNRESOLVED_DIAG_CACHE
+    if cache.get("source_mtime") == mtime and cache.get("fingerprint") == fingerprint and target.exists():
+        return
+    try:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with target.open("w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            for row in unresolved_rows:
+                writer.writerow({k: row.get(k, "") for k in fieldnames})
+        cache["source_mtime"] = mtime
+        cache["fingerprint"] = fingerprint
+    except OSError:
+        LOGGER.exception("Unable to write %s", target)
+
+
+# ---------------------------------------------------------------------------
+# Opponent (batting team) strikeout-rate resolution for the Ks Threat board.
+#
+# The "Opponent K Rate" shown on the pitcher-strikeouts (Ks Threat) board must
+# describe the BATTING team the pitcher faces TODAY -- never the pitcher's own
+# team, and never whichever team the pitcher happened to face in a prior start.
+#
+# Historically this value came from latest_pitcher_tracking_snapshot(), which
+# keys opponent_k_pct by *pitcher name* off that pitcher's most recent tracking
+# row. That row's `opponent` is the pitcher's PREVIOUS opponent, so e.g. Tatsuya
+# Imai (facing Milwaukee today) surfaced the Athletics' 28.7% batting K% instead
+# of Milwaukee's ~22%. We now resolve opponent K% from a league-wide team
+# batting-K index built off the same tracking file, grouped by the batting team
+# (the `opponent` column), and look it up by *today's* opponent team.
+# ---------------------------------------------------------------------------
+
+OPPONENT_K_RATE_MIN = 0.15
+OPPONENT_K_RATE_MAX = 0.27
+
+
+def mlb_canonical_team_key(value):
+    """Normalize a team full name / abbreviation / nickname to one canonical
+    nickname so that e.g. MIL, "Milwaukee Brewers" and "Brewers" all resolve to
+    the same key. Falls back to the cleaned text when no mapping exists."""
+    text = normalize_text(value)
+    if not text:
+        return ""
+    if text in MLB_TEAM_DISPLAY:
+        return MLB_TEAM_DISPLAY[text]
+    upper = text.upper()
+    if upper in MLB_TEAM_DISPLAY:  # abbreviations, e.g. "MIL", "mil"
+        return MLB_TEAM_DISPLAY[upper]
+    title = text.title()
+    if title in MLB_TEAM_DISPLAY:  # mixed-case full names, e.g. "milwaukee brewers"
+        return MLB_TEAM_DISPLAY[title]
+    return text
+
+
+def _coerce_k_fraction(value):
+    """Return a strikeout rate as a 0-1 fraction (accepts 28.7 or 0.287)."""
+    k_val = safe_float(value)
+    if k_val is None:
+        return None
+    if k_val > 1:
+        k_val = k_val / 100.0
+    return k_val
+
+
+TEAM_BATTING_K_MAX_AGE_DAYS = 3
+
+
+def _warn_if_team_batting_k_stale(df, path, max_age_days=TEAM_BATTING_K_MAX_AGE_DAYS):
+    """Log (never raise) a WARNING when the authoritative team-batting-K snapshot's
+    newest fetched_date is older than max_age_days. The display still renders off
+    the last-good file; this only surfaces staleness in ops logs so a wedged
+    refresh job is noticed. Any error here is swallowed so it can never break
+    page rendering."""
+    try:
+        if "fetched_date" not in df.columns:
+            return
+        fetched = pd.to_datetime(df["fetched_date"], errors="coerce").dropna()
+        if fetched.empty:
+            return
+        newest = fetched.max().date()
+        try:
+            today = today_et()
+        except Exception:
+            today = date.today()
+        age = (today - newest).days
+        if age > max_age_days:
+            LOGGER.warning(
+                "MLB team batting K%% snapshot is stale: newest fetched_date %s is "
+                "%d days old (> %d). Re-run refresh_team_batting_k.py; displaying "
+                "last-good values from %s.",
+                newest.isoformat(), age, max_age_days, str(path),
+            )
+    except Exception:
+        LOGGER.debug("team batting K%% staleness check skipped", exc_info=True)
+
+
+def mlb_team_batting_k_index():
+    """Build {canonical_team: {k_rate, samples, source_file, source_column}}
+    describing each team's ACTUAL season batting strikeout rate.
+
+    Source: team_batting_k_pct_season.csv -- a single authoritative season
+    snapshot of every club's batting K% (FanGraphs team batting, full-season,
+    PA-weighted) used consistently for all 30 teams. This replaces the prior
+    estimate, which took the median of `opponent_k_pct` across pitcher_tracking.csv
+    rows. That median was systematically biased high (~+1pp on average, up to
+    ~4pp for individual teams) because it was an unweighted median of per-start
+    opponent samples rather than the club's true PA-weighted season rate.
+
+    Only the *source* of the displayed Opponent K Rate changes here. The
+    consumer in load_mlb_pitcher_board() still resolves the value by TODAY's
+    batting opponent (canonical team key), so the stale-prior-opponent fix and
+    today's-opponent lookup are preserved, and projection math / rankings (which
+    never read this value) are unaffected.
+
+    Each row is range-validated so a wrong/garbage figure can never reach the
+    display: values outside the realistic MLB season band (OPPONENT_K_RATE_MIN..
+    OPPONENT_K_RATE_MAX) are logged and skipped rather than shown.
+    """
+    path = MLB_FILES["team_batting_k"]
+    df = read_csv_df(path)
+    if df.empty or "team" not in df.columns or "k_pct" not in df.columns:
+        return {}
+    _warn_if_team_batting_k_stale(df, path)
+    index = {}
+    for _, raw in df.iterrows():
+        team_key = mlb_canonical_team_key(raw.get("team"))
+        if not team_key:
+            continue
+        k_val = _coerce_k_fraction(raw.get("k_pct"))
+        if k_val is None:
+            continue
+        if k_val < OPPONENT_K_RATE_MIN or k_val > OPPONENT_K_RATE_MAX:
+            LOGGER.warning(
+                "Team batting K%% out of realistic season range for %s: %.4f "
+                "(expected %.2f-%.2f); skipping authoritative row.",
+                team_key, k_val, OPPONENT_K_RATE_MIN, OPPONENT_K_RATE_MAX,
+            )
+            continue
+        samples = safe_float(raw.get("pa"))
+        index[team_key] = {
+            "k_rate": round(k_val, 4),
+            "samples": int(samples) if samples is not None else None,
+            "source_file": str(path),
+            "source_column": "k_pct",
+        }
+    return index
+
+
+def validate_opponent_k_rate(team_key, value, *, adjusted=False):
+    """Flag opponent K% outside the plausible season band (15%-27%) unless the
+    value is explicitly recent/split-adjusted. Returns "ok", "out_of_range",
+    "adjusted", or None (when there is no value to check). Emits a WARNING log
+    when an unadjusted value falls outside the band so wrong-source/wrong-team
+    regressions surface in ops logs."""
+    if value is None:
+        return None
+    if adjusted:
+        return "adjusted"
+    if value < OPPONENT_K_RATE_MIN or value > OPPONENT_K_RATE_MAX:
+        LOGGER.warning(
+            "MLB opponent K%% out of expected season range for %s: %.4f "
+            "(expected %.2f-%.2f). If intentional, mark as recent/split-adjusted.",
+            team_key or "?", value, OPPONENT_K_RATE_MIN, OPPONENT_K_RATE_MAX,
+        )
+        return "out_of_range"
+    return "ok"
+
+
 def load_mlb_pitcher_board():
     props = read_csv_df(MLB_FILES["pitchers"])
     tracking = latest_pitcher_tracking_snapshot()
+    team_k_index = mlb_team_batting_k_index()
     using_fallback = False
     source_path = MLB_FILES["pitchers"]
 
@@ -1015,9 +1379,50 @@ def load_mlb_pitcher_board():
         source_path = MLB_FILES["pitcher_tracking"]
         props = fallback
 
-    records = []
+    # Filter out unresolved / Unknown / TBD pitcher rows BEFORE they reach the
+    # cards. The upstream MLB pipeline occasionally publishes a placeholder
+    # starter row (e.g. "Unknown Pitcher" with Pitcher_ID=0) when StatsAPI has
+    # not posted both probable starters yet; those rows must not be rendered
+    # as live simulated pitcher cards. The skipped rows are written to a
+    # diagnostics CSV so ops can spot games with unresolved starters.
+    pitcher_id_lookup = _mlb_pitcher_id_lookup_from_projections()
+    today_str = str(today_et()) if today_et else ""
+    unresolved_rows = []
+    valid_rows = []
+    skipped_unresolved = 0
     for _, raw in props.iterrows():
         row = raw.to_dict()
+        raw_name = str(row.get("pitcher_name") or "").strip()
+        norm_name = raw_name.lower()
+        reason = None
+        if not raw_name:
+            reason = "blank_pitcher_name"
+        elif norm_name in _MLB_UNRESOLVED_PITCHER_TOKENS or "unknown" in norm_name or "tbd" in norm_name:
+            reason = "unresolved_pitcher_name"
+        if reason:
+            skipped_unresolved += 1
+            unresolved_rows.append({
+                "date": str(row.get("date") or today_str),
+                "team": str(row.get("team") or "").strip(),
+                "opponent": str(row.get("opponent") or "").strip(),
+                "raw_pitcher_name": raw_name or "(blank)",
+                "normalized_pitcher_name": norm_name,
+                "pitcher_id": pitcher_id_lookup.get(norm_name, ""),
+                "failure_reason": reason,
+            })
+            continue
+        valid_rows.append(raw)
+
+    if skipped_unresolved:
+        LOGGER.info(
+            "MLB pitcher board: skipped %d unresolved pitcher row(s) from %s",
+            skipped_unresolved, source_path,
+        )
+    _write_mlb_unresolved_pitchers_diagnostic(unresolved_rows, source_path)
+
+    records = []
+    for raw in valid_rows:
+        row = raw.to_dict() if hasattr(raw, "to_dict") else dict(raw)
         name = normalize_text(row.get("pitcher_name"))
         key = name.lower()
         line = safe_float(row.get("best_over_line"))
@@ -1027,18 +1432,59 @@ def load_mlb_pitcher_board():
         if est_innings is None:
             est_outs = safe_float(row.get("projected_outs") or row.get("predicted_outs"))
             est_innings = round(est_outs / 3, 2) if est_outs is not None else context.get("estimated_innings")
+
+        # Resolve opponent K Rate from TODAY's batting opponent, not the
+        # pitcher's own team or a stale prior-start opponent. Look up the
+        # league-wide season batting-K index by the canonical opponent team.
+        opponent_display = normalize_text(row.get("opponent")) or "TBD"
+        opp_team_key = mlb_canonical_team_key(opponent_display)
+        team_k_entry = team_k_index.get(opp_team_key)
+        if team_k_entry is not None:
+            resolved_opp_k = team_k_entry["k_rate"]
+            opp_k_source = "team_batting_k_index"
+            opp_k_source_file = team_k_entry["source_file"]
+            opp_k_source_column = team_k_entry["source_column"]
+            opp_k_adjusted = False
+        else:
+            # No season batting-K data for today's opponent. Do NOT fall back to
+            # the pitcher's prior-start opponent K% (wrong team); leave it blank.
+            resolved_opp_k = None
+            opp_k_source = None
+            opp_k_source_file = None
+            opp_k_source_column = None
+            opp_k_adjusted = False
+        opp_k_flag = validate_opponent_k_rate(opp_team_key, resolved_opp_k, adjusted=opp_k_adjusted)
+
+        if os.environ.get("MLB_KS_DEBUG") and opp_team_key == "Brewers":
+            LOGGER.info(
+                "[MLB_KS_DEBUG] pitcher=%s | facing=%s | resolved_opponent=%s | "
+                "source_file=%s | source_column=%s | raw_value=%s | displayed=%s | flag=%s",
+                name, opponent_display, opp_team_key,
+                opp_k_source_file, opp_k_source_column, resolved_opp_k,
+                ("%.1f%%" % (resolved_opp_k * 100)) if resolved_opp_k is not None else "—",
+                opp_k_flag,
+            )
+
         record = {
             "pitcher_name": name,
             "team": normalize_text(row.get("team")) or "TBD",
-            "opponent": normalize_text(row.get("opponent")) or "TBD",
+            "opponent": opponent_display,
             "projected_ks": projected_ks,
             "sportsbook_line": line,
             "edge": round(projected_ks - line, 2) if projected_ks is not None and line is not None else None,
             "confidence": confidence_level(row.get("recommendation_confidence") or row.get("confidence")),
             "pitcher_k_percent_season": context.get("pitcher_k_percent_season"),
-            "opponent_hitter_k_percent": context.get("opponent_hitter_k_percent"),
+            "opponent_hitter_k_percent": resolved_opp_k,
+            "opponent_k_source": opp_k_source,
+            "opponent_k_flag": opp_k_flag,
             "estimated_innings": est_innings,
             "recent_avg_ks": context.get("recent_avg_ks"),
+            "k_prob_8_plus": safe_float(row.get("k_prob_8_plus")),
+            "k_prob_9_plus": safe_float(row.get("k_prob_9_plus")),
+            "k_prob_10_plus": safe_float(row.get("k_prob_10_plus")),
+            "over_7_5_pct": safe_float(row.get("over_7_5_pct")),
+            "over_8_5_pct": safe_float(row.get("over_8_5_pct")),
+            "over_9_5_pct": safe_float(row.get("over_9_5_pct")),
             "recommended_play": normalize_text(row.get("recommended_play")) or (f"Over {line:g}" if line is not None else "n/a"),
             "board_date": parse_date(row.get("date")),
         }
@@ -1050,16 +1496,21 @@ def load_mlb_pitcher_board():
     if not board_date and last_updated:
         board_date = last_updated.date()
     banner = "Showing most recent available board" if using_fallback or (board_date and board_date < today_et()) else ""
+    # Show every resolved starter on the slate. A hard [:25] cap previously
+    # silently hid real games' starters when the slate exceeded 25 (e.g. a
+    # 15-game slate with 30 resolved starters), creating the appearance of a
+    # missing matchup (NYY/Royals: Gerrit Cole was being truncated).
     return {
-        "records": records[:25],
+        "records": records,
         "board_date": board_date,
         "banner": banner,
         "source_label": public_data_source_label(source_path),
         "last_updated": last_updated,
         "props_scanned": pitcher_props_scanned_count() or len(records),
-        "plays_shown": min(len(records), 25),
+        "plays_shown": len(records),
         "model_version": MODEL_VERSION,
         "data_source_freshness": source_freshness_label(last_updated),
+        "unresolved_skipped": skipped_unresolved,
     }
 
 
@@ -1231,6 +1682,477 @@ def load_mlb_record_board():
     }
 
 
+def load_mlb_weather():
+    """Load MLB weather impact data from JSON artifact."""
+    default_note = "Weather context is contextual and not a guarantee. Scores summarize temperature, wind, rain risk, and roof handling for today's slate."
+    fallback = {
+        "status": "unavailable",
+        "slate_date_et": today_et().isoformat(),
+        "generated_at": None,
+        "methodology_note": default_note,
+        "games": [],
+    }
+    weather_file = MLB_FILES.get("weather")
+    if not weather_file or not weather_file.exists():
+        return fallback
+
+    try:
+        with open(weather_file, "r", encoding="utf-8") as f:
+            raw = json.load(f)
+    except Exception as exc:
+        LOGGER.warning("Unable to load MLB weather data from %s: %s", weather_file, exc)
+        return fallback
+
+    if not isinstance(raw, dict):
+        LOGGER.warning("MLB weather data has unexpected root type: %s", type(raw).__name__)
+        return fallback
+
+    games = raw.get("games", [])
+    if not isinstance(games, list):
+        LOGGER.warning("MLB weather games has unexpected type: %s", type(games).__name__)
+        games = []
+
+    clean_games = [game for game in games if isinstance(game, dict)]
+    return {
+        "status": normalize_text(raw.get("status"), "ok" if clean_games else "unavailable"),
+        "slate_date_et": normalize_text(raw.get("slate_date_et"), today_et().isoformat()),
+        "generated_at": raw.get("generated_at"),
+        "methodology_note": normalize_text(raw.get("methodology_note"), default_note),
+        "games": clean_games,
+    }
+
+
+def build_mlb_weather_page():
+    """Build MLB weather impact page."""
+    data = load_mlb_weather()
+    title = "MLB Weather Impact"
+    subtitle = "Weather context for today's MLB slate including temperature, wind, rain risk, and roof handling."
+    nav = render_mlb_nav("/mlb/weather")
+
+    def weather_number(value):
+        try:
+            numeric = float(value)
+        except (TypeError, ValueError):
+            return None
+        if pd.isna(numeric):
+            return None
+        return numeric
+
+    def clean_label(value, default=""):
+        cleaned = normalize_text(value)
+        if cleaned.lower() in {"n/a", "na", "none", "null", "unknown", "tbd", "context active", "weather context"}:
+            return default
+        return cleaned or default
+
+    def first_label(game, keys, default=""):
+        for key in keys:
+            label = clean_label(game.get(key))
+            if label:
+                return label
+        return default
+
+    def temp_value(game):
+        return weather_number(game.get("temperature_f"))
+
+    def rain_value(game):
+        return weather_number(game.get("precipitation_probability") or game.get("rain_chance"))
+
+    def wind_value(game):
+        return weather_number(game.get("wind_speed_mph"))
+
+    def wind_direction_code(game):
+        direction = first_label(game, ["wind_direction_label", "wind_direction"])
+        if not direction:
+            return ""
+        direction = direction.upper().strip()
+        if direction in {"CALM", "VARIABLE", "VAR", "NONE"}:
+            return ""
+        return direction
+
+    def wind_arrow(direction):
+        arrows = {
+            "N": "↑",
+            "NNE": "↑",
+            "NE": "↗",
+            "ENE": "↗",
+            "E": "→",
+            "ESE": "↘",
+            "SE": "↘",
+            "SSE": "↓",
+            "S": "↓",
+            "SSW": "↓",
+            "SW": "↙",
+            "WSW": "↙",
+            "W": "←",
+            "WNW": "↖",
+            "NW": "↖",
+            "NNW": "↑",
+        }
+        return arrows.get(direction, "")
+
+    def temp_display(game):
+        temp = temp_value(game)
+        return f"{temp:.0f}°F" if temp is not None else ""
+
+    def matchup_label(game):
+        away = first_label(game, ["away_team"])
+        home = first_label(game, ["home_team"])
+        if away and home:
+            return f"{away} @ {home}"
+        away_full = first_label(game, ["away_team_name"])
+        home_full = first_label(game, ["home_team_name"])
+        if away_full and home_full:
+            return f"{away_full} @ {home_full}"
+        return away or home or away_full or home_full or "Matchup unavailable"
+
+    def venue_line(game):
+        return first_label(game, ["venue_name", "venue"])
+
+    def roof_label(game):
+        roof = first_label(game, ["roof_status_estimate", "roof_type"])
+        return roof.title() if roof else ""
+
+    def score_value(game, key):
+        numeric = weather_number(game.get(key))
+        return abs(numeric) if numeric is not None else 0.0
+
+    def sort_key(game):
+        max_impact = max(
+            score_value(game, "run_environment_score"),
+            score_value(game, "power_environment_score"),
+            score_value(game, "pitcher_environment_score"),
+        )
+        label_rank = {"Power Boost": 0, "Run Boost": 1, "Pitcher Friendly": 2, "Wind Suppression": 3, "Delay Risk": 4, "Neutral": 5}
+        return (-max_impact, label_rank.get(normalized_primary(game), 6), matchup_label(game))
+
+    def normalized_primary(game):
+        raw = first_label(game, ["primary_label", "label"], "Neutral")
+        allowed = {"Power Boost", "Run Boost", "Pitcher Friendly", "Wind Suppression", "Delay Risk", "Neutral"}
+        if raw in allowed:
+            return raw
+        lowered = raw.lower()
+        if "power" in lowered:
+            return "Power Boost"
+        if "run" in lowered:
+            return "Run Boost"
+        if "pitcher" in lowered:
+            return "Pitcher Friendly"
+        if "wind" in lowered and ("in" in lowered or "suppress" in lowered):
+            return "Wind Suppression"
+        if "delay" in lowered or "rain" in lowered:
+            return "Delay Risk"
+        return "Neutral"
+
+    def label_class(primary):
+        if primary == "Power Boost":
+            return "power"
+        if primary == "Run Boost":
+            return "run"
+        if primary == "Pitcher Friendly":
+            return "pitcher"
+        if primary == "Wind Suppression":
+            return "suppression"
+        if primary == "Delay Risk":
+            return "delay"
+        return "neutral"
+
+    def condition_icon(game, primary):
+        rain = rain_value(game) or 0
+        wind = wind_value(game) or 0
+        temp = temp_value(game)
+        roof = roof_label(game).lower()
+        if primary == "Delay Risk" or rain >= 35:
+            return "🌧"
+        if "closed" in roof or "retractable" in roof:
+            return "🏟"
+        if wind >= 15:
+            return "💨"
+        if temp is not None and temp >= 72:
+            return "☀️"
+        if temp is not None and temp < 60:
+            return "🌥"
+        return "🌤"
+
+    def weather_chips(game, primary):
+        chips = []
+        temp = temp_display(game)
+        if temp:
+            chips.append(("condition", condition_icon(game, primary), temp))
+        wind = wind_value(game)
+        if wind is not None:
+            direction = wind_direction_code(game)
+            arrow = wind_arrow(direction)
+            if direction and arrow:
+                chips.append(("wind", arrow, f"Wind {wind:.0f} mph {direction}"))
+            else:
+                chips.append(("wind", "💨", f"Wind {wind:.0f} mph · direction unavailable"))
+        rain = rain_value(game)
+        if rain is not None and rain > 0:
+            chips.append(("rain", "🌧", f"Rain {rain:.0f}%"))
+        roof = roof_label(game)
+        if roof:
+            chips.append(("roof", "🏟", roof))
+        return chips
+
+    def baseball_impact(game, primary):
+        temp = temp_value(game)
+        wind = wind_value(game) or 0
+        direction = wind_direction_code(game)
+        roof = roof_label(game).lower()
+        rain = rain_value(game) or 0
+        if "closed" in roof or "retractable" in roof:
+            if primary in {"Run Boost", "Power Boost"} and temp is not None and temp >= 70:
+                return "Warm air with roof flexibility can help offense."
+            return "Roof conditions reduce weather volatility."
+        if primary == "Power Boost":
+            return "Wind could help deep fly balls carry."
+        if primary == "Run Boost":
+            if temp is not None and temp >= 70:
+                return "Warm air with light wind. Slight boost to carry."
+            return "Conditions lean slightly better for offense."
+        if primary == "Pitcher Friendly":
+            return "Cooler or controlled air may mute power."
+        if primary == "Wind Suppression":
+            return "Wind may suppress carry."
+        if primary == "Delay Risk" or rain >= 35:
+            return "Rain risk could affect rhythm and game flow."
+        if temp is not None and temp >= 75:
+            return "Warm air can help offense."
+        if temp is not None and temp < 60:
+            return "Cooler air may mute power."
+        if wind >= 12 and direction:
+            return "Wind is a meaningful factor for batted balls."
+        return "Minimal weather impact expected."
+
+    games = data.get("games", []) if isinstance(data.get("games"), list) else []
+    sorted_games = sorted(games, key=sort_key)
+
+    if data.get("status") == "unavailable" or not sorted_games:
+        body = render_banner("") + render_meta_strip(data) + """
+        <section class="empty-state" style="text-align:center; padding:60px 20px;">
+            <h2>Weather board unavailable right now</h2>
+            <p class="muted">Weather details are not available for the current MLB slate. Check back closer to first pitch.</p>
+            <a class="cta-btn" href="/mlb">Back to MLB Preview</a>
+        </section>
+        """
+        return render_layout(title, subtitle, body, "/mlb/weather", nav)
+
+    game_cards_html = ""
+    active_game_slugs = build_mlb_game_catalog().get("slugs", {})
+    for game in sorted_games:
+        primary = normalized_primary(game)
+        css_class = label_class(primary)
+        chips_html = "".join(
+            f'<span class="weather-chip {escape(kind)}"><span class="weather-chip-icon">{escape(icon)}</span>{escape(text)}</span>'
+            for kind, icon, text in weather_chips(game, primary)
+        )
+        venue = venue_line(game)
+        venue_html = f'<div class="venue-line">{escape(venue)}</div>' if venue else ""
+        impact = baseball_impact(game, primary)
+
+        away_name = first_label(game, ["away_team_name", "away_team"])
+        home_name = first_label(game, ["home_team_name", "home_team"])
+        matchup_html = render_mlb_game_matchup_link(
+            away_name, home_name, matchup_label(game), active_slugs=active_game_slugs
+        )
+
+        game_cards_html += f"""
+        <article class="weather-card weather-card-{escape(css_class)}">
+            <div class="weather-card-top">
+                <div>
+                    <div class="card-kicker">MATCHUP</div>
+                    <div class="matchup">{matchup_html}</div>
+                </div>
+                <span class="weather-pill {escape(css_class)}">{escape(primary)}</span>
+            </div>
+            <div class="weather-visual-row">{chips_html}</div>
+            <div class="impact-block">
+                <div class="impact-label">Baseball Impact</div>
+                <p>{escape(impact)}</p>
+            </div>
+            {venue_html}
+        </article>
+        """
+
+    body = render_banner("") + render_meta_strip(data) + f"""
+    <section class="weather-hero-strip">
+        <p>MLB Weather Board</p>
+        <h2>Slate conditions by matchup</h2>
+    </section>
+    <section class="weather-grid">
+        {game_cards_html}
+    </section>
+    <style>
+        .weather-hero-strip {{
+            padding: 18px 20px 0;
+        }}
+        .weather-hero-strip p {{
+            color: #7dd3fc;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .12em;
+            margin: 0 0 4px;
+            text-transform: uppercase;
+        }}
+        .weather-hero-strip h2 {{
+            color: #fff;
+            font-size: 24px;
+            margin: 0;
+        }}
+        .weather-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 18px;
+            padding: 18px 20px 28px;
+        }}
+        .weather-card {{
+            position: relative;
+            overflow: hidden;
+            min-height: 230px;
+            border: 1px solid rgba(148, 163, 184, .18);
+            border-radius: 16px;
+            padding: 18px;
+            background: linear-gradient(145deg, rgba(15, 23, 42, .98), rgba(17, 24, 39, .92));
+            box-shadow: 0 16px 42px rgba(0, 0, 0, .28);
+        }}
+        .weather-card::before {{
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 4px;
+            background: #64748b;
+        }}
+        .weather-card::after {{
+            content: "";
+            position: absolute;
+            right: -52px;
+            top: -52px;
+            width: 160px;
+            height: 160px;
+            border-radius: 999px;
+            background: rgba(125, 211, 252, .10);
+            pointer-events: none;
+        }}
+        .weather-card-power {{ background: linear-gradient(145deg, rgba(69, 26, 3, .94), rgba(17, 24, 39, .96)); }}
+        .weather-card-power::before {{ background: linear-gradient(90deg, #fb923c, #ef4444); }}
+        .weather-card-run {{ background: linear-gradient(145deg, rgba(8, 47, 73, .94), rgba(17, 24, 39, .96)); }}
+        .weather-card-run::before {{ background: linear-gradient(90deg, #38bdf8, #22d3ee); }}
+        .weather-card-pitcher {{ background: linear-gradient(145deg, rgba(15, 23, 42, .97), rgba(30, 41, 59, .94)); }}
+        .weather-card-pitcher::before {{ background: linear-gradient(90deg, #60a5fa, #818cf8); }}
+        .weather-card-suppression {{ background: linear-gradient(145deg, rgba(30, 41, 59, .97), rgba(17, 24, 39, .96)); }}
+        .weather-card-suppression::before {{ background: linear-gradient(90deg, #94a3b8, #38bdf8); }}
+        .weather-card-delay {{ background: linear-gradient(145deg, rgba(69, 26, 3, .95), rgba(30, 41, 59, .96)); }}
+        .weather-card-delay::before {{ background: linear-gradient(90deg, #facc15, #fb923c); }}
+        .weather-card-top {{
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+        }}
+        .card-kicker {{
+            color: #64748b;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: .14em;
+            margin-bottom: 5px;
+        }}
+        .matchup {{
+            color: #f8fafc;
+            font-size: 23px;
+            font-weight: 900;
+            letter-spacing: .02em;
+            line-height: 1.05;
+        }}
+        .weather-pill {{
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: .08em;
+            padding: 7px 10px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }}
+        .weather-pill.power {{ background: rgba(251, 146, 60, .18); color: #fed7aa; border: 1px solid rgba(251, 146, 60, .45); }}
+        .weather-pill.run {{ background: rgba(56, 189, 248, .16); color: #bae6fd; border: 1px solid rgba(56, 189, 248, .42); }}
+        .weather-pill.pitcher {{ background: rgba(96, 165, 250, .15); color: #bfdbfe; border: 1px solid rgba(96, 165, 250, .42); }}
+        .weather-pill.suppression {{ background: rgba(148, 163, 184, .14); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, .38); }}
+        .weather-pill.delay {{ background: rgba(250, 204, 21, .16); color: #fde68a; border: 1px solid rgba(250, 204, 21, .42); }}
+        .weather-pill.neutral {{ background: rgba(148, 163, 184, .12); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, .28); }}
+        .weather-visual-row {{
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }}
+        .weather-chip {{
+            align-items: center;
+            background: rgba(15, 23, 42, .52);
+            border: 1px solid rgba(148, 163, 184, .22);
+            border-radius: 999px;
+            color: #e2e8f0;
+            display: inline-flex;
+            font-size: 13px;
+            font-weight: 800;
+            gap: 7px;
+            line-height: 1;
+            min-height: 34px;
+            padding: 8px 11px;
+        }}
+        .weather-chip-icon {{
+            font-size: 17px;
+            line-height: 1;
+        }}
+        .weather-chip.wind {{ color: #dbeafe; }}
+        .weather-chip.rain {{ color: #bfdbfe; }}
+        .weather-chip.roof {{ color: #fde68a; }}
+        .impact-block {{
+            position: relative;
+            z-index: 1;
+            background: rgba(2, 6, 23, .22);
+            border: 1px solid rgba(148, 163, 184, .13);
+            border-radius: 12px;
+            margin-bottom: 14px;
+            padding: 12px;
+        }}
+        .impact-label {{
+            color: #94a3b8;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: .12em;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }}
+        .impact-block p {{
+            color: #f8fafc;
+            font-size: 14px;
+            line-height: 1.45;
+            margin: 0;
+        }}
+        .venue-line {{
+            position: relative;
+            z-index: 1;
+            color: #94a3b8;
+            font-size: 13px;
+        }}
+        @media (max-width: 640px) {{
+            .weather-hero-strip {{ padding: 14px 12px 0; }}
+            .weather-hero-strip h2 {{ font-size: 21px; }}
+            .weather-grid {{ grid-template-columns: 1fr; gap: 12px; padding: 14px 12px 22px; }}
+            .weather-card {{ min-height: 0; padding: 16px; }}
+            .weather-card-top {{ display: block; margin-bottom: 12px; }}
+            .weather-pill {{ display: inline-block; margin-top: 10px; }}
+            .matchup {{ font-size: 21px; }}
+            .weather-chip {{ font-size: 12px; min-height: 32px; }}
+        }}
+    </style>
+    """
+
+    return render_layout(title, subtitle, body, "/mlb/weather", nav)
 def load_hitter_summary(kind):
     df = read_csv_df(MLB_FILES["hitters"])
     if df.empty:
@@ -1739,14 +2661,14 @@ def log_mlb_hitter_category_debug(route_label, category_key, target_stat, rows):
 
 
 def build_mlb_hitter_projection_board():
-    full_board_source = MLB_OUTPUT_DIR / "hitter_predictions_full.csv"
-    if full_board_source.exists():
-        summary_source = full_board_source
+    public_facing_source = _mlb_public_facing_hitter_source()
+    if public_facing_source is not None:
+        summary_source = public_facing_source
     elif MLB_READER_MODE == "canonical" and MLB_FILES["hitters_full"].exists():
         summary_source = MLB_FILES["hitters_full"]
     else:
         summary_source = MLB_FILES["hitters"]
-    using_full_board = summary_source.name == "hitter_predictions_full.csv"
+    using_full_board = summary_source.name in _PUBLIC_FACING_HITTER_FILE_NAMES
     summary_df = read_csv_df(summary_source)
     if summary_df.empty:
         return []
@@ -1895,6 +2817,9 @@ def build_mlb_pitcher_projection_board():
             "projection": safe_float(item.get("projected_ks")),
             "pitcher_k_percent_season": safe_float(item.get("pitcher_k_percent_season")),
             "opponent_hitter_k_percent": safe_float(item.get("opponent_hitter_k_percent")),
+            "k_prob_8_plus": safe_float(item.get("k_prob_8_plus")),
+            "k_prob_9_plus": safe_float(item.get("k_prob_9_plus")),
+            "k_prob_10_plus": safe_float(item.get("k_prob_10_plus")),
             "line": safe_float(item.get("sportsbook_line")),
             "edge": safe_float(item.get("edge")),
             "confidence": confidence_level(item.get("confidence")),
@@ -1912,6 +2837,9 @@ def build_mlb_pitcher_projection_board():
                 "projection": safe_float(item.get("estimated_innings")) * 3,
                 "pitcher_k_percent_season": safe_float(item.get("pitcher_k_percent_season")),
                 "opponent_hitter_k_percent": safe_float(item.get("opponent_hitter_k_percent")),
+                "k_prob_8_plus": None,
+                "k_prob_9_plus": None,
+                "k_prob_10_plus": None,
                 "line": None,
                 "edge": None,
                 "confidence": confidence_level(item.get("confidence")),
@@ -2106,6 +3034,897 @@ def build_mlb_player_projection_profiles():
     teams = sorted({item["team"] for item in records if item.get("team")})
     last_updated = max(filter(None, [file_timestamp(path) for path in source_paths]), default=None)
     return {"records": records, "teams": teams, "source_labels": public_data_source_labels(source_paths), "last_updated": last_updated}
+
+
+MLB_PLAYER_SITE_URL = "https://edgerankedai.com"
+
+# Canonical production origin used for canonical tags, og:url, and sitemaps.
+SITE_ORIGIN = "https://edgerankedai.com"
+
+
+def find_mlb_player_profile(slug):
+    payload = build_mlb_player_projection_profiles()
+    target = slugify_player_name(slug)
+    if not target:
+        return None, payload
+    for record in payload.get("records", []):
+        if slugify_player_name(record.get("player")) == target:
+            return record, payload
+    return None, payload
+
+
+def render_mlb_player_stat_section(title, caption, fields, distributions=None):
+    if not fields:
+        return ""
+    cards = seo_tiers.public_cards(fields, distributions)
+    if not cards:
+        return ""
+    return (
+        "<section class='panel'>"
+        f"<div class='panel-head'><div><div class='eyebrow'>MLB</div><h2>{escape(title)}</h2></div>"
+        f"<p class='muted'>{escape(caption)}</p></div>"
+        + render_stat_cards(cards)
+        + "</section>"
+    )
+
+
+def build_mlb_player_not_found_page(slug):
+    requested = normalize_text(slug).replace("-", " ").title()
+    body = (
+        render_empty_state(
+            "Player Not Found",
+            "We couldn't find that MLB player.",
+            "This player may not be on today's MLB slate. Browse the live projection boards for every active player.",
+        )
+        + render_page_actions(
+            [
+                ("View MLB Projections", "/mlb/projections", "primary"),
+                ("MLB Best Bets", "/mlb/best-bets", "secondary"),
+            ]
+        )
+    )
+    html = render_layout(
+        requested or "MLB Player",
+        "This MLB player profile is not currently available.",
+        body,
+        "/mlb/projections",
+        render_mlb_nav("/mlb/projections"),
+        hero_kicker="MLB Player Profile",
+        meta_description="This MLB player profile is not currently available. Browse EdgeRanked AI's live MLB projection boards.",
+        document_title="MLB Player Not Found | EdgeRanked AI",
+    )
+    return html, 404
+
+
+def build_mlb_player_page(slug):
+    profile, payload = find_mlb_player_profile(slug)
+    if not profile:
+        return build_mlb_player_not_found_page(slug)
+
+    player = normalize_text(profile.get("player"))
+    team = normalize_text(profile.get("team")).upper()
+    opponent = normalize_text(profile.get("opponent"))
+    player_type = normalize_text(profile.get("player_type")) or "Player"
+    matchup = normalize_text(profile.get("matchup")) or "Matchup pending"
+    confidence = normalize_text(profile.get("confidence")) or "Model View"
+    last_updated = payload.get("last_updated")
+    updated_label = format_timestamp(last_updated) if last_updated else ""
+
+    summary_cards = []
+    if team:
+        summary_cards.append(("Team", team, "Current club"))
+    if opponent:
+        summary_cards.append(("Opponent", opponent, "Today's matchup"))
+    summary_cards.append(("Player Type", player_type, "Model coverage"))
+    summary_cards.append(("Confidence", confidence, "Model read"))
+
+    body_parts = [
+        "<section class='panel'>"
+        "<div class='panel-head'><div><div class='eyebrow'>Matchup</div>"
+        f"<h2>{escape(matchup)}</h2></div>"
+        f"<p class='muted'>{escape(render_mlb_confidence_badge_caption(confidence))}</p></div>"
+        + render_stat_cards(summary_cards)
+        + "</section>"
+    ]
+    mlb_distributions = seo_tiers.value_distributions(
+        payload.get("records", []), ("hitter_stats", "pitcher_stats")
+    )
+    body_parts.append(
+        render_mlb_player_stat_section(
+            "Hitting Outlook",
+            "Public outlook tiers for today's hitting matchup.",
+            profile.get("hitter_stats", []),
+            mlb_distributions,
+        )
+    )
+    body_parts.append(
+        render_mlb_player_stat_section(
+            "Pitching Outlook",
+            "Public outlook tiers for today's pitching matchup.",
+            profile.get("pitcher_stats", []),
+            mlb_distributions,
+        )
+    )
+    body_parts.append(
+        render_mlb_player_stat_section(
+            "Prop Outlook",
+            "Public outlook tiers for each prop market.",
+            profile.get("probabilities", []),
+        )
+    )
+    body_parts.append(seo_tiers.render_premium_locked_section(seo_tiers.PREMIUM_PLAYER_ITEMS))
+    body_parts.append(
+        render_page_actions(
+            [
+                ("All MLB Projections", "/mlb/projections", "primary"),
+                ("MLB Best Bets", "/mlb/best-bets", "secondary"),
+                ("Pitcher Strikeouts", "/mlb/pitcher-strikeouts", "secondary"),
+            ]
+        )
+    )
+
+    body = "".join(part for part in body_parts if part)
+
+    subtitle_bits = [bit for bit in [team and f"{team}", opponent and f"vs {opponent}", player_type] if bit]
+    subtitle = " · ".join(subtitle_bits) if subtitle_bits else "MLB player profile"
+    if updated_label:
+        subtitle = f"{subtitle} · Updated {updated_label}"
+
+    meta_desc = (
+        f"{player} MLB projections, prop probabilities, and matchup analysis"
+        + (f" for {team}" if team else "")
+        + (f" vs {opponent}" if opponent else "")
+        + f". {player_type} model coverage from EdgeRanked AI."
+    )
+    document_title = (
+        f"{player} MLB Projections & Prop Probabilities"
+        + (f" ({team})" if team else "")
+        + " | EdgeRanked AI"
+    )
+
+    return render_layout(
+        player,
+        subtitle,
+        body,
+        "/mlb/projections",
+        render_mlb_nav("/mlb/projections"),
+        hero_kicker="MLB Player Profile",
+        meta_description=meta_desc,
+        document_title=document_title,
+    )
+
+
+def render_mlb_confidence_badge_caption(confidence):
+    return f"Model confidence: {normalize_text(confidence) or 'Model View'}"
+
+
+def build_mlb_players_sitemap():
+    payload = build_mlb_player_projection_profiles()
+    last_updated = payload.get("last_updated")
+    lastmod = last_updated.date().isoformat() if isinstance(last_updated, datetime) else date.today().isoformat()
+    seen = set()
+    urls = []
+    for record in payload.get("records", []):
+        slug = slugify_player_name(record.get("player"))
+        if not slug or slug in seen:
+            continue
+        seen.add(slug)
+        urls.append(
+            "  <url>"
+            f"<loc>{MLB_PLAYER_SITE_URL}/mlb/player/{slug}</loc>"
+            f"<lastmod>{lastmod}</lastmod>"
+            "<changefreq>daily</changefreq>"
+            "<priority>0.6</priority>"
+            "</url>"
+        )
+    xml = (
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
+        + "\n".join(urls)
+        + "\n</urlset>\n"
+    )
+    return Response(xml, mimetype="application/xml")
+
+
+def slugify_team_name(value):
+    return slugify_player_name(value)
+
+
+def render_mlb_player_name_html(player):
+    name = normalize_text(player)
+    slug = slugify_player_name(name)
+    if name and slug:
+        return f"<a class='mlb-player-link' href='/mlb/player/{slug}'>{escape(name)}</a>"
+    return escape(name or "Player")
+
+
+def _mlb_game_matchup_key(away_team, home_team):
+    return mlb_matchup_key(away_team, home_team) or frozenset()
+
+
+def mlb_game_page_slug(away_team, home_team):
+    away = slugify_team_name(away_team)
+    home = slugify_team_name(home_team)
+    if not away or not home:
+        return ""
+    return f"{away}-vs-{home}"
+
+
+def _weather_games_index(weather_payload):
+    index = {}
+    for game in weather_payload.get("games") or []:
+        away = normalize_text(game.get("away_team_name") or game.get("away_team"))
+        home = normalize_text(game.get("home_team_name") or game.get("home_team"))
+        if away and home:
+            index[_mlb_game_matchup_key(away, home)] = game
+    return index
+
+
+def _mlb_game_last_updated():
+    paths = []
+    if MLB_OUTPUT_DIR:
+        paths.append(MLB_OUTPUT_DIR / MLB_INTEL_GAME_ENV_FILE)
+    weather_path = MLB_FILES.get("weather")
+    if weather_path:
+        paths.append(weather_path)
+    return max(filter(None, [file_timestamp(path) for path in paths]), default=None)
+
+
+def build_mlb_game_catalog():
+    env_payload = _load_mlb_intel_json(MLB_INTEL_GAME_ENV_FILE)
+    weather_payload = load_mlb_weather()
+    weather_index = _weather_games_index(weather_payload)
+    catalog = {}
+    last_updated = _mlb_game_last_updated()
+
+    env_games = (env_payload or {}).get("games") or []
+    if env_games:
+        for game in env_games:
+            away = normalize_text(game.get("away_team"))
+            home = normalize_text(game.get("home_team"))
+            if not away or not home:
+                continue
+            slug = mlb_game_page_slug(away, home)
+            if not slug:
+                continue
+            weather_game = weather_index.get(_mlb_game_matchup_key(away, home), {})
+            catalog[slug] = {
+                "slug": slug,
+                "away_team": away,
+                "home_team": home,
+                "game_id": game.get("game_id"),
+                "game_date": normalize_text(weather_game.get("game_date") or weather_payload.get("slate_date_et") or today_et().isoformat()),
+                "env": game,
+                "weather": weather_game or game.get("weather_summary") or {},
+                "last_updated": last_updated,
+            }
+    else:
+        for weather_game in weather_payload.get("games") or []:
+            away = normalize_text(weather_game.get("away_team_name") or weather_game.get("away_team"))
+            home = normalize_text(weather_game.get("home_team_name") or weather_game.get("home_team"))
+            if not away or not home:
+                continue
+            slug = mlb_game_page_slug(away, home)
+            if not slug:
+                continue
+            catalog[slug] = {
+                "slug": slug,
+                "away_team": away,
+                "home_team": home,
+                "game_id": weather_game.get("game_id"),
+                "game_date": normalize_text(weather_game.get("game_date") or weather_payload.get("slate_date_et") or today_et().isoformat()),
+                "env": {},
+                "weather": weather_game,
+                "last_updated": last_updated,
+            }
+
+    active_matchups = current_mlb_active_matchups()
+    if active_matchups is not None:
+        catalog = {
+            slug: entry
+            for slug, entry in catalog.items()
+            if _mlb_game_matchup_key(entry["away_team"], entry["home_team"]) in active_matchups
+        }
+    return {"games": list(catalog.values()), "slugs": catalog, "last_updated": last_updated}
+
+
+def find_mlb_game_by_slug(slug):
+    target = normalize_text(slug).lower()
+    catalog = build_mlb_game_catalog()
+    return catalog.get("slugs", {}).get(target), catalog
+
+
+def render_mlb_game_matchup_link(away_team, home_team, label=None, active_slugs=None):
+    text = label or f"{normalize_text(away_team)} vs {normalize_text(home_team)}"
+    slug = mlb_game_page_slug(away_team, home_team)
+    if active_slugs is None:
+        active_slugs = build_mlb_game_catalog().get("slugs", {})
+    if slug and slug in active_slugs:
+        return f"<a class='mlb-game-link' href='/mlb/game/{slug}'>{escape(text)}</a>"
+    return escape(text)
+
+
+def _mlb_hitters_for_game(away_team, home_team):
+    source = _mlb_public_facing_hitter_source()
+    if not source:
+        return []
+    df = read_csv_df(source)
+    if df.empty:
+        return []
+    team_col = find_first_column(df, ["team", "Team", "TEAM"])
+    opp_col = find_first_column(df, ["opponent", "Opponent", "OPPONENT"])
+    hitter_col = find_first_column(df, ["hitter_name", "Hitter", "player_name", "PLAYER_NAME"])
+    if not team_col or not opp_col or not hitter_col:
+        return []
+    target_key = _mlb_game_matchup_key(away_team, home_team)
+    rows = []
+    for _, raw in df.iterrows():
+        team = normalize_text(raw.get(team_col))
+        opponent = normalize_text(raw.get(opp_col))
+        if _mlb_game_matchup_key(team, opponent) != target_key:
+            continue
+        rows.append({
+            "player": normalize_text(raw.get(hitter_col)),
+            "team": team,
+            "hit_prob": safe_float(raw.get("hit_prob") or raw.get("Hit Probability")),
+            "hr_prob": safe_float(raw.get("hr_prob") or raw.get("Home Run Probability")),
+            "tb2_prob": safe_float(raw.get("tb2_prob") or raw.get("Total Bases >= 2") or raw.get("blended_tb2_prob_v2")),
+            "rbi_prob": safe_float(raw.get("rbi_prob") or raw.get("RBI Probability")),
+        })
+    return rows
+
+
+def _mlb_fantasy_lookup(away_team, home_team):
+    df = read_csv_df(MLB_FILES["fantasy"])
+    if df.empty:
+        return {}
+    lookup = {}
+    target_key = _mlb_game_matchup_key(away_team, home_team)
+    for _, raw in df.iterrows():
+        team = normalize_text(raw.get("team"))
+        opponent = normalize_text(raw.get("opponent"))
+        if _mlb_game_matchup_key(team, opponent) != target_key:
+            continue
+        player = normalize_text(raw.get("player_name"))
+        if player:
+            lookup[player.lower()] = safe_float(raw.get("fantasy_points"))
+    return lookup
+
+
+def _mlb_game_pitchers(game_entry, attack_payload=None):
+    env = game_entry.get("env") or {}
+    notes = list(env.get("pitcher_attack_notes") or [])
+    if notes:
+        return notes
+    attack_payload = attack_payload if attack_payload is not None else _load_mlb_intel_json(MLB_INTEL_ATTACK_FILE)
+    away = game_entry.get("away_team")
+    home = game_entry.get("home_team")
+    game_id = str(env.get("game_id") or "")
+    pitchers = []
+    for row in (attack_payload or {}).get("attack_pitchers") or []:
+        if game_id and str(row.get("game_id")) != game_id:
+            continue
+        team = normalize_text(row.get("team"))
+        opponent = normalize_text(row.get("opponent"))
+        if team not in {away, home} or opponent not in {away, home}:
+            continue
+        pitchers.append({
+            "pitcher_name": normalize_text(row.get("pitcher_name")),
+            "team": team,
+            "opponent": opponent,
+            "projected_strikeouts": safe_float(row.get("projected_strikeouts")),
+            "projected_ip": safe_float(row.get("projected_ip")),
+            "confidence": normalize_text(row.get("attack_label") or row.get("game_environment_label")),
+        })
+    if pitchers:
+        return pitchers[:2]
+    df = read_csv_df(MLB_FILES["pitcher_predictions"])
+    if df.empty:
+        df = read_csv_df(MLB_FILES["pitchers"])
+    if df.empty:
+        return []
+    pitcher_col = find_first_column(df, ["pitcher_name", "Pitcher", "player_name"])
+    team_col = find_first_column(df, ["team", "Team"])
+    opp_col = find_first_column(df, ["opponent", "Opponent"])
+    if not pitcher_col:
+        return []
+    fallback = []
+    for _, raw in df.iterrows():
+        team = normalize_text(raw.get(team_col)) if team_col else ""
+        opponent = normalize_text(raw.get(opp_col)) if opp_col else ""
+        if team not in {away, home} or opponent not in {away, home}:
+            continue
+        fallback.append({
+            "pitcher_name": normalize_text(raw.get(pitcher_col)),
+            "team": team,
+            "opponent": opponent,
+            "projected_strikeouts": safe_float(raw.get("projected_strikeouts") or raw.get("Model_Projected_Strikeouts")),
+            "projected_ip": safe_float(raw.get("projected_ip") or raw.get("Projected_IP")),
+            "confidence": normalize_text(raw.get("recommendation_confidence") or raw.get("confidence")),
+        })
+    return fallback[:2]
+
+
+def _mlb_game_top_hr_hitters(game_entry):
+    env = game_entry.get("env") or {}
+    top = list(env.get("top_hitters") or [])
+    if top:
+        rows = []
+        for row in top:
+            rows.append({
+                "player": normalize_text(row.get("hitter_name") or row.get("player")),
+                "team": normalize_text(row.get("team")),
+                "hr_prob": safe_float(row.get("hr_prob")),
+            })
+        return sorted(rows, key=lambda row: safe_float(row.get("hr_prob"), 0) or 0, reverse=True)[:8]
+    hitters = _mlb_hitters_for_game(game_entry.get("away_team"), game_entry.get("home_team"))
+    return sorted(hitters, key=lambda row: safe_float(row.get("hr_prob"), 0) or 0, reverse=True)[:8]
+
+
+def _mlb_game_top_hitters(game_entry):
+    env = game_entry.get("env") or {}
+    top = list(env.get("top_hitters") or [])
+    fantasy_lookup = _mlb_fantasy_lookup(game_entry.get("away_team"), game_entry.get("home_team"))
+    if top:
+        rows = []
+        for row in top:
+            player = normalize_text(row.get("hitter_name") or row.get("player"))
+            rows.append({
+                "player": player,
+                "team": normalize_text(row.get("team")),
+                "hit_prob": safe_float(row.get("hit_prob")),
+                "tb2_prob": safe_float(row.get("tb2_prob")),
+                "rbi_prob": safe_float(row.get("rbi_prob")),
+                "fantasy_points": fantasy_lookup.get(player.lower()),
+            })
+        return rows[:10]
+    hitters = _mlb_hitters_for_game(game_entry.get("away_team"), game_entry.get("home_team"))
+    for row in hitters:
+        row["fantasy_points"] = fantasy_lookup.get(normalize_text(row.get("player")).lower())
+    return sorted(hitters, key=lambda row: safe_float(row.get("hit_prob"), 0) or 0, reverse=True)[:10]
+
+
+def _mlb_game_weather_fields(game_entry):
+    weather = game_entry.get("weather") or {}
+    if isinstance(weather, dict) and weather.get("weather_summary"):
+        weather = weather.get("weather_summary")
+    label = normalize_text(weather.get("label"))
+    fields = []
+    if normalize_text(weather.get("temperature_f")):
+        fields.append(("Temperature", f"{metric_label(weather.get('temperature_f'), 0)}°F", "Weather"))
+    wind_bits = []
+    if weather.get("wind_speed_mph") is not None:
+        wind_bits.append(f"{metric_label(weather.get('wind_speed_mph'), 0)} mph")
+    if normalize_text(weather.get("wind_direction")):
+        wind_bits.append(normalize_text(weather.get("wind_direction")))
+    if wind_bits:
+        fields.append(("Wind", " ".join(wind_bits), "Weather"))
+    if normalize_text(weather.get("roof_type")):
+        fields.append(("Roof", normalize_text(weather.get("roof_type")).title(), "Venue"))
+    if label:
+        if "run" in label.lower():
+            fields.append(("Run Boost", label, "Impact"))
+        elif "power" in label.lower():
+            fields.append(("Power Boost", label, "Impact"))
+        else:
+            fields.append(("Weather Label", label, "Impact"))
+    if normalize_text(weather.get("summary")):
+        fields.append(("Summary", normalize_text(weather.get("summary")), "Weather"))
+    return fields
+
+
+def render_mlb_game_table(title, caption, rows, columns):
+    if not rows:
+        return ""
+    header = "".join(f"<th>{escape(label)}</th>" for label, _, _ in columns)
+    body_rows = []
+    for row in rows:
+        cells = []
+        for label, key, fmt in columns:
+            if key == "player":
+                rendered = render_mlb_player_name_html(row.get(key))
+            elif key == "pitcher_name":
+                rendered = render_mlb_player_name_html(row.get(key))
+            elif fmt == "tier":
+                rendered = escape(seo_tiers.probability_tier(row.get(key)) or "—")
+            elif fmt == "pct":
+                rendered = escape(pct_label(row.get(key)))
+            elif fmt == "num":
+                rendered = escape(metric_label(row.get(key)))
+            else:
+                rendered = escape(normalize_text(row.get(key), "—"))
+            cells.append(f"<td data-label='{escape(label)}'>{rendered}</td>")
+        body_rows.append("<tr>" + "".join(cells) + "</tr>")
+    return (
+        "<section class='panel'>"
+        f"<div class='panel-head'><div><div class='eyebrow'>MLB Game</div><h2>{escape(title)}</h2></div>"
+        f"<p class='muted'>{escape(caption)}</p></div>"
+        "<div class='table-shell'><table><thead><tr>"
+        f"{header}"
+        "</tr></thead><tbody>"
+        f"{''.join(body_rows)}"
+        "</tbody></table></div></section>"
+    )
+
+
+def build_mlb_game_not_found_page(slug):
+    requested = normalize_text(slug).replace("-", " ").replace(" vs ", " vs ").title()
+    body = (
+        render_empty_state(
+            "Game Not Found",
+            "We couldn't find that MLB matchup.",
+            "This game is not on today's active MLB slate. Browse the live projection boards for current matchups.",
+        )
+        + render_page_actions(
+            [
+                ("View MLB Projections", "/mlb/projections", "primary"),
+                ("MLB Weather Board", "/mlb/weather", "secondary"),
+            ]
+        )
+    )
+    html = render_layout(
+        requested or "MLB Game",
+        "This MLB game page is not currently available.",
+        body,
+        "/mlb/projections",
+        render_mlb_nav("/mlb/projections"),
+        hero_kicker="MLB Game Preview",
+        meta_description="This MLB game page is not currently available. Browse EdgeRanked AI's live MLB projection boards.",
+        document_title="MLB Game Not Found | EdgeRanked AI",
+    )
+    return html, 404
+
+
+def build_mlb_game_page(slug):
+    game_entry, catalog = find_mlb_game_by_slug(slug)
+    if not game_entry:
+        return build_mlb_game_not_found_page(slug)
+
+    away = normalize_text(game_entry.get("away_team"))
+    home = normalize_text(game_entry.get("home_team"))
+    env = game_entry.get("env") or {}
+    game_date = normalize_text(game_entry.get("game_date"))
+    last_updated = game_entry.get("last_updated") or catalog.get("last_updated")
+    updated_label = format_timestamp(last_updated) if last_updated else ""
+
+    away_runs = safe_float(env.get("avg_away_runs"))
+    home_runs = safe_float(env.get("avg_home_runs"))
+    away_win = safe_float(env.get("away_win_pct"))
+    home_win = safe_float(env.get("home_win_pct"))
+    projected_total = safe_float(env.get("projected_total"))
+    favorite = away if away_win is not None and home_win is not None and away_win >= home_win else home if away_win is not None and home_win is not None else ""
+
+    summary_cards = [
+        ("Away Team", away, "Road club"),
+        ("Home Team", home, "Home club"),
+    ]
+    if game_date:
+        summary_cards.append(("Game Date", game_date, "Scheduled slate date"))
+    away_outlook = seo_tiers.team_outlook_tier(away_win)
+    home_outlook = seo_tiers.team_outlook_tier(home_win)
+    if away_outlook:
+        summary_cards.append((f"{away} Outlook", away_outlook, "Team outlook tier"))
+    if home_outlook:
+        summary_cards.append((f"{home} Outlook", home_outlook, "Team outlook tier"))
+    if favorite:
+        summary_cards.append(("Favorite", favorite, "Higher modeled team outlook"))
+
+    body_parts = [
+        "<section class='panel'>"
+        "<div class='panel-head'><div><div class='eyebrow'>Matchup</div>"
+        f"<h2>{escape(away)} vs {escape(home)}</h2></div>"
+        f"<p class='muted'>{escape(normalize_text(env.get('environment_label')) or 'Model game view')}</p></div>"
+        + render_stat_cards(summary_cards)
+        + "</section>"
+    ]
+
+    sim_cards = []
+    for label, key in [
+        ("One-Run Game", "one_run_game_pct"),
+        ("Blowout Game", "blowout_game_pct"),
+        ("High Scoring Game", "high_scoring_game_pct"),
+        ("Low Scoring Game", "low_scoring_game_pct"),
+    ]:
+        tier = seo_tiers.probability_tier(env.get(key)) if env.get(key) is not None else None
+        if tier:
+            sim_cards.append((f"{label} Outlook", tier, "Simulation outlook tier"))
+    if sim_cards:
+        body_parts.append(
+            "<section class='panel'>"
+            "<div class='panel-head'><div><div class='eyebrow'>Simulation Outlook</div>"
+            "<h2>Game simulation summary</h2></div>"
+            "<p class='muted'>Public outlook tiers from the MLB game simulation.</p></div>"
+            + render_stat_cards(sim_cards)
+            + "</section>"
+        )
+
+    pitchers = _mlb_game_pitchers(game_entry)
+    if pitchers:
+        body_parts.append(
+            render_mlb_game_table(
+                "Starting Pitchers",
+                "Confirmed starters for this matchup.",
+                pitchers,
+                [
+                    ("Pitcher", "pitcher_name", "text"),
+                    ("Team", "team", "text"),
+                    ("Confidence", "confidence", "text"),
+                ],
+            )
+        )
+
+    hr_rows = _mlb_game_top_hr_hitters(game_entry)
+    if hr_rows:
+        body_parts.append(
+            render_mlb_game_table(
+                "Top Home Run Threats",
+                "Leading home-run outlooks in this matchup.",
+                hr_rows,
+                [
+                    ("Player", "player", "text"),
+                    ("Team", "team", "text"),
+                    ("HR Outlook", "hr_prob", "tier"),
+                ],
+            )
+        )
+
+    hitter_rows = _mlb_game_top_hitters(game_entry)
+    if hitter_rows:
+        body_parts.append(
+            render_mlb_game_table(
+                "Top Hitters",
+                "Leading hitter outlooks in this matchup.",
+                hitter_rows,
+                [
+                    ("Player", "player", "text"),
+                    ("Team", "team", "text"),
+                    ("Hit Outlook", "hit_prob", "tier"),
+                    ("2+ Bases Outlook", "tb2_prob", "tier"),
+                    ("RBI Outlook", "rbi_prob", "tier"),
+                ],
+            )
+        )
+
+    weather_fields = _mlb_game_weather_fields(game_entry)
+    if weather_fields:
+        body_parts.append(
+            "<section class='panel'>"
+            "<div class='panel-head'><div><div class='eyebrow'>Weather</div><h2>Weather impacts</h2></div>"
+            "<p class='muted'>Published weather context for this matchup.</p></div>"
+            + render_stat_cards(weather_fields)
+            + "</section>"
+        )
+
+    body_parts.append(seo_tiers.render_premium_locked_section(seo_tiers.PREMIUM_GAME_ITEMS))
+    body_parts.append(
+        render_page_actions(
+            [
+                ("All MLB Projections", "/mlb/projections", "primary"),
+                ("MLB Weather Board", "/mlb/weather", "secondary"),
+                ("MLB Best Bets", "/mlb/best-bets", "secondary"),
+            ]
+        )
+    )
+
+    body = "".join(part for part in body_parts if part)
+    subtitle_bits = [bit for bit in [game_date, updated_label and f"Updated {updated_label}"] if bit]
+    subtitle = " · ".join(subtitle_bits) if subtitle_bits else "MLB game preview"
+
+    meta_desc = (
+        f"View simulations, win probabilities, projected runs, weather impacts, starting pitcher projections, "
+        f"and top player projections for {away} vs {home} from EdgeRanked AI."
+    )
+    document_title = f"{away} vs {home} Prediction, Simulation & Projections | EdgeRanked AI"
+
+    return render_layout(
+        f"{away} vs {home}",
+        subtitle,
+        body,
+        "/mlb/projections",
+        render_mlb_nav("/mlb/projections"),
+        hero_kicker="MLB Game Preview",
+        meta_description=meta_desc,
+        document_title=document_title,
+    )
+
+
+def build_mlb_games_sitemap():
+    catalog = build_mlb_game_catalog()
+    last_updated = catalog.get("last_updated")
+    lastmod = last_updated.date().isoformat() if isinstance(last_updated, datetime) else date.today().isoformat()
+    urls = []
+    for entry in catalog.get("games", []):
+        slug = entry.get("slug")
+        if not slug:
+            continue
+        urls.append(
+            "  <url>"
+            f"<loc>{MLB_PLAYER_SITE_URL}/mlb/game/{slug}</loc>"
+            f"<lastmod>{lastmod}</lastmod>"
+            "<changefreq>daily</changefreq>"
+            "<priority>0.6</priority>"
+            "</url>"
+        )
+    xml = (
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
+        + "\n".join(urls)
+        + "\n</urlset>\n"
+    )
+    return Response(xml, mimetype="application/xml")
+
+
+def find_nba_player_profile(slug):
+    payload = build_nba_player_projection_profiles()
+    target = slugify_player_name(slug)
+    if not target:
+        return None, payload
+    for record in payload.get("records", []):
+        if slugify_player_name(record.get("player")) == target:
+            return record, payload
+    return None, payload
+
+
+def render_nba_player_name_html(player):
+    name = normalize_text(player)
+    slug = slugify_player_name(name)
+    if name and slug:
+        return f"<a class='nba-player-link' href='/nba/player/{slug}'>{escape(name)}</a>"
+    return escape(name or "Player")
+
+
+def render_nba_player_stat_section(title, caption, fields, distributions=None):
+    if not fields:
+        return ""
+    cards = seo_tiers.public_cards(fields, distributions)
+    if not cards:
+        return ""
+    return (
+        "<section class='panel'>"
+        f"<div class='panel-head'><div><div class='eyebrow'>NBA</div><h2>{escape(title)}</h2></div>"
+        f"<p class='muted'>{escape(caption)}</p></div>"
+        + render_stat_cards(cards)
+        + "</section>"
+    )
+
+
+def build_nba_player_not_found_page(slug):
+    requested = normalize_text(slug).replace("-", " ").title()
+    body = (
+        render_empty_state(
+            "Player Not Found",
+            "We couldn't find that NBA player.",
+            "This player may not be on today's NBA slate. Browse the live projection boards for every active player.",
+        )
+        + render_page_actions(
+            [
+                ("View NBA Projections", "/nba/projections", "primary"),
+                ("NBA Top Plays", "/nba/best-bets", "secondary"),
+            ]
+        )
+    )
+    html = render_layout(
+        requested or "NBA Player",
+        "This NBA player profile is not currently available.",
+        body,
+        "/nba/projections",
+        render_subnav(NBA_NAV_ITEMS, "/nba/projections"),
+        hero_kicker="NBA Player Profile",
+        meta_description="This NBA player profile is not currently available. Browse EdgeRanked AI's live NBA projection boards.",
+        document_title="NBA Player Not Found | EdgeRanked AI",
+    )
+    return html, 404
+
+
+def build_nba_player_page(slug):
+    profile, payload = find_nba_player_profile(slug)
+    if not profile:
+        return build_nba_player_not_found_page(slug)
+
+    player = normalize_text(profile.get("player"))
+    team = normalize_text(profile.get("team")).upper()
+    opponent = normalize_text(profile.get("opponent"))
+    matchup = normalize_text(profile.get("matchup")) or "Matchup pending"
+    confidence = normalize_text(profile.get("confidence")) or "Model View"
+    last_updated = payload.get("last_updated")
+    updated_label = format_timestamp(last_updated) if last_updated else ""
+
+    summary_cards = []
+    if team:
+        summary_cards.append(("Team", team, "Current club"))
+    if opponent:
+        summary_cards.append(("Opponent", opponent, "Today's matchup"))
+    summary_cards.append(("Confidence", confidence, "Model read"))
+
+    body_parts = [
+        "<section class='panel'>"
+        "<div class='panel-head'><div><div class='eyebrow'>Matchup</div>"
+        f"<h2>{escape(matchup)}</h2></div>"
+        f"<p class='muted'>{escape(render_mlb_confidence_badge_caption(confidence))}</p></div>"
+        + render_stat_cards(summary_cards)
+        + "</section>"
+    ]
+    nba_distributions = seo_tiers.value_distributions(payload.get("records", []), ("stats",))
+    body_parts.append(
+        render_nba_player_stat_section(
+            "Core Outlook",
+            "Public outlook tiers for today's projected stat output.",
+            profile.get("stats", []),
+            nba_distributions,
+        )
+    )
+    body_parts.append(
+        render_nba_player_stat_section(
+            "Prop Outlook",
+            "Public outlook tiers for each prop market.",
+            profile.get("probabilities", []),
+        )
+    )
+    body_parts.append(
+        render_nba_player_stat_section(
+            "Model Confidence",
+            "Confidence and matchup context from the projection file.",
+            profile.get("confidence_fields", []),
+        )
+    )
+    body_parts.append(seo_tiers.render_premium_locked_section(seo_tiers.PREMIUM_PLAYER_ITEMS))
+    body_parts.append(
+        render_page_actions(
+            [
+                ("All NBA Projections", "/nba/projections", "primary"),
+                ("NBA Top Plays", "/nba/best-bets", "secondary"),
+            ]
+        )
+    )
+
+    body = "".join(part for part in body_parts if part)
+
+    subtitle_bits = [bit for bit in [team and f"{team}", opponent and f"vs {opponent}"] if bit]
+    subtitle = " · ".join(subtitle_bits) if subtitle_bits else "NBA player profile"
+    if updated_label:
+        subtitle = f"{subtitle} · Updated {updated_label}"
+
+    meta_desc = f"View today's {player} NBA projections, matchup data, and model confidence from EdgeRanked AI."
+    document_title = f"{player} NBA Projection Today | EdgeRanked AI"
+
+    return render_layout(
+        player,
+        subtitle,
+        body,
+        "/nba/projections",
+        render_subnav(NBA_NAV_ITEMS, "/nba/projections"),
+        hero_kicker="NBA Player Profile",
+        meta_description=meta_desc,
+        document_title=document_title,
+    )
+
+
+def build_nba_players_sitemap():
+    payload = build_nba_player_projection_profiles()
+    last_updated = payload.get("last_updated")
+    lastmod = last_updated.date().isoformat() if isinstance(last_updated, datetime) else date.today().isoformat()
+    seen = set()
+    urls = []
+    for record in payload.get("records", []):
+        slug = slugify_player_name(record.get("player"))
+        if not slug or slug in seen:
+            continue
+        seen.add(slug)
+        urls.append(
+            "  <url>"
+            f"<loc>{MLB_PLAYER_SITE_URL}/nba/player/{slug}</loc>"
+            f"<lastmod>{lastmod}</lastmod>"
+            "<changefreq>daily</changefreq>"
+            "<priority>0.6</priority>"
+            "</url>"
+        )
+    xml = (
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
+        + "\n".join(urls)
+        + "\n</urlset>\n"
+    )
+    return Response(xml, mimetype="application/xml")
 
 
 def mlb_system_rows():
@@ -2844,6 +4663,327 @@ def build_pga_player_projection_profiles():
     }
 
 
+def load_pga_simulation_source_df():
+    return read_csv_df(PGA_RESULTS_PATH)
+
+
+def _pga_probability_value(raw, *keys):
+    for key in keys:
+        if key in raw.index:
+            value = safe_float(raw.get(key))
+            if value is not None:
+                return value
+    return None
+
+
+def _pga_golfer_profile_from_row(raw, fallback_tournament=""):
+    golfer = normalize_text(raw.get("golfer_name"))
+    if not golfer:
+        return None
+    tournament = normalize_text(raw.get("tournament_name"), fallback_tournament or "Current tournament")
+    confidence = normalize_text(raw.get("uncertainty_label"), "Model View").title()
+    profile = {
+        "player": golfer,
+        "golfer_name": golfer,
+        "team": "",
+        "opponent": "",
+        "tournament": tournament,
+        "matchup": tournament,
+        "confidence": confidence,
+        "stats": [],
+        "probabilities": [],
+        "confidence_fields": [],
+    }
+    stat_fields = [
+        ("Projected Finish", _pga_probability_value(raw, "expected_finish_position"), "value"),
+        ("Projected Total Score", _pga_probability_value(raw, "expected_total_score", "avg_tournament_score"), "value"),
+        ("Average Round Score", _pga_probability_value(raw, "avg_round_score", "round_score_mean"), "value"),
+        ("Average Birdies", _pga_probability_value(raw, "avg_birdies"), "value"),
+    ]
+    probability_fields = [
+        ("Win Probability", _pga_probability_value(raw, "win_perc", "win_prob"), "probability"),
+        ("Top 5 Probability", _pga_probability_value(raw, "top5_perc", "top5_prob"), "probability"),
+        ("Top 10 Probability", _pga_probability_value(raw, "top10_perc", "top10_prob"), "probability"),
+        ("Top 20 Probability", _pga_probability_value(raw, "top20_perc", "top20_prob"), "probability"),
+        ("Made Cut Probability", _pga_probability_value(raw, "made_cut_perc", "make_cut_prob"), "probability"),
+    ]
+    for label, value, kind in stat_fields:
+        append_profile_field(profile["stats"], label, value, kind, label)
+    for label, value, kind in probability_fields:
+        append_profile_field(profile["probabilities"], label, value, kind, label)
+    if confidence:
+        append_profile_field(profile["confidence_fields"], "Confidence Tier", confidence, "value", "uncertainty_label")
+    return profile
+
+
+def _collect_pga_golfer_names_from_props():
+    names = {}
+    if not PGA_PROCESSED_ODDS_DIR.exists():
+        return names
+    for path in sorted(PGA_PROCESSED_ODDS_DIR.glob("pga_props_*.json")):
+        payload = read_json(path)
+        prop_bets = payload.get("prop_bets", []) if isinstance(payload, dict) else []
+        for item in prop_bets:
+            golfer = normalize_text(item.get("golfer_name"))
+            slug = slugify_player_name(golfer)
+            if golfer and slug:
+                names[slug] = golfer
+    return names
+
+
+def _collect_pga_golfer_names_from_best_bets():
+    names = {}
+    payload = read_json(PGA_PUBLISHED_BEST_BETS_PATH)
+    items = payload if isinstance(payload, list) else []
+    for item in items:
+        golfer = normalize_text(item.get("golfer_name"))
+        slug = slugify_player_name(golfer)
+        if golfer and slug:
+            names[slug] = golfer
+    return names
+
+
+def build_pga_golfer_registry():
+    registry = {}
+    source_paths = [PGA_RESULTS_PATH, PGA_PUBLISHED_BEST_BETS_PATH]
+    metadata = read_json(PGA_TOURNAMENT_METADATA_PATH)
+    fallback_tournament = normalize_text(metadata.get("tournament_name"))
+
+    df = load_pga_simulation_source_df()
+    if not df.empty:
+        for _, raw in df.iterrows():
+            golfer = normalize_text(raw.get("golfer_name"))
+            slug = slugify_player_name(golfer)
+            if not slug:
+                continue
+            registry[slug] = {
+                "golfer": golfer,
+                "tournament": normalize_text(raw.get("tournament_name"), fallback_tournament),
+                "has_active_projection": True,
+            }
+
+    for slug, golfer in {**_collect_pga_golfer_names_from_props(), **_collect_pga_golfer_names_from_best_bets()}.items():
+        registry.setdefault(slug, {
+            "golfer": golfer,
+            "tournament": "",
+            "has_active_projection": False,
+        })
+
+    entries = sorted(registry.values(), key=lambda item: normalize_text(item.get("golfer")).lower())
+    last_updated = max(
+        filter(None, [file_timestamp(path) for path in source_paths] + [file_timestamp(PGA_TOURNAMENT_METADATA_PATH)]),
+        default=None,
+    )
+    return {"entries": entries, "slugs": registry, "last_updated": last_updated}
+
+
+def find_pga_golfer_profile(slug):
+    target = slugify_player_name(slug)
+    metadata = read_json(PGA_TOURNAMENT_METADATA_PATH)
+    fallback_tournament = normalize_text(metadata.get("tournament_name"))
+    source_path = PGA_RESULTS_PATH
+    last_updated = file_timestamp(source_path)
+
+    if target:
+        df = load_pga_simulation_source_df()
+        if not df.empty:
+            for _, raw in df.iterrows():
+                if slugify_player_name(raw.get("golfer_name")) == target:
+                    profile = _pga_golfer_profile_from_row(raw, fallback_tournament)
+                    if profile:
+                        return profile, {"last_updated": last_updated, "source_label": public_data_source_label(source_path)}, True
+
+    registry_payload = build_pga_golfer_registry()
+    entry = registry_payload.get("slugs", {}).get(target) if target else None
+    if entry:
+        profile = {
+            "player": entry.get("golfer"),
+            "golfer_name": entry.get("golfer"),
+            "team": "",
+            "opponent": "",
+            "tournament": entry.get("tournament", ""),
+            "matchup": entry.get("tournament", ""),
+            "confidence": "",
+            "stats": [],
+            "probabilities": [],
+            "confidence_fields": [],
+        }
+        return profile, {"last_updated": registry_payload.get("last_updated")}, False
+    return None, {"last_updated": last_updated}, False
+
+
+def render_pga_golfer_name_html(golfer):
+    name = normalize_text(golfer)
+    slug = slugify_player_name(name)
+    if name and slug:
+        return f"<a class='pga-golfer-link' href='/pga/golfer/{slug}'>{escape(name)}</a>"
+    return escape(name or "Golfer")
+
+
+def render_pga_golfer_stat_section(title, caption, fields, distributions=None):
+    if not fields:
+        return ""
+    cards = seo_tiers.public_cards(fields, distributions)
+    if not cards:
+        return ""
+    return (
+        "<section class='panel'>"
+        f"<div class='panel-head'><div><div class='eyebrow'>PGA</div><h2>{escape(title)}</h2></div>"
+        f"<p class='muted'>{escape(caption)}</p></div>"
+        + render_stat_cards(cards)
+        + "</section>"
+    )
+
+
+def build_pga_golfer_not_found_page(slug):
+    requested = normalize_text(slug).replace("-", " ").title()
+    body = (
+        render_empty_state(
+            "Golfer Not Found",
+            "We couldn't find that PGA golfer.",
+            "This golfer is not currently tracked in EdgeRanked PGA production outputs.",
+        )
+        + render_page_actions(
+            [
+                ("View PGA Leaderboard", "/pga/leaderboard", "primary"),
+                ("PGA Best Bets", "/pga/best-bets", "secondary"),
+            ]
+        )
+    )
+    html = render_layout(
+        requested or "PGA Golfer",
+        "This PGA golfer profile is not currently available.",
+        body,
+        "/pga/leaderboard",
+        render_subnav(PGA_NAV_ITEMS, "/pga/leaderboard"),
+        hero_kicker="PGA Golfer Profile",
+        meta_description="This PGA golfer profile is not currently available. Browse EdgeRanked AI's PGA tournament boards.",
+        document_title="PGA Golfer Not Found | EdgeRanked AI",
+    )
+    return html, 404
+
+
+def build_pga_golfer_page(slug):
+    profile, payload, has_active_projection = find_pga_golfer_profile(slug)
+    if not profile:
+        return build_pga_golfer_not_found_page(slug)
+
+    golfer = normalize_text(profile.get("player") or profile.get("golfer_name"))
+    tournament = normalize_text(profile.get("tournament") or profile.get("matchup"))
+    confidence = normalize_text(profile.get("confidence")) or "Model View"
+    last_updated = payload.get("last_updated")
+    updated_label = format_timestamp(last_updated) if last_updated else ""
+
+    summary_cards = []
+    if tournament and has_active_projection:
+        summary_cards.append(("Tournament", tournament, "Current event"))
+    if has_active_projection:
+        summary_cards.append(("Confidence Tier", confidence, "Model read"))
+
+    body_parts = []
+    if has_active_projection and tournament:
+        body_parts.append(
+            "<section class='panel'>"
+            "<div class='panel-head'><div><div class='eyebrow'>Tournament</div>"
+            f"<h2>{escape(tournament)}</h2></div>"
+            f"<p class='muted'>Model confidence tier: {escape(confidence)}</p></div>"
+            + render_stat_cards(summary_cards)
+            + "</section>"
+        )
+    elif golfer:
+        body_parts.append(
+            "<section class='panel'>"
+            "<div class='panel-head'><div><div class='eyebrow'>Golfer Profile</div>"
+            f"<h2>{escape(golfer)}</h2></div>"
+            "<p class='muted'>Known PGA golfer tracked in EdgeRanked production outputs.</p></div>"
+            + render_stat_cards(summary_cards)
+            + "</section>"
+        )
+    if not has_active_projection:
+        body_parts.append(
+            render_empty_state(
+                "No Active Projection",
+                "No active tournament projection available.",
+                "This golfer is tracked in published PGA outputs, but is not in the current tournament simulation field.",
+            )
+        )
+    body_parts.append(
+        render_pga_golfer_stat_section(
+            "Finish Outlook",
+            "Public outlook tiers for win, placement, and made-cut outcomes.",
+            profile.get("probabilities", []),
+        )
+    )
+    body_parts.append(
+        render_pga_golfer_stat_section(
+            "Model Confidence",
+            "Confidence context from the published simulation file.",
+            profile.get("confidence_fields", []),
+        )
+    )
+    if has_active_projection:
+        body_parts.append(seo_tiers.render_premium_locked_section(seo_tiers.PREMIUM_PGA_ITEMS))
+    body_parts.append(
+        render_page_actions(
+            [
+                ("PGA Leaderboard", "/pga/leaderboard", "primary"),
+                ("PGA Best Bets", "/pga/best-bets", "secondary"),
+            ]
+        )
+    )
+
+    body = "".join(part for part in body_parts if part)
+    subtitle_bits = [bit for bit in [tournament if has_active_projection else "", has_active_projection and confidence] if bit]
+    subtitle = " · ".join(subtitle_bits) if subtitle_bits else "PGA golfer profile"
+    if updated_label and has_active_projection:
+        subtitle = f"{subtitle} · Updated {updated_label}"
+
+    meta_desc = (
+        f"View today's {golfer} PGA projections, tournament outlook, probabilities, "
+        "and model confidence from EdgeRanked AI."
+    )
+    document_title = f"{golfer} PGA Projection Today | EdgeRanked AI"
+
+    return render_layout(
+        golfer,
+        subtitle,
+        body,
+        "/pga/leaderboard",
+        render_subnav(PGA_NAV_ITEMS, "/pga/leaderboard"),
+        hero_kicker="PGA Golfer Profile",
+        meta_description=meta_desc,
+        document_title=document_title,
+    )
+
+
+def build_pga_golfers_sitemap():
+    registry_payload = build_pga_golfer_registry()
+    last_updated = registry_payload.get("last_updated")
+    lastmod = last_updated.date().isoformat() if isinstance(last_updated, datetime) else date.today().isoformat()
+    seen = set()
+    urls = []
+    for entry in registry_payload.get("entries", []):
+        slug = slugify_player_name(entry.get("golfer"))
+        if not slug or slug in seen:
+            continue
+        seen.add(slug)
+        urls.append(
+            "  <url>"
+            f"<loc>{MLB_PLAYER_SITE_URL}/pga/golfer/{slug}</loc>"
+            f"<lastmod>{lastmod}</lastmod>"
+            "<changefreq>daily</changefreq>"
+            "<priority>0.6</priority>"
+            "</url>"
+        )
+    xml = (
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
+        + "\n".join(urls)
+        + "\n</urlset>\n"
+    )
+    return Response(xml, mimetype="application/xml")
+
+
 def load_pga_summary(round_number=None):
     metadata = read_json(PGA_TOURNAMENT_METADATA_PATH)
     config = read_json(PGA_CONFIG_PATH)
@@ -2884,6 +5024,14 @@ def render_root_nav(active_path):
     return "<div class='top-links'>" + "".join(items) + "</div>"
 
 
+def render_mobile_nav(active_path):
+    items = []
+    for label, href in ROOT_NAV_ITEMS:
+        css = "mobile-link active" if href == active_path or (href != "/" and active_path.startswith(href)) else "mobile-link"
+        items.append(f"<a class='{css}' href='{href}'>{escape(label)}</a>")
+    return "<div class='mobile-nav-panel' id='mobile-nav-panel'>" + "".join(items) + "</div>"
+
+
 def render_footer():
     year = now_et().year
     return (
@@ -2891,20 +5039,14 @@ def render_footer():
         "<div class='footer-shell'>"
         "<div class='footer-brand'>"
         "<img class='footer-logo' src='/brand/logo.png' alt='EdgeRanked SportsAI logo'>"
-        "<div><span>EdgeRanked<span class='brand-accent'>AI</span></span><div class='footer-note'>Institutional-grade sports intelligence and probability modeling.</div></div>"
+        "<div><span>EdgeRanked<span class='brand-accent'>AI</span></span><div class='footer-note'>Institutional-grade sports intelligence and probability modeling.</div><div class='footer-note'>Projection-first analytics updated daily across all active sports.</div></div>"
         "</div>"
         "<div class='footer-links'>"
         "<div class='footer-col'>"
-        "<h4>Platform</h4>"
-        "<a href='/nba'>NBA</a>"
-        "<a href='/mlb'>MLB</a>"
-        "<a href='/wnba'>WNBA</a>"
-        "<a href='/pga'>PGA</a>"
-        "<a href='/ufc'>UFC</a>"
-        "</div>"
-        "<div class='footer-col'>"
-        "<h4>Resources</h4>"
+        "<h4>Company</h4>"
         "<a href='/about'>About</a>"
+        "<a href='/pricing'>Pricing</a>"
+        "<a href='mailto:support@edgerankedai.com'>Contact</a>"
         "</div>"
         "<div class='footer-col'>"
         "<h4>Legal</h4>"
@@ -3001,16 +5143,20 @@ def format_cell(value, fmt):
     return escape(normalize_text(value) or "n/a")
 
 
-def render_data_table(title, subtitle, rows, columns, empty_message, empty_detail):
+def render_data_table(title, subtitle, rows, columns, empty_message, empty_detail, link_renderers=None):
     if not rows:
         return render_empty_state(title, empty_message, empty_detail)
 
+    link_renderers = link_renderers or {}
     header = "".join(f"<th>{escape(label)}</th>" for label, _, _ in columns)
     body_rows = []
     for row in rows:
         cells = []
         for label, key, fmt in columns:
-            rendered = format_cell(row.get(key), fmt)
+            if key in link_renderers:
+                rendered = link_renderers[key](row.get(key))
+            else:
+                rendered = format_cell(row.get(key), fmt)
             cells.append(f"<td data-label='{escape(label)}'>{rendered}</td>")
         body_rows.append("<tr>" + "".join(cells) + "</tr>")
 
@@ -3112,8 +5258,14 @@ def render_mlb_projection_table(title, subtitle, rows, scope_id, entity_label="P
         edge = safe_float(row.get("edge"))
         confidence = normalize_text(row.get("confidence")) or "Low"
         lean = normalize_text(row.get("lean"))
+        player_slug = slugify_player_name(player)
+        player_name_html = (
+            f"<a class='mlb-player-link' href='/mlb/player/{player_slug}'>{escape(player)}</a>"
+            if player and player_slug
+            else escape(player or entity_label)
+        )
         cells = [
-            f"<td data-label='{escape(entity_label)}'><strong class='mlb-player-name'>{escape(player or entity_label)}</strong></td>",
+            f"<td data-label='{escape(entity_label)}'><strong class='mlb-player-name'>{player_name_html}</strong></td>",
             f"<td data-label='Team'>{escape(team or '—')}</td>",
             f"<td data-label='Opponent'>{escape(opponent)}</td>",
             f"<td data-label='Stat'>{escape(stat or 'N/A')}</td>",
@@ -3156,6 +5308,84 @@ def render_mlb_projection_table(title, subtitle, rows, scope_id, entity_label="P
         "</tr></thead><tbody>"
         + "".join(body_rows)
         + "</tbody></table></div></section>"
+    )
+
+
+def _mlb_hitter_card_insight(rows):
+    """Derive a single concise, baseball-analytical insight line for a hitter card.
+
+    Presentation-only: reads projections already on `rows`, never recomputes them,
+    never persists, never mutates model output. Returns (label, kind) where kind
+    is a theme key (power|run|contact|speed|caution|floor) used purely for CSS.
+    Returns None if no signal qualifies (caller decides whether to render).
+    """
+    if not rows:
+        return None
+    by_stat = {}
+    for r in rows:
+        stat = normalize_text(r.get("stat"))
+        proj = safe_float(r.get("projection"))
+        if not stat or proj is None:
+            continue
+        # Keep the best (largest) projection per stat so multi-row players
+        # get the strongest signal for that category.
+        if stat not in by_stat or proj > by_stat[stat]:
+            by_stat[stat] = proj
+
+    hr = by_stat.get("Home Runs")
+    tb2 = by_stat.get("2+ Bases")
+    hits = by_stat.get("Hits")
+    hits2 = by_stat.get("2+ Hits")
+    rbi = by_stat.get("RBI")
+    sb = by_stat.get("Stolen Bases")
+    k = by_stat.get("Hitter Strikeouts")
+    runs = by_stat.get("Runs")
+    fp = by_stat.get("Fantasy Points")
+
+    # Priority cascade — most distinctive signal wins so each card carries one
+    # analytical descriptor instead of a stack of competing chips.
+    if hr is not None and hr >= 8.0:
+        return ("Strong HR projection", "power")
+    if hr is not None and tb2 is not None and hr >= 5.0 and tb2 >= 35.0:
+        return ("Strong power matchup", "power")
+    if tb2 is not None and tb2 >= 45.0:
+        return ("High total-base projection", "power")
+    if rbi is not None and rbi >= 55.0:
+        return ("Top-tier RBI opportunity", "run")
+    if rbi is not None and hits is not None and rbi >= 45.0 and hits >= 55.0:
+        return ("Strong run-production spot", "run")
+    if hits is not None and k is not None and hits >= 60.0 and k <= 18.0:
+        return ("Elite contact projection", "contact")
+    if hits is not None and hits >= 55.0:
+        return ("High contact projection", "contact")
+    if hits2 is not None and hits2 >= 30.0:
+        return ("Multi-hit upside profile", "contact")
+    if sb is not None and sb >= 18.0:
+        return ("Elevated stolen-base opportunity", "speed")
+    if runs is not None and runs >= 45.0:
+        return ("Strong run-scoring spot", "run")
+    if fp is not None and fp >= 9.0:
+        return ("High fantasy ceiling", "power")
+    if k is not None and k <= 15.0:
+        return ("Low strikeout exposure", "floor")
+    if k is not None and k >= 30.0:
+        return ("Strikeout-prone matchup", "caution")
+    if hits is not None or hr is not None or tb2 is not None or rbi is not None:
+        return ("Stable projection profile", "floor")
+    return None
+
+
+def _mlb_hitter_insight_html(rows):
+    """Render the insight chip HTML for a hitter card; empty string when nothing applies."""
+    insight = _mlb_hitter_card_insight(rows)
+    if not insight:
+        return ""
+    label, kind = insight
+    return (
+        '<div class="card-insight" data-insight-kind="' + escape(kind) + '">'
+        '<span class="insight-dot" aria-hidden="true"></span>'
+        '<span class="insight-text">' + escape(label) + '</span>'
+        '</div>'
     )
 
 
@@ -3217,7 +5447,14 @@ def render_mlb_projection_cards(title, subtitle, rows, scope_id, entity_label="P
 
         meta_chips = ""
         if extra_columns and group["rows"]:
-            first_row = group["rows"][0]
+            first_row = next(
+                (
+                    row
+                    for row in group["rows"]
+                    if any(row.get(key_name) not in (None, "") for _, key_name, _ in extra_columns)
+                ),
+                group["rows"][0],
+            )
             chips = []
             for label, key_name, render_type in extra_columns:
                 raw_value = first_row.get(key_name)
@@ -3236,19 +5473,10 @@ def render_mlb_projection_cards(title, subtitle, rows, scope_id, entity_label="P
             primary_row = group["rows"][0]
             primary_stat = normalize_text(primary_row.get("stat"), default_stat)
             primary_value = normalize_text(primary_row.get("projection_display")) or metric_label(safe_float(primary_row.get("projection")))
-            line_val = safe_float(primary_row.get("line"))
-            edge_val = safe_float(primary_row.get("edge"))
-            support_items = []
-            if line_val is not None:
-                support_items.append(f"Line {metric_label(line_val)}")
-            if edge_val is not None:
-                support_items.append(f"Edge {metric_label(edge_val)}")
-            support_html = f'<div class="primary-support">{escape(" | ".join(support_items))}</div>' if support_items else ""
             primary_html = (
                 '<div class="primary-stat">'
                 f'<span>{escape(primary_stat)}</span>'
                 f'<strong>{escape(primary_value)}</strong>'
-                f'{support_html}'
                 '</div>'
             )
 
@@ -3259,28 +5487,22 @@ def render_mlb_projection_cards(title, subtitle, rows, scope_id, entity_label="P
         for row in rows_for_stat_list:
             stat = normalize_text(row.get("stat"))
             proj = normalize_text(row.get("projection_display")) or metric_label(safe_float(row.get("projection")))
-            line_val = safe_float(row.get("line"))
-            line = metric_label(line_val) if line_val is not None else "—"
-            edge_val = safe_float(row.get("edge"))
-            edge = metric_label(edge_val) if edge_val is not None else "—"
-            lean = normalize_text(row.get("lean")) or "—"
             stat_rows_html.append(
                 f'<div class="stat-row">'
                 f'<span class="stat-name">{escape(stat)}</span>'
                 f'<span class="stat-val">{escape(proj)}</span>'
-                f'<span class="stat-line">{escape(line)}</span>'
-                f'<span class="stat-edge">{escape(edge)}</span>'
-                f'<span class="stat-lean">{escape(lean)}</span>'
                 f'</div>'
             )
+
+        insight_html = _mlb_hitter_insight_html(group["rows"])
 
         cards.append(
             f'<article class="play-card" data-player="{escape(player.lower())}" data-team="{escape(team)}">'
             f'<div class="play-top"><div><div class="play-name">{escape(player or entity_label)}</div>'
-            f'<div class="play-sub">{escape(team or "—")} vs {escape(opponent)}</div></div>'
-            f'{render_mlb_confidence_badge(best_confidence)}</div>'
+            f'<div class="play-sub">{escape(team or "—")} vs {escape(opponent)}</div></div></div>'
             f'{"<div class=\"card-meta\"><span class=\"meta-chip limited-chip\">Limited stat coverage</span></div>" if limited_coverage else ""}'
             f'{meta_chips}'
+            f'{insight_html}'
             f'{primary_html}'
             f'<div class="stat-rows">'
             f'{"".join(stat_rows_html)}'
@@ -3308,13 +5530,30 @@ def render_mlb_projection_cards(title, subtitle, rows, scope_id, entity_label="P
 .primary-stat {{ display: grid; gap: 5px; margin: 10px 0 8px; }}
 .primary-stat span {{ color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }}
 .primary-stat strong {{ color: #fff; font-size: 28px; line-height: 1; letter-spacing: 0; }}
-.primary-support {{ color: var(--muted); font-size: 12px; font-weight: 700; }}
 .stat-rows {{ display: grid; gap: 0px; margin-top: 8px; }}
-.stat-row {{ display: grid; grid-template-columns: 1.4fr 1fr 0.7fr 0.7fr 0.7fr; gap: 8px; align-items: center; padding: 8px 0; border-top: 1px solid rgba(30, 41, 59, 0.6); font-size: 13px; }}
+.stat-row {{ display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 8px 0; border-top: 1px solid rgba(30, 41, 59, 0.6); font-size: 13px; }}
 .stat-row:first-child {{ border-top: none; padding-top: 0; }}
-.stat-row span {{ color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }}
-.stat-row .stat-name {{ color: #fff; font-weight: 800; font-size: 14px; text-transform: none; letter-spacing: normal; }}
-.stat-row .stat-val {{ color: #fff; font-weight: 800; font-size: 14px; }}
+.stat-row .stat-name {{ color: #fff; font-weight: 700; font-size: 13.5px; text-transform: none; letter-spacing: normal; }}
+.stat-row .stat-val {{ color: #fff; font-weight: 800; font-size: 14px; text-align: right; }}
+.card-insight {{ display: inline-flex; align-items: center; gap: 8px; margin: 4px 0 10px; padding: 6px 11px; border-radius: 10px; border: 1px solid rgba(59, 130, 246, 0.22); background: rgba(30, 41, 59, 0.55); font-size: 11.5px; font-weight: 600; letter-spacing: 0.02em; color: #e2e8f0; line-height: 1.3; max-width: 100%; }}
+.card-insight .insight-text {{ white-space: normal; }}
+.card-insight .insight-dot {{ width: 7px; height: 7px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.20); flex: 0 0 auto; }}
+.card-insight[data-insight-kind="power"] {{ border-color: rgba(244, 114, 182, 0.32); background: rgba(244, 114, 182, 0.10); color: #fbcfe8; }}
+.card-insight[data-insight-kind="power"] .insight-dot {{ background: #f472b6; box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.22); }}
+.card-insight[data-insight-kind="run"] {{ border-color: rgba(250, 204, 21, 0.32); background: rgba(250, 204, 21, 0.10); color: #fde68a; }}
+.card-insight[data-insight-kind="run"] .insight-dot {{ background: #facc15; box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.22); }}
+.card-insight[data-insight-kind="contact"] {{ border-color: rgba(34, 197, 94, 0.32); background: rgba(34, 197, 94, 0.10); color: #bbf7d0; }}
+.card-insight[data-insight-kind="contact"] .insight-dot {{ background: #22c55e; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.22); }}
+.card-insight[data-insight-kind="speed"] {{ border-color: rgba(56, 189, 248, 0.32); background: rgba(56, 189, 248, 0.10); color: #bae6fd; }}
+.card-insight[data-insight-kind="speed"] .insight-dot {{ background: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.22); }}
+.card-insight[data-insight-kind="caution"] {{ border-color: rgba(248, 113, 113, 0.32); background: rgba(248, 113, 113, 0.10); color: #fecaca; }}
+.card-insight[data-insight-kind="caution"] .insight-dot {{ background: #f87171; box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.22); }}
+.card-insight[data-insight-kind="floor"] {{ border-color: rgba(148, 163, 184, 0.32); background: rgba(148, 163, 184, 0.10); color: #e2e8f0; }}
+.card-insight[data-insight-kind="floor"] .insight-dot {{ background: #cbd5e1; box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.22); }}
+@media (max-width: 520px) {{
+  .card-insight {{ font-size: 11px; padding: 5px 9px; gap: 7px; }}
+  .card-insight .insight-dot {{ width: 6px; height: 6px; box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.20); }}
+}}
 </style>'''
         f'''<script>
 (() => {{
@@ -3347,6 +5586,249 @@ def render_mlb_projection_cards(title, subtitle, rows, scope_id, entity_label="P
     apply();
   }});
 
+  apply();
+}})();
+</script>'''
+    )
+
+
+def render_mlb_pitcher_strikeout_cards(title, subtitle, records, scope_id):
+    if not records:
+        return render_empty_state(
+            title,
+            f"No {title.lower()} are currently available.",
+            "The latest MLB pitcher projections are still being generated. Check back shortly.",
+        )
+
+    def _clamp_pct(raw):
+        value = safe_float(raw)
+        if value is None:
+            return None
+        if -1.0 <= value <= 1.0 and value != 0:
+            value = value * 100
+        if value < 0:
+            value = 0.0
+        if value > 100:
+            value = 100.0
+        return float(value)
+
+    def _pct_str(value):
+        if value is None:
+            return "--"
+        return f"{value:.1f}%"
+
+    def _num_str(value, digits=1):
+        number = safe_float(value)
+        if number is None:
+            return "--"
+        if digits == 0:
+            return str(int(round(number)))
+        return f"{number:.{digits}f}"
+
+    teams = sorted({normalize_text(record.get("team")).upper() for record in records if normalize_text(record.get("team"))})
+    team_options = "".join(f'<option value="{escape(team)}">{escape(team)}</option>' for team in teams)
+    team_filter_html = (
+        '<div class="mlb-team-filter">'
+        f'<label class="filter-field" for="{escape(scope_id)}-team-filter"><span>Team</span>'
+        f'<select id="{escape(scope_id)}-team-filter" class="mlb-team-select" data-card-filter="{escape(scope_id)}">'
+        '<option value="ALL">All Teams</option>'
+        f"{team_options}"
+        '</select></label>'
+        '</div>'
+    )
+
+    cards = []
+    for record in records:
+        pitcher = mlb_clean_text(record.get("pitcher_name"), fallback="Pitcher")
+        team = normalize_text(record.get("team")).upper()
+        opponent = mlb_clean_text(record.get("opponent"), fallback="Matchup pending")
+        confidence = normalize_text(record.get("confidence")) or "Low"
+
+        projected_ks_value = safe_float(record.get("projected_ks"))
+        projected_ks_display = _num_str(projected_ks_value, digits=1)
+
+        def _resolve_pct(*keys):
+            for key_name in keys:
+                if key_name not in record:
+                    continue
+                raw = record.get(key_name)
+                if raw is None or raw == "":
+                    continue
+                clamped = _clamp_pct(raw)
+                if clamped is not None:
+                    return clamped
+            return None
+
+        p8 = _resolve_pct("k_prob_8_plus", "over_7_5_pct")
+        p9 = _resolve_pct("k_prob_9_plus", "over_8_5_pct")
+        p10 = _resolve_pct("over_9_5_pct")
+        if p8 is not None and p9 is not None and p9 > p8:
+            p9 = p8
+        if p9 is not None and p10 is not None and p10 > p9:
+            p10 = p9
+        if p8 is not None and p10 is not None and p10 > p8:
+            p10 = p8
+
+        opp_k_value = _clamp_pct(record.get("opponent_hitter_k_percent"))
+        innings = safe_float(record.get("estimated_innings"))
+        expected_outs = innings * 3 if innings is not None else None
+        expected_outs_display = _num_str(expected_outs, digits=1)
+        opp_k_display = _pct_str(opp_k_value)
+
+        # Re-enabled after upstream Sim_Prob_Over_* values were restored
+        # (validator gate blocks all-zero ceiling republishes; sanitize step
+        # blanks all ceiling cols when validator fails so the entire block
+        # disappears below).
+        ceiling_pairs = [("8+ K", p8), ("9+ K", p9)]
+        if p10 is not None:
+            ceiling_pairs.append(("10+ K", p10))
+        # If EVERY ceiling value is missing (post-sanitize state), hide the
+        # whole Strikeout Ceiling section. Today's slate keeps the
+        # Projected Strikeouts hero + Opponent K Rate + Expected Outs blocks.
+        all_ceiling_missing = all(v is None for _, v in ceiling_pairs)
+        if all_ceiling_missing:
+            ceiling_block_html = ""
+        else:
+            ceiling_rows = "".join(
+                f'<div class="ceiling-row"><span class="ceiling-label">{escape(label)}</span>'
+                f'<span class="ceiling-value">{escape(_pct_str(value))}</span></div>'
+                for label, value in ceiling_pairs
+            )
+            ceiling_block_html = (
+                '<div class="ceiling-block">'
+                '<span class="block-eyebrow">Strikeout Ceiling</span>'
+                f'<div class="ceiling-list">{ceiling_rows}</div>'
+                '</div>'
+            )
+
+        context_blocks = (
+            '<div class="context-grid">'
+            '<div class="context-block">'
+            '<span class="context-label">Opponent K Rate</span>'
+            f'<span class="context-value">{escape(opp_k_display)}</span>'
+            '</div>'
+            '<div class="context-block">'
+            '<span class="context-label">Expected Outs</span>'
+            f'<span class="context-value">{escape(expected_outs_display)}</span>'
+            '</div>'
+            '</div>'
+        )
+
+        cards.append(
+            f'<article class="pitcher-card" data-player="{escape(pitcher.lower())}" data-team="{escape(team)}">'
+            '<div class="pitcher-card-head">'
+            '<div class="pitcher-identity">'
+            f'<div class="pitcher-name">{escape(pitcher)}</div>'
+            f'<div class="pitcher-sub">{escape(team or "—")} vs {escape(opponent)}</div>'
+            '</div>'
+            '</div>'
+            '<div class="projection-hero">'
+            '<span class="projection-eyebrow">Projected Strikeouts</span>'
+            f'<div class="projection-value"><strong>{escape(projected_ks_display)}</strong><span class="projection-unit">Ks</span></div>'
+            '</div>'
+            f'{ceiling_block_html}'
+            f'{context_blocks}'
+            '</article>'
+        )
+
+    return (
+        '<section class="panel pitcher-panel">'
+        f'<div class="panel-head"><div><div class="eyebrow">MLB · Pitcher Projections</div><h2>{escape(title)}</h2></div>'
+        f'<p class="muted">{escape(subtitle)}</p></div>'
+        f'{team_filter_html}'
+        f'<p class="muted projection-summary" id="{escape(scope_id)}-summary">Showing {len(records)} pitchers.</p>'
+        f'<div class="pitcher-grid" id="{escape(scope_id)}-cards">'
+        f'{"".join(cards)}'
+        '</div></section>'
+        f'''<style>
+.pitcher-panel .mlb-team-filter {{ max-width: 280px; margin: 14px 0 18px; }}
+.pitcher-grid {{ display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }}
+.pitcher-card {{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 20px 22px;
+  border-radius: 18px;
+  border: 1px solid rgba(59, 130, 246, 0.18);
+  background: linear-gradient(160deg, rgba(15, 22, 41, 0.96) 0%, rgba(10, 15, 28, 0.96) 60%, rgba(8, 11, 22, 0.98) 100%);
+  box-shadow: 0 18px 40px rgba(2, 6, 23, 0.45);
+  overflow: hidden;
+}}
+.pitcher-card::before {{
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0) 0%, rgba(96, 165, 250, 0.65) 50%, rgba(59, 130, 246, 0) 100%);
+}}
+.pitcher-card-head {{ display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }}
+.pitcher-identity {{ display: flex; flex-direction: column; gap: 4px; min-width: 0; }}
+.pitcher-name {{ color: #f8fafc; font-weight: 800; font-size: 17px; letter-spacing: -0.01em; line-height: 1.2; }}
+.pitcher-sub {{ color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: 0.02em; }}
+.projection-hero {{
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.18) 0%, rgba(59, 130, 246, 0) 65%), rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(59, 130, 246, 0.22);
+}}
+.projection-eyebrow {{ color: #93c5fd; font-size: 10px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; }}
+.projection-value {{ display: flex; align-items: baseline; gap: 8px; color: #fff; }}
+.projection-value strong {{ font-size: 38px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; color: #fff; }}
+.projection-unit {{ font-size: 14px; font-weight: 700; color: #cbd5f5; letter-spacing: 0.04em; }}
+.ceiling-block {{ display: flex; flex-direction: column; gap: 8px; }}
+.block-eyebrow {{ color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; }}
+.ceiling-list {{ display: flex; flex-direction: column; gap: 4px; }}
+.ceiling-row {{
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(30, 41, 59, 0.7);
+  font-size: 13px;
+}}
+.ceiling-label {{ color: #e2e8f0; font-weight: 700; letter-spacing: 0.04em; }}
+.ceiling-value {{ color: #fff; font-weight: 800; font-variant-numeric: tabular-nums; }}
+.context-grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }}
+.context-block {{
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(30, 41, 59, 0.7);
+}}
+.context-label {{ color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }}
+.context-value {{ color: #fff; font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; }}
+@media (max-width: 540px) {{
+  .pitcher-grid {{ grid-template-columns: 1fr; gap: 14px; }}
+  .pitcher-card {{ padding: 18px; }}
+  .projection-value strong {{ font-size: 34px; }}
+}}
+</style>'''
+        f'''<script>
+(() => {{
+  const container = document.getElementById("{scope_id}-cards");
+  if (!container) return;
+  const cards = Array.from(container.querySelectorAll(".pitcher-card"));
+  const teamSelect = document.getElementById("{scope_id}-team-filter");
+  const summary = document.getElementById("{scope_id}-summary");
+  let activeTeam = "ALL";
+  function apply() {{
+    const visible = cards.filter((card) => activeTeam === "ALL" || card.dataset.team === activeTeam);
+    cards.forEach((card) => {{
+      const show = visible.includes(card);
+      card.hidden = !show;
+      card.style.display = show ? "" : "none";
+    }});
+    const parts = [`Showing ${{visible.length}} of ${{cards.length}} pitchers`];
+    if (activeTeam !== "ALL") parts.push(`team: ${{activeTeam}}`);
+    if (summary) summary.textContent = parts.join(" | ");
+  }}
+  teamSelect?.addEventListener("change", () => {{
+    activeTeam = teamSelect.value || "ALL";
+    apply();
+  }});
   apply();
 }})();
 </script>'''
@@ -3957,6 +6439,14 @@ def render_player_profile_explorer(title, subtitle, payload, scope_id, entity_la
 
 
 def render_nba_projection_table(rows):
+    # Premium projection explorer (shared NBA/WNBA renderer). The legacy
+    # row-per-stat table is preserved below as render_nba_projection_table_legacy
+    # for fallback only — the public route now serves the redesigned view.
+    from nba_model.webapp.projection_explorer import render_projection_explorer
+    return render_projection_explorer(rows, sport_label="NBA", namespace="nba")
+
+
+def render_nba_projection_table_legacy(rows):
     if not rows:
         return render_empty_state(
             "Projection Explorer",
@@ -3993,7 +6483,7 @@ def render_nba_projection_table(rows):
             f"data-minutes='{row['expected_minutes'] if row['expected_minutes'] is not None else ''}' "
             f"data-confidence-rank='{row['confidence_rank']}'>"
             + "<td data-label='Player'><div class='player-cell'><div class='player-main'>"
-            + escape(row["player"])
+            + render_nba_player_name_html(row["player"])
             + "</div></div></td>"
             + "<td data-label='Stat'><div class='stat-chip'>"
             + escape(row["stat_label"])
@@ -4178,7 +6668,7 @@ def render_nba_projection_snapshot(snapshot_cards):
                 "<li class='leader-item'>"
                 + f"<span class='leader-rank'>{index}</span>"
                 + "<div class='leader-copy'><div class='leader-name'>"
-                + escape(leader["player"])
+                + render_nba_player_name_html(leader["player"])
                 + "</div><div class='leader-meta'>"
                 + escape(leader["team"])
                 + " | "
@@ -4346,15 +6836,52 @@ def render_nba_best_bets_table(board):
     )
 
 
-def render_layout(title, subtitle, body_html, active_path, section_nav=None, hero_kicker=None, hero_media_html=""):
+def _canonical_url_for(canonical_path=None):
+    """Build the absolute, self-referencing canonical URL for the current page.
+
+    Defaults to the live request path so every page declares a self-referencing
+    canonical; callers can override (e.g. preview pages that should consolidate
+    onto their primary hub). Query strings are intentionally dropped so URL
+    variants collapse onto a single canonical.
+    """
+    path = canonical_path
+    if path is None:
+        try:
+            path = request.path
+        except Exception:
+            path = "/"
+    if not path:
+        path = "/"
+    if not path.startswith("/"):
+        path = "/" + path
+    return SITE_ORIGIN + path
+
+
+def render_layout(title, subtitle, body_html, active_path, section_nav=None, hero_kicker=None, hero_media_html="", meta_description=None, document_title=None, canonical_path=None, robots="index, follow"):
     section_nav_html = section_nav or ""
     kicker = hero_kicker or "Premium Sports Analytics"
+    page_title = document_title or title
+    meta_description_html = f'\n  <meta name="description" content="{escape(meta_description)}">' if meta_description else ""
+    canonical_url = _canonical_url_for(canonical_path)
+    og_description = meta_description or subtitle or "Premium AI sports projections, probabilities, and verified results from EdgeRanked."
+    seo_head_html = (
+        f'\n  <link rel="canonical" href="{escape(canonical_url)}">'
+        f'\n  <meta name="robots" content="{escape(robots)}">'
+        f'\n  <meta property="og:type" content="website">'
+        f'\n  <meta property="og:site_name" content="EdgeRankedSportsAI">'
+        f'\n  <meta property="og:title" content="{escape(page_title)}">'
+        f'\n  <meta property="og:description" content="{escape(og_description)}">'
+        f'\n  <meta property="og:url" content="{escape(canonical_url)}">'
+        f'\n  <meta name="twitter:card" content="summary_large_image">'
+        f'\n  <meta name="twitter:title" content="{escape(page_title)}">'
+        f'\n  <meta name="twitter:description" content="{escape(og_description)}">'
+    )
     return f"""<!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{escape(title)}</title>
+  <title>{escape(page_title)}</title>{meta_description_html}{seo_head_html}
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-L9N5JKN47H"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -4364,15 +6891,22 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
   </script>
   <style>
     :root {{
-      --bg: #020617;
+      --bg: #0b0c10;
+      --bg-elevated: #111318;
+      --bg-card: #16181f;
+      --border: #23252e;
+      --text: #e8e9ec;
+      --text-muted: #9aa0a6;
+      --accent: #3b82f6;
+      --accent-glow: rgba(59,130,246,0.25);
+      --accent-2: #22c55e;
+      --gradient-start: #1e3a8a;
+      --gradient-end: #0b0c10;
       --surface: #0b1220;
       --surface-strong: #060b17;
       --surface-soft: rgba(15, 23, 42, 0.72);
       --ink: #f8fafc;
-      --muted: #94a3b8;
       --line: #1f2937;
-      --accent: #3b82f6;
-      --accent-strong: #2563eb;
       --success: #10b981;
       --warning: #f59e0b;
       --danger: #ef4444;
@@ -4385,12 +6919,11 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
     html {{ background: var(--bg); color-scheme: dark; }}
     body {{
       margin: 0;
-      background:
-        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.12), transparent 30%),
-        radial-gradient(circle at 85% 20%, rgba(59, 130, 246, 0.08), transparent 22%),
-        var(--bg);
-      color: var(--ink);
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
     }}
     a {{ color: inherit; }}
     img {{ display: block; }}
@@ -4398,21 +6931,20 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       position: sticky;
       top: 0;
       z-index: 50;
-      border-bottom: 1px solid var(--line);
-      background: rgba(2, 6, 23, 0.84);
-      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 12, 16, 0.85);
+      backdrop-filter: blur(12px);
     }}
     .nav-shell, .shell, .footer-shell {{
       width: min(1280px, calc(100% - 24px));
       margin: 0 auto;
     }}
     .nav-shell {{
-      min-height: 64px;
+      height: 64px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 14px;
-      padding: 10px 0;
     }}
     .nav-brand {{
       display: inline-flex;
@@ -4427,9 +6959,9 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
     }}
     .nav-wordmark {{
       color: #fff;
-      font-size: 20px;
+      font-size: 1.15rem;
       font-weight: 700;
-      letter-spacing: -0.04em;
+      letter-spacing: -0.02em;
       white-space: nowrap;
     }}
     .brand-accent {{ color: var(--accent); }}
@@ -4467,6 +6999,12 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       flex-wrap: wrap;
       gap: 10px;
     }}
+    .top-links {{
+      gap: 28px;
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }}
     .top-link, .sub-link, .cta-btn {{
       display: inline-flex;
       align-items: center;
@@ -4474,28 +7012,87 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       gap: 8px;
       text-decoration: none;
       border-radius: 14px;
-      border: 1px solid var(--line);
-      padding: 10px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      background: rgba(15, 23, 42, 0.7);
-      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      font-size: 0.92rem;
+      font-weight: 500;
+      background: transparent;
+      color: var(--text-muted);
       transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
     }}
     .top-link:hover, .sub-link:hover, .cta-btn:hover {{
       transform: translateY(-1px);
-      border-color: rgba(59, 130, 246, 0.35);
+      border-color: rgba(59, 130, 246, 0.5);
+      background: rgba(59, 130, 246, 0.1);
       color: #fff;
     }}
     .top-link.active, .sub-link.active, .cta-btn.primary {{
       color: #fff;
-      background: var(--surface);
-      border-color: rgba(59, 130, 246, 0.18);
+      background: rgba(59, 130, 246, 0.15);
+      border-color: rgba(59, 130, 246, 0.3);
     }}
     .cta-btn.secondary {{
-      background: rgba(18, 25, 41, 0.9);
+      background: transparent;
+      color: var(--text-muted);
+      border-color: var(--border);
+    }}
+    .auth-actions {{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }}
+    .auth-actions .cta-btn {{
+      min-height: 38px;
+      white-space: nowrap;
+    }}
+    .auth-actions .er-auth-link {{
+      margin-left: 0 !important;
+    }}
+    .auth-actions .logout-link {{
+      color: #fecaca;
+      border-color: rgba(248, 113, 113, 0.32);
+      background: rgba(127, 29, 29, 0.18);
+    }}
+    .menu-toggle {{
+      display: none;
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(59, 130, 246, 0.28);
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.82);
       color: #fff;
-      border-color: var(--line);
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1;
+    }}
+    .mobile-nav-panel {{
+      display: none;
+      width: 100%;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 0 0 12px;
+    }}
+    .mobile-link {{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 8px 10px;
+      border: 1px solid rgba(30, 41, 59, 0.95);
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.72);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+    }}
+    .mobile-link.active {{
+      color: #fff;
+      border-color: rgba(59, 130, 246, 0.42);
+      background: rgba(59, 130, 246, 0.16);
     }}
     .hero-copy {{
       max-width: 760px;
@@ -4605,6 +7202,18 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 12px;
+    }}
+    .premium-unlock-list {{
+      list-style: none;
+      margin: 4px 0 16px;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 8px;
+    }}
+    .premium-unlock-list li {{
+      font-weight: 600;
+      color: var(--text, #e2e8f0);
     }}
     .metric-grid.compact {{
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -5409,9 +8018,9 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       line-height: 1.8;
     }}
     .site-footer {{
-      border-top: 1px solid var(--line);
-      padding: 32px 0 44px;
-      background: rgba(2, 6, 23, 0.95);
+      border-top: 1px solid var(--border);
+      padding: 48px 0;
+      background: rgba(11, 12, 16, 0.85);
     }}
     .footer-shell {{
       display: grid;
@@ -5441,9 +8050,9 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       display: flex;
       flex-wrap: wrap;
       justify-content: flex-end;
-      gap: 24px;
-      color: var(--muted);
-      font-size: 14px;
+      gap: 28px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
     }}
     .footer-col {{
       display: grid;
@@ -5451,11 +8060,12 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       min-width: 140px;
     }}
     .footer-col h4 {{
-      margin: 0 0 2px;
+      margin: 0 0 8px;
       color: #fff;
-      font-size: 12px;
+      font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 0.14em;
+      font-weight: 600;
     }}
     .footer-links a {{
       text-decoration: none;
@@ -5470,12 +8080,12 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       flex-wrap: wrap;
       justify-content: space-between;
       gap: 10px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(31, 41, 55, 0.8);
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
     }}
     .footer-copy {{
-      color: #64748b;
-      font-size: 12px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
     }}
     @media (max-width: 980px) {{
       .split {{
@@ -5571,15 +8181,46 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
         padding: 18px 0 44px;
       }}
       .nav-shell {{
-        align-items: flex-start;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        height: auto;
+        min-height: 56px;
+        padding: 10px 0;
       }}
       .nav-brand {{
-        width: 100%;
-        justify-content: space-between;
+        min-width: 0;
+      }}
+      .nav-wordmark {{
+        font-size: 1rem;
       }}
       .top-links {{
-        width: 100%;
+        display: none;
+      }}
+      .menu-toggle {{
+        display: inline-flex;
+      }}
+      .site-nav.menu-open .mobile-nav-panel {{
+        display: grid;
+        grid-column: 1 / -1;
+      }}
+      .auth-actions {{
+        justify-content: flex-end;
+        gap: 6px;
+      }}
+      .auth-actions .cta-btn {{
+        font-size: 0.78rem;
+        padding: 6px 9px;
+        min-height: 34px;
+        border-radius: 11px;
+      }}
+      .top-link, .sub-link, .cta-btn {{
+        font-size: 0.85rem;
+        padding: 6px 12px;
+      }}
+      .footer-links {{
+        gap: 16px;
+        font-size: 0.8rem;
       }}
       .results-frame {{
         min-height: 960px;
@@ -5643,6 +8284,100 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
   </style>
 
 <style>
+/* Sport "premium polish" — fully scoped to .sport-premium-page so any sport
+   page can opt-in by wrapping its body in <div class="sport-premium-page ...">.
+   Pages that do NOT carry this wrapper class are completely unaffected. */
+.sport-premium-page {{ display: block; }}
+.sport-premium-page > * + * {{ margin-top: 22px; }}
+
+.sport-premium-page .panel {{
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(30, 41, 59, 0.55) 0%, rgba(15, 23, 42, 0.78) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.18);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 28px 64px rgba(2, 8, 23, 0.55);
+  border-radius: 22px;
+  padding: 28px 26px;
+  transition: border-color 220ms ease, transform 220ms ease, box-shadow 220ms ease;
+}}
+.sport-premium-page .panel::before {{
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(59, 130, 246, 0.55) 30%,
+    rgba(34, 197, 94, 0.45) 70%,
+    transparent 100%);
+  opacity: 0.7;
+  pointer-events: none;
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+}}
+.sport-premium-page .panel:hover {{
+  border-color: rgba(59, 130, 246, 0.32);
+}}
+
+.sport-premium-page .panel-head {{
+  margin-bottom: 22px;
+}}
+.sport-premium-page .panel-head .eyebrow {{
+  letter-spacing: 0.24em;
+  font-size: 11px;
+  background: linear-gradient(90deg, #60a5fa, #22c55e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}}
+.sport-premium-page .panel-head h2,
+.sport-premium-page .panel-head h3 {{
+  letter-spacing: -0.01em;
+  font-weight: 700;
+}}
+.sport-premium-page .panel-head .muted,
+.sport-premium-page .panel-head p {{
+  color: #b8c0cc;
+}}
+
+.sport-premium-page .cta-btn {{
+  background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
+  border: 1px solid rgba(96, 165, 250, 0.45);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.35);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}}
+.sport-premium-page .cta-btn:hover {{
+  transform: translateY(-1px);
+  box-shadow: 0 16px 32px rgba(37, 99, 235, 0.45);
+}}
+
+.sport-premium-page table thead th {{
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 11.5px;
+  color: #9aa6b8;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.18);
+}}
+.sport-premium-page table tbody tr {{
+  transition: background 160ms ease;
+}}
+.sport-premium-page table tbody tr:hover {{
+  background: rgba(59, 130, 246, 0.06);
+}}
+
+.sport-premium-page .leader-grid {{
+  gap: 16px;
+}}
+
+@media (max-width: 720px) {{
+  .sport-premium-page .panel {{
+    padding: 22px 18px;
+    border-radius: 18px;
+  }}
+  .sport-premium-page > * + * {{ margin-top: 16px; }}
+}}
 </style>
 
 
@@ -5663,7 +8398,12 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
         <span class="nav-wordmark">EdgeRanked<span class="brand-accent">SportsAI</span></span>
       </a>
       {render_root_nav(active_path)}
-      <a class="cta-btn primary" href='/sign-up'>Create Account</a> <a class='cta-btn secondary' href='/sign-in'>Sign In</a></a>
+      <div class="auth-actions">
+        <a class="cta-btn primary" href="/sign-up">Create Account</a>
+        <a class="cta-btn secondary" href="/sign-in">Sign In</a>
+      </div>
+      <button class="menu-toggle" id="mobile-menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav-panel">☰</button>
+      {render_mobile_nav(active_path)}
     </div>
   </nav>
   <div class="shell">
@@ -5683,6 +8423,17 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
     </main>
   </div>
   {render_footer()}
+<script>
+(function(){{
+  var nav = document.querySelector(".site-nav");
+  var btn = document.getElementById("mobile-menu-toggle");
+  if (!nav || !btn) return;
+  btn.addEventListener("click", function(){{
+    var open = nav.classList.toggle("menu-open");
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+  }});
+}})();
+</script>
 <script src="/static/auth_nav.js"></script>
 </body>
 </html>"""
@@ -5711,8 +8462,8 @@ def get_mlb_dataset(spec_key):
         data["kind"] = kind
         return data
     if kind == "mlb_hitter_full":
-        source_path = MLB_OUTPUT_DIR / "hitter_predictions_full.csv"
-        if not source_path.exists():
+        source_path = _mlb_public_facing_hitter_source()
+        if source_path is None:
             source_path = MLB_FILES["hitters_full"] if MLB_READER_MODE == "canonical" and MLB_FILES["hitters_full"].exists() else MLB_FILES["hitters"]
         return {
             "kind": kind,
@@ -5721,8 +8472,8 @@ def get_mlb_dataset(spec_key):
             "last_updated": file_timestamp(source_path),
         }
     if kind in MLB_HITTER_CATEGORY_STATS:
-        source_path = MLB_OUTPUT_DIR / "hitter_predictions_full.csv"
-        if not source_path.exists():
+        source_path = _mlb_public_facing_hitter_source()
+        if source_path is None:
             source_path = MLB_FILES["hitters_full"] if MLB_READER_MODE == "canonical" and MLB_FILES["hitters_full"].exists() else MLB_FILES["hitters"]
         target_stat = MLB_HITTER_CATEGORY_STATS[kind]
         records = filter_mlb_hitter_projection_rows(build_mlb_hitter_projection_board(), target_stat)
@@ -5835,6 +8586,1239 @@ def build_home_page():
     )
 
 
+def _homepage_snapshot_rows(max_rows: int = 5):
+    """Return a small (≤max_rows) list of preview rows from current daily outputs.
+
+    Pulls top picks from existing CSVs only (NBA projections, MLB hitter
+    summary, MLB pitcher projections, MLB best-bets). Each row is a dict:
+    {player, team, projection, label, edge}.
+
+    Never exposes full datasets — only the top 1-2 from each source, capped
+    at max_rows. Returns a single placeholder row if no outputs are available.
+    """
+    rows = []
+    seen = set()
+    pill_labels = {"Elite", "High", "Strong", "Standard"}
+
+    def _add(player, team, projection, label, edge="—"):
+        key = str(player or "").strip().lower()
+        if not key or key in seen:
+            return
+        if not str(projection or "").strip():
+            return
+        if label not in pill_labels:
+            label = "Standard"
+        seen.add(key)
+        rows.append({
+            "player": str(player).strip(),
+            "team": str(team or "").strip(),
+            "projection": str(projection).strip(),
+            "label": label,
+            "edge": edge or "—",
+        })
+
+    # NBA: top by CONFIDENCE, project PRA.
+    # Only show NBA rows when the projections output was refreshed today.
+    # This prevents stale NBA players from appearing on no-slate days.
+    try:
+        from datetime import datetime
+        from zoneinfo import ZoneInfo
+
+        nba_output_is_today = False
+        try:
+            nba_mtime = datetime.fromtimestamp(PROJECTIONS_PATH.stat().st_mtime, ZoneInfo("America/New_York")).date()
+            today_et = datetime.now(ZoneInfo("America/New_York")).date()
+            nba_output_is_today = nba_mtime == today_et
+        except Exception:
+            nba_output_is_today = False
+
+        df = read_csv_df(PROJECTIONS_PATH) if nba_output_is_today else pd.DataFrame()
+        if not df.empty and "PLAYER_NAME" in df.columns:
+            d = df.copy()
+            if "CONFIDENCE" in d.columns:
+                d = d.sort_values("CONFIDENCE", ascending=False, na_position="last")
+            t = d.iloc[0]
+            name = str(t.get("PLAYER_NAME", "")).strip().title()
+            team = str(t.get("TEAM_ABBREVIATION", "")).strip().upper()
+            opp = str(t.get("OPPONENT", "")).strip().upper()
+            pra = t.get("PRA_PROJ")
+            label = "Elite" if str(t.get("CONFIDENCE_LABEL", "")).upper().startswith("HIGH") else "High"
+            if name and pd.notna(pra):
+                meta = f"NBA • {team} vs {opp}" if team and opp else "NBA"
+                _add(name, meta, f"PRA {float(pra):.1f}", label)
+    except Exception:
+        pass
+
+    # MLB hitter: top by Rank → Hit Probability.
+    try:
+        df = read_csv_df(MLB_FILES["hitters"])
+        if not df.empty and "Hitter" in df.columns:
+            d = df.copy()
+            if "Rank" in d.columns:
+                d = d.sort_values("Rank", na_position="last")
+            t = d.iloc[0]
+            name = str(t.get("Hitter", "")).strip()
+            team = str(t.get("Team", "")).strip()
+            opp = str(t.get("Opponent", "")).strip()
+            prob = t.get("Hit Probability")
+            if name and pd.notna(prob):
+                p = float(prob)
+                meta = f"MLB • {team} vs {opp}" if team and opp else "MLB"
+                _add(name, meta, f"Hit {p:.0f}%", "Elite" if p >= 75 else "High")
+    except Exception:
+        pass
+
+    # MLB pitcher: top by simulated strikeouts.
+    try:
+        df = read_csv_df(MLB_FILES["pitcher_predictions"])
+        if not df.empty and "Pitcher" in df.columns:
+            d = df.copy()
+            sort_col = next((c for c in (
+                "Sim_Mean_Strikeouts", "Final_Projected_Strikeouts", "Projected_Strikeouts"
+            ) if c in d.columns), None)
+            if sort_col:
+                d = d.sort_values(sort_col, ascending=False, na_position="last")
+            t = d.iloc[0]
+            name = str(t.get("Pitcher", "")).strip()
+            team = str(t.get("Team", "")).strip()
+            opp = str(t.get("Opponent", "")).strip()
+            ks = t.get(sort_col) if sort_col else None
+            if name and ks is not None and pd.notna(ks):
+                meta = f"MLB • {team} vs {opp}" if team and opp else "MLB"
+                _add(name, meta, f"K {float(ks):.1f}", "High")
+    except Exception:
+        pass
+
+    # MLB best-bets: up to 2 rows by descending edge, with real edge value.
+    try:
+        df = read_csv_df(MLB_FILES["best_bets"])
+        if not df.empty and "player_name" in df.columns:
+            d = df.copy()
+            if "edge" in d.columns:
+                d = d.sort_values("edge", ascending=False, na_position="last")
+            for _, t in d.head(2).iterrows():
+                name = str(t.get("player_name", "")).strip()
+                market = str(t.get("market", "")).strip()
+                play = str(t.get("play", "")).strip()
+                line = t.get("line")
+                edge_val = t.get("edge")
+                if not name:
+                    continue
+                projection = " ".join(p for p in (market, play) if p).strip()
+                if not projection and pd.notna(line):
+                    projection = str(line)
+                edge_text = "—"
+                if pd.notna(edge_val):
+                    try:
+                        ev = float(edge_val)
+                        edge_text = f"{ev*100:+.1f}%" if abs(ev) < 1 else f"{ev:+.1f}%"
+                    except Exception:
+                        edge_text = "—"
+                _add(name, "MLB", projection or "—", "Strong", edge_text)
+                if len(rows) >= max_rows:
+                    break
+    except Exception:
+        pass
+
+    if not rows:
+        rows = [{
+            "player": "Awaiting today's outputs",
+            "team": "",
+            "projection": "—",
+            "label": "Standard",
+            "edge": "—",
+        }]
+
+    return rows[:max_rows]
+
+
+def _render_ai_snapshot_rows_html(rows):
+    """Render the 3-column AI Snapshot table body (Player / Projection / Confidence)."""
+    pill = {
+        "Elite":    ("rgba(34,197,94,0.15)",  "#22c55e"),
+        "High":     ("rgba(59,130,246,0.15)", "#3b82f6"),
+        "Strong":   ("rgba(168,85,247,0.15)", "#a855f7"),
+        "Standard": ("rgba(148,163,184,0.15)", "#94a3b8"),
+    }
+    parts = []
+    for i, r in enumerate(rows):
+        bg, fg = pill.get(r["label"], pill["Standard"])
+        last = (i == len(rows) - 1)
+        border = "" if last else "border-bottom:1px solid rgba(255,255,255,0.05);"
+        parts.append(
+            f'<tr style="{border}">'
+            f'<td style="padding:12px 16px;font-weight:500;">{escape(r["player"])}</td>'
+            f'<td style="padding:12px 16px;color:var(--accent);font-weight:600;">{escape(r["projection"])}</td>'
+            f'<td style="padding:12px 16px;">'
+            f'<span style="background:{bg};color:{fg};padding:4px 10px;border-radius:12px;font-size:0.8rem;font-weight:600;">{escape(r["label"])}</span>'
+            f'</td>'
+            f'</tr>'
+        )
+    return "\n".join(parts)
+
+
+def _render_premium_visible_rows_html(rows, max_visible=3):
+    """Render the 4-column Premium Snapshot visible body (Player / Projection / Confidence / Edge)."""
+    parts = []
+    for r in rows[:max_visible]:
+        meta = r.get("team", "")
+        meta_html = (
+            f'<br><span class="player-meta">{escape(meta)}</span>' if meta else ""
+        )
+        parts.append(
+            f'<tr>'
+            f'<td><strong>{escape(r["player"])}</strong>{meta_html}</td>'
+            f'<td class="projection-value">{escape(r["projection"])}</td>'
+            f'<td><span class="confidence-badge {escape(r["label"]).lower()}">{escape(r["label"])}</span></td>'
+            f'<td class="edge-value">{escape(r.get("edge", "—"))}</td>'
+            f'</tr>'
+        )
+    return "\n".join(parts)
+
+
+def build_home_page_preview():
+    """
+    Premium homepage preview for EdgeRankedSportsAI.
+    Dark SaaS style, modern sport cards, pricing teaser, free beta section.
+    """
+    # Inline CSS and HTML for a standalone premium preview
+    html = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EdgeRankedSportsAI — Premium Sports Intelligence</title>
+<meta name="description" content="AI-powered sports projections, probabilities, and verified results for MLB, NBA, WNBA, PGA, and UFC from EdgeRanked.">
+<link rel="canonical" href="https://edgerankedai.com/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="EdgeRankedSportsAI">
+<meta property="og:title" content="EdgeRankedSportsAI — Premium Sports Intelligence">
+<meta property="og:description" content="AI-powered sports projections, probabilities, and verified results for MLB, NBA, WNBA, PGA, and UFC.">
+<meta property="og:url" content="https://edgerankedai.com/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="EdgeRankedSportsAI — Premium Sports Intelligence">
+<meta name="twitter:description" content="AI-powered sports projections, probabilities, and verified results for MLB, NBA, WNBA, PGA, and UFC.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"EdgeRankedSportsAI","url":"https://edgerankedai.com/","sameAs":["https://x.com/EdgeRankedAI"]}
+</script>
+<style>
+:root {
+  --bg: #0b0c10;
+  --bg-elevated: #111318;
+  --bg-card: #16181f;
+  --border: #23252e;
+  --text: #e8e9ec;
+  --text-muted: #9aa0a6;
+  --accent: #3b82f6;
+  --accent-glow: rgba(59,130,246,0.25);
+  --accent-2: #22c55e;
+  --gradient-start: #1e3a8a;
+  --gradient-end: #0b0c10;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Nav */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(11,12,16,0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.logo {
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.logo-mark {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: transparent;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 900; color: #fff; font-size: 0.9rem;
+  flex-shrink: 0;
+}
+.logo-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+}
+.nav-links { display: none; gap: 28px; font-size: 0.92rem; font-weight: 500; color: var(--text-muted); align-items: center; }
+.nav-links a { transition: color 0.15s; white-space: nowrap; }
+.nav-links a:hover { color: var(--text); }
+.nav-links .nav-social-icon {
+  display: inline-flex; align-items: center; gap: 4px;
+  color: var(--text-muted); font-size: 0.85rem;
+}
+.nav-links .nav-social-icon:hover { color: var(--accent); }
+.nav-cta {
+  display: none;
+  background: linear-gradient(135deg, var(--accent), #2563eb);
+  color: #fff;
+  padding: 9px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 0 var(--accent-glow);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.nav-cta:hover { box-shadow: 0 0 20px 4px var(--accent-glow); transform: translateY(-1px); }
+@media (min-width: 768px) {
+  .nav-links, .nav-cta { display: flex; }
+  .menu-btn { display: none; }
+}
+.menu-btn {
+  background: none; border: none; color: var(--text-muted);
+  font-size: 1.4rem; cursor: pointer;
+  padding: 6px 10px; border-radius: 8px;
+  flex-shrink: 0;
+}
+.menu-btn:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+#mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  flex-direction: column;
+}
+#mobile-menu-overlay.active { display: flex; }
+#mobile-menu-overlay .mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+#mobile-menu-overlay .mobile-menu-close {
+  background: none; border: none; color: var(--text-muted);
+  font-size: 1.4rem; cursor: pointer;
+  padding: 6px 10px; border-radius: 8px;
+  line-height: 1;
+}
+#mobile-menu-overlay .mobile-menu-close:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+#mobile-menu-overlay .mobile-menu-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 20px 24px;
+}
+#mobile-menu-overlay .mobile-menu-body a {
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+  padding: 0 6px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: var(--text);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  text-decoration: none;
+}
+#mobile-menu-overlay .mobile-menu-body a:active { background: rgba(255,255,255,0.04); }
+#mobile-menu-overlay .mobile-menu-body a:last-of-type { border-bottom: 0; }
+#mobile-menu-overlay .mobile-menu-cta {
+  display: block;
+  margin-top: 18px;
+  background: linear-gradient(135deg, var(--accent), #2563eb);
+  color: #fff;
+  text-align: center;
+  border-radius: 12px;
+  padding: 14px;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+}
+#mobile-menu-overlay .mobile-menu-social {
+  margin-top: 20px;
+  padding: 14px 6px 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+#mobile-menu-overlay .mobile-menu-social a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: auto;
+  padding: 6px 10px;
+  border-bottom: 0;
+  color: var(--accent);
+  font-weight: 600;
+  border-radius: 8px;
+}
+#mobile-menu-overlay .mobile-menu-social a:hover { background: rgba(59,130,246,0.1); }
+@media (min-width: 768px) {
+  #mobile-menu-overlay { display: none !important; }
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 64px 0 56px;
+  background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(59,130,246,0.12), transparent),
+              linear-gradient(180deg, var(--gradient-start) 0%, var(--gradient-end) 60%);
+}
+.hero::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.6; pointer-events: none;
+}
+.hero-inner { position: relative; z-index: 1; text-align: center; padding: 0 4px; }
+.badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(59,130,246,0.12); color: #93bbfc;
+  border: 1px solid rgba(59,130,246,0.25);
+  padding: 6px 14px; border-radius: 999px;
+  font-size: 0.82rem; font-weight: 600; margin-bottom: 18px;
+}
+.badge-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2); }
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  padding: 0 8px;
+}
+.hero h1 span { background: linear-gradient(90deg, #fff, #93bbfc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p {
+  color: var(--text-muted);
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  max-width: 640px;
+  margin: 0 auto 28px;
+  padding: 0 8px;
+}
+.hero-follow-x {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 20px;
+  font-size: 0.85rem; font-weight: 500; color: var(--text-muted);
+  transition: color 0.15s; text-decoration: none;
+}
+.hero-follow-x:hover { color: var(--accent); }
+.hero-follow-x svg { width: 16px; height: 16px; flex-shrink: 0; }
+.hero-actions {
+  display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 22px; border-radius: 10px; font-weight: 700; font-size: 0.95rem;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), #2563eb);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(37,99,235,0.35);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { background: var(--bg-card); }
+
+/* Section */
+.section { padding: 64px 0; }
+.section-title {
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.section-sub {
+  color: var(--text-muted);
+  font-size: 0.98rem;
+  max-width: 560px;
+  margin-bottom: 36px;
+}
+
+/* Live AI Snapshot */
+.snapshot-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (min-width: 768px) {
+  .snapshot-grid { grid-template-columns: repeat(4, 1fr); }
+}
+.snapshot-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.snapshot-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(59,130,246,0.5);
+}
+.snapshot-value {
+  font-size: 2rem;
+  font-weight: 900;
+  background: linear-gradient(90deg, #fff, #93bbfc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+}
+.snapshot-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Sport Cards */
+.sports-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (min-width: 768px) {
+  .sports-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+}
+@media (min-width: 1024px) {
+  .sports-grid { grid-template-columns: repeat(5, 1fr); }
+}
+.sport-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px 18px;
+  text-align: center;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  position: relative; overflow: hidden;
+}
+.sport-card::before {
+  content: ""; position: absolute; inset: 0; border-radius: 16px;
+  background: radial-gradient(120px 80px at 50% 0%, rgba(59,130,246,0.08), transparent);
+  pointer-events: none;
+}
+.sport-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(59,130,246,0.35);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+}
+.sport-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; margin-bottom: 14px;
+  background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2);
+}
+.sport-card h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; }
+.sport-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; }
+.sport-link {
+  display: inline-block; margin-top: 14px;
+  font-size: 0.82rem; font-weight: 700; color: var(--accent);
+}
+.sport-link:hover { text-decoration: underline; }
+
+/* Pricing */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.pricing-card {
+  background: linear-gradient(180deg, rgba(59,130,246,0.08), transparent 60%),
+              var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px 28px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.pricing-card.featured {
+  border-color: rgba(59,130,246,0.5);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+}
+.pricing-card::after {
+  content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 60%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59,130,246,0.5), transparent);
+}
+.price {
+  font-size: 3rem; font-weight: 900; letter-spacing: -0.03em;
+  background: linear-gradient(90deg, #fff, #93bbfc);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.price-period { color: var(--text-muted); font-size: 0.95rem; font-weight: 500; }
+.pricing-features {
+  list-style: none; margin: 24px 0; text-align: left; display: inline-block;
+}
+.pricing-features li {
+  padding: 6px 0; padding-left: 26px; position: relative;
+  color: var(--text-muted); font-size: 0.92rem;
+}
+.pricing-features li::before {
+  content: "✓"; position: absolute; left: 0; color: var(--accent-2); font-weight: 800;
+}
+
+/* Trust */
+.trust-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 768px) {
+  .trust-grid { grid-template-columns: repeat(3, 1fr); }
+}
+.trust-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+}
+.trust-item h4 { font-size: 0.95rem; font-weight: 800; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.trust-item p { color: var(--text-muted); font-size: 0.88rem; }
+
+/* Footer */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 48px 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+.footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 22px; margin-bottom: 20px; }
+.footer-links a:hover { color: var(--text); }
+
+/* Utilities */
+.text-center { text-align: center; }
+.mt-8 { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-24 { margin-top: 24px; }
+.mb-24 { margin-bottom: 24px; }
+
+/* Premium Locked Previews */
+.premium-preview-card {
+  background: var(--bg-elevated);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 16px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.premium-preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+}
+.premium-preview-table th {
+  text-align: left;
+  padding: 14px 18px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(59,130,246,0.2);
+}
+.premium-preview-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.premium-preview-table tr:last-child td {
+  border-bottom: none;
+}
+.premium-blurred-row {
+  opacity: 0.3;
+  filter: blur(3px);
+  color: var(--text-muted);
+}
+.premium-blurred-row td {
+  color: var(--text-muted) !important;
+}
+.player-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 2px;
+}
+.projection-value {
+  font-weight: 700;
+  color: var(--accent);
+}
+.edge-value {
+  font-weight: 600;
+  color: #22c55e;
+}
+.confidence-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.confidence-badge.elite {
+  background: rgba(34,197,94,0.15);
+  color: #22c55e;
+}
+.confidence-badge.high {
+  background: rgba(59,130,246,0.15);
+  color: #3b82f6;
+}
+.confidence-badge.strong {
+  background: rgba(168,85,247,0.15);
+  color: #a855f7;
+}
+.premium-lock-text {
+  font-size: 0.95rem;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.premium-lock-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(11,12,16,0.9) 30%, var(--bg-card));
+  padding: 40px 24px 24px;
+  text-align: center;
+  border-radius: 0 0 16px 16px;
+}
+.premium-lock-icon {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  color: var(--accent);
+}
+.premium-cta {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+.premium-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37,99,235,0.35);
+}
+
+/* Premium Value Cards */
+.premium-value-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (min-width: 768px) {
+  .premium-value-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.premium-value-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.premium-value-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(59,130,246,0.35);
+}
+.premium-value-icon {
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+  color: var(--accent);
+}
+.premium-value-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.premium-value-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Live Platform Status */
+.live-status-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.live-status-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(34,197,94,0.08);
+  border: 1px solid rgba(34,197,94,0.2);
+  border-radius: 12px;
+  font-size: 0.85rem;
+}
+.live-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 8px rgba(34,197,94,0.5);
+}
+.live-status-label {
+  color: var(--text);
+  font-weight: 500;
+}
+.live-status-value {
+  color: var(--text-muted);
+  margin-left: auto;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+/* Mobile Improvements */
+@media (max-width: 640px) {
+  .premium-value-grid {
+    grid-template-columns: 1fr;
+  }
+  .live-status-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero h1 {
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+  }
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-actions .btn {
+    width: 100%;
+    max-width: 280px;
+  }
+  .section {
+    padding: 48px 0;
+  }
+  .pricing-card {
+    padding: 28px 20px;
+  }
+  .premium-preview-card {
+    padding: 20px;
+  }
+  .premium-preview-table th,
+  .premium-preview-table td {
+    padding: 10px 12px;
+    font-size: 0.8rem;
+  }
+  .footer {
+    padding: 36px 0;
+  }
+  .footer-links {
+    gap: 16px;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="site-nav">
+  <div class="container nav-inner">
+    <a href="/" class="logo">
+      <span class="logo-mark"><img src="/brand/logo.png" alt="EdgeRankedSportsAI logo"></span>
+      EdgeRankedSportsAI
+    </a>
+    <div class="nav-links">
+      <a href="/mlb">MLB</a>
+      <a href="/nba">NBA</a>
+      <a href="/wnba">WNBA</a>
+      <a href="/pga">PGA</a>
+      <a href="/ufc">UFC</a>
+      <a href="/soccer">Soccer</a>
+      <a href="/about">About</a>
+      <a href="https://x.com/EdgeRankedAI" target="_blank" rel="noopener" class="nav-social-icon" title="Follow on X">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        <span>Follow</span>
+      </a>
+    </div>
+    <a href="/pricing" class="nav-cta">Get Started</a>
+    <button class="menu-btn" id="nav-menu-btn" aria-label="Open menu" aria-expanded="false">☰</button>
+  </div>
+</nav>
+<div id="mobile-menu-overlay" role="dialog" aria-modal="true" aria-label="Navigation menu">
+  <div class="mobile-menu-header">
+    <a href="/" class="logo">
+      <span class="logo-mark"><img src="/brand/logo.png" alt="EdgeRankedSportsAI logo"></span>
+      EdgeRankedSportsAI
+    </a>
+    <button class="mobile-menu-close" id="mobile-menu-close" aria-label="Close menu">✕</button>
+  </div>
+  <div class="mobile-menu-body">
+    <a href="/mlb" role="menuitem">MLB</a>
+    <a href="/nba" role="menuitem">NBA</a>
+    <a href="/wnba" role="menuitem">WNBA</a>
+    <a href="/pga" role="menuitem">PGA</a>
+    <a href="/ufc" role="menuitem">UFC</a>
+    <a href="/soccer" role="menuitem">Soccer</a>
+    <a href="/about" role="menuitem">About</a>
+    <a href="/pricing" role="menuitem" class="mobile-menu-cta">Get Started</a>
+    <div class="mobile-menu-social">
+      <span>Follow us</span>
+      <a href="https://x.com/EdgeRankedAI" target="_blank" rel="noopener" role="menuitem">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        @EdgeRankedAI
+      </a>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var btn = document.getElementById('nav-menu-btn');
+  var overlay = document.getElementById('mobile-menu-overlay');
+  var closeBtn = document.getElementById('mobile-menu-close');
+  if (!btn || !overlay) return;
+  function openMenu() {
+    overlay.classList.add('active');
+    btn.setAttribute('aria-expanded', 'true');
+    btn.innerHTML = '✕';
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    overlay.classList.remove('active');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = '☰';
+    document.body.style.overflow = '';
+  }
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    overlay.classList.contains('active') ? closeMenu() : openMenu();
+  });
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      closeMenu();
+    });
+  }
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) closeMenu();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && overlay.classList.contains('active')) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="badge"><span class="badge-dot"></span> Live model coverage across 5 sports</div>
+    <h1>Premium Sports <span>Intelligence</span></h1>
+    <p>Projection-first analytics across MLB, NBA, WNBA, PGA, and UFC.</p>
+    <div class="live-status-strip" style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:20px 0 28px;font-size:0.85rem;">
+      <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,0.08);padding:6px 12px;border-radius:20px;border:1px solid rgba(59,130,246,0.2);">
+        <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;"></span> MLB weather engine active
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,0.08);padding:6px 12px;border-radius:20px;border:1px solid rgba(59,130,246,0.2);">
+        <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;"></span> WNBA models updated
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,0.08);padding:6px 12px;border-radius:20px;border:1px solid rgba(59,130,246,0.2);">
+        <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;"></span> UFC simulations active
+      </span>
+    </div>
+    <div class="hero-actions">
+      <a href="/mlb" class="btn btn-primary">Explore MLB Today</a>
+      <a href="/mlb/projections" class="btn btn-ghost">View Projections</a>
+    </div>
+    <a href="https://x.com/EdgeRankedAI" target="_blank" rel="noopener" class="hero-follow-x">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      Follow on X
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Today's AI Snapshot</h2>
+    <p class="section-sub">Sample from today's model outputs — top picks across MLB and NBA. Sign in for the full board.</p>
+    <div style="display:grid;grid-template-columns:1fr;gap:32px;margin-top:24px;">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;">
+        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:16px;color:var(--text);">Premium Projection Preview</h3>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border);">
+                <th style="text-align:left;padding:12px 16px;font-size:0.85rem;font-weight:600;color:var(--text-muted);">Player</th>
+                <th style="text-align:left;padding:12px 16px;font-size:0.85rem;font-weight:600;color:var(--text-muted);">Projection</th>
+                <th style="text-align:left;padding:12px 16px;font-size:0.85rem;font-weight:600;color:var(--text-muted);">Confidence</th>
+              </tr>
+            </thead>
+            <tbody>
+<!--AI_SNAPSHOT_ROWS-->
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:20px;font-size:0.85rem;color:var(--text-muted);text-align:center;">+ additional premium projections available for Pro members</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr;gap:16px;">
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:20px;">
+          <h4 style="font-size:1rem;font-weight:700;margin-bottom:12px;color:var(--text);">Live Model Status</h4>
+          <ul style="list-style:none;padding:0;margin:0;">
+            <li style="padding:8px 0;display:flex;align-items:center;gap:10px;color:var(--text-muted);font-size:0.9rem;">
+              <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;"></span> MLB Weather Engine Active
+            </li>
+            <li style="padding:8px 0;display:flex;align-items:center;gap:10px;color:var(--text-muted);font-size:0.9rem;">
+              <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;"></span> NBA Slate Synced
+            </li>
+            <li style="padding:8px 0;display:flex;align-items:center;gap:10px;color:var(--text-muted);font-size:0.9rem;">
+              <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;"></span> WNBA Models Ready
+            </li>
+            <li style="padding:8px 0;display:flex;align-items:center;gap:10px;color:var(--text-muted);font-size:0.9rem;">
+              <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;"></span> UFC Simulations Updated
+            </li>
+          </ul>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:20px;">
+          <h4 style="font-size:1rem;font-weight:700;margin-bottom:12px;color:var(--text);">Coverage Summary</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div style="text-align:center;">
+              <div style="font-size:1.8rem;font-weight:900;color:var(--accent);">1,402</div>
+              <div style="font-size:0.8rem;color:var(--text-muted);">props processed today</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:1.8rem;font-weight:900;color:var(--accent);">5</div>
+              <div style="font-size:0.8rem;color:var(--text-muted);">sports active</div>
+            </div>
+          </div>
+          <p style="margin-top:16px;font-size:0.85rem;color:var(--text-muted);text-align:center;">updated every slate • projection-first analytics</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Today's Premium Snapshot</h2>
+    <p class="section-sub">A glimpse of today's premium projections. Upgrade for full access.</p>
+    
+    <div class="premium-preview-card">
+      <div class="premium-preview-table-container">
+        <table class="premium-preview-table">
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Projection</th>
+              <th>Confidence</th>
+              <th>Edge</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Visible rows -->
+<!--PREMIUM_VISIBLE_ROWS-->
+
+            <!-- Blurred/faded hidden rows -->
+            <tr class="premium-blurred-row">
+              <td><strong>Hidden Player</strong><br><span class="player-meta">Team • Position</span></td>
+              <td class="projection-value">•••</td>
+              <td><span class="confidence-badge">•••</span></td>
+              <td class="edge-value">•••</td>
+            </tr>
+            <tr class="premium-blurred-row">
+              <td><strong>Hidden Player</strong><br><span class="player-meta">Team • Position</span></td>
+              <td class="projection-value">•••</td>
+              <td><span class="confidence-badge">•••</span></td>
+              <td class="edge-value">•••</td>
+            </tr>
+            <tr class="premium-blurred-row">
+              <td><strong>Hidden Player</strong><br><span class="player-meta">Team • Position</span></td>
+              <td class="projection-value">•••</td>
+              <td><span class="confidence-badge">•••</span></td>
+              <td class="edge-value">•••</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="premium-lock-overlay">
+        <div class="premium-lock-icon">🔒</div>
+        <p class="premium-lock-text">Unlock all premium projections and matchup intelligence.</p>
+        <a href="/pricing" class="premium-cta">Upgrade to Pro</a>
+      </div>
+    </div>
+    
+    <p class="premium-footnote" style="text-align:center;margin-top:24px;font-size:0.85rem;color:var(--text-muted);">
+      Premium includes: Full projection boards • Matchup intelligence • Weather‑adjusted models • Live tracking
+    </p>
+  </div>
+</section>
+
+<section class="section" style="background: var(--bg-elevated);">
+  <div class="container">
+    <h2 class="section-title">Projection Dashboards</h2>
+    <p class="section-sub">Deep‑dive boards, matchup analytics, and verified tracking for each sport.</p>
+    <div class="sports-grid">
+      <div class="sport-card">
+        <div class="sport-icon">⚾</div>
+        <h3>MLB</h3>
+        <p>Strikeout models, HR projections, weather‑adjusted analytics. Updated Daily.</p>
+        <a href="/mlb" class="sport-link">Open MLB →</a>
+      </div>
+      <div class="sport-card">
+        <div class="sport-icon">🏀</div>
+        <h3>NBA</h3>
+        <p>Projection engine, matchup intelligence, pace/context analysis. Live.</p>
+        <a href="/nba" class="sport-link">Open NBA →</a>
+      </div>
+      <div class="sport-card">
+        <div class="sport-icon">🏀</div>
+        <h3>WNBA</h3>
+        <p>Simulation‑driven projections and verified player trends. Updated Daily.</p>
+        <a href="/wnba" class="sport-link">Open WNBA →</a>
+      </div>
+      <div class="sport-card">
+        <div class="sport-icon">⛳</div>
+        <h3>PGA</h3>
+        <p>Tournament simulations, finishing probabilities, course‑fit modeling. Live.</p>
+        <a href="/pga" class="sport-link">Open PGA →</a>
+      </div>
+      <div class="sport-card">
+        <div class="sport-icon">🥊</div>
+        <h3>UFC</h3>
+        <p>Fight simulations, finish probability, matchup intelligence. Updated Daily.</p>
+        <a href="/ufc" class="sport-link">Open UFC →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title text-center">Trust & Methodology</h2>
+    <p class="section-sub text-center">Transparent, projection‑first modeling built for serious analysts.</p>
+    <div class="trust-grid">
+      <div class="trust-item">
+        <h4>📊 Projection‑First Modeling</h4>
+        <p>Every insight starts with simulation engines and statistical models, not hunches.</p>
+      </div>
+      <div class="trust-item">
+        <h4>🌤️ Weather & Context Intelligence</h4>
+        <p>Real‑time environmental adjustments for MLB, PGA, and outdoor sports.</p>
+      </div>
+      <div class="trust-item">
+        <h4>🔍 Verified Tracking</h4>
+        <p>Historical picks are tracked, graded, and publicly reported for full transparency.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background: var(--bg-elevated);">
+  <div class="container">
+    <h2 class="section-title text-center">Simple, Transparent Pricing</h2>
+    <p class="section-sub text-center">One plan. Every sport. No upsells.</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div style="font-weight:700;font-size:0.9rem;color:var(--text-muted);margin-bottom:6px;">FREE BETA ACCESS</div>
+        <div class="price">$0</div>
+        <div class="price-period">Limited‑Time Beta Access</div>
+        <ul class="pricing-features">
+          <li>Limited preview access</li>
+          <li>Selected dashboards</li>
+          <li>Beta access</li>
+          <li>Core projections</li>
+        </ul>
+        <a href="/mlb" class="btn btn-ghost" style="width:100%;">Try Free Preview</a>
+      </div>
+      <div class="pricing-card featured">
+        <div style="font-weight:700;font-size:0.9rem;color:var(--text-muted);margin-bottom:6px;">PRO PLAN</div>
+        <div class="price">$19.99</div>
+        <div class="price-period">per month</div>
+        <ul class="pricing-features">
+          <li>All sports (MLB, NBA, WNBA, PGA, UFC)</li>
+          <li>Advanced projections</li>
+          <li>Matchup intelligence</li>
+          <li>Weather/context engine</li>
+          <li>Verified tracking</li>
+          <li>Premium dashboards</li>
+        </ul>
+        <a href="/pricing" class="btn btn-primary" style="width:100%;">Choose Pro Plan</a>
+        <p class="mt-12" style="font-size:0.8rem;color:var(--text-muted);">Cancel anytime. No hidden fees.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px;">
+      <img src="/brand/logo.png" alt="EdgeRankedSportsAI logo" style="width:32px;height:32px;border-radius:8px;">
+      <span style="font-weight:800;font-size:1.1rem;">EdgeRankedSportsAI</span>
+    </div>
+    <div class="footer-links">
+      <a href="/about">About</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/soccer">Soccer</a>
+      <a href="/privacy-policy">Privacy Policy</a>
+      <a href="/terms">Terms</a>
+      <a href="/disclaimer">Disclaimer</a>
+      <a href="mailto:contact@edgerankedai.com">Contact</a>
+      <a href="https://x.com/EdgeRankedAI" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        X
+      </a>
+    </div>
+    <p style="margin-top:20px;font-size:0.85rem;color:var(--text-muted);line-height:1.5;">Projection-first analytics updated daily across all active sports.</p>
+    <p style="margin-top:20px;font-size:0.85rem;color:var(--text-muted);">© EdgeRankedSportsAI. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>
+"""
+    snapshot_rows = _homepage_snapshot_rows(max_rows=5)
+    html = html.replace("<!--AI_SNAPSHOT_ROWS-->", _render_ai_snapshot_rows_html(snapshot_rows))
+    html = html.replace("<!--PREMIUM_VISIBLE_ROWS-->", _render_premium_visible_rows_html(snapshot_rows, max_visible=3))
+    return html
+
+
 def build_about_page():
     body = (
         "<section class='panel'>"
@@ -5848,6 +9832,327 @@ def build_about_page():
         + "</section>"
     )
     return render_layout("About EdgeRanked AI", "A premium sports analytics platform built around model-driven projections, transparent results, and daily decision-ready boards.", body, "/about", hero_kicker="About")
+
+
+NBA_TEAM_DISPLAY = {
+    "ATL": "Hawks", "BOS": "Celtics", "BKN": "Nets", "CHA": "Hornets", "CHI": "Bulls",
+    "CLE": "Cavaliers", "DAL": "Mavericks", "DEN": "Nuggets", "DET": "Pistons", "GSW": "Warriors",
+    "HOU": "Rockets", "IND": "Pacers", "LAC": "Clippers", "LAL": "Lakers", "MEM": "Grizzlies",
+    "MIA": "Heat", "MIL": "Bucks", "MIN": "Timberwolves", "NOP": "Pelicans", "NYK": "Knicks",
+    "OKC": "Thunder", "ORL": "Magic", "PHI": "76ers", "PHX": "Suns", "POR": "Trail Blazers",
+    "SAC": "Kings", "SAS": "Spurs", "TOR": "Raptors", "UTA": "Jazz", "WAS": "Wizards",
+}
+WNBA_TEAM_DISPLAY = {
+    "ATL": "Dream", "CHI": "Sky", "CON": "Sun", "DAL": "Wings", "GSV": "Valkyries", "IND": "Fever",
+    "LA": "Sparks", "LAS": "Aces", "MIN": "Lynx", "NY": "Liberty", "PHX": "Mercury", "SEA": "Storm", "WAS": "Mystics",
+}
+MLB_TEAM_DISPLAY = {
+    "Arizona Diamondbacks": "Diamondbacks", "Athletics": "Athletics", "Atlanta Braves": "Braves", "Baltimore Orioles": "Orioles",
+    "Boston Red Sox": "Red Sox", "Chicago Cubs": "Cubs", "Chicago White Sox": "White Sox", "Cincinnati Reds": "Reds",
+    "Cleveland Guardians": "Guardians", "Colorado Rockies": "Rockies", "Detroit Tigers": "Tigers", "Houston Astros": "Astros",
+    "Kansas City Royals": "Royals", "Los Angeles Angels": "Angels", "Los Angeles Dodgers": "Dodgers", "Miami Marlins": "Marlins",
+    "Milwaukee Brewers": "Brewers", "Minnesota Twins": "Twins", "New York Mets": "Mets", "New York Yankees": "Yankees",
+    "Philadelphia Phillies": "Phillies", "Pittsburgh Pirates": "Pirates", "San Diego Padres": "Padres", "San Francisco Giants": "Giants",
+    "Seattle Mariners": "Mariners", "St. Louis Cardinals": "Cardinals", "Tampa Bay Rays": "Rays", "Texas Rangers": "Rangers",
+    "Toronto Blue Jays": "Blue Jays", "Washington Nationals": "Nationals",
+    "ARI": "Diamondbacks", "ATH": "Athletics", "ATL": "Braves", "BAL": "Orioles", "BOS": "Red Sox", "CHC": "Cubs", "CWS": "White Sox",
+    "CIN": "Reds", "CLE": "Guardians", "COL": "Rockies", "DET": "Tigers", "HOU": "Astros", "KC": "Royals", "LAA": "Angels",
+    "LAD": "Dodgers", "MIA": "Marlins", "MIL": "Brewers", "MIN": "Twins", "NYM": "Mets", "NYY": "Yankees", "PHI": "Phillies",
+    "PIT": "Pirates", "SD": "Padres", "SF": "Giants", "SEA": "Mariners", "STL": "Cardinals", "TB": "Rays", "TEX": "Rangers",
+    "TOR": "Blue Jays", "WSH": "Nationals",
+}
+
+
+def preview_sample_note():
+    return "Preview sample - full board updates daily for premium members."
+
+
+def display_team(value, sport_key):
+    text = normalize_text(value)
+    if not text:
+        return ""
+    upper = text.upper()
+    if sport_key == "nba":
+        return NBA_TEAM_DISPLAY.get(upper, text)
+    if sport_key == "wnba":
+        return WNBA_TEAM_DISPLAY.get(upper, text)
+    if sport_key == "mlb":
+        return MLB_TEAM_DISPLAY.get(text, text)
+    return text
+
+
+def clean_matchup(value, sport_key, team=None, opponent=None):
+    text = normalize_text(value)
+    if text:
+        for separator in (" vs. ", " vs ", " @ "):
+            if separator in text:
+                left, right = text.split(separator, 1)
+                clean_sep = " vs " if "vs" in separator else " at "
+                return f"{display_team(left, sport_key)}{clean_sep}{display_team(right, sport_key)}"
+        return display_team(text, sport_key)
+    team_label = display_team(team, sport_key)
+    opponent_label = display_team(opponent, sport_key)
+    if team_label and opponent_label:
+        return f"{team_label} vs {opponent_label}"
+    return opponent_label or team_label
+
+
+def preview_projection_card(player, team, matchup, category, projection=None, detail="", sport_key=""):
+    return {
+        "player": normalize_text(player, "Preview sample"),
+        "team": display_team(team, sport_key) if sport_key else normalize_text(team),
+        "matchup": clean_matchup(matchup, sport_key, team=team) if sport_key else normalize_text(matchup),
+        "category": normalize_text(category, "Projection"),
+        "projection": normalize_text(projection),
+        "detail": normalize_text(detail),
+        "sport_key": sport_key,
+    }
+
+
+def preview_fallback_card(category, detail):
+    return {"hidden": True, "category": category, "detail": detail}
+
+
+def render_preview_projection_cards(cards):
+    body = []
+    for card in cards:
+        if card.get("hidden"):
+            continue
+        team = normalize_text(card.get("team"))
+        matchup = normalize_text(card.get("matchup"))
+        meta_bits = []
+        if team:
+            meta_bits.append(team)
+        if matchup and matchup != team:
+            meta_bits.append(matchup)
+        projection = normalize_text(card.get("projection"))
+        projection_html = f"<p class='preview-value'>{escape(projection)}</p>" if projection and projection.lower() not in {"n/a", "nan", "unavailable"} else ""
+        meta_html = f"<div class='resource-meta'>{escape(' | '.join(meta_bits))}</div>" if meta_bits else ""
+        detail_html = f"<p>{escape(normalize_text(card.get('detail')))}</p>" if normalize_text(card.get("detail")) else ""
+        if not projection_html and normalize_text(card.get("category")).lower() != "weather edge":
+            continue
+        player_label = card.get("player", "Slate note")
+        if card.get("sport_key") == "wnba":
+            player_html = render_wnba_player_name_html(player_label)
+        else:
+            player_html = escape(player_label)
+        body.append(
+            "<article class='resource-card preview-sample-card'>"
+            + f"<div class='resource-meta'>{escape(card.get('category', 'Projection'))}</div>"
+            + f"<strong>{player_html}</strong>"
+            + meta_html
+            + projection_html
+            + detail_html
+            + "</article>"
+        )
+    return "<div class='resource-grid preview-sample-grid'>" + "".join(body) + "</div>" if body else ""
+
+
+def top_row_by_numeric(rows, field, stat_key=None, used_players=None):
+    candidates = []
+    used_players = {normalize_text(player).lower() for player in (used_players or set()) if normalize_text(player)}
+    for row in rows or []:
+        if stat_key is not None:
+            row_stat = normalize_text(row.get("stat_key") or row.get("stat")).upper()
+            if row_stat != normalize_text(stat_key).upper():
+                continue
+        player = normalize_text(row.get("PLAYER") or row.get("player") or row.get("Pitcher") or row.get("pitcher"))
+        value = safe_float(row.get(field))
+        if value is None:
+            continue
+        candidates.append((player.lower() in used_players, value, row))
+    if not candidates:
+        return None
+    fresh = [item for item in candidates if not item[0]]
+    pool = fresh or candidates
+    return max(pool, key=lambda item: item[1])[2]
+
+
+def build_mlb_preview_samples():
+    cards = []
+    try:
+        hitter_rows = build_mlb_hitter_projection_board()
+    except Exception:
+        hitter_rows = []
+
+    hr_row = top_row_by_numeric([row for row in hitter_rows if row.get("stat") == "Home Runs"], "projection")
+    if hr_row:
+        cards.append(preview_projection_card(
+            hr_row.get("player"), hr_row.get("team"), clean_matchup(None, "mlb", hr_row.get("team"), hr_row.get("opponent")),
+            "Top HR / Power", hr_row.get("projection_display") or pct_label(hr_row.get("projection")),
+            "Highest HR probability on today's board.", sport_key="mlb",
+        ))
+
+    try:
+        pitcher_df = read_csv_df(MLB_FILES["pitcher_predictions"])
+    except Exception:
+        pitcher_df = pd.DataFrame()
+    pitcher_row = None
+    k_field = None
+    if not pitcher_df.empty:
+        rows = records_from_df(pitcher_df)
+        for field in ("Final_Projected_Strikeouts", "Projected_Strikeouts", "Sim_Mean_Strikeouts", "Model_Projected_Strikeouts"):
+            pitcher_row = top_row_by_numeric(rows, field)
+            if pitcher_row:
+                k_field = field
+                break
+    if pitcher_row and k_field:
+        cards.append(preview_projection_card(
+            pitcher_row.get("Pitcher"), pitcher_row.get("Team"), clean_matchup(None, "mlb", pitcher_row.get("Team"), pitcher_row.get("Opponent")),
+            "Top Strikeout Projection", f"{safe_float(pitcher_row.get(k_field)):.1f} Projected Ks",
+            "Top strikeout projection on today's board.", sport_key="mlb",
+        ))
+
+    tb_row = top_row_by_numeric([row for row in hitter_rows if row.get("stat") == "2+ Bases"], "projection")
+    tb_label = "Top Total Bases"
+    tb_detail = "Best 2+ total bases probability on today's board."
+    if not tb_row:
+        tb_row = top_row_by_numeric([row for row in hitter_rows if row.get("stat") == "Hits"], "projection")
+        tb_label = "Top Hit Projection"
+        tb_detail = "Closest available hitter projection on today's board."
+    if tb_row:
+        cards.append(preview_projection_card(
+            tb_row.get("player"), tb_row.get("team"), clean_matchup(None, "mlb", tb_row.get("team"), tb_row.get("opponent")),
+            tb_label, tb_row.get("projection_display") or pct_label(tb_row.get("projection")),
+            tb_detail, sport_key="mlb",
+        ))
+    return cards
+
+
+def build_nba_preview_samples():
+    try:
+        rows = projection_view_records()
+    except Exception:
+        rows = []
+    cards = []
+    used = set()
+    for label, field, copy in [
+        ("Top Points", "PTS", "Highest available points projection in the current NBA sample."),
+        ("Top PRA", "PRA", "Top points + rebounds + assists sample, preferring a different player when possible."),
+        ("Top Fantasy", "FANTASY", "Top fantasy projection sample, preferring a different player when possible."),
+    ]:
+        row = top_row_by_numeric(rows, field, used_players=used)
+        if row:
+            used.add(normalize_text(row.get("PLAYER")))
+            cards.append(preview_projection_card(row.get("PLAYER"), row.get("TEAM"), row.get("MATCHUP"), label, metric_label(row.get(field)), copy, sport_key="nba"))
+        else:
+            cards.append(preview_fallback_card(label, f"A clean {field} sample is not available right now."))
+    return cards
+
+
+def build_wnba_component_totals(rows, fields):
+    grouped = {}
+    for row in rows or []:
+        player = normalize_text(row.get("player"))
+        if not player:
+            continue
+        stat = normalize_text(row.get("stat_key")).upper()
+        if stat not in fields:
+            continue
+        key = (player, normalize_text(row.get("team")), normalize_text(row.get("matchup") or row.get("opponent")))
+        grouped.setdefault(key, {})[stat] = safe_float(row.get("projection"))
+    totals = []
+    for (player, team, matchup), values in grouped.items():
+        if all(values.get(field) is not None for field in fields):
+            totals.append({"player": player, "team": team, "matchup": matchup, "projection": sum(values[field] for field in fields)})
+    return totals
+
+
+def build_wnba_preview_samples():
+    try:
+        from nba_model.webapp.wnba_views import build_projection_records
+        rows = build_projection_records()
+    except Exception:
+        rows = []
+    cards = []
+    used = set()
+    pts_row = top_row_by_numeric(rows, "projection", stat_key="PTS", used_players=used)
+    if pts_row:
+        used.add(normalize_text(pts_row.get("player")))
+        cards.append(preview_projection_card(pts_row.get("player"), pts_row.get("team"), pts_row.get("matchup") or pts_row.get("opponent"), "Top Points", metric_label(pts_row.get("projection")), "Highest available points projection in the current WNBA sample.", sport_key="wnba"))
+    else:
+        cards.append(preview_fallback_card("Top Points", "A clean points sample is not available right now."))
+
+    pra_rows = build_wnba_component_totals(rows, {"PTS", "REB", "AST"})
+    pra_row = top_row_by_numeric(pra_rows, "projection", used_players=used)
+    if pra_row:
+        used.add(normalize_text(pra_row.get("player")))
+        cards.append(preview_projection_card(pra_row.get("player"), pra_row.get("team"), pra_row.get("matchup"), "Top PRA", metric_label(pra_row.get("projection")), "Computed from available points, rebounds, and assists projection rows.", sport_key="wnba"))
+    else:
+        cards.append(preview_fallback_card("Top PRA", "PRA sample is unavailable because one or more component stats are missing."))
+
+    fantasy_row = top_row_by_numeric(rows, "projection", stat_key="FANTASY", used_players=used)
+    if fantasy_row:
+        cards.append(preview_projection_card(fantasy_row.get("player"), fantasy_row.get("team"), fantasy_row.get("matchup") or fantasy_row.get("opponent"), "Top Fantasy", metric_label(fantasy_row.get("projection")), "Highest available fantasy projection in the current WNBA sample.", sport_key="wnba"))
+    else:
+        cards.append(preview_fallback_card("Top Fantasy", "Fantasy projection is not available in the current WNBA output."))
+    return cards
+
+
+def build_preview_sample_cards(sport_key):
+    if sport_key == "mlb":
+        return build_mlb_preview_samples()
+    if sport_key == "nba":
+        return build_nba_preview_samples()
+    if sport_key == "wnba":
+        return build_wnba_preview_samples()
+    return []
+
+
+def preview_page_styles():
+    return """
+    <style>
+      .preview-page { display: grid; gap: 14px; }
+      .preview-page .panel { padding: 18px; }
+      .preview-hero-panel { min-height: auto; }
+      .preview-hero-panel .panel-head { margin-bottom: 8px; }
+      .preview-hero-panel h2 { font-size: 28px; line-height: 1.05; }
+      .preview-hero-copy { margin-bottom: 12px; }
+      .preview-hero-copy p { margin: 0; max-width: 58ch; }
+      .preview-sample-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+      .preview-sample-card { padding: 16px; }
+      .preview-sample-card strong { display: block; margin-top: 8px; color: #fff; font-size: 22px; line-height: 1.1; }
+      .preview-value { margin: 10px 0 4px; color: #fff; font-size: 28px; font-weight: 900; letter-spacing: -0.02em; }
+      .preview-board-footer { text-align: center; }
+      @media (max-width: 720px) {
+        .preview-page { gap: 10px; }
+        .preview-page .panel { padding: 14px; }
+        .preview-hero-panel h2 { font-size: 24px; }
+        .preview-sample-card strong { font-size: 18px; }
+        .preview-value { font-size: 23px; }
+        .preview-page .cta-row { gap: 8px; }
+        .preview-page .cta-btn { width: 100%; justify-content: center; }
+      }
+    </style>
+    """
+
+
+def build_preview_page(sport_key, active_route=None):
+    spec = PREVIEW_PAGE_SPECS[sport_key]
+    route = active_route or spec["route"]
+    intro = spec["intro"][0] if spec.get("intro") else "Live projection samples from today's slate."
+    sample_cards = render_preview_projection_cards(build_preview_sample_cards(sport_key))
+    cta_actions = {
+        "mlb": [("Unlock Full MLB Board", "/mlb/projections", "primary"), ("Pitcher Board", "/mlb/pitcher-strikeouts", "secondary")],
+        "nba": [("Access Full NBA Projections", "/nba/projections", "primary")],
+        "wnba": [("Unlock WNBA Projection Dashboard", "/wnba/projections", "primary")],
+    }
+    body = (
+        preview_page_styles()
+        + "<div class='preview-page'>"
+        + "<section class='panel preview-hero-panel'><div class='panel-head'><div><div class='eyebrow'>Today's Slate</div><h2>" + escape(spec["heading"]) + "</h2></div></div>"
+        + "<div class='preview-hero-copy'><p class='muted'>" + escape(intro) + "</p></div>"
+        + render_page_actions(cta_actions.get(sport_key, []))
+        + "</section>"
+        + "<section class='panel'><div class='panel-head'><div><div class='eyebrow'>Live Samples</div><h2>What looks interesting</h2></div></div>" + sample_cards + "</section>"
+        + "<section class='panel preview-board-footer'><div class='panel-head'><div><div class='eyebrow'>Premium Board</div><h2>Full slate lives behind the board</h2></div><p class='muted'>Open the premium view for filters, sortable tables, and every current projection.</p></div>" + render_page_actions(cta_actions.get(sport_key, [])) + "</section>"
+        + "</div>"
+    )
+    # /mlb and /mlb-preview serve identical content; consolidate both onto the
+    # primary hub URL (/mlb, /nba, /wnba) so Google indexes the hub, not the
+    # duplicate preview path.
+    hub_path = "/" + sport_key
+    return render_layout(spec["heading"], spec["description"], body, route, None, hero_kicker="Slate Preview", canonical_path=hub_path)
 
 
 def build_nba_home():
@@ -5885,13 +10190,12 @@ def build_nba_home():
             ("Jump to Top Plays", "/nba/best-bets", "secondary"),
         ])
         + "</section>"
-        + render_nba_record_panel(record_board)
         + render_nba_best_bets_summary(best_bets_board)
     )
     return render_layout(
         "NBA Projection Center",
         "Daily player projections, probabilities, matchup intelligence, and verified results powered by EdgeRanked",
-        body,
+        _nba_premium_wrap(body),
         "/nba",
         render_subnav(NBA_NAV_ITEMS, "/nba"),
         hero_kicker="NBA",
@@ -5911,7 +10215,37 @@ def build_ufc_home():
             team_label="Group",
         )
     )
-    return render_layout("UFC", "Fight forecasts, prop probabilities, and model-driven card analysis.", body, "/ufc", render_subnav(UFC_NAV_ITEMS, "/ufc"))
+    return render_layout("UFC", "Fight forecasts, prop probabilities, and model-driven card analysis.", _ufc_premium_wrap(body), "/ufc", render_subnav(UFC_NAV_ITEMS, "/ufc"))
+
+
+# Per-sport opt-in wrappers for the .sport-premium-page CSS already defined in
+# render_layout's stylesheet. No global rules; the wrapper class is the only
+# trigger for the premium polish on each sport's pages.
+_MLB_PREMIUM_OPEN = "<div class='sport-premium-page sport-premium-mlb'>"
+_MLB_PREMIUM_CLOSE = "</div>"
+_NBA_PREMIUM_OPEN = "<div class='sport-premium-page sport-premium-nba'>"
+_NBA_PREMIUM_CLOSE = "</div>"
+_PGA_GOLFER_LINKS = {"golfer_name": render_pga_golfer_name_html}
+_PGA_PREMIUM_OPEN = "<div class='sport-premium-page sport-premium-pga'>"
+_PGA_PREMIUM_CLOSE = "</div>"
+_UFC_PREMIUM_OPEN = "<div class='sport-premium-page sport-premium-ufc'>"
+_UFC_PREMIUM_CLOSE = "</div>"
+
+
+def _mlb_premium_wrap(body_html: str) -> str:
+    return _MLB_PREMIUM_OPEN + body_html + _MLB_PREMIUM_CLOSE
+
+
+def _nba_premium_wrap(body_html: str) -> str:
+    return _NBA_PREMIUM_OPEN + body_html + _NBA_PREMIUM_CLOSE
+
+
+def _pga_premium_wrap(body_html: str) -> str:
+    return _PGA_PREMIUM_OPEN + body_html + _PGA_PREMIUM_CLOSE
+
+
+def _ufc_premium_wrap(body_html: str) -> str:
+    return _UFC_PREMIUM_OPEN + body_html + _UFC_PREMIUM_CLOSE
 
 
 def build_mlb_home():
@@ -5938,40 +10272,1066 @@ def build_mlb_home():
         + render_mlb_compact_top_plays(best_bets["top_plays"])
     )
 
-    return render_layout("MLB Snapshot", "Today’s MLB projection overview powered by EdgeRanked.", body, "/mlb", render_mlb_nav("/mlb"))
+    return render_layout("MLB Snapshot", "Today’s MLB projection overview powered by EdgeRanked.", _mlb_premium_wrap(body), "/mlb", render_mlb_nav("/mlb"))
 
+
+# ─────────────────────────── MLB Intel preview ────────────────────────────────
+# Preview-only page that renders the three intel JSONs published to MLB_OUTPUT_DIR
+# by mlb_model.production.build_mlb_{game_environment,attack_context,intel_explanations}.
+# Read-only: never writes, never mutates source files, never alters projections.
+
+MLB_INTEL_GAME_ENV_FILE = "mlb_game_environment_today.json"
+MLB_INTEL_ATTACK_FILE = "mlb_attack_context_today.json"
+MLB_INTEL_EXPLANATIONS_FILE = "mlb_intel_explanations_today.json"
+MLB_INTEL_MATCHUP_HISTORY_FILE = "mlb_matchup_history_today.json"
+
+# BvP display thresholds (per spec). Display-only — never feeds projections.
+_BVP_HIDE_BELOW_AB = 5
+_BVP_COMPACT_MAX_AB = 9  # 5..9 → "BvP: limited sample, X AB"
+
+
+def _load_mlb_intel_json(filename):
+    if MLB_OUTPUT_DIR is None:
+        return None
+    path = MLB_OUTPUT_DIR / filename
+    if not path.exists():
+        return None
+    try:
+        with path.open("r", encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return None
+
+
+def _intel_fmt_num(value, digits=1, fallback="Unavailable"):
+    if value is None:
+        return fallback
+    try:
+        return f"{round(float(value), digits)}"
+    except (TypeError, ValueError):
+        return fallback
+
+
+def _intel_fmt_pct(value, digits=1, fallback="Unavailable"):
+    if value is None:
+        return fallback
+    try:
+        return f"{round(float(value), digits)}%"
+    except (TypeError, ValueError):
+        return fallback
+
+
+def _intel_explanation_index(explanations):
+    if not explanations:
+        return {"game": {}, "hitter": {}, "pitcher": {}, "stack": {}}
+    game_idx = {}
+    for row in explanations.get("why_this_game") or []:
+        gid = str(row.get("game_id"))
+        if gid:
+            game_idx[gid] = row.get("explanation") or ""
+    hitter_idx = {}
+    for row in explanations.get("why_this_hitter") or []:
+        key = (str(row.get("hitter_id") or ""), str(row.get("hitter_name") or ""), str(row.get("game_id") or ""))
+        hitter_idx[key] = row.get("explanation") or ""
+    pitcher_idx = {}
+    for row in explanations.get("why_attack_this_pitcher") or []:
+        key = (str(row.get("pitcher_id") or ""), str(row.get("pitcher_name") or ""), str(row.get("game_id") or ""))
+        pitcher_idx[key] = row.get("explanation") or ""
+    stack_idx = {}
+    for row in explanations.get("why_stack_this_team") or []:
+        key = (str(row.get("team") or ""), str(row.get("game_id") or ""))
+        stack_idx[key] = row.get("explanation") or ""
+    return {"game": game_idx, "hitter": hitter_idx, "pitcher": pitcher_idx, "stack": stack_idx}
+
+
+def _intel_chip(label, value):
+    if value is None or value == "" or value == "Unavailable":
+        return ""
+    return (
+        "<span class='intel-chip'>"
+        f"<span class='intel-chip-label'>{escape(str(label))}</span>"
+        f"<span class='intel-chip-value'>{escape(str(value))}</span>"
+        "</span>"
+    )
+
+
+def _intel_panel_styles():
+    return (
+        "<style>"
+        ".intel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;}"
+        ".intel-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-md);padding:14px 16px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow);position:relative;}"
+        ".intel-card-head{display:flex;flex-direction:column;gap:2px;padding-right:64px;}"
+        ".intel-eyebrow{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;}"
+        ".intel-title{font-size:16px;font-weight:700;color:var(--ink);line-height:1.25;}"
+        ".intel-sub{font-size:12.5px;color:var(--muted);line-height:1.4;}"
+        ".intel-chips{display:flex;flex-wrap:wrap;gap:5px;}"
+        ".intel-chip{display:inline-flex;align-items:center;gap:5px;background:var(--surface-strong);border:1px solid var(--line);border-radius:999px;padding:3px 9px;font-size:11.5px;}"
+        ".intel-chip-label{color:var(--muted);letter-spacing:.02em;font-size:11px;}"
+        ".intel-chip-value{color:var(--ink);font-weight:600;}"
+        ".intel-score-badge{position:absolute;top:12px;right:14px;font-size:10.5px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;text-align:right;}"
+        ".intel-score-badge strong{display:block;color:var(--ink);font-size:14px;text-transform:none;letter-spacing:0;}"
+        ".intel-section-head{margin-bottom:12px;}"
+        ".intel-section-head .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}"
+        ".intel-section-head h3{margin:0 0 4px 0;font-size:18px;color:var(--ink);}"
+        ".intel-section-head p{margin:0;font-size:13px;color:var(--muted);}"
+        ".intel-mini-list{margin:2px 0 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--ink);}"
+        ".intel-mini-list .muted{color:var(--muted);}"
+        ".intel-status-banner{background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.32);color:var(--ink);border-radius:var(--radius-md);padding:10px 14px;margin-bottom:18px;font-size:12.5px;}"
+        "@media(max-width:560px){"
+        ".intel-grid{grid-template-columns:1fr;gap:12px;}"
+        ".intel-card{padding:13px 14px;}"
+        ".intel-card-head{padding-right:0;}"
+        ".intel-title{font-size:15.5px;}"
+        ".intel-score-badge{position:static;display:inline-flex;align-items:baseline;gap:6px;align-self:flex-end;order:99;background:var(--surface-strong);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:10px;letter-spacing:.06em;}"
+        ".intel-score-badge strong{display:inline;font-size:12px;}"
+        "}"
+        "</style>"
+    )
+
+
+def _intel_section_head(title, subtitle):
+    return (
+        "<div class='intel-section-head'>"
+        "<div class='eyebrow'>MLB Intel</div>"
+        f"<h3>{escape(title)}</h3>"
+        f"<p>{escape(subtitle)}</p>"
+        "</div>"
+    )
+
+
+def _intel_score_badge(value, label):
+    if value is None:
+        return ""
+    return (
+        f"<div class='intel-score-badge'>{escape(label)}<strong>{escape(str(value))}</strong></div>"
+    )
+
+
+# Display-only label translations for the intel preview UI. Backend JSON values
+# are unchanged; this is purely a frontend render-layer translation.
+_INTEL_LABEL_DISPLAY = {
+    "Run Boost": "High Scoring Environment",
+    "Power Environment": "Power-Friendly Environment",
+    "Pitcher Friendly": "Pitching Environment",
+    "Chaos Spot": "Volatile Environment",
+    "Tight Game": "Competitive Game",
+    "Blowout Risk": "Blowout Potential",
+    "Run Production Spot": "Contact Boost",
+    "Premium Stack Environment": "Team Stack Trio",
+}
+
+
+def _intel_display_label(label):
+    if label is None:
+        return ""
+    text = str(label).strip()
+    return _INTEL_LABEL_DISPLAY.get(text, text)
+
+
+def _intel_load_matchup_history_lookup():
+    """Return {hitter_id_str → matchup_record} from mlb_matchup_history_today.json.
+
+    Each hitter has a single probable pitcher per slate, so keying by hitter_id
+    alone is unambiguous for display. Returns an empty dict if the artifact is
+    missing or unreadable — the page renders normally without BvP chips.
+    """
+    payload = _load_mlb_intel_json(MLB_INTEL_MATCHUP_HISTORY_FILE)
+    if not payload:
+        return {}
+    out = {}
+    for r in payload.get("matchups") or []:
+        hid = r.get("hitter_id")
+        if hid is None:
+            continue
+        out[str(hid)] = r
+    return out
+
+
+def _intel_bvp_chip_html(matchup_record):
+    """Render a single compact BvP chip per spec thresholds.
+
+    Display rules:
+      - no_history=true or career_ab<5 → return "" (no chip).
+      - 5 ≤ AB < 10 → "BvP · limited sample, N AB"
+      - 10 ≤ AB < 20 → "BvP · X-for-Y, N HR, .AVG · small sample"
+      - AB ≥ 20 (sample_size_label='Established') → "BvP · X-for-Y, N HR, .AVG · established history"
+    """
+    if not matchup_record:
+        return ""
+    if matchup_record.get("no_history"):
+        return ""
+    ab = matchup_record.get("career_ab")
+    try:
+        ab_int = int(ab) if ab is not None else 0
+    except (TypeError, ValueError):
+        return ""
+    if ab_int < _BVP_HIDE_BELOW_AB:
+        return ""
+
+    sample_label = (matchup_record.get("sample_size_label") or "").strip()
+    small_sample_warning = bool(matchup_record.get("small_sample_warning"))
+
+    if ab_int <= _BVP_COMPACT_MAX_AB:
+        text = f"BvP · limited sample, {ab_int} AB"
+    else:
+        hits = matchup_record.get("career_hits")
+        hr = matchup_record.get("career_hr")
+        avg = (matchup_record.get("career_avg") or "").strip() or "—"
+        hits_for = f"{hits}-for-{ab_int}" if isinstance(hits, int) else f"{ab_int} AB"
+        hr_part = f", {hr} HR" if isinstance(hr, int) else ""
+        text = f"BvP · {hits_for}{hr_part}, {avg}"
+        if sample_label == "Established":
+            text += " · established history"
+        elif small_sample_warning:
+            text += " · small sample"
+
+    return (
+        "<span class='intel-chip'>"
+        f"<span class='intel-chip-value'>{escape(text)}</span>"
+        "</span>"
+    )
+
+
+def _intel_team_short(team):
+    """Compact form: drop city for crowded micro-copy. Used only inside short takeaway lines."""
+    if not team:
+        return ""
+    parts = team.split()
+    return parts[-1] if len(parts) > 1 else team
+
+
+def _intel_weather_line(weather):
+    if not weather:
+        return ""
+    venue = (weather.get("venue") or "").strip()
+    summary = (weather.get("summary") or "").strip()
+    roof = (weather.get("roof_type") or "").strip()
+    bits = [b for b in (venue, summary, (f"{roof} roof" if roof and roof not in ("outdoor", "") else "")) if b]
+    if not bits:
+        return ""
+    return f"<div class='intel-sub'>{escape(' · '.join(bits))}</div>"
+
+
+def _render_intel_game_cards(env_payload):
+    games = (env_payload or {}).get("games") or []
+    if not games:
+        return render_empty_state(
+            "Top Game Environments",
+            "No games available yet.",
+            "Today's intel artifact has not been generated or is still publishing.",
+        )
+    cards = []
+    for g in games:
+        away = g.get("away_team") or "Away"
+        home = g.get("home_team") or "Home"
+        env_label = _intel_display_label(g.get("environment_label") or "Balanced")
+        env_score = g.get("environment_score")
+        score_text = g.get("projected_score_text") or f"{away} vs {home}"
+        chips = "".join([
+            _intel_chip("Projected Runs", _intel_fmt_num(g.get("projected_total"), 1)),
+            _intel_chip("High Score Rate", _intel_fmt_pct(g.get("high_scoring_game_pct"), 0)),
+            _intel_chip("Close Game", _intel_fmt_pct(g.get("one_run_game_pct"), 0)),
+            _intel_chip("Blowout", _intel_fmt_pct(g.get("blowout_game_pct"), 0)),
+        ])
+        cards.append(
+            "<article class='intel-card'>"
+            f"{_intel_score_badge(env_score, 'Env')}"
+            "<div class='intel-card-head'>"
+            f"<div class='intel-eyebrow'>{escape(env_label)}</div>"
+            f"<div class='intel-title'>{escape(score_text)}</div>"
+            f"{_intel_weather_line(g.get('weather_summary'))}"
+            "</div>"
+            f"<div class='intel-chips'>{chips}</div>"
+            "</article>"
+        )
+    head = _intel_section_head(
+        "Top Game Environments",
+        "Today’s strongest MLB run environments from the EdgeRanked simulation engine.",
+    )
+    return (
+        "<section class='panel'>"
+        f"{head}"
+        "<div class='intel-grid'>" + "".join(cards) + "</div>"
+        "</section>"
+    )
+
+
+def _pitcher_role_label(attack_label, projected_ip):
+    """Adapt the displayed role label for openers / low-IP cases without changing the JSON."""
+    if projected_ip is None:
+        return "Opener Risk"
+    try:
+        ip = float(projected_ip)
+    except (TypeError, ValueError):
+        return attack_label or "Balanced"
+    if ip < 3.5:
+        return "Opener Risk"
+    if ip < 5.0 and (not attack_label or attack_label in {"Balanced", "Attackable Arm"}):
+        return "Volatile Role"
+    return attack_label or "Balanced"
+
+
+def _render_intel_pitcher_cards(attack_payload, limit=10):
+    rows = list((attack_payload or {}).get("attack_pitchers") or [])
+    rows = rows[:limit]
+    if not rows:
+        return render_empty_state(
+            "Pitcher Attack Board",
+            "No pitcher rows available yet.",
+            "The attack-context artifact has not been generated or is still publishing.",
+        )
+    cards = []
+    for r in rows:
+        name = r.get("pitcher_name") or "Pitcher"
+        team = r.get("team") or ""
+        opp = r.get("opponent") or ""
+        env_label = _intel_display_label(r.get("game_environment_label") or "Balanced")
+        attack_label = r.get("attack_label") or "Balanced"
+        attack_score = r.get("attack_score")
+        projected_ip = r.get("projected_ip")
+        role_label = _intel_display_label(_pitcher_role_label(attack_label, projected_ip))
+        chips = "".join([
+            _intel_chip("IP", _intel_fmt_num(projected_ip, 1)),
+            _intel_chip("K", _intel_fmt_num(r.get("projected_strikeouts"), 1)),
+            _intel_chip("Opp Runs", _intel_fmt_num(r.get("opponent_projected_runs"), 1)),
+            _intel_chip("K%", _intel_fmt_pct(r.get("pitcher_k_percent"), 1)),
+        ])
+        matchup = f"{team} vs {opp}" if team and opp else (team or opp or "")
+        cards.append(
+            "<article class='intel-card'>"
+            f"{_intel_score_badge(attack_score, 'Score')}"
+            "<div class='intel-card-head'>"
+            f"<div class='intel-eyebrow'>{escape(role_label)} · {escape(env_label)}</div>"
+            f"<div class='intel-title'>{escape(name)}</div>"
+            f"<div class='intel-sub'>{escape(matchup)}</div>"
+            "</div>"
+            f"<div class='intel-chips'>{chips}</div>"
+            "</article>"
+        )
+    head = _intel_section_head(
+        "Pitcher Attack Board",
+        "Starting pitchers in the toughest run environments today.",
+    )
+    return (
+        "<section class='panel'>"
+        f"{head}"
+        "<div class='intel-grid'>" + "".join(cards) + "</div>"
+        "</section>"
+    )
+
+
+def _render_intel_hitter_section(rows, title, subtitle, limit=10, matchup_lookup=None):
+    if not rows:
+        return ""
+    rows = rows[:limit]
+    matchup_lookup = matchup_lookup or {}
+    cards = []
+    for r in rows:
+        name = r.get("hitter_name") or "Hitter"
+        team = r.get("team") or ""
+        opp = r.get("opponent") or ""
+        pitcher = r.get("pitcher_name") or ""
+        env_label = _intel_display_label(r.get("environment_label") or "Balanced")
+        hitter_label = _intel_display_label(r.get("hitter_environment_label") or "Balanced")
+        h_score = r.get("hitter_environment_score")
+        chip_parts = [
+            _intel_chip("Hit", _intel_fmt_pct(r.get("hit_prob"), 1)),
+            _intel_chip("2+ TB", _intel_fmt_pct(r.get("tb2_prob"), 1)),
+            _intel_chip("HR", _intel_fmt_pct(r.get("hr_prob"), 1)),
+            _intel_chip("RBI", _intel_fmt_pct(r.get("rbi_prob"), 1)),
+        ]
+        # Optional BvP context chip — strict display thresholds; never feeds
+        # projections. Hidden entirely when AB<5, no history, or artifact missing.
+        hid = r.get("hitter_id")
+        if hid is not None:
+            bvp_chip = _intel_bvp_chip_html(matchup_lookup.get(str(hid)))
+            if bvp_chip:
+                chip_parts.append(bvp_chip)
+        chips = "".join(chip_parts)
+        sub_parts = []
+        if team and opp:
+            sub_parts.append(f"{team} vs {opp}")
+        if pitcher:
+            sub_parts.append(f"vs {pitcher}")
+        sub = " · ".join(sub_parts)
+        cards.append(
+            "<article class='intel-card'>"
+            f"{_intel_score_badge(h_score, 'Score')}"
+            "<div class='intel-card-head'>"
+            f"<div class='intel-eyebrow'>{escape(hitter_label)} · {escape(env_label)}</div>"
+            f"<div class='intel-title'>{escape(name)}</div>"
+            f"<div class='intel-sub'>{escape(sub)}</div>"
+            "</div>"
+            f"<div class='intel-chips'>{chips}</div>"
+            "</article>"
+        )
+    head = _intel_section_head(title, subtitle)
+    return (
+        "<section class='panel'>"
+        f"{head}"
+        "<div class='intel-grid'>" + "".join(cards) + "</div>"
+        "</section>"
+    )
+
+
+def _render_intel_hitter_groups(attack_payload, matchup_lookup=None):
+    rows = (attack_payload or {}).get("hitter_environment_spots") or []
+    if not rows:
+        return render_empty_state(
+            "Hitter Environment Spots",
+            "No hitter spots available yet.",
+            "The attack-context artifact has not been generated or is still publishing.",
+        )
+    power = [r for r in rows if (r.get("hitter_environment_label") == "Power Spot")]
+    run_prod = [r for r in rows if (r.get("hitter_environment_label") == "Run Production Spot")]
+    contact = [r for r in rows if (r.get("hitter_environment_label") == "Contact Spot")]
+
+    blocks = []
+    blocks.append(
+        _render_intel_hitter_section(
+            power,
+            "Top 10 Power Spots",
+            "Hitters with the strongest home-run probabilities in plus run environments.",
+            matchup_lookup=matchup_lookup,
+        )
+    )
+    blocks.append(
+        _render_intel_hitter_section(
+            run_prod,
+            "Top 10 Contact Boost Spots",
+            "Hitters in high-scoring spots with strong RBI and total-base profiles.",
+            matchup_lookup=matchup_lookup,
+        )
+    )
+    if len(contact) >= 3:
+        blocks.append(
+            _render_intel_hitter_section(
+                contact,
+                "Top 10 Contact Spots",
+                "Hitters projected for high contact in supportive environments.",
+                matchup_lookup=matchup_lookup,
+            )
+        )
+    blocks = [b for b in blocks if b]
+    return "".join(blocks)
+
+
+def _render_intel_stack_cards(attack_payload, limit=10):
+    rows = list((attack_payload or {}).get("team_stack_environments") or [])
+    rows = rows[:limit]
+    if not rows:
+        return render_empty_state(
+            "Team Run Environments",
+            "No team rows available yet.",
+            "The attack-context artifact has not been generated or is still publishing.",
+        )
+    cards = []
+    for r in rows:
+        team = r.get("team") or "Team"
+        opp = r.get("opponent") or ""
+        env_label = _intel_display_label(r.get("environment_label") or "Balanced")
+        stack_label = _intel_display_label(r.get("stack_label") or "Balanced")
+        stack_score = r.get("stack_score")
+        chips = "".join([
+            _intel_chip("Team Runs", _intel_fmt_num(r.get("projected_team_runs"), 1)),
+            _intel_chip("Total", _intel_fmt_num(r.get("projected_total"), 1)),
+        ])
+        top_hitters = r.get("top_hitters") or []
+        mini = []
+        for h in top_hitters[:3]:
+            hname = h.get("hitter_name") or ""
+            hr = _intel_fmt_pct(h.get("hr_prob"), 1)
+            if hname:
+                mini.append(
+                    "<li>"
+                    f"<span>{escape(hname)}</span>"
+                    f" <span class='muted'>· HR {escape(hr)}</span>"
+                    "</li>"
+                )
+        mini_html = f"<ul class='intel-mini-list'>{''.join(mini)}</ul>" if mini else ""
+        matchup = f"{team} vs {opp}" if opp else team
+        cards.append(
+            "<article class='intel-card'>"
+            f"{_intel_score_badge(stack_score, 'Score')}"
+            "<div class='intel-card-head'>"
+            f"<div class='intel-eyebrow'>{escape(stack_label)} · {escape(env_label)}</div>"
+            f"<div class='intel-title'>{escape(matchup)}</div>"
+            "</div>"
+            f"<div class='intel-chips'>{chips}</div>"
+            f"{mini_html}"
+            "</article>"
+        )
+    head = _intel_section_head(
+        "Team Run Environments",
+        "Teams carrying the strongest simulated scoring outlook today.",
+    )
+    return (
+        "<section class='panel'>"
+        f"{head}"
+        "<div class='intel-grid'>" + "".join(cards) + "</div>"
+        "</section>"
+    )
+
+
+def build_mlb_intel_page():
+    env_payload = _load_mlb_intel_json(MLB_INTEL_GAME_ENV_FILE)
+    attack_payload = _load_mlb_intel_json(MLB_INTEL_ATTACK_FILE)
+    matchup_lookup = _intel_load_matchup_history_lookup()
+
+    missing = []
+    if env_payload is None:
+        missing.append(MLB_INTEL_GAME_ENV_FILE)
+    if attack_payload is None:
+        missing.append(MLB_INTEL_ATTACK_FILE)
+
+    try:
+        active_path = request.path or "/mlb/intel"
+    except RuntimeError:
+        active_path = "/mlb/intel"
+    if active_path not in {"/mlb/intel", "/mlb/intel-preview"}:
+        active_path = "/mlb/intel"
+    # Always highlight the live "Intel" nav item even when served from the legacy alias.
+    nav_path = "/mlb/intel"
+
+    banner_html = ""
+    if missing:
+        slate_date = (env_payload or {}).get("slate_date") or "unknown"
+        banner_text = f"MLB Intel · slate {slate_date}. Missing artifacts: {', '.join(missing)}."
+        banner_html = f"<div class='intel-status-banner'>{escape(banner_text)}</div>"
+
+    body = (
+        _intel_panel_styles()
+        + banner_html
+        + _render_intel_game_cards(env_payload)
+        + _render_intel_pitcher_cards(attack_payload, limit=10)
+        + _render_intel_hitter_groups(attack_payload, matchup_lookup=matchup_lookup)
+        + _render_intel_stack_cards(attack_payload, limit=10)
+    )
+    return render_layout(
+        "MLB Intel",
+        "Today’s MLB game environments, pitcher matchups, and team-level scoring outlook.",
+        _mlb_premium_wrap(body),
+        active_path,
+        render_mlb_nav(nav_path),
+        hero_kicker="Matchup History",
+    )
+
+
+# Backwards-compatible alias retained for any callers still referencing the
+# preview-era builder name. Both routes call the same function above.
+build_mlb_intel_preview = build_mlb_intel_page
+
+
+# ────────────────────────── MLB Matchup History page ───────────────────────────
+# Premium-gated standalone page that renders mlb_matchup_history_today.json into
+# five compact card sections. Display layer only — never touches projections,
+# sims, model logic, JSON schemas, or the underlying builder.
+
+def _matchup_parse_rate(text):
+    """Parse StatsAPI rate strings like '.273' / '.713' → float. None on failure."""
+    if text is None:
+        return None
+    try:
+        return float(text)
+    except (TypeError, ValueError):
+        try:
+            return float(str(text).strip())
+        except (TypeError, ValueError):
+            return None
+
+
+def _matchup_qualifies(m):
+    """Reject no-history, AB<5, or null-stat rows up-front."""
+    if m is None:
+        return False
+    if m.get("no_history"):
+        return False
+    ab = m.get("career_ab")
+    if not isinstance(ab, int) or ab < 5:
+        return False
+    return True
+
+
+def _matchup_partition(matchups):
+    """Bucket matchups into the five spec sections, with the per-section caps."""
+    established = []
+    power = []
+    contact = []
+    pitcher_dom = []
+    limited = []
+    for m in matchups:
+        if not _matchup_qualifies(m):
+            continue
+        ab = m.get("career_ab") or 0
+        hr = m.get("career_hr") or 0
+        k = m.get("career_k") or 0
+        avg = _matchup_parse_rate(m.get("career_avg"))
+        ops = _matchup_parse_rate(m.get("career_ops"))
+
+        if 5 <= ab < 10:
+            limited.append(m)
+            continue   # limited samples don't appear in the headline buckets
+
+        if ab >= 20:
+            established.append((m, (avg or 0.0) + 0.05 * (hr or 0) + (ops or 0.0)))
+
+        if hr >= 2 and ab >= 10:
+            power.append((m, (hr, ops or 0.0)))
+
+        if ab >= 10 and avg is not None and avg >= 0.300:
+            contact.append((m, (avg, ops or 0.0)))
+
+        if ab >= 10 and (k >= 8 or (avg is not None and avg <= 0.180)):
+            pitcher_dom.append((m, (k, 1.0 - (avg if avg is not None else 0.0))))
+
+    established.sort(key=lambda t: -t[1])
+    power.sort(key=lambda t: (-t[1][0], -t[1][1]))
+    contact.sort(key=lambda t: (-t[1][0], -t[1][1]))
+    pitcher_dom.sort(key=lambda t: (-t[1][0], -t[1][1]))
+    # Limited samples sorted by AB ascending (smallest first) then alpha.
+    limited.sort(key=lambda m: ((m.get("career_ab") or 0), (m.get("hitter_name") or "")))
+
+    return {
+        "established": [t[0] for t in established[:15]],
+        "power": [t[0] for t in power[:15]],
+        "contact": [t[0] for t in contact[:15]],
+        "pitcher_dom": [t[0] for t in pitcher_dom[:15]],
+        "limited": limited[:10],
+    }
+
+
+def _matchup_sample_badge(matchup):
+    label = (matchup.get("sample_size_label") or "").strip().lower()
+    if label == "established":
+        text = "Established"
+    elif label in {"small sample", "tiny sample"}:
+        text = "Limited"
+    else:
+        return ""
+    return f"<div class='intel-score-badge'>Sample<strong>{escape(text)}</strong></div>"
+
+
+def _matchup_chips(matchup, *, compact=False):
+    ab = matchup.get("career_ab")
+    hits = matchup.get("career_hits")
+    hr = matchup.get("career_hr")
+    k = matchup.get("career_k")
+    avg = matchup.get("career_avg")
+    ops = matchup.get("career_ops")
+    chips = [
+        _intel_chip("AB", _intel_fmt_num(ab, 0)),
+        _intel_chip("H", _intel_fmt_num(hits, 0)),
+        _intel_chip("HR", _intel_fmt_num(hr, 0)),
+        _intel_chip("K", _intel_fmt_num(k, 0)),
+    ]
+    if not compact:
+        chips.append(_intel_chip("AVG", str(avg) if avg else "Unavailable"))
+        if ops:
+            chips.append(_intel_chip("OPS", str(ops)))
+    return "".join(c for c in chips if c)
+
+
+def _render_matchup_card(m, *, compact=False):
+    hitter = m.get("hitter_name") or "Hitter"
+    pitcher = m.get("pitcher_name") or "Pitcher"
+    team = m.get("team") or ""
+    opp = m.get("opponent") or ""
+    matchup_line = f"vs {pitcher}" if pitcher else ""
+    sub_parts = []
+    if team and opp:
+        sub_parts.append(f"{team} vs {opp}")
+    sub = " · ".join(sub_parts) if sub_parts else ""
+    return (
+        "<article class='intel-card'>"
+        f"{_matchup_sample_badge(m) if not compact else ''}"
+        "<div class='intel-card-head'>"
+        f"<div class='intel-eyebrow'>{escape(matchup_line)}</div>"
+        f"<div class='intel-title'>{escape(hitter)}</div>"
+        f"{('<div class' + chr(0x27) + 'intel-sub' + chr(0x27) + '>' + escape(sub) + '</div>') if sub else ''}"
+        "</div>"
+        f"<div class='intel-chips'>{_matchup_chips(m, compact=compact)}</div>"
+        "</article>"
+    )
+
+
+def _render_matchup_section(title, subtitle, rows, *, compact=False):
+    if not rows:
+        return ""
+    cards = "".join(_render_matchup_card(m, compact=compact) for m in rows)
+    head = _intel_section_head(title, subtitle)
+    return (
+        "<section class='panel'>"
+        f"{head}"
+        f"<div class='intel-grid'>{cards}</div>"
+        "</section>"
+    )
+
+
+def build_mlb_matchup_history_page():
+    payload = _load_mlb_intel_json(MLB_INTEL_MATCHUP_HISTORY_FILE)
+    raw_matchups = (payload or {}).get("matchups") or []
+
+    def _num(v, default=0.0):
+        try:
+            if v in (None, "", "None"):
+                return default
+            return float(v)
+        except Exception:
+            return default
+
+    def _int(v, default=0):
+        try:
+            if v in (None, "", "None"):
+                return default
+            return int(float(v))
+        except Exception:
+            return default
+
+    def _team_short(name):
+        n = str(name or "").strip()
+        repl = {
+            "Arizona Diamondbacks": "Diamondbacks",
+            "Atlanta Braves": "Braves",
+            "Baltimore Orioles": "Orioles",
+            "Boston Red Sox": "Red Sox",
+            "Chicago Cubs": "Cubs",
+            "Chicago White Sox": "White Sox",
+            "Cincinnati Reds": "Reds",
+            "Cleveland Guardians": "Guardians",
+            "Colorado Rockies": "Rockies",
+            "Detroit Tigers": "Tigers",
+            "Houston Astros": "Astros",
+            "Kansas City Royals": "Royals",
+            "Los Angeles Angels": "Angels",
+            "Los Angeles Dodgers": "Dodgers",
+            "Miami Marlins": "Marlins",
+            "Milwaukee Brewers": "Brewers",
+            "Minnesota Twins": "Twins",
+            "New York Mets": "Mets",
+            "New York Yankees": "Yankees",
+            "Athletics": "Athletics",
+            "Oakland Athletics": "Athletics",
+            "Philadelphia Phillies": "Phillies",
+            "Pittsburgh Pirates": "Pirates",
+            "San Diego Padres": "Padres",
+            "San Francisco Giants": "Giants",
+            "Seattle Mariners": "Mariners",
+            "St. Louis Cardinals": "Cardinals",
+            "Tampa Bay Rays": "Rays",
+            "Texas Rangers": "Rangers",
+            "Toronto Blue Jays": "Blue Jays",
+            "Washington Nationals": "Nationals",
+        }
+        return repl.get(n, n)
+
+    def _game_key(m):
+        gid = m.get("game_id") or m.get("gamePk") or ""
+        team = m.get("team") or m.get("hitter_team") or ""
+        opp = m.get("opponent") or m.get("pitcher_team") or ""
+        return str(gid or f"{team}|{opp}")
+
+    def _game_title(rows):
+        first = rows[0] if rows else {}
+        team = first.get("team") or first.get("hitter_team") or ""
+        opp = first.get("opponent") or first.get("pitcher_team") or ""
+        if team and opp:
+            return f"{_team_short(team)} vs {_team_short(opp)}"
+        return "Matchup History"
+
+    def _tag_and_rank(m):
+        ab = _int(m.get("career_ab"))
+        hr = _int(m.get("career_hr"))
+        k = _int(m.get("career_k"))
+        avg = _num(m.get("career_avg"))
+        ops = _num(m.get("career_ops"))
+        sample = str(m.get("sample_size_label") or "")
+
+        if hr >= 2:
+            return "Power Matchup", 0
+        if ab >= 10 and avg >= 0.300:
+            return "Strong Contact", 1
+        if ab >= 10 and (k >= 8 or avg <= 0.180):
+            return "Pitcher Edge", 2
+        if sample == "Established" or ab >= 20:
+            return "Established History", 3
+        return "Limited Exposure", 4
+
+    def _include(m):
+        if m.get("no_history") is True:
+            return False
+        ab = _int(m.get("career_ab"))
+        hr = _int(m.get("career_hr"))
+        return ab >= 10 or hr >= 2
+
+    seen = set()
+    grouped = {}
+    game_meta = {}
+    audit_counts = {
+        "raw_matchups": len(raw_matchups),
+        "no_history": 0,
+        "below_display_threshold": 0,
+        "duplicates": 0,
+        "rendered_cards": 0,
+        "games_total": 0,
+        "games_with_cards": 0,
+        "games_empty_state": 0,
+    }
+    for m in raw_matchups:
+        hitter_id = str(m.get("hitter_id") or m.get("player_id") or m.get("hitter_name") or "")
+        pitcher_id = str(m.get("pitcher_id") or m.get("pitcher_name") or "")
+        gkey = _game_key(m)
+
+        # Track every game on the slate so empty/limited matchups are not
+        # silently hidden — even games with all-tiny-sample hitters still
+        # render with an empty-state message instead of disappearing.
+        if gkey not in game_meta:
+            game_meta[gkey] = {
+                "team": m.get("team") or m.get("hitter_team") or "",
+                "opponent": m.get("opponent") or m.get("pitcher_team") or "",
+                "pitcher_name": m.get("pitcher_name") or "",
+            }
+        else:
+            if not game_meta[gkey].get("pitcher_name") and m.get("pitcher_name"):
+                game_meta[gkey]["pitcher_name"] = m.get("pitcher_name")
+            if not game_meta[gkey].get("team") and (m.get("team") or m.get("hitter_team")):
+                game_meta[gkey]["team"] = m.get("team") or m.get("hitter_team")
+            if not game_meta[gkey].get("opponent") and (m.get("opponent") or m.get("pitcher_team")):
+                game_meta[gkey]["opponent"] = m.get("opponent") or m.get("pitcher_team")
+
+        if m.get("no_history") is True:
+            audit_counts["no_history"] += 1
+            continue
+        if not _include(m):
+            audit_counts["below_display_threshold"] += 1
+            continue
+
+        dedupe = (hitter_id, pitcher_id)
+        if dedupe in seen:
+            audit_counts["duplicates"] += 1
+            continue
+        seen.add(dedupe)
+
+        tag, tag_rank = _tag_and_rank(m)
+        mm = dict(m)
+        mm["_matchup_context_tag"] = tag
+        mm["_matchup_context_rank"] = tag_rank
+        grouped.setdefault(gkey, []).append(mm)
+        audit_counts["rendered_cards"] += 1
+
+    def _sort_row(m):
+        return (
+            _int(m.get("_matchup_context_rank"), 99),
+            -_int(m.get("career_hr")),
+            -_int(m.get("career_ab")),
+            -_num(m.get("career_ops")),
+            -_num(m.get("career_avg")),
+            str(m.get("hitter_name") or ""),
+        )
+
+    game_sections = []
+    for key, meta in game_meta.items():
+        rows = grouped.get(key, [])
+        rows.sort(key=_sort_row)
+        if rows:
+            best = rows[0]
+            game_rank = (
+                0,
+                _int(best.get("_matchup_context_rank"), 99),
+                -max(_int(r.get("career_hr")) for r in rows),
+                -max(_int(r.get("career_ab")) for r in rows),
+                -max(_num(r.get("career_ops")) for r in rows),
+            )
+        else:
+            # Empty-state games sort to the bottom but are still rendered so
+            # the slate's full game list is visible to the user.
+            game_rank = (1, 99, 0, 0, 0.0)
+        game_sections.append((game_rank, key, rows, meta))
+    game_sections.sort(key=lambda x: x[0])
+
+    audit_counts["games_total"] = len(game_meta)
+    audit_counts["games_with_cards"] = sum(1 for _, _, rows, _ in game_sections if rows)
+    audit_counts["games_empty_state"] = audit_counts["games_total"] - audit_counts["games_with_cards"]
+
+    try:
+        LOGGER.info(
+            "mlb_matchup_history render: games_total=%(games_total)d "
+            "games_with_cards=%(games_with_cards)d games_empty_state=%(games_empty_state)d "
+            "raw_matchups=%(raw_matchups)d rendered_cards=%(rendered_cards)d "
+            "no_history=%(no_history)d below_threshold=%(below_display_threshold)d "
+            "duplicates=%(duplicates)d",
+            audit_counts,
+        )
+    except Exception:
+        pass
+
+    def _empty_state_title(meta):
+        team = _team_short(meta.get("team") or "")
+        opp = _team_short(meta.get("opponent") or "")
+        if team and opp:
+            return f"{team} vs {opp}"
+        return "Matchup History"
+
+    def _render_game_section(rows, meta):
+        title = _game_title(rows) if rows else _empty_state_title(meta)
+        subtitle = "Career matchup history for today's projected starters."
+        if not rows:
+            pitcher = meta.get("pitcher_name") or "TBD"
+            note = (
+                f"No qualifying career BvP history for hitters facing "
+                f"{escape(str(pitcher))}. All matchups are tiny-sample or first-look."
+            )
+            body_html = f"<p class='muted' style='margin:0;'>{note}</p>"
+        else:
+            cards = []
+            for m in rows:
+                card = _render_matchup_card(m)
+                tag = escape(str(m.get("_matchup_context_tag") or "Matchup History"))
+                tag_chip = (
+                    "<span class='intel-chip matchup-context-chip'>"
+                    f"<span class='intel-chip-value'>{tag}</span>"
+                    "</span>"
+                )
+                card = card.replace(
+                    "</article>",
+                    f"<div class='intel-chips matchup-context-row'>{tag_chip}</div></article>",
+                )
+                cards.append(card)
+            body_html = f"<div class='intel-grid'>{''.join(cards)}</div>"
+        return (
+            "<section class='panel matchup-game-panel'>"
+            "<div class='intel-section-head matchup-game-head'><div class='eyebrow'>Matchup History</div>"
+            f"<h3>{escape(title)}</h3>"
+            f"<p>{escape(subtitle)}</p></div>"
+            f"{body_html}"
+            "</section>"
+        )
+
+    banner_html = ""
+    if not payload:
+        banner_html = (
+            "<div class='intel-status-banner'>"
+            "Matchup history is unavailable right now."
+            "</div>"
+        )
+
+    if game_sections:
+        sections_html = "".join(_render_game_section(rows, meta) for _, _, rows, meta in game_sections)
+    else:
+        sections_html = (
+            "<section class='panel'>"
+            + "<div class='intel-section-head'><div class='eyebrow'>Matchup History</div>"
+            + "<h3>Matchup History</h3><p>No qualifying batter vs pitcher history is available for today's projected matchups.</p></div>"
+            + "</section>"
+        )
+
+    body = (
+        _intel_panel_styles()
+        + banner_html
+        + "<section class='panel'>"
+        + "<div class='intel-section-head'>"
+        + "<div><div class='intel-section-eyebrow'>Matchup History</div>"
+        + "<h3>Matchup History</h3>"
+        + "<p>Career matchup history for today's projected starters.</p>"
+        + "</div></div>"
+        + "</section>"
+        + sections_html
+    )
+
+    return render_layout(
+        "Matchup History",
+        "Career matchup history for today's projected starters.",
+        _mlb_premium_wrap(body),
+        "/mlb/matchup-history",
+        render_mlb_nav("/mlb/matchup-history"),
+        hero_kicker="Matchup History",
+    )
 
 
 def build_pricing_page(form_values=None, submit_state=None):
     body = (
-        render_banner("Premium memberships are coming soon. Join the waitlist for launch updates and early access.")
+        render_banner("Professional‑grade sports intelligence ready for launch.")
         + "<section class='pricing-hero'>"
-        + "<div class='pricing-emblem-wrap'><img class='pricing-emblem' src='/brand/emblem.png' alt='EdgeRanked emblem'></div>"
-        + "<div class='pricing-kicker'>Elite Access</div>"
-        + "<h2>Unlock your edge</h2>"
-        + "<p class='muted pricing-copy'>One membership for full access to our AI models, daily projections, and tracked results.</p>"
-        + "<article class='pricing-card pricing-card-featured pricing-card-single'>"
-        + "<div class='pricing-name'>All-Access Membership</div>"
+        + "<div class='pricing-emblem-wrap'><img class='pricing-emblem' src='/brand/logo.png' alt='EdgeRanked SportsAI logo'></div>"
+        + "<div class='pricing-kicker'>Pro Access</div>"
+        + "<h2>Unlock EdgeRankedSportsAI Pro</h2>"
+        + "<p class='muted pricing-copy'>Full projection access across MLB, NBA, WNBA, PGA, and UFC.</p>"
+        + "<article class='pricing-card pricing-card-featured pricing-card-single' style='"
+        + "background: linear-gradient(180deg, rgba(11, 12, 16, 0.85), rgba(2, 6, 15, 0.95));"
+        + "border: 1px solid rgba(59, 130, 246, 0.2);"
+        + "backdrop-filter: blur(12px);"
+        + "border-radius: 20px;"
+        + "box-shadow: 0 8px 32px rgba(0, 10, 255, 0.08);"
+        + "'>"
+        + "<div class='pricing-name'>All‑Access Membership</div>"
         + "<div class='pricing-price'>$19.99<span>/month</span></div>"
         + "<ul class='pricing-list'>"
-        + "<li>Full NBA, MLB, UFC, and PGA boards</li>"
-        + "<li>Live model confidence ratings</li>"
-        + "<li>Daily projection and results updates</li>"
-        + "<li>Priority access to new features</li>"
+        + "<li>Full multi‑sport projections (MLB, NBA, WNBA, PGA, UFC)</li>"
+        + "<li>MLB weather‑adjusted analytics</li>"
+        + "<li>NBA/WNBA matchup intelligence</li>"
+        + "<li>PGA tournament simulations</li>"
+        + "<li>UFC fight simulations</li>"
+        + "<li>Verified tracking & performance dashboards</li>"
+        + "<li>Updated every active slate</li>"
         + "</ul>"
-        + render_page_actions([
-            ("Start Membership", "/waitlist", "primary"),
-        ])
+        + "<div class='trust-block' style='"
+        + "margin: 24px 0;"
+        + "padding: 20px;"
+        + "background: rgba(15, 23, 42, 0.4);"
+        + "border-radius: 12px;"
+        + "border-left: 4px solid rgba(59, 130, 246, 0.6);"
+        + "'>"
+        + "<p style='margin: 0; font-size: 0.95rem; color: rgba(148, 163, 184, 0.9);'>"
+        + "<strong>Projection‑first sports intelligence.</strong> No locks. No guarantees. Just model‑driven insights."
+        + "</p>"
+        + "</div>"
+        + "<div class='cta-row'>"
+        + "<button id='pricing-checkout-btn' class='cta-btn primary' type='button'>Start Pro Access</button>"
+        + "</div>"
+        + "<div id='pricing-checkout-msg' role='alert' aria-live='polite' style='margin-top:12px;font-size:0.9rem;color:#fca5a5;min-height:1.2em;'></div>"
+        + "<script>"
+        + "(function(){"
+        + "var btn=document.getElementById('pricing-checkout-btn');"
+        + "var msg=document.getElementById('pricing-checkout-msg');"
+        + "if(!btn||!msg)return;"
+        + "var originalLabel=btn.textContent;"
+        + "function setLoading(on){btn.disabled=!!on;btn.textContent=on?'Opening checkout\\u2026':originalLabel;}"
+        + "function showError(text){msg.textContent=text||'Please try again.';setLoading(false);}"
+        + "async function startCheckout(){"
+        + "msg.textContent='';setLoading(true);"
+        + "try{"
+        + "var r=await fetch('/api/stripe/create-checkout',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}'});"
+        # Fall back to a fresh Clerk Bearer token if the bridge cookie is
+        # missing or stale; mirrors what /account uses for Start Membership.
+        + "if(r.status===401&&window.Clerk){"
+        + "try{await window.Clerk.load();if(window.Clerk.session){var token=await window.Clerk.session.getToken();if(token){r=await fetch('/api/stripe/create-checkout',{method:'POST',credentials:'same-origin',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},body:'{}'});}}}catch(_e){}"
+        + "}"
+        + "if(r.status===401){window.location.assign('/sign-in?next=/pricing');return;}"
+        + "if(!r.ok){var detail='';try{detail=(await r.json()).error||'';}catch(_){try{detail=await r.text();}catch(_){detail='';}}showError('Checkout unavailable (HTTP '+r.status+'). '+(detail||'Please try again.'));return;}"
+        + "var data=await r.json();"
+        + "if(data&&data.url){window.location.assign(data.url);return;}"
+        + "showError('No checkout URL returned. Please try again.');"
+        + "}catch(err){showError('Checkout error: '+((err&&err.message)?err.message:'unknown'));}"
+        + "}"
+        + "btn.addEventListener('click',function(e){e.preventDefault();startCheckout();});"
+        + "})();"
+        + "</script>"
         + "<p class='pricing-footnote'>Cancel anytime. Secure payment via Stripe.</p>"
+        + "<p class='pricing-preview-note' style='"
+        + "margin-top: 20px;"
+        + "font-size: 0.85rem;"
+        + "color: rgba(148, 163, 184, 0.7);"
+        + "'>"
+        + "Free preview access remains limited. Pro unlocks full dashboards and premium model context."
+        + "</p>"
         + "</article>"
         + "</section>"
     )
     return render_layout(
-        "EdgeRanked AI | Membership",
-        "One simple membership for full access to our AI models, daily projections, and tracked results.",
+        "EdgeRanked AI | Pro Membership",
+        "Full projection access across MLB, NBA, WNBA, PGA, and UFC.",
         body,
         "/pricing",
-        hero_kicker="Membership",
+        hero_kicker="Pro Membership",
     )
 
 
@@ -6053,7 +11413,7 @@ def build_pga_page(round_number=None):
     top_golfer_rows = []
     for row in top_golfers:
         top_golfer_rows.append({
-            "Golfer": normalize_text(row.get("golfer_name")),
+            "golfer_name": normalize_text(row.get("golfer_name")),
             "Win %": pct_label(row.get("win_perc")),
             "Top 10 %": pct_label(row.get("top10_perc")),
             "Cut %": pct_label(row.get("made_cut_perc")),
@@ -6070,9 +11430,10 @@ def build_pga_page(round_number=None):
             "Projected Tournament Leaders",
             "The strongest current tournament outlooks based on the latest published simulation.",
             top_golfer_rows,
-            [("Golfer", "Golfer", "text"), ("Win %", "Win %", "text"), ("Top 10 %", "Top 10 %", "text"), ("Cut %", "Cut %", "text"), ("Avg Round", "Avg Round", "text")],
+            [("Golfer", "golfer_name", "text"), ("Win %", "Win %", "text"), ("Top 10 %", "Top 10 %", "text"), ("Cut %", "Cut %", "text"), ("Avg Round", "Avg Round", "text")],
             "No PGA projections are currently available.",
             "Publish the latest PGA simulation output to show projected leaders here.",
+            link_renderers=_PGA_GOLFER_LINKS,
         )
         + render_player_profile_explorer(
             "Golfer Model Coverage",
@@ -6087,7 +11448,7 @@ def build_pga_page(round_number=None):
             ("Tournament Leaderboard", "Latest simulated tournament win, top-5, and cut percentages.", "/pga/leaderboard", f"{len(summary['leaderboard']['records'])} golfers"),
         ])
     )
-    return render_layout("PGA", "Round projections, matchup edges, and finishing position targets.", body, "/pga", render_subnav(PGA_NAV_ITEMS, "/pga"), hero_kicker="PGA")
+    return render_layout("PGA", "Round projections, matchup edges, and finishing position targets.", _pga_premium_wrap(body), "/pga", render_subnav(PGA_NAV_ITEMS, "/pga"), hero_kicker="PGA")
 
 
 def build_pga_best_bets_page(round_number=None):
@@ -6110,6 +11471,7 @@ def build_pga_best_bets_page(round_number=None):
                 pga_available_props_columns() if showing_available_props else pga_best_bets_columns(),
                 "No PGA round props are currently available.",
                 "Publish a round-specific file such as best_bets_R1.json through best_bets_R4.json to populate this page.",
+                link_renderers=_PGA_GOLFER_LINKS if not showing_available_props else None,
             )
             if round_board["records"]
             else render_empty_state(
@@ -6119,7 +11481,7 @@ def build_pga_best_bets_page(round_number=None):
             )
         )
     )
-    return render_layout("PGA Best Bets", "Round-specific golf props in the same EdgeRanked layout used across the site.", body, "/pga/best-bets", render_subnav(PGA_NAV_ITEMS, "/pga/best-bets"), hero_kicker="PGA")
+    return render_layout("PGA Best Bets", "Round-specific golf props in the same EdgeRanked layout used across the site.", _pga_premium_wrap(body), "/pga/best-bets", render_subnav(PGA_NAV_ITEMS, "/pga/best-bets"), hero_kicker="PGA")
 
 
 def build_pga_leaderboard_page(round_number=None):
@@ -6137,9 +11499,10 @@ def build_pga_leaderboard_page(round_number=None):
             pga_leaderboard_columns(),
             "No PGA simulation output is currently available.",
             "Publish the latest tournament simulation export to show projected leaderboard data here.",
+            link_renderers=_PGA_GOLFER_LINKS,
         )
     )
-    return render_layout("PGA Leaderboard", "Tournament win, placement, and cut probabilities from the latest PGA simulation.", body, "/pga/leaderboard", render_subnav(PGA_NAV_ITEMS, "/pga/leaderboard"), hero_kicker="PGA")
+    return render_layout("PGA Leaderboard", "Tournament win, placement, and cut probabilities from the latest PGA simulation.", _pga_premium_wrap(body), "/pga/leaderboard", render_subnav(PGA_NAV_ITEMS, "/pga/leaderboard"), hero_kicker="PGA")
 
 
 def build_privacy_policy_page():
@@ -6230,23 +11593,20 @@ def build_mlb_dataset_page(spec_key):
                 "Today's board is still being generated. Check back shortly.",
             )
         )
-        return render_layout(title, subtitle, body, spec["route"], nav)
+        return render_layout(title, subtitle, _mlb_premium_wrap(body), spec["route"], nav)
 
     if spec_key == "pitcher_strikeouts":
-        pitcher_rows = build_mlb_pitcher_projection_board()
-        pitcher_extra_columns = [("Pitcher K%", "pitcher_k_percent_season", "pct"), ("Opponent Hitter K%", "opponent_hitter_k_percent", "pct")]
+        pitcher_records = load_mlb_pitcher_board()["records"]
         body = (
             render_banner(data["banner"])
-            + render_mlb_projection_cards(
+            + render_mlb_pitcher_strikeout_cards(
                 "Pitcher Projection Board",
-                "Projection-first pitcher rows for strikeouts and workload-driven markets.",
-                pitcher_rows,
+                "AI-driven strikeout projections, ceiling probabilities, and matchup context for today's slate.",
+                pitcher_records,
                 "mlb-pitcher-projections",
-                entity_label="Pitcher",
-                extra_columns=pitcher_extra_columns,
             )
         )
-        return render_layout(title, subtitle, body, spec["route"], nav)
+        return render_layout(title, subtitle, _mlb_premium_wrap(body), spec["route"], nav)
 
     if spec_key in {"history", "graded"}:
         body = (
@@ -6272,7 +11632,7 @@ def build_mlb_dataset_page(spec_key):
                 "The latest completed MLB board has not been written yet. Check back shortly.",
             )
         )
-        return render_layout(title, subtitle, body, spec["route"], nav)
+        return render_layout(title, subtitle, _mlb_premium_wrap(body), spec["route"], nav)
 
     if spec_key == "record":
         body = (
@@ -6296,7 +11656,7 @@ def build_mlb_dataset_page(spec_key):
                 "Tracked MLB record rows will appear here once the first graded results are written.",
             )
         )
-        return render_layout(title, subtitle, body, spec["route"], nav)
+        return render_layout(title, subtitle, _mlb_premium_wrap(body), spec["route"], nav)
 
     if spec_key == "hitter_full":
         hitter_rows = build_mlb_hitter_projection_board()
@@ -6309,7 +11669,7 @@ def build_mlb_dataset_page(spec_key):
                 entity_label="Player",
             )
         )
-        return render_layout(title, subtitle, body, spec["route"], nav)
+        return render_layout(title, subtitle, _mlb_premium_wrap(body), spec["route"], nav)
 
     if spec_key in {"projections", "two_plus_hits", "two_plus_bases", "rbi_targets", "hitter_strikeouts", "stolen_bases", "hr_targets"}:
         hitter_rows = build_mlb_hitter_projection_board()
@@ -6336,7 +11696,7 @@ def build_mlb_dataset_page(spec_key):
                 debug_category=spec_key,
             )
         )
-        return render_layout(title, subtitle, body, spec["route"], nav)
+        return render_layout(title, subtitle, _mlb_premium_wrap(body), spec["route"], nav)
 
     if spec_key == "lines":
         body = render_data_table(
@@ -6347,7 +11707,7 @@ def build_mlb_dataset_page(spec_key):
             "No line data is currently available.",
             "The current MLB line feed has not been loaded yet.",
         )
-        return render_layout(title, subtitle, body, spec["route"], nav)
+        return render_layout(title, subtitle, _mlb_premium_wrap(body), spec["route"], nav)
 
     if spec_key == "injuries":
         body = (
@@ -6368,7 +11728,7 @@ def build_mlb_dataset_page(spec_key):
                 "Tracking exports will populate here once available.",
             )
         )
-        return render_layout(title, subtitle, body, spec["route"], nav)
+        return render_layout(title, subtitle, _mlb_premium_wrap(body), spec["route"], nav)
 
     body = render_data_table(
         "MLB System Status",
@@ -6378,7 +11738,7 @@ def build_mlb_dataset_page(spec_key):
         "No system data is currently available.",
         "Backing file metadata will appear here once available.",
     )
-    return render_layout(title, subtitle, body, spec["route"], nav)
+    return render_layout(title, subtitle, _mlb_premium_wrap(body), spec["route"], nav)
 
 
 def build_nba_dataset_page(spec_key):
@@ -6410,7 +11770,7 @@ def build_nba_dataset_page(spec_key):
             header
             + render_data_table(spec["title"], spec["description"], rows, columns, "No NBA data is currently available.", "The latest NBA file has not been loaded yet.")
         )
-    return render_layout(spec["title"], spec["description"], body, spec["route"], render_subnav(NBA_NAV_ITEMS, nav_target))
+    return render_layout(spec["title"], spec["description"], _nba_premium_wrap(body), spec["route"], render_subnav(NBA_NAV_ITEMS, nav_target))
 
 
 def build_ufc_dataset_page(spec_key):
@@ -6438,11 +11798,818 @@ def build_ufc_dataset_page(spec_key):
             header
             + render_data_table(spec["title"], spec["description"], rows, columns, "No UFC data is currently available.", "The latest UFC file has not been loaded yet.")
         )
-    return render_layout(spec["title"], spec["description"], body, spec["route"], render_subnav(UFC_NAV_ITEMS, nav_target))
+    return render_layout(spec["title"], spec["description"], _ufc_premium_wrap(body), spec["route"], render_subnav(UFC_NAV_ITEMS, nav_target))
+
+
+# ============================================================
+# INTERNAL · MLB Learning Reports Dashboard (read-only, admin)
+# ============================================================
+# Route: /internal/mlb-learning
+# - Gated by INTERNAL_ADMIN_USER_IDS env (CSV of Clerk user IDs)
+# - When env unset OR caller not in set → abort(404) (invisible)
+# - Read-only: never triggers retraining, never exposes controls
+# - Reads from: learning/reports, learning/shadow_reports,
+#   learning/shadow_state, mlb/outputs/*tracking.csv, mlb/models/*.pkl
+# - Not added to any public nav.
+
+INTERNAL_MLB_PIPELINE_DIR = Path(os.environ.get("EDGERANKED_MLB_PIPELINE_DIR", "/home/ubuntu/mlb_model"))
+INTERNAL_LEARNING_REPORTS_DIR = INTERNAL_MLB_PIPELINE_DIR / "learning" / "reports"
+INTERNAL_LEARNING_SHADOW_REPORTS_DIR = INTERNAL_MLB_PIPELINE_DIR / "learning" / "shadow_reports"
+INTERNAL_LEARNING_SHADOW_STATE_DIR = INTERNAL_MLB_PIPELINE_DIR / "learning" / "shadow_state"
+INTERNAL_LEARNING_MLB_OUTPUTS_DIR = INTERNAL_MLB_PIPELINE_DIR / "mlb" / "outputs"
+INTERNAL_LEARNING_MLB_MODELS_DIR = INTERNAL_MLB_PIPELINE_DIR / "mlb" / "models"
+
+
+def _internal_admin_user_ids():
+    raw = os.environ.get("INTERNAL_ADMIN_USER_IDS", "")
+    return {p.strip() for p in raw.split(",") if p.strip()}
+
+
+# Temporary fallback admin allowlist (operator-owner). Env-driven IDs still
+# apply on top. Remove this set when env-only operation is confirmed.
+HARDCODED_INTERNAL_ADMIN_IDS = {"user_3DMxv1TdzUBjwWlEQfWi4BUJw1u"}
+
+
+def _internal_is_admin(user_id):
+    allowed = _internal_admin_user_ids() | HARDCODED_INTERNAL_ADMIN_IDS
+    return bool(user_id) and user_id in allowed
+
+
+def _internal_safe_json(path):
+    try:
+        if not path.exists():
+            return None
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
+def _internal_latest_shadow_dated_dir():
+    if not INTERNAL_LEARNING_SHADOW_REPORTS_DIR.exists():
+        return None
+    candidates = [c for c in INTERNAL_LEARNING_SHADOW_REPORTS_DIR.iterdir() if c.is_dir()]
+    if not candidates:
+        return None
+    candidates.sort(key=lambda p: p.name, reverse=True)
+    return candidates[0]
+
+
+def _internal_live_model_versions():
+    out = []
+    if not INTERNAL_LEARNING_MLB_MODELS_DIR.exists():
+        return out
+    for pkl in sorted(INTERNAL_LEARNING_MLB_MODELS_DIR.glob("*.pkl")):
+        if pkl.name.startswith("._"):
+            continue
+        try:
+            mtime = datetime.utcfromtimestamp(pkl.stat().st_mtime)
+            size_mb = pkl.stat().st_size / (1024 * 1024)
+            out.append({"name": pkl.name, "modified_utc": mtime.isoformat(timespec="seconds"), "size_mb": round(size_mb, 2)})
+        except Exception:
+            continue
+    return out
+
+
+def _internal_tracking_rows(path):
+    try:
+        if not path.exists():
+            return None
+        with path.open("r", encoding="utf-8", errors="replace") as handle:
+            return max(0, sum(1 for _ in handle) - 1)
+    except Exception:
+        return None
+
+
+def _internal_load_learning_payload():
+    """Aggregate all read-only sources for the internal dashboard."""
+    latest_summary = _internal_safe_json(INTERNAL_LEARNING_REPORTS_DIR / "latest_summary.json") or {}
+    current_pointer = _internal_safe_json(INTERNAL_LEARNING_SHADOW_STATE_DIR / "current_version.json") or {}
+    version_log = _internal_safe_json(INTERNAL_LEARNING_SHADOW_STATE_DIR / "version_log.json") or {}
+    last_orch_run = _internal_safe_json(INTERNAL_LEARNING_SHADOW_STATE_DIR / "orchestrator_last_run.json") or {}
+
+    promotion_payload = None
+    daily_payload = None
+    latest_shadow_dir = _internal_latest_shadow_dated_dir()
+    if latest_shadow_dir is not None:
+        promotion_payload = _internal_safe_json(latest_shadow_dir / "promotion_recommendation.json")
+        daily_payload = _internal_safe_json(latest_shadow_dir / "daily_learning_report.json")
+
+    return {
+        "latest_summary": latest_summary,
+        "current_shadow_version": current_pointer.get("version"),
+        "shadow_version_log": version_log.get("versions", []),
+        "last_orchestrator_run": last_orch_run,
+        "promotion": promotion_payload,
+        "shadow_daily": daily_payload,
+        "latest_shadow_dir": str(latest_shadow_dir) if latest_shadow_dir else None,
+        "live_models": _internal_live_model_versions(),
+        "hitter_tracking_rows": _internal_tracking_rows(INTERNAL_LEARNING_MLB_OUTPUTS_DIR / "hitter_tracking.csv"),
+        "pitcher_tracking_rows": _internal_tracking_rows(INTERNAL_LEARNING_MLB_OUTPUTS_DIR / "pitcher_tracking.csv"),
+    }
+
+
+def _internal_pct(value):
+    if value is None:
+        return "—"
+    try:
+        return f"{float(value) * 100:.1f}%" if abs(float(value)) <= 1 else f"{float(value):.1f}%"
+    except Exception:
+        return "—"
+
+
+def _internal_num(value, digits=3):
+    if value is None:
+        return "—"
+    try:
+        return f"{float(value):.{digits}f}"
+    except Exception:
+        return "—"
+
+
+def _internal_signed(value, digits=3):
+    if value is None:
+        return "—"
+    try:
+        return f"{float(value):+.{digits}f}"
+    except Exception:
+        return "—"
+
+
+def _internal_metric_card(label, value, caption):
+    return (
+        "<article class='metric-card'>"
+        f"<div class='metric-label'>{escape(str(label))}</div>"
+        f"<div class='metric-value'>{escape(str(value))}</div>"
+        f"<p class='metric-caption'>{escape(str(caption))}</p>"
+        "</article>"
+    )
+
+
+def _internal_render_pitcher_rolling(rolling):
+    rows = []
+    for window in ("7d", "14d", "30d", "all"):
+        block = (rolling.get("pitcher_strikeouts") or {}).get(window, {}) or {}
+        n = int(block.get("n", 0) or 0)
+        if n == 0:
+            rows.append(
+                f"<tr><td>{escape(window)}</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>"
+            )
+        else:
+            rows.append(
+                f"<tr><td>{escape(window)}</td><td>{n}</td>"
+                f"<td>{_internal_num(block.get('mae'), 3)}</td>"
+                f"<td>{_internal_num(block.get('rmse'), 3)}</td>"
+                f"<td>{_internal_signed(block.get('bias'), 3)}</td>"
+                f"<td>{_internal_num(block.get('mean_projected'), 3)}</td>"
+                f"<td>{_internal_num(block.get('mean_actual'), 3)}</td></tr>"
+            )
+    head = (
+        "<tr><th>Window</th><th>n</th><th>MAE</th><th>RMSE</th><th>Bias</th>"
+        "<th>Mean projected</th><th>Mean actual</th></tr>"
+    )
+    return f"<table class='internal-table'><thead>{head}</thead><tbody>{''.join(rows)}</tbody></table>"
+
+
+def _internal_render_hitter_buckets(rolling):
+    rows = []
+    labels = (
+        ("hit", "Hit ≥1"),
+        ("tb2", "Total Bases ≥2"),
+        ("hr", "HR ≥1"),
+        ("rbi", "RBI ≥1"),
+    )
+    for key, label in labels:
+        block = (rolling.get("hitter_buckets_30d") or {}).get(key, {}) or {}
+        n = int(block.get("n", 0) or 0)
+        if n == 0:
+            rows.append(f"<tr><td>{escape(label)}</td><td>0</td><td>—</td><td>—</td><td>—</td></tr>")
+        else:
+            rows.append(
+                f"<tr><td>{escape(label)}</td><td>{n}</td>"
+                f"<td>{_internal_num(block.get('accuracy'), 4)}</td>"
+                f"<td>{_internal_num(block.get('base_rate'), 4)}</td>"
+                f"<td>{_internal_num(block.get('brier'), 4)}</td></tr>"
+            )
+    head = "<tr><th>Market</th><th>n</th><th>Accuracy</th><th>Base rate</th><th>Brier</th></tr>"
+    return f"<table class='internal-table'><thead>{head}</thead><tbody>{''.join(rows)}</tbody></table>"
+
+
+def _internal_render_misses(rows, columns):
+    if not rows:
+        return "<p class='muted'>No residuals available.</p>"
+    head = "<tr>" + "".join(f"<th>{escape(c[1])}</th>" for c in columns) + "</tr>"
+    body_rows = []
+    for row in rows:
+        body_rows.append(
+            "<tr>" + "".join(f"<td>{escape(str(row.get(c[0], '—')))}</td>" for c in columns) + "</tr>"
+        )
+    return f"<table class='internal-table'><thead>{head}</thead><tbody>{''.join(body_rows)}</tbody></table>"
+
+
+def _internal_render_models_panel(models):
+    if not models:
+        return "<p class='muted'>No live model files found.</p>"
+    head = "<tr><th>Model</th><th>Last modified (UTC)</th><th>Size (MB)</th></tr>"
+    rows = "".join(
+        f"<tr><td>{escape(m['name'])}</td><td>{escape(m['modified_utc'])}</td><td>{escape(str(m['size_mb']))}</td></tr>"
+        for m in models
+    )
+    return f"<table class='internal-table'><thead>{head}</thead><tbody>{rows}</tbody></table>"
+
+
+def _internal_render_shadow_versions(versions, current):
+    if not versions:
+        return "<p class='muted'>No shadow versions trained yet.</p>"
+    head = "<tr><th>Version</th><th>Trained (UTC)</th><th>Hitter targets OK</th><th>Pitcher targets OK</th><th>Current</th></tr>"
+    rows = []
+    for v in versions[-10:][::-1]:
+        is_current = "✓" if v.get("version") == current else ""
+        rows.append(
+            f"<tr><td>{escape(v.get('version', '—'))}</td>"
+            f"<td>{escape(v.get('trained_at_utc', '—'))}</td>"
+            f"<td>{escape(str(v.get('hitter_targets_ok', 0)))}</td>"
+            f"<td>{escape(str(v.get('pitcher_targets_ok', 0)))}</td>"
+            f"<td>{escape(is_current)}</td></tr>"
+        )
+    return f"<table class='internal-table'><thead>{head}</thead><tbody>{''.join(rows)}</tbody></table>"
+
+
+def _internal_render_promotion(payload):
+    if not payload:
+        return "<p class='muted'>No promotion recommendation file yet.</p>"
+    overall = payload.get("overall", "unknown")
+    badge_class = {
+        "promotion_candidate": "badge-high",
+        "shadow_outperforming_live": "badge-high",
+        "shadow_inconclusive": "badge-medium",
+        "insufficient_sample": "badge-low",
+        "rollback_recommended": "badge-low",
+    }.get(overall, "badge-low")
+    rows = []
+    for entry in payload.get("per_target", []) or []:
+        rec = entry.get("recommendation", "—")
+        rows.append(
+            f"<tr><td>{escape(entry.get('kind', '—'))}/{escape(entry.get('target', '—'))}</td>"
+            f"<td>{escape(str(entry.get('n_slates', 0)))}</td>"
+            f"<td>{escape(str(entry.get('total_samples', 0)))}</td>"
+            f"<td>{_internal_num(entry.get('mae'), 3)}</td>"
+            f"<td>{_internal_num(entry.get('rmse'), 3)}</td>"
+            f"<td>{escape(rec)}</td></tr>"
+        )
+    head = "<tr><th>Kind / target</th><th>n_slates</th><th>n_samples</th><th>MAE</th><th>RMSE</th><th>Rec</th></tr>"
+    table = (
+        f"<table class='internal-table'><thead>{head}</thead><tbody>{''.join(rows) or '<tr><td colspan=6>—</td></tr>'}</tbody></table>"
+        if rows else "<p class='muted'>No per-target recommendations recorded.</p>"
+    )
+    return (
+        f"<p><strong>Overall:</strong> <span class='badge {badge_class}'>{escape(overall)}</span> "
+        f"<span class='muted'>policy: {escape(payload.get('policy', '—'))}</span></p>"
+        f"{table}"
+    )
+
+
+def _internal_compute_model_health(payload):
+    """Derive operator-friendly summary from real metrics. Never fabricates."""
+    summary = payload.get("latest_summary") or {}
+    rolling = summary.get("rolling") or {}
+    drift = summary.get("calibration_drift") or {}
+    promotion = payload.get("promotion") or {}
+
+    p_all = (rolling.get("pitcher_strikeouts") or {}).get("all") or {}
+    p_30 = (rolling.get("pitcher_strikeouts") or {}).get("30d") or {}
+    p_14 = (rolling.get("pitcher_strikeouts") or {}).get("14d") or {}
+    p_7 = (rolling.get("pitcher_strikeouts") or {}).get("7d") or {}
+    buckets = rolling.get("hitter_buckets_30d") or {}
+
+    def _n(block):
+        try:
+            return int(block.get("n", 0) or 0)
+        except Exception:
+            return 0
+
+    total_pitcher_n = _n(p_all)
+    total_hitter_n = sum(_n(buckets.get(k, {})) for k in ("hit", "tb2", "hr", "rbi"))
+
+    shadow_status = (promotion.get("overall") if isinstance(promotion, dict) else None) or "insufficient_sample"
+
+    # Insufficient data path
+    if total_pitcher_n == 0 and total_hitter_n == 0:
+        return {
+            "score": None,
+            "trend": "Insufficient",
+            "confidence": "Low",
+            "improved": [],
+            "regressed": [],
+            "weaknesses": [],
+            "shadow_status": shadow_status,
+            "recommended_action": "Wait for graded slates — no rolling data available yet.",
+            "note": "No graded hitter or pitcher rows available — health score unavailable.",
+        }
+
+    # Trend: compare 7d vs 30d (fallback to 14d) on pitcher MAE
+    trend = "Insufficient"
+    recent_mae = p_7.get("mae") if _n(p_7) > 0 else None
+    baseline_block = p_30 if _n(p_30) > 0 else (p_14 if _n(p_14) > 0 else None)
+    baseline_mae = baseline_block.get("mae") if baseline_block else None
+    if recent_mae is not None and baseline_mae is not None and baseline_mae > 0:
+        ratio = float(recent_mae) / float(baseline_mae)
+        if ratio < 0.95:
+            trend = "Improving"
+        elif ratio > 1.05:
+            trend = "Regressing"
+        else:
+            trend = "Stable"
+
+    # Confidence from sample sufficiency
+    if total_pitcher_n >= 500 or total_hitter_n >= 2000:
+        confidence = "High"
+    elif total_pitcher_n >= 100 or total_hitter_n >= 500:
+        confidence = "Moderate"
+    else:
+        confidence = "Low"
+
+    # Score (0-100)
+    score = 70  # neutral midline
+    if trend == "Improving":
+        score += 10
+    elif trend == "Regressing":
+        score -= 15
+    elif trend == "Stable":
+        score += 5
+
+    hitter_drift = float(drift.get("hitter_max_abs_diff") or 0)
+    pitcher_drift = float(drift.get("pitcher_max_abs_diff") or 0)
+    if hitter_drift > 20:
+        score -= 12
+    elif hitter_drift > 10:
+        score -= 5
+    if pitcher_drift > 3:
+        score -= 8
+    elif pitcher_drift > 1.5:
+        score -= 3
+
+    quality_mae = recent_mae if recent_mae is not None else p_all.get("mae")
+    if quality_mae is not None:
+        try:
+            qm = float(quality_mae)
+            if qm < 1.5:
+                score += 8
+            elif qm > 2.5:
+                score -= 8
+        except Exception:
+            pass
+
+    if shadow_status in ("promotion_candidate", "shadow_outperforming_live"):
+        score += 5
+    elif shadow_status == "rollback_recommended":
+        score -= 10
+
+    if confidence == "Low":
+        # Pull score toward 50 when we don't trust the signal
+        score = int(round(score * 0.7 + 50 * 0.3))
+
+    score = max(0, min(100, int(round(score))))
+
+    # Improved bullets
+    improved = []
+    if trend == "Improving" and recent_mae is not None and baseline_mae:
+        delta = (1 - float(recent_mae) / float(baseline_mae)) * 100
+        improved.append(f"Pitcher strikeout MAE improved {delta:.1f}% vs 30d baseline ({float(recent_mae):.2f} vs {float(baseline_mae):.2f})")
+    for key, market_label in (("hit", "Hit ≥1"), ("hr", "HR ≥1"), ("tb2", "Total Bases ≥2"), ("rbi", "RBI ≥1")):
+        b = buckets.get(key) or {}
+        n = _n(b)
+        if n >= 100:
+            acc = float(b.get("accuracy") or 0)
+            base = float(b.get("base_rate") or 0)
+            if acc > base + 0.05:
+                improved.append(f"{market_label} accuracy {acc:.1%} exceeds base rate {base:.1%} (n={n})")
+    if (pitcher_drift > 0 and pitcher_drift <= 1.5) and total_pitcher_n >= 200:
+        improved.append(f"Pitcher calibration drift within tolerance ({pitcher_drift:.2f} K max bucket gap)")
+
+    # Regressed bullets
+    regressed = []
+    if trend == "Regressing" and recent_mae is not None and baseline_mae:
+        delta = (float(recent_mae) / float(baseline_mae) - 1) * 100
+        regressed.append(f"Pitcher strikeout MAE worsened {delta:.1f}% vs 30d baseline ({float(recent_mae):.2f} vs {float(baseline_mae):.2f})")
+    if hitter_drift > 15:
+        regressed.append(f"Hitter calibration drift elevated — max bucket divergence {hitter_drift:.1f}%")
+    if pitcher_drift > 2:
+        regressed.append(f"Pitcher calibration drift elevated — max bucket divergence {pitcher_drift:.2f} K")
+
+    # Weaknesses (model behavior patterns, not just regressions)
+    weaknesses = []
+    bias = p_all.get("bias")
+    if bias is not None:
+        try:
+            b = float(bias)
+            if b > 0.5:
+                weaknesses.append(f"Pitcher K projections trending HIGH (avg bias {b:+.2f})")
+            elif b < -0.5:
+                weaknesses.append(f"Pitcher K projections trending LOW (avg bias {b:+.2f})")
+        except Exception:
+            pass
+    pitcher_misses = summary.get("biggest_pitcher_misses") or []
+    if pitcher_misses:
+        top = pitcher_misses[:5]
+        avg = sum(float(m.get("abs_error", 0) or 0) for m in top) / max(1, len(top))
+        if avg >= 5:
+            weaknesses.append(f"Top 5 pitcher residuals avg |Δ| {avg:.1f} K — outlier ceiling errors")
+    for key, market_label in (("hit", "Hit ≥1"), ("hr", "HR ≥1"), ("tb2", "Total Bases ≥2"), ("rbi", "RBI ≥1")):
+        b = buckets.get(key) or {}
+        n = _n(b)
+        if n >= 100:
+            acc = float(b.get("accuracy") or 0)
+            base_rate = float(b.get("base_rate") or 0)
+            if acc < base_rate - 0.03:
+                weaknesses.append(f"{market_label} accuracy {acc:.1%} below base rate {base_rate:.1%}")
+
+    # Recommended action
+    if shadow_status == "promotion_candidate":
+        action = "Manual review of shadow promotion candidate — compare per-target deltas"
+    elif shadow_status == "rollback_recommended":
+        action = "Roll shadow pointer back one version and investigate regression"
+    elif trend == "Regressing":
+        action = "Investigate last 7d pitcher misses — recent MAE worse than baseline"
+    elif hitter_drift > 20 or pitcher_drift > 3:
+        action = "Refresh calibration — current drift exceeds tolerance"
+    elif shadow_status == "insufficient_sample":
+        action = "Continue shadow validation — collecting sample"
+    elif trend == "Improving" and confidence == "High":
+        action = "No action needed — model performance stable and improving"
+    else:
+        action = "Continue monitoring — no immediate action required"
+
+    return {
+        "score": score,
+        "trend": trend,
+        "confidence": confidence,
+        "improved": improved,
+        "regressed": regressed,
+        "weaknesses": weaknesses,
+        "shadow_status": shadow_status,
+        "recommended_action": action,
+        "note": None,
+    }
+
+
+def _internal_render_health_summary(health):
+    score = health.get("score")
+    if score is None:
+        tier = "insufficient"
+        score_display = "—"
+    elif score >= 80:
+        tier = "high"
+        score_display = str(score)
+    elif score >= 60:
+        tier = "medium"
+        score_display = str(score)
+    else:
+        tier = "low"
+        score_display = str(score)
+
+    trend = health.get("trend", "Insufficient")
+    confidence = health.get("confidence", "Low")
+    trend_tier = {"Improving": "high", "Stable": "medium", "Regressing": "low"}.get(trend, "neutral")
+    conf_tier = {"High": "high", "Moderate": "medium", "Low": "low"}.get(confidence, "low")
+
+    def _bullets(items, fallback):
+        if not items:
+            return f"<p class='health-empty muted'>{escape(fallback)}</p>"
+        return "<ul class='health-bullets'>" + "".join(f"<li>{escape(it)}</li>" for it in items) + "</ul>"
+
+    note_html = f"<p class='muted health-note'>{escape(health['note'])}</p>" if health.get("note") else ""
+
+    shadow_status = health.get("shadow_status") or "insufficient_sample"
+    shadow_tier = {
+        "promotion_candidate": "high",
+        "shadow_outperforming_live": "high",
+        "shadow_inconclusive": "medium",
+        "insufficient_sample": "neutral",
+        "rollback_recommended": "low",
+    }.get(shadow_status, "neutral")
+
+    return (
+        "<section class='panel health-panel'>"
+        "<div class='panel-head'><h2>Model Health Summary</h2>"
+        "<p class='muted'>Plain-English snapshot derived from rolling MAE/RMSE, calibration drift, and shadow comparisons. Updates automatically; never fabricates improvements.</p>"
+        "</div>"
+        f"{note_html}"
+        "<div class='health-top'>"
+        f"<div class='health-score-card health-{tier}'>"
+        "<div class='health-eyebrow'>Model Health</div>"
+        f"<div class='health-score-value'>{escape(score_display)}<span class='health-score-denom'>/100</span></div>"
+        "</div>"
+        f"<div class='health-chip-card health-{trend_tier}'>"
+        "<div class='health-eyebrow'>Trend</div>"
+        f"<div class='health-chip-value'>{escape(trend)}</div>"
+        "</div>"
+        f"<div class='health-chip-card health-{conf_tier}'>"
+        "<div class='health-eyebrow'>Confidence</div>"
+        f"<div class='health-chip-value'>{escape(confidence)}</div>"
+        "</div>"
+        "</div>"
+        "<div class='health-grid'>"
+        f"<div class='health-card health-card-good'><h3>What improved</h3>{_bullets(health['improved'], 'No clear improvements in the current window.')}</div>"
+        f"<div class='health-card health-card-bad'><h3>What regressed</h3>{_bullets(health['regressed'], 'No clear regressions in the current window.')}</div>"
+        f"<div class='health-card health-card-warn'><h3>Biggest model weaknesses</h3>{_bullets(health['weaknesses'], 'No notable weaknesses surfaced from current data.')}</div>"
+        f"<div class='health-card health-card-shadow'>"
+        "<h3>Shadow ML status</h3>"
+        f"<p class='health-status-line'><span class='badge health-badge-{shadow_tier}'>{escape(shadow_status)}</span></p>"
+        "<h3 class='health-action-head'>Recommended action</h3>"
+        f"<p class='health-action-line'>{escape(health['recommended_action'])}</p>"
+        "</div>"
+        "</div>"
+        "</section>"
+        "<style>"
+        ".health-panel { border: 1px solid rgba(59, 130, 246, 0.22); background: linear-gradient(180deg, rgba(15, 23, 42, 0.92) 0%, rgba(10, 15, 28, 0.96) 100%); }"
+        ".health-top { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 12px; margin: 12px 0 16px; }"
+        ".health-score-card, .health-chip-card { padding: 18px 20px; border-radius: 14px; border: 1px solid rgba(30, 41, 59, 0.7); background: rgba(15, 23, 42, 0.6); display: flex; flex-direction: column; gap: 6px; }"
+        ".health-eyebrow { color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; }"
+        ".health-score-value { color: #fff; font-size: 44px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; display: flex; align-items: baseline; gap: 6px; }"
+        ".health-score-denom { font-size: 16px; font-weight: 700; color: var(--muted); letter-spacing: 0.04em; }"
+        ".health-chip-value { color: #fff; font-size: 22px; font-weight: 800; letter-spacing: -0.01em; }"
+        ".health-high { border-color: rgba(34, 197, 94, 0.55); background: linear-gradient(160deg, rgba(34, 197, 94, 0.16) 0%, rgba(15, 23, 42, 0.6) 70%); }"
+        ".health-high .health-score-value, .health-high .health-chip-value { color: #bbf7d0; }"
+        ".health-medium { border-color: rgba(245, 158, 11, 0.55); background: linear-gradient(160deg, rgba(245, 158, 11, 0.16) 0%, rgba(15, 23, 42, 0.6) 70%); }"
+        ".health-medium .health-score-value, .health-medium .health-chip-value { color: #fde68a; }"
+        ".health-low { border-color: rgba(239, 68, 68, 0.55); background: linear-gradient(160deg, rgba(239, 68, 68, 0.18) 0%, rgba(15, 23, 42, 0.6) 70%); }"
+        ".health-low .health-score-value, .health-low .health-chip-value { color: #fecaca; }"
+        ".health-insufficient, .health-neutral { border-color: rgba(148, 163, 184, 0.45); background: linear-gradient(160deg, rgba(148, 163, 184, 0.12) 0%, rgba(15, 23, 42, 0.6) 70%); }"
+        ".health-insufficient .health-score-value, .health-neutral .health-chip-value { color: #cbd5f5; }"
+        ".health-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }"
+        ".health-card { padding: 16px; border-radius: 12px; border: 1px solid rgba(30, 41, 59, 0.7); background: rgba(15, 23, 42, 0.55); }"
+        ".health-card h3 { margin: 0 0 8px; font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase; color: #e2e8f0; }"
+        ".health-card-good { border-left: 3px solid rgba(34, 197, 94, 0.7); }"
+        ".health-card-bad { border-left: 3px solid rgba(239, 68, 68, 0.7); }"
+        ".health-card-warn { border-left: 3px solid rgba(245, 158, 11, 0.7); }"
+        ".health-card-shadow { border-left: 3px solid rgba(96, 165, 250, 0.7); }"
+        ".health-bullets { margin: 0; padding-left: 18px; color: #e2e8f0; font-size: 13px; line-height: 1.5; }"
+        ".health-bullets li { margin: 2px 0; }"
+        ".health-empty { font-size: 12px; }"
+        ".health-action-head { margin-top: 14px; }"
+        ".health-status-line { margin: 4px 0 0; }"
+        ".health-action-line { margin: 4px 0 0; color: #fff; font-weight: 700; }"
+        ".health-badge-high { background: rgba(34, 197, 94, 0.16); color: #bbf7d0; border: 1px solid rgba(34, 197, 94, 0.45); padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: 0.04em; }"
+        ".health-badge-medium { background: rgba(245, 158, 11, 0.16); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.45); padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: 0.04em; }"
+        ".health-badge-low { background: rgba(239, 68, 68, 0.18); color: #fecaca; border: 1px solid rgba(239, 68, 68, 0.5); padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: 0.04em; }"
+        ".health-badge-neutral { background: rgba(148, 163, 184, 0.16); color: #cbd5f5; border: 1px solid rgba(148, 163, 184, 0.45); padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: 0.04em; }"
+        "@media (max-width: 720px) {"
+        " .health-top { grid-template-columns: 1fr; }"
+        " .health-grid { grid-template-columns: 1fr; }"
+        " .health-score-value { font-size: 36px; }"
+        "}"
+        "</style>"
+    )
+
+
+def build_internal_mlb_learning_page():
+    payload = _internal_load_learning_payload()
+    summary = payload.get("latest_summary") or {}
+    today_block = summary.get("today") or {}
+    rolling = summary.get("rolling") or {}
+    drift = summary.get("calibration_drift") or {}
+
+    anchor = summary.get("anchor_date") or "—"
+    generated = summary.get("generated_at_utc") or "—"
+    last_orch = payload.get("last_orchestrator_run") or {}
+
+    games_card = today_block.get("hitters_today", 0) + today_block.get("pitchers_today", 0)
+    metric_cards = (
+        "<div class='metric-grid compact'>"
+        + _internal_metric_card("Last grading run", generated, f"Anchor date {anchor}")
+        + _internal_metric_card("Today's graded rows", games_card, f"Hitters {today_block.get('hitters_today', 0)} • Pitchers {today_block.get('pitchers_today', 0)}")
+        + _internal_metric_card("Hitter tracking rows", payload.get("hitter_tracking_rows") or 0, "mlb/outputs/hitter_tracking.csv")
+        + _internal_metric_card("Pitcher tracking rows", payload.get("pitcher_tracking_rows") or 0, "mlb/outputs/pitcher_tracking.csv")
+        + _internal_metric_card("Shadow current version", payload.get("current_shadow_version") or "—", f"Versions on disk: {len(payload.get('shadow_version_log') or [])}")
+        + _internal_metric_card("Last orchestrator", last_orch.get("mode", "—"), f"{last_orch.get('finished_at_utc', '—')}")
+        + "</div>"
+    )
+
+    pitcher_rolling_table = _internal_render_pitcher_rolling(rolling)
+    hitter_bucket_table = _internal_render_hitter_buckets(rolling)
+    misses_pitchers = _internal_render_misses(
+        summary.get("biggest_pitcher_misses") or [],
+        columns=[("date", "Date"), ("pitcher", "Pitcher"), ("opponent", "Opp"),
+                 ("predicted", "Projected K"), ("actual", "Actual K"), ("abs_error", "|Δ|")],
+    )
+    misses_hitters = _internal_render_misses(
+        summary.get("biggest_hitter_misses") or [],
+        columns=[("market", "Market"), ("date", "Date"), ("player", "Player"),
+                 ("predicted_prob_pct", "Predicted %"), ("actual", "Actual"), ("residual", "|Δ|")],
+    )
+    live_models_table = _internal_render_models_panel(payload.get("live_models") or [])
+    shadow_versions_table = _internal_render_shadow_versions(payload.get("shadow_version_log") or [], payload.get("current_shadow_version"))
+    promotion_block = _internal_render_promotion(payload.get("promotion"))
+
+    drift_block = (
+        "<div class='internal-callout'>"
+        f"<p><strong>Hitter calibration</strong>: max abs(diff) = "
+        f"{_internal_num(drift.get('hitter_max_abs_diff'), 3)} • updated {escape(str(drift.get('hitter_updated') or '—'))}</p>"
+        f"<p><strong>Pitcher calibration</strong>: max abs(avg_diff) = "
+        f"{_internal_num(drift.get('pitcher_max_abs_diff'), 3)} • updated {escape(str(drift.get('pitcher_updated') or '—'))}</p>"
+        "</div>"
+    )
+
+    shadow_payload = payload.get("shadow_daily") or {}
+    shadow_dir = payload.get("latest_shadow_dir") or "—"
+    if shadow_payload:
+        n_files = shadow_payload.get("n_comparison_files", 0)
+        windows = shadow_payload.get("windows", {})
+        shadow_lines = [f"<p class='muted'>Comparison files seen: {n_files} • source dir: <code>{escape(shadow_dir)}</code></p>"]
+        rows = []
+        for label in ("1d", "7d", "14d", "30d"):
+            block = (windows.get(label) or {}).get("pitcher", {}).get("strikeouts", {}) or {}
+            rows.append(
+                f"<tr><td>{escape(label)}</td><td>{int(block.get('n_slates', 0) or 0)}</td>"
+                f"<td>{int(block.get('total_samples', 0) or 0)}</td>"
+                f"<td>{_internal_num(block.get('mae'), 3)}</td>"
+                f"<td>{_internal_num(block.get('rmse'), 3)}</td></tr>"
+            )
+        head = "<tr><th>Window</th><th>n_slates</th><th>n_samples</th><th>Shadow MAE</th><th>Shadow RMSE</th></tr>"
+        shadow_lines.append(f"<table class='internal-table'><thead>{head}</thead><tbody>{''.join(rows)}</tbody></table>")
+        shadow_block_html = "".join(shadow_lines)
+    else:
+        shadow_block_html = "<p class='muted'>No shadow daily report yet.</p>"
+
+    health = _internal_compute_model_health(payload)
+    health_html = _internal_render_health_summary(health)
+
+    body = (
+        "<section class='panel internal-banner'>"
+        "<div class='eyebrow'>Internal · Read-only</div>"
+        "<h2>MLB Learning Reports</h2>"
+        "<p class='muted'>Restricted operational view. Not for distribution. Read-only — this page never triggers grading, retraining, or promotion.</p>"
+        "</section>"
+        f"{health_html}"
+        "<section class='panel'>"
+        "<div class='panel-head'><h2>At a glance</h2><p class='muted'>Snapshot of the latest grading + learning pipeline state.</p></div>"
+        f"{metric_cards}"
+        "</section>"
+        "<section class='panel'>"
+        "<div class='panel-head'><h2>Live model versions</h2><p class='muted'>Files under <code>mlb/models/</code>. Read-only — never overwritten by the learning system.</p></div>"
+        f"{live_models_table}"
+        "</section>"
+        "<section class='panel'>"
+        "<div class='panel-head'><h2>Shadow model versions</h2><p class='muted'>Versioned <code>.joblib</code> artifacts under <code>learning/shadow_models/</code>.</p></div>"
+        f"{shadow_versions_table}"
+        "</section>"
+        "<section class='panel'>"
+        "<div class='panel-head'><h2>Rolling pitcher strikeouts performance</h2><p class='muted'>Live projected vs actual K, weighted by sample count per window.</p></div>"
+        f"{pitcher_rolling_table}"
+        "</section>"
+        "<section class='panel'>"
+        "<div class='panel-head'><h2>Rolling hitter bucket accuracy (30d)</h2><p class='muted'>Calls treated as positive when probability ≥ 50%.</p></div>"
+        f"{hitter_bucket_table}"
+        "</section>"
+        "<section class='panel'>"
+        "<div class='panel-head'><h2>Calibration drift</h2><p class='muted'>Largest absolute bucket divergence in the current calibration reports.</p></div>"
+        f"{drift_block}"
+        "</section>"
+        "<section class='panel'>"
+        "<div class='panel-head'><h2>Shadow vs Live</h2><p class='muted'>From the latest shadow daily report.</p></div>"
+        f"{shadow_block_html}"
+        "</section>"
+        "<section class='panel'>"
+        "<div class='panel-head'><h2>Promotion recommendation</h2><p class='muted'>Advisory only. Promotion to live is a manual operator action.</p></div>"
+        f"{promotion_block}"
+        "</section>"
+        "<section class='panel'>"
+        "<div class='panel-head'><h2>Biggest pitcher misses (30d)</h2><p class='muted'>|projected − actual| strikeouts.</p></div>"
+        f"{misses_pitchers}"
+        "</section>"
+        "<section class='panel'>"
+        "<div class='panel-head'><h2>Biggest hitter misses (30d)</h2><p class='muted'>|actual − predicted probability|.</p></div>"
+        f"{misses_hitters}"
+        "</section>"
+        "<style>"
+        ".internal-banner { border: 1px solid rgba(245, 158, 11, 0.35); background: linear-gradient(180deg, rgba(245, 158, 11, 0.10) 0%, rgba(15, 23, 42, 0.92) 100%); }"
+        ".internal-banner .eyebrow { color: #fcd34d; }"
+        ".internal-table { width: 100%; border-collapse: collapse; font-size: 13px; }"
+        ".internal-table th, .internal-table td { padding: 8px 10px; border-bottom: 1px solid rgba(30, 41, 59, 0.7); text-align: left; }"
+        ".internal-table th { color: var(--muted); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 800; }"
+        ".internal-table td { color: #e2e8f0; font-variant-numeric: tabular-nums; }"
+        ".internal-table tr:hover td { background: rgba(15, 23, 42, 0.6); }"
+        ".internal-callout { padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(30, 41, 59, 0.7); background: rgba(15, 23, 42, 0.55); }"
+        ".internal-callout p { margin: 4px 0; }"
+        ".internal-callout code { color: #93c5fd; }"
+        "@media (max-width: 540px) { .internal-table { font-size: 12px; } .internal-table th, .internal-table td { padding: 6px 8px; } }"
+        "</style>"
+    )
+
+    return render_layout(
+        "Internal · MLB Learning",
+        "Read-only operational dashboard for MLB grading + shadow learning state.",
+        body,
+        "/internal/mlb-learning",
+        hero_kicker="Internal",
+    )
+
+
+# --- Site-wide SEO discovery files -----------------------------------------
+
+# Primary, publicly indexable URLs (paths only). Preview/duplicate paths are
+# intentionally excluded because they canonicalize onto these hubs.
+SITEMAP_STATIC_PATHS = [
+    ("/", "daily", "1.0"),
+    ("/mlb", "daily", "0.9"),
+    ("/nba", "daily", "0.9"),
+    ("/wnba", "daily", "0.9"),
+    ("/pga", "daily", "0.9"),
+    ("/ufc", "daily", "0.9"),
+    ("/soccer", "daily", "0.8"),
+    ("/mlb/weather", "daily", "0.6"),
+    ("/mlb/intel", "daily", "0.6"),
+    ("/results", "daily", "0.7"),
+    ("/about", "monthly", "0.4"),
+    ("/pricing", "monthly", "0.4"),
+    ("/privacy-policy", "yearly", "0.2"),
+    ("/terms", "yearly", "0.2"),
+    ("/disclaimer", "yearly", "0.2"),
+]
+
+# Per-entity child sitemaps served elsewhere in the app. Declared in robots.txt
+# so Search Console discovers every sitemap, not just the master one.
+SITEMAP_CHILD_PATHS = [
+    "/sitemap_mlb_players.xml",
+    "/sitemap_mlb_games.xml",
+    "/sitemap_nba_players.xml",
+    "/sitemap_wnba_players.xml",
+    "/sitemap_pga_golfers.xml",
+]
+
+
+def build_master_sitemap():
+    """Serve /sitemap.xml.
+
+    The document is assembled with ElementTree (so every value lands inside a
+    real element), pretty-printed one tag per line, and parsed back with
+    ElementTree to prove well-formedness before it is returned with an
+    application/xml content type.
+    """
+    import xml.etree.ElementTree as ET
+
+    today = date.today().isoformat()
+    sitemap_ns = "http://www.sitemaps.org/schemas/sitemap/0.9"
+    urlset = ET.Element("urlset", {"xmlns": sitemap_ns})
+    for path, changefreq, priority in SITEMAP_STATIC_PATHS:
+        url_el = ET.SubElement(urlset, "url")
+        ET.SubElement(url_el, "loc").text = f"{SITE_ORIGIN}{path}"
+        ET.SubElement(url_el, "lastmod").text = today
+        ET.SubElement(url_el, "changefreq").text = changefreq
+        ET.SubElement(url_el, "priority").text = priority
+
+    # MLB Results Archive: hub + one permanent page per graded slate (newest
+    # first, newest prioritized). Read-only; never runs models or grading.
+    try:
+        for path, changefreq, priority, lastmod in mlb_results_archive.results_sitemap_entries(MLB_OUTPUT_DIR):
+            url_el = ET.SubElement(urlset, "url")
+            ET.SubElement(url_el, "loc").text = f"{SITE_ORIGIN}{path}"
+            ET.SubElement(url_el, "lastmod").text = lastmod
+            ET.SubElement(url_el, "changefreq").text = changefreq
+            ET.SubElement(url_el, "priority").text = priority
+    except Exception:
+        pass  # never let archive enumeration break the core sitemap
+
+    # MLB Stadium Intelligence: index + 30 evergreen ballpark pages.
+    try:
+        for path, changefreq, priority in mlb_stadiums.stadiums_sitemap_entries():
+            url_el = ET.SubElement(urlset, "url")
+            ET.SubElement(url_el, "loc").text = f"{SITE_ORIGIN}{path}"
+            ET.SubElement(url_el, "lastmod").text = today
+            ET.SubElement(url_el, "changefreq").text = changefreq
+            ET.SubElement(url_el, "priority").text = priority
+    except Exception:
+        pass
+
+    ET.indent(urlset, space="  ")  # pretty-print: one tag per line (Python 3.9+)
+    body = ET.tostring(urlset, encoding="unicode")
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n' + body + "\n"
+
+    # Validate before returning. If anything is malformed, surface it (the route
+    # error handler returns 500) rather than serving a broken sitemap to Google.
+    ET.fromstring(xml)
+    return Response(xml, mimetype="application/xml")
+
+
+def build_robots_txt():
+    """Serve /robots.txt: allow full crawl and declare every sitemap."""
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "",
+        f"Sitemap: {SITE_ORIGIN}/sitemap.xml",
+    ]
+    for child in SITEMAP_CHILD_PATHS:
+        lines.append(f"Sitemap: {SITE_ORIGIN}{child}")
+    lines.append("")
+    return Response("\n".join(lines), mimetype="text/plain")
 
 
 def create_app():
     flask_app = Flask(__name__)
+    flask_app.config["SECRET_KEY"] = os.environ["SECRET_KEY"]
+    flask_app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["DATABASE_URL"]
+    flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     def handle_waitlist_submission():
         form_values = {
@@ -6489,13 +12656,57 @@ def create_app():
         response.headers["Expires"] = "0"
         return response
 
+    @flask_app.get("/internal/mlb-learning")
+    def internal_mlb_learning():
+        # TEMP DEBUG: returns 403 (not 404) and logs the detected user_id
+        # + configured allowed IDs so an admin debugging access can confirm
+        # the env value vs their actual session. Never logs cookies/tokens.
+        try:
+            from auth_system.auth import get_clerk_user_id
+            user_id = get_clerk_user_id()
+        except Exception:
+            user_id = None
+        if not _internal_is_admin(user_id):
+            allowed_env = os.environ.get("INTERNAL_ADMIN_USER_IDS", "")
+            flask_app.logger.warning(
+                "INTERNAL_MLB_LEARNING_DENIED user_id=%s allowed_ids=%s",
+                user_id, allowed_env,
+            )
+            from flask import abort
+            abort(403)
+        return build_internal_mlb_learning_page()
+
     @flask_app.get("/")
     def root():
-        return build_home_page()
+        return build_home_page_preview()
+
+    @flask_app.get("/sitemap.xml")
+    def sitemap_xml():
+        return build_master_sitemap()
+
+    @flask_app.get("/robots.txt")
+    def robots_txt():
+        return build_robots_txt()
+
+    @flask_app.get("/homepage-preview")
+    def homepage_preview():
+        return build_home_page_preview()
 
     @flask_app.get("/about")
     def about():
         return build_about_page()
+
+    @flask_app.get("/mlb-preview")
+    def mlb_preview():
+        return build_preview_page("mlb")
+
+    @flask_app.get("/nba-preview")
+    def nba_preview():
+        return build_preview_page("nba")
+
+    @flask_app.get("/wnba-preview")
+    def wnba_preview():
+        return build_preview_page("wnba")
 
     @flask_app.get("/waitlist")
     @flask_app.get("/pricing")
@@ -6568,11 +12779,19 @@ a{color:#60a5fa!important}
 
     @flask_app.get("/api/pga/player-projections")
     def pga_player_projections_api():
-        return jsonify(json_ready(build_pga_player_projection_profiles()))
+        return jsonify(json_ready(seo_tiers.public_profiles_payload(build_pga_player_projection_profiles())))
 
     @flask_app.get("/api/pga/system")
     def pga_system_api():
         return jsonify(json_ready(pga_system_status()))
+
+    @flask_app.get("/pga/golfer/<golfer_slug>")
+    def pga_golfer_profile_page(golfer_slug):
+        return build_pga_golfer_page(golfer_slug)
+
+    @flask_app.get("/sitemap_pga_golfers.xml")
+    def pga_golfers_sitemap():
+        return build_pga_golfers_sitemap()
 
     @flask_app.get("/privacy-policy")
     @flask_app.get("/privacy")
@@ -6589,13 +12808,52 @@ a{color:#60a5fa!important}
 
     @flask_app.get("/nba")
     def nba_home():
-        return build_nba_home()
+        return build_preview_page("nba")
 
     register_wnba_routes(flask_app, render_layout, render_subnav)
+    flask_app.view_functions["wnba_home"] = lambda: build_preview_page("wnba")
+
+    register_soccer_routes(flask_app, render_layout, render_subnav, json_ready)
 
     @flask_app.get("/mlb")
     def mlb_home():
-        return build_mlb_home()
+        return build_preview_page("mlb")
+
+    @flask_app.get("/mlb/weather")
+    def mlb_weather_page():
+        return build_mlb_weather_page()
+
+    @flask_app.get("/api/mlb/weather")
+    def mlb_weather_api():
+        return jsonify(json_ready(load_mlb_weather()))
+
+    register_mlb_hr_threat_routes(
+        flask_app,
+        render_layout,
+        render_mlb_nav,
+        render_banner,
+        json_ready,
+        mlb_premium_wrap=_mlb_premium_wrap,
+    )
+
+    mlb_results_archive.register_mlb_results_routes(
+        flask_app, render_layout, MLB_OUTPUT_DIR, SITE_ORIGIN
+    )
+
+    mlb_stadiums.register_mlb_stadium_routes(flask_app, render_layout, SITE_ORIGIN)
+
+    @flask_app.get("/mlb/intel")
+    def mlb_intel():
+        return build_mlb_intel_page()
+
+    @flask_app.get("/mlb/matchup-history")
+    def mlb_matchup_history():
+        return build_mlb_matchup_history_page()
+
+    # Legacy alias — temporarily retained while consumers migrate to /mlb/intel.
+    @flask_app.get("/mlb/intel-preview")
+    def mlb_intel_preview():
+        return build_mlb_intel_page()
 
     @flask_app.get("/ufc")
     def ufc_home():
@@ -6603,15 +12861,39 @@ a{color:#60a5fa!important}
 
     @flask_app.get("/api/nba/player-projections")
     def nba_player_projections_api():
-        return jsonify(json_ready(build_nba_player_projection_profiles()))
+        return jsonify(json_ready(seo_tiers.public_profiles_payload(build_nba_player_projection_profiles())))
 
     @flask_app.get("/api/mlb/player-projections")
     def mlb_player_projections_api():
-        return jsonify(json_ready(build_mlb_player_projection_profiles()))
+        return jsonify(json_ready(seo_tiers.public_profiles_payload(build_mlb_player_projection_profiles())))
+
+    @flask_app.get("/mlb/player/<player_slug>")
+    def mlb_player_profile_page(player_slug):
+        return build_mlb_player_page(player_slug)
+
+    @flask_app.get("/sitemap_mlb_players.xml")
+    def mlb_players_sitemap():
+        return build_mlb_players_sitemap()
+
+    @flask_app.get("/mlb/game/<game_slug>")
+    def mlb_game_page(game_slug):
+        return build_mlb_game_page(game_slug)
+
+    @flask_app.get("/sitemap_mlb_games.xml")
+    def mlb_games_sitemap():
+        return build_mlb_games_sitemap()
+
+    @flask_app.get("/nba/player/<player_slug>")
+    def nba_player_profile_page(player_slug):
+        return build_nba_player_page(player_slug)
+
+    @flask_app.get("/sitemap_nba_players.xml")
+    def nba_players_sitemap():
+        return build_nba_players_sitemap()
 
     @flask_app.get("/api/ufc/player-projections")
     def ufc_player_projections_api():
-        return jsonify(json_ready(build_ufc_player_projection_profiles()))
+        return jsonify(json_ready(seo_tiers.public_profiles_payload(build_ufc_player_projection_profiles())))
 
     for key, spec in NBA_PAGE_SPECS.items():
         def nba_page(spec_key=key):
@@ -6622,8 +12904,6 @@ a{color:#60a5fa!important}
 
         flask_app.add_url_rule(spec["route"], f"nba_page_{key}", nba_page)
         flask_app.add_url_rule(spec["api_route"], f"nba_api_{key}", nba_api)
-
-    register_mlb_weather_routes(flask_app, render_layout, render_mlb_nav, render_banner, render_meta_strip, json_ready)
 
     for key, spec in MLB_PAGE_SPECS.items():
         def mlb_page(spec_key=key):
@@ -6646,6 +12926,27 @@ a{color:#60a5fa!important}
         flask_app.add_url_rule(spec["api_route"], f"ufc_api_{key}", ufc_api)
 
     register_auth_routes(flask_app)
+
+    from auth_system.models import db
+    db.init_app(flask_app)
+    with flask_app.app_context():
+        db.create_all()
+        logging.getLogger(__name__).info(
+            "auth_system db ready: url=%s",
+            str(db.engine.url),
+        )
+    from auth_system.stripe_integration import register_stripe_routes
+    register_stripe_routes(flask_app)
+    from auth_system.auth import (
+        register_app_session_api,
+        register_auth_api,
+        register_clerk_webhook,
+    )
+    register_app_session_api(flask_app)
+    register_auth_api(flask_app)
+    register_clerk_webhook(flask_app, db)
+    from auth_system.paywall import register_paywall
+    register_paywall(flask_app, db)
 
     return flask_app
 

@@ -3,14 +3,18 @@ from __future__ import annotations
 import os
 import json
 import sys
-from datetime import datetime, timedelta
+import re
+import unicodedata
+from datetime import datetime, timedelta, date
 from html import escape
 from math import erf, isnan, sqrt
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import pandas as pd
-from flask import jsonify
+from flask import Response, jsonify
+
+from nba_model.webapp import seo_tiers
 
 
 ET = ZoneInfo("America/New_York")
@@ -52,6 +56,9 @@ WNBA_UNMATCHED_STATS_PATH = WNBA_BEST_BETS_DIR / "unmatched_stats_today.csv"
 WNBA_STATUS_PATH = WNBA_BASE_DIR / "data" / "raw" / "wnba_player_status.csv"
 WNBA_LINES_PATH = WNBA_BASE_DIR / "data" / "raw" / "wnba_sportsbook_lines.csv"
 WNBA_SCHEDULE_PATH = WNBA_BASE_DIR / "data" / "raw" / "wnba_schedule_today.csv"
+WNBA_PRODUCTION_STATUS_PATH = WNBA_BASE_DIR / "data" / "processed" / "wnba_production_status.json"
+WNBA_PLAYER_POSITIONS_PATH = WNBA_BASE_DIR / "data" / "raw" / "wnba_player_positions.csv"
+WNBA_PLAYER_SITE_URL = "https://edgerankedai.com"
 
 WNBA_PAGE_SPECS = {
     "best_bets": {
@@ -489,6 +496,305 @@ def build_player_projection_profiles() -> dict:
     return {"records": records, "teams": teams, "source_label": public_data_source_label(source_path), "last_updated": file_timestamp(source_path)}
 
 
+def slugify_player_name(value) -> str:
+    text = normalize_text(value)
+    if not text:
+        return ""
+    decomposed = unicodedata.normalize("NFKD", text)
+    ascii_text = decomposed.encode("ascii", "ignore").decode("ascii").lower()
+    ascii_text = ascii_text.replace("'", "").replace("'", "").replace("'", "")
+    return re.sub(r"[^a-z0-9]+", "-", ascii_text).strip("-")
+
+
+def _registry_player_from_row(raw, player_cols, team_cols, opponent_cols):
+    player = normalize_text(first_value(raw, player_cols))
+    if not player or "+" in player:
+        return None
+    team = normalize_text(first_value(raw, team_cols)).upper() if team_cols else ""
+    opponent = normalize_text(first_value(raw, opponent_cols)).upper() if opponent_cols else ""
+    slug = slugify_player_name(player)
+    if not slug:
+        return None
+    return {"slug": slug, "player": player, "team": team, "opponent": opponent}
+
+
+def build_wnba_player_registry() -> dict:
+    registry = {}
+    source_paths = [
+        WNBA_PROJECTIONS_PATH,
+        WNBA_APP_VIEW_PATH,
+        WNBA_HISTORY_PATH,
+        WNBA_GRADED_PATH,
+        WNBA_BEST_BETS_PATH,
+        WNBA_PLAYER_POSITIONS_PATH,
+    ]
+
+    active_payload = build_player_projection_profiles()
+    for record in active_payload.get("records", []):
+        slug = slugify_player_name(record.get("player"))
+        if not slug:
+            continue
+        registry[slug] = {
+            "player": record.get("player"),
+            "team": record.get("team", ""),
+            "opponent": record.get("opponent", ""),
+            "matchup": record.get("matchup", ""),
+            "has_active_projection": True,
+        }
+
+    discovery_sources = [
+        (WNBA_HISTORY_PATH, ["player_name", "PLAYER", "player"], ["team", "TEAM"], ["opponent", "OPPONENT"]),
+        (WNBA_GRADED_PATH, ["player_name", "PLAYER", "player"], ["team", "TEAM"], ["opponent", "OPPONENT"]),
+        (WNBA_BEST_BETS_PATH, ["player_name", "PLAYER", "player"], ["team", "TEAM"], ["opponent", "OPPONENT"]),
+        (WNBA_PLAYER_POSITIONS_PATH, ["player_name", "PLAYER", "player"], ["team", "TEAM"], []),
+    ]
+    for path, player_cols, team_cols, opponent_cols in discovery_sources:
+        df = read_csv_df(path)
+        if df.empty:
+            continue
+        for _, raw in df.iterrows():
+            entry = _registry_player_from_row(raw, player_cols, team_cols, opponent_cols)
+            if not entry:
+                continue
+            slug = entry["slug"]
+            current = registry.get(slug)
+            if current is None:
+                registry[slug] = {
+                    "player": entry["player"],
+                    "team": entry["team"],
+                    "opponent": entry["opponent"],
+                    "matchup": "",
+                    "has_active_projection": False,
+                }
+                continue
+            if not current.get("team") and entry["team"]:
+                current["team"] = entry["team"]
+            if not current.get("opponent") and entry["opponent"]:
+                current["opponent"] = entry["opponent"]
+
+    entries = sorted(registry.values(), key=lambda item: (item.get("team", ""), item.get("player", "")))
+    last_updated = max(filter(None, [file_timestamp(path) for path in source_paths]), default=None)
+    return {"entries": entries, "slugs": registry, "last_updated": last_updated}
+
+
+def find_wnba_player_profile(slug):
+    target = slugify_player_name(slug)
+    active_payload = build_player_projection_profiles()
+    if target:
+        for record in active_payload.get("records", []):
+            if slugify_player_name(record.get("player")) == target:
+                return record, active_payload, True
+    registry_payload = build_wnba_player_registry()
+    entry = registry_payload.get("slugs", {}).get(target) if target else None
+    if entry:
+        profile = {
+            "player": entry.get("player"),
+            "team": entry.get("team", ""),
+            "opponent": entry.get("opponent", ""),
+            "matchup": entry.get("matchup", ""),
+            "confidence": "",
+            "stats": [],
+            "probabilities": [],
+            "confidence_fields": [],
+        }
+        return profile, active_payload, False
+    return None, active_payload, False
+
+
+def render_wnba_player_name_html(player) -> str:
+    name = normalize_text(player)
+    slug = slugify_player_name(name)
+    if name and slug:
+        return f"<a class='wnba-player-link' href='/wnba/player/{slug}'>{escape(name)}</a>"
+    return escape(name or "Player")
+
+
+def render_wnba_player_stat_section(title, caption, fields, distributions=None) -> str:
+    if not fields:
+        return ""
+    cards = seo_tiers.public_cards(fields, distributions)
+    if not cards:
+        return ""
+    return (
+        "<section class='panel'>"
+        f"<div class='panel-head'><div><div class='eyebrow'>WNBA</div><h2>{escape(title)}</h2></div>"
+        f"<p class='muted'>{escape(caption)}</p></div>"
+        + render_stat_cards(cards)
+        + "</section>"
+    )
+
+
+def _render_wnba_page_actions(actions) -> str:
+    buttons = []
+    for label, href, kind in actions:
+        css = "cta-btn" if kind == "primary" else "cta-btn secondary"
+        buttons.append(f"<a class='{css}' href='{escape(href)}'>{escape(label)}</a>")
+    return "<div class='cta-row'>" + "".join(buttons) + "</div>"
+
+
+def build_wnba_player_not_found_page(slug, render_layout, render_subnav):
+    requested = normalize_text(slug).replace("-", " ").title()
+    body = (
+        render_empty_state(
+            "Player Not Found",
+            "We couldn't find that WNBA player.",
+            "This player is not currently tracked in EdgeRanked WNBA production outputs.",
+        )
+        + _render_wnba_page_actions(
+            [
+                ("View WNBA Projections", "/wnba/projections", "primary"),
+                ("WNBA Top Plays", "/wnba/best-bets", "secondary"),
+            ]
+        )
+    )
+    html = render_layout(
+        requested or "WNBA Player",
+        "This WNBA player profile is not currently available.",
+        body,
+        "/wnba/projections",
+        render_subnav(WNBA_NAV_ITEMS, "/wnba/projections"),
+        hero_kicker="WNBA Player Profile",
+        meta_description="This WNBA player profile is not currently available. Browse EdgeRanked AI's WNBA projection boards.",
+        document_title="WNBA Player Not Found | EdgeRanked AI",
+    )
+    return html, 404
+
+
+def build_wnba_player_page(slug, render_layout, render_subnav):
+    profile, payload, has_active_projection = find_wnba_player_profile(slug)
+    if not profile:
+        return build_wnba_player_not_found_page(slug, render_layout, render_subnav)
+
+    player = normalize_text(profile.get("player"))
+    team = normalize_text(profile.get("team")).upper()
+    opponent = normalize_text(profile.get("opponent"))
+    matchup = normalize_text(profile.get("matchup")) or (f"{team} vs {opponent}" if team and opponent else "")
+    confidence = normalize_text(profile.get("confidence")) or "Model View"
+    last_updated = payload.get("last_updated")
+    updated_label = format_timestamp(last_updated) if last_updated else ""
+
+    summary_cards = []
+    if team:
+        summary_cards.append(("Team", team, "Current club"))
+    if opponent and has_active_projection:
+        summary_cards.append(("Opponent", opponent, "Today's matchup"))
+    if has_active_projection:
+        summary_cards.append(("Confidence", confidence, "Model read"))
+
+    body_parts = []
+    if has_active_projection and matchup:
+        body_parts.append(
+            "<section class='panel'>"
+            "<div class='panel-head'><div><div class='eyebrow'>Matchup</div>"
+            f"<h2>{escape(matchup)}</h2></div>"
+            f"<p class='muted'>Model confidence: {escape(confidence)}</p></div>"
+            + render_stat_cards(summary_cards)
+            + "</section>"
+        )
+    elif team:
+        body_parts.append(
+            "<section class='panel'>"
+            "<div class='panel-head'><div><div class='eyebrow'>Player Profile</div>"
+            f"<h2>{escape(player)}</h2></div>"
+            "<p class='muted'>Known WNBA player tracked in EdgeRanked production outputs.</p></div>"
+            + render_stat_cards(summary_cards)
+            + "</section>"
+        )
+    if not has_active_projection:
+        body_parts.append(
+            render_empty_state(
+                "No Active Projection",
+                "No active projection available today.",
+                "This player is tracked in WNBA history or roster data, but is not on today's modeled slate.",
+            )
+        )
+    wnba_distributions = seo_tiers.value_distributions(payload.get("records", []), ("stats",))
+    body_parts.append(
+        render_wnba_player_stat_section(
+            "Core Outlook",
+            "Public outlook tiers for today's projected stat output.",
+            profile.get("stats", []),
+            wnba_distributions,
+        )
+    )
+    body_parts.append(
+        render_wnba_player_stat_section(
+            "Prop Outlook",
+            "Public outlook tiers for each prop market.",
+            profile.get("probabilities", []),
+        )
+    )
+    body_parts.append(
+        render_wnba_player_stat_section(
+            "Model Confidence",
+            "Confidence and matchup context from the projection file.",
+            profile.get("confidence_fields", []),
+        )
+    )
+    if has_active_projection:
+        body_parts.append(seo_tiers.render_premium_locked_section(seo_tiers.PREMIUM_PLAYER_ITEMS))
+    body_parts.append(
+        _render_wnba_page_actions(
+            [
+                ("All WNBA Projections", "/wnba/projections", "primary"),
+                ("WNBA Top Plays", "/wnba/best-bets", "secondary"),
+            ]
+        )
+    )
+
+    body = "".join(part for part in body_parts if part)
+
+    subtitle_bits = [bit for bit in [team and f"{team}", opponent and has_active_projection and f"vs {opponent}"] if bit]
+    subtitle = " · ".join(subtitle_bits) if subtitle_bits else "WNBA player profile"
+    if updated_label and has_active_projection:
+        subtitle = f"{subtitle} · Updated {updated_label}"
+
+    meta_desc = (
+        f"View today's {player} WNBA projections, matchup data, probabilities, "
+        "and model confidence from EdgeRanked AI."
+    )
+    document_title = f"{player} WNBA Projection Today | EdgeRanked AI"
+
+    return render_layout(
+        player,
+        subtitle,
+        body,
+        "/wnba/projections",
+        render_subnav(WNBA_NAV_ITEMS, "/wnba/projections"),
+        hero_kicker="WNBA Player Profile",
+        meta_description=meta_desc,
+        document_title=document_title,
+    )
+
+
+def build_wnba_players_sitemap():
+    registry_payload = build_wnba_player_registry()
+    last_updated = registry_payload.get("last_updated")
+    lastmod = last_updated.date().isoformat() if isinstance(last_updated, datetime) else date.today().isoformat()
+    seen = set()
+    urls = []
+    for entry in registry_payload.get("entries", []):
+        slug = slugify_player_name(entry.get("player"))
+        if not slug or slug in seen:
+            continue
+        seen.add(slug)
+        urls.append(
+            "  <url>"
+            f"<loc>{WNBA_PLAYER_SITE_URL}/wnba/player/{slug}</loc>"
+            f"<lastmod>{lastmod}</lastmod>"
+            "<changefreq>daily</changefreq>"
+            "<priority>0.6</priority>"
+            "</url>"
+        )
+    xml = (
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
+        + "\n".join(urls)
+        + "\n</urlset>\n"
+    )
+    return Response(xml, mimetype="application/xml")
+
+
 def build_best_bets_board() -> dict:
     df = read_csv_df(WNBA_BEST_BETS_PATH)
     source_path = WNBA_BEST_BETS_PATH
@@ -768,6 +1074,14 @@ def render_player_profile_explorer(payload: dict) -> str:
 
 
 def render_projection_table(rows: list[dict]) -> str:
+    # Premium projection explorer (shared NBA/WNBA renderer). The legacy
+    # row-per-stat table is preserved below as render_projection_table_legacy
+    # for fallback only — the public route now serves the redesigned view.
+    from nba_model.webapp.projection_explorer import render_projection_explorer
+    return render_projection_explorer(rows, sport_label="WNBA", namespace="wnba")
+
+
+def render_projection_table_legacy(rows: list[dict]) -> str:
     if not rows:
         return render_empty_state("Projection Explorer", "No WNBA projections are currently available.", "The latest WNBA projection file has not been loaded yet.")
 
@@ -788,7 +1102,7 @@ def render_projection_table(rows: list[dict]) -> str:
             f"data-minutes='{row['expected_minutes'] if row['expected_minutes'] is not None else ''}' "
             f"data-confidence-rank='{row['confidence_rank']}'>"
             + "<td data-label='Player'><div class='player-cell'><div class='player-main'>"
-            + escape(row["player"])
+            + render_wnba_player_name_html(row["player"])
             + "</div><div class='muted'>"
             + escape(row["matchup"])
             + "</div></div></td>"
@@ -952,7 +1266,7 @@ def render_projection_snapshot(snapshot_cards: list[dict]) -> str:
                 "<li class='leader-item'><span class='leader-rank'>"
                 + str(index)
                 + "</span><div class='leader-copy'><div class='leader-name'>"
-                + escape(leader["player"])
+                + render_wnba_player_name_html(leader["player"])
                 + "</div><div class='leader-meta'>"
                 + escape(leader["team"])
                 + " | "
@@ -1068,6 +1382,51 @@ def build_system_rows() -> list[dict]:
     return [{"file": label, "exists": "Yes" if path.exists() else "No", "updated": format_timestamp(file_timestamp(path)), "source_label": label} for label, path in paths.items()]
 
 
+def read_production_status() -> dict:
+    if not WNBA_PRODUCTION_STATUS_PATH.exists():
+        return {
+            "WNBA_PRODUCTION_STATUS": "FAIL",
+            "status": "stale",
+            "message": "WNBA refresh status is unavailable; check back shortly.",
+            "published": "no",
+            "stale_output_blocked": "yes",
+        }
+    try:
+        with WNBA_PRODUCTION_STATUS_PATH.open("r", encoding="utf-8") as handle:
+            return json.load(handle)
+    except Exception as exc:
+        return {
+            "WNBA_PRODUCTION_STATUS": "FAIL",
+            "status": "stale",
+            "message": "WNBA refresh status could not be read; check back shortly.",
+            "published": "no",
+            "stale_output_blocked": "yes",
+            "error": str(exc),
+        }
+
+
+def build_production_status_rows(status: dict) -> list[dict]:
+    rows = []
+    for key in [
+        "WNBA_PRODUCTION_STATUS",
+        "slate_date",
+        "canonical_teams",
+        "projected_teams",
+        "included_players",
+        "excluded_players",
+        "excluded_reasons",
+        "published",
+        "stale_output_blocked",
+        "message",
+        "error",
+    ]:
+        value = status.get(key, "")
+        if isinstance(value, (list, dict)):
+            value = json.dumps(value, sort_keys=True)
+        rows.append({"field": key, "value": value})
+    return rows
+
+
 def build_live_data_audit() -> dict:
     require_live_data = os.environ.get("EDGERANKED_WNBA_REQUIRE_LIVE_DATA", "")
     audit = {
@@ -1121,6 +1480,20 @@ def build_live_data_audit_rows(audit: dict) -> list[dict]:
     ]
 
 
+def production_block_notice() -> str:
+    status = read_production_status()
+    if status.get("WNBA_PRODUCTION_STATUS") == "PASS" and str(status.get("published", "")).lower() == "yes":
+        return ""
+    message = status.get("message") or "WNBA refresh is blocked while the slate is verified."
+    detail = status.get("error") or "The site is intentionally withholding stale or partial WNBA outputs."
+    return render_empty_state("WNBA Status", str(message), str(detail))
+
+
+def production_ready() -> bool:
+    status = read_production_status()
+    return status.get("WNBA_PRODUCTION_STATUS") == "PASS" and str(status.get("published", "")).lower() == "yes"
+
+
 def get_dataset(spec_key: str) -> dict:
     spec = WNBA_PAGE_SPECS[spec_key]
     if spec_key == "projections":
@@ -1139,47 +1512,119 @@ def get_dataset(spec_key: str) -> dict:
     if spec_key == "graded":
         return {"kind": "table", "records": records_from_df(read_csv_df(WNBA_GRADED_PATH)), "title": spec["title"], "description": spec["description"]}
     if spec_key == "system":
+        production_status = read_production_status()
         return {
             "kind": "table",
-            "records": [{"service": "wnba", "status": "available"}],
+            "records": build_production_status_rows(production_status),
             "title": spec["title"],
             "description": spec["description"],
+            "production_status": production_status,
         }
     return {"kind": "table", "records": records_from_df(read_csv_df(spec["path"])), "title": spec["title"], "description": spec["description"]}
 
 
+# Wrapping every WNBA page body in this opt-in class activates the
+# .sport-premium-page styles defined in render_layout's stylesheet. No global
+# rules are touched; pages without this class behave exactly as before.
+WNBA_PREMIUM_OPEN = "<div class='sport-premium-page sport-premium-wnba'>"
+WNBA_PREMIUM_CLOSE = "</div>"
+
+
+def render_public_preview_rows(rows: list[tuple[str, str, str]]) -> str:
+    return "<div class='resource-grid'>" + "".join(
+        "<article class='resource-card'><strong>" + escape(title) + "</strong><p>" + escape(detail) + "</p><div class='resource-meta'>" + escape(meta) + "</div></article>"
+        for title, meta, detail in rows
+    ) + "</div>"
+
+
 def build_home(render_layout, render_subnav) -> str:
-    projection_rows = build_projection_records()
-    best_bets = build_best_bets_board()
-    snapshot = build_projection_snapshot(projection_rows)
     body = (
-        "<section class='panel'><div class='panel-head'><div><div class='eyebrow'>WNBA Daily Slate</div><h2>Projection-first WNBA board</h2></div><p class='muted'>WNBA now follows the same product pattern as the flagship NBA board: full player coverage, sortable projection rows, and top-play context.</p></div></section>"
-        + render_projection_snapshot(snapshot)
-        + render_player_profile_explorer(build_player_projection_profiles())
-        + "<section class='panel'><div class='panel-head'><div><div class='eyebrow'>Full Projection Access</div><h2>Explore every modeled player</h2></div><p class='muted'>Open the explorer to filter by team or stat and sort the full WNBA player-stat board.</p></div>"
-        + "<div class='actions'><a class='cta-btn' href='/wnba/projections'>Open Projection Explorer</a></div></section>"
-        + render_best_bets_summary(best_bets)
+        "<section class='panel'>"
+        "<div class='panel-head'><div><div class='eyebrow'>Public Preview</div><h2>WNBA Projections Today Preview</h2></div>"
+        "<p class='muted'>Public, crawlable WNBA analytics content. Premium projections stay protected.</p></div>"
+        "<p class='muted'>EdgeRanked AI WNBA projections support daily research across scoring, rebounds, assists, combo stats, and top-play organization. This public WNBA landing page creates an indexable preview while keeping subscriber projection outputs in the existing gated routes.</p>"
+        "<p class='muted'>The WNBA workflow is built for quick slate review: identify player role, compare stat categories, understand matchup pressure, and separate stronger model signals from ordinary market noise.</p>"
+        "<p class='muted'>Use this page as a public guide to WNBA projections today and the kinds of analytics available inside the full EdgeRanked premium experience.</p>"
+        "<div class='actions'><a class='cta-btn' href='/pricing'>Unlock full WNBA projections</a><a class='cta-btn secondary' href='/'>View Homepage</a></div>"
+        "</section>"
+        "<section class='panel'>"
+        "<div class='panel-head'><div><div class='eyebrow'>Coverage</div><h2>What the preview covers</h2></div>"
+        "<p class='muted'>These public examples describe the WNBA analysis surface without publishing live premium picks or model outputs.</p></div>"
+        + render_stat_cards([
+            ("WNBA Markets", "Player Props", "Scoring, rebounding, assists, combo stats, top-play structure, and matchup-driven context."),
+            ("Slate Workflow", "Daily", "Designed for fast review of role, minutes, opponent profile, and confidence signals."),
+            ("Premium View", "Protected", "Live WNBA projections, top plays, and detailed boards remain inside premium access."),
+        ])
+        + "</section>"
+        "<section class='panel'>"
+        "<div class='panel-head'><div><div class='eyebrow'>Projection Signals</div><h2>Sample analytics cards</h2></div>"
+        "<p class='muted'>Each card shows the type of signal organization available in the full EdgeRanked workflow.</p></div>"
+        + render_public_preview_rows([
+            ("WNBA Player Projections", "Preview signal", "Structures scoring, rebounding, assist, and combo-stat analysis around role and matchup context."),
+            ("Top-Play Organization", "Preview signal", "Groups stronger model signals so the slate can be reviewed quickly without losing context."),
+            ("Matchup Context", "Preview signal", "Highlights team environment, player role, pace, usage, and market-specific research notes."),
+        ])
+        + "</section>"
+        "<section class='panel'>"
+        "<div class='panel-head'><div><div class='eyebrow'>Mock Examples</div><h2>Sample projection use cases</h2></div>"
+        "<p class='muted'>Illustrative examples only. These are not live picks, betting recommendations, or current premium projections.</p></div>"
+        + render_public_preview_rows([
+            ("Primary Ball Handler", "Points / assists context", "On-ball role, assist chances, projected minutes, and opponent defensive pressure."),
+            ("Frontcourt Rebounder", "Rebounds / combo context", "Rebounding share, opponent shot profile, foul risk, and minutes stability."),
+            ("Perimeter Scorer", "Points / 3PM context", "Shot attempt volume, spacing role, matchup quality, and recent usage trend."),
+        ])
+        + "</section>"
+        "<section class='panel'>"
+        "<div class='panel-head'><div><div class='eyebrow'>Premium Tools</div><h2>Open the full gated boards</h2></div>"
+        "<p class='muted'>These links keep WNBA projection and board routes in their existing protected locations.</p></div>"
+        + render_public_preview_rows([
+            ("WNBA Projection Explorer", "Premium board", "Open the existing gated WNBA player projection board."),
+            ("WNBA Top Plays", "Premium board", "Open the existing gated WNBA top-plays page."),
+        ]).replace("<article class='resource-card'><strong>WNBA Projection Explorer</strong>", "<a class='resource-card' href='/wnba/projections'><strong>WNBA Projection Explorer</strong>").replace("</article><article class='resource-card'><strong>WNBA Top Plays</strong>", "</a><a class='resource-card' href='/wnba/best-bets'><strong>WNBA Top Plays</strong>").replace("</article></div>", "</a></div>")
+        + "</section>"
+        "<section class='panel'>"
+        "<div class='panel-head'><div><div class='eyebrow'>Explore</div><h2>More public pages</h2></div>"
+        "<p class='muted'>Internal preview links help crawlers and visitors discover the public sports analytics surface.</p></div>"
+        + render_public_preview_rows([
+            ("Home", "Homepage", "Return to the EdgeRanked AI homepage and sport dashboard directory."),
+            ("MLB Projections Today", "Public preview", "Review the public MLB projections landing page."),
+            ("NBA Projections Today", "Public preview", "Review the public NBA projections landing page."),
+        ]).replace("<article class='resource-card'><strong>Home</strong>", "<a class='resource-card' href='/'><strong>Home</strong>").replace("</article><article class='resource-card'><strong>MLB Projections Today</strong>", "</a><a class='resource-card' href='/mlb'><strong>MLB Projections Today</strong>").replace("</article><article class='resource-card'><strong>NBA Projections Today</strong>", "</a><a class='resource-card' href='/nba'><strong>NBA Projections Today</strong>").replace("</article></div>", "</a></div>")
+        + "</section>"
     )
-    return render_layout("WNBA Projection Center", "WNBA player projections and top plays powered by EdgeRanked.", body, "/wnba", render_subnav(WNBA_NAV_ITEMS, "/wnba"), hero_kicker="WNBA")
+    return render_layout(
+        "WNBA Projections Today Preview",
+        "Public preview of EdgeRanked AI WNBA projections today, including player prop examples, top-play structure, matchup context, and premium analytics signals.",
+        body,
+        "/wnba",
+        render_subnav(WNBA_NAV_ITEMS, "/wnba"),
+        hero_kicker="Public Sports Preview",
+        meta_description="Public preview of EdgeRanked AI WNBA projections today, including player prop examples, top-play structure, matchup context, and premium analytics signals.",
+        html_title="WNBA Projections Today Preview | EdgeRanked AI",
+    )
 
 
 def build_dataset_page(spec_key: str, render_layout, render_subnav) -> str:
     spec = WNBA_PAGE_SPECS[spec_key]
+    if spec_key != "system" and not production_ready():
+        body = WNBA_PREMIUM_OPEN + production_block_notice() + WNBA_PREMIUM_CLOSE
+        return render_layout(spec["title"], "WNBA slate verification is in progress.", body, spec["route"], render_subnav(WNBA_NAV_ITEMS, spec["route"]), hero_kicker="WNBA")
     data = get_dataset(spec_key)
     rows = data.get("records", [])
     nav_target = spec["route"] if spec_key != "system" else "/wnba"
     header = "<section class='panel'><div class='panel-head'><div><div class='eyebrow'>WNBA</div><h2>" + escape(spec["title"]) + "</h2></div><p class='muted'>" + escape(spec["description"]) + "</p></div></section>"
     if spec_key == "record":
-        body = header + render_record_panel(data)
+        inner = header + render_record_panel(data)
     elif spec_key == "best_bets":
-        body = header + render_best_bets_table(data)
+        inner = header + render_best_bets_table(data)
     elif spec_key == "projections":
-        body = header + render_player_profile_explorer(build_player_projection_profiles()) + render_projection_table(rows)
+        inner = header + render_projection_table(rows)
     elif spec_key == "system":
-        body = header + render_data_table("WNBA System Status", spec["description"], rows, [("Service", "service", "text"), ("Status", "status", "text")], "No WNBA system data is currently available.", "Status is currently unavailable.")
+        inner = header + render_data_table("WNBA System Status", spec["description"], rows, [("Field", "field", "text"), ("Value", "value", "text")], "No WNBA system data is currently available.", "Status is currently unavailable.")
     else:
         columns = [(key, key, "text") for key in (rows[0].keys() if rows else ["Board"])]
-        body = header + render_data_table(spec["title"], spec["description"], rows, columns, "No WNBA data is currently available.", "The latest WNBA file has not been loaded yet.")
+        inner = header + render_data_table(spec["title"], spec["description"], rows, columns, "No WNBA data is currently available.", "The latest WNBA file has not been loaded yet.")
+    body = WNBA_PREMIUM_OPEN + inner + WNBA_PREMIUM_CLOSE
     return render_layout(spec["title"], spec["description"], body, spec["route"], render_subnav(WNBA_NAV_ITEMS, nav_target), hero_kicker="WNBA")
 
 
@@ -1188,9 +1633,17 @@ def register_wnba_routes(flask_app, render_layout, render_subnav) -> None:
     def wnba_home():
         return build_home(render_layout, render_subnav)
 
+    @flask_app.get("/wnba/player/<player_slug>")
+    def wnba_player_profile_page(player_slug):
+        return build_wnba_player_page(player_slug, render_layout, render_subnav)
+
+    @flask_app.get("/sitemap_wnba_players.xml")
+    def wnba_players_sitemap():
+        return build_wnba_players_sitemap()
+
     @flask_app.get("/api/wnba/player-projections")
     def wnba_player_projections_api():
-        return jsonify(json_ready(build_player_projection_profiles()))
+        return jsonify(json_ready(seo_tiers.public_profiles_payload(build_player_projection_profiles())))
 
     for key, spec in WNBA_PAGE_SPECS.items():
         def wnba_page(spec_key=key):
@@ -1198,7 +1651,9 @@ def register_wnba_routes(flask_app, render_layout, render_subnav) -> None:
 
         def wnba_api(spec_key=key):
             if spec_key == "system":
-                return jsonify({"status": "ok", "sport": "wnba", "public": True})
+                production_status = read_production_status()
+                http_status = 200 if production_status.get("WNBA_PRODUCTION_STATUS") == "PASS" else 503
+                return jsonify(json_ready({"sport": "wnba", "public": True, **production_status})), http_status
             return jsonify(json_ready(get_dataset(spec_key)))
 
         flask_app.add_url_rule(spec["route"], f"wnba_page_{key}", wnba_page)

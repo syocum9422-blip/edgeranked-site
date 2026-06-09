@@ -124,13 +124,20 @@ def csv_row_count(path: Path) -> int:
 
 
 def source_candidates():
-    """Return slate source candidates in the same preference order as the live app."""
+    """Return slate source candidates. Prefer active MLB model outputs first."""
+    active_model_base = Path("/home/ubuntu/mlb_model")
+
+    candidates = [
+        ("active_model_full_board", active_model_base / "mlb" / "outputs" / "hitter_predictions_full.csv"),
+        ("active_model_today_board", active_model_base / "mlb" / "outputs" / "hitter_predictions_today.csv"),
+        ("active_model_pitcher_props", active_model_base / "mlb" / "outputs" / "pitcher_props_today.csv"),
+    ]
+
     bases = []
     for base in [LIVE_MLB_BASE, REPO_ROOT]:
         if base not in bases:
             bases.append(base)
 
-    candidates = []
     for base in bases:
         candidates.extend([
             ("canonical_full_board", base / "outputs" / "canonical" / "hitter_predictions_full.csv"),
@@ -139,8 +146,8 @@ def source_candidates():
             ("live_summary", base / "mlb" / "outputs" / "hitter_summary_today.csv"),
             ("pitcher_props", base / "mlb" / "outputs" / "pitcher_props_today.csv"),
         ])
-    return candidates
 
+    return candidates
 
 def select_current_slate_source():
     """Select a current MLB slate file and reject stale candidates."""

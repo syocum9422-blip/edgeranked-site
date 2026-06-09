@@ -48,6 +48,11 @@ PUBLISH_SPORTS = {
 def should_publish_mlb() -> bool:
     return "all" in PUBLISH_SPORTS or "mlb" in PUBLISH_SPORTS
 
+
+def should_publish_wnba() -> bool:
+    return "all" in PUBLISH_SPORTS or "wnba" in PUBLISH_SPORTS
+
+
 def _mode_path(legacy: Path, canonical: Path) -> Path:
     if MLB_PUBLISH_MODE == "canonical" and canonical.exists():
         return canonical
@@ -66,6 +71,36 @@ SITE_LINES_TARGET = DEPLOY_ROOT / "data" / "mlb" / "lines_today.csv"
 CANO_HITTER_SUMMARY = MLB_SOURCE_ROOT / "outputs" / "site" / "hitter_summary_today.csv"
 LEGACY_HITTER_SUMMARY = MLB_SOURCE_ROOT / "mlb_model" / "mlb" / "outputs" / "hitter_summary_today.csv"
 CANO_FULL_HITTER = MLB_SOURCE_ROOT / "outputs" / "canonical" / "hitter_predictions_full.csv"
+
+WNBA_SOURCE_ROOT = Path(os.environ.get("EDGERANKED_WNBA_BASE_DIR", str(SPORTS_ROOT / "wnba")))
+WNBA_SNAPSHOT_TARGET = DEPLOY_ROOT / "wnba"
+WNBA_EXCLUDE_NAMES = {".venv", "__pycache__", ".git"}
+
+
+def refresh_wnba_snapshot() -> int:
+    if not should_publish_wnba():
+        return 0
+    if not WNBA_SOURCE_ROOT.exists():
+        print(f"SKIP WNBA snapshot: missing source {WNBA_SOURCE_ROOT}")
+        return 0
+    WNBA_SNAPSHOT_TARGET.mkdir(parents=True, exist_ok=True)
+    updated = 0
+    for source in WNBA_SOURCE_ROOT.iterdir():
+        if source.name in WNBA_EXCLUDE_NAMES:
+            continue
+        target = WNBA_SNAPSHOT_TARGET / source.name
+        if source.is_dir():
+            shutil.copytree(
+                source,
+                target,
+                dirs_exist_ok=True,
+                ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
+            )
+        else:
+            shutil.copy2(source, target)
+        updated += 1
+    print(f"UPDATED WNBA snapshot: {WNBA_SNAPSHOT_TARGET} from {WNBA_SOURCE_ROOT} ({updated} top-level item(s))")
+    return updated
 
 
 COPIES = [
@@ -256,22 +291,19 @@ def copy_one(source: Path, target: Path, label: str) -> bool:
 
 
 def main() -> int:
-    if not should_publish_mlb():
+    updated = 0
+
+    if should_publish_mlb():
+        validate_mlb_site_source()
+        for source, target, label in COPIES:
+            updated += int(copy_one(source, target, label))
+    else:
         print(
             "[site_publish] EDGERANKED_PUBLISH_SPORTS="
             f"{','.join(sorted(PUBLISH_SPORTS))}; skipping MLB validation/copy"
         )
-        print("")
-        print("Snapshot refresh complete. Updated 0 MLB file(s).")
-        print("Next step:")
-        print("  run scripts/publish_render_site.sh to sync the refreshed snapshot into the live site")
-        return 0
 
-    validate_mlb_site_source()
-
-    updated = 0
-    for source, target, label in COPIES:
-        updated += int(copy_one(source, target, label))
+    updated += refresh_wnba_snapshot()
 
     print("")
     print(f"Snapshot refresh complete. Updated {updated} file(s).")

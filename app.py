@@ -1,6 +1,9 @@
 import csv
 import json
 import os
+import re
+import time
+import unicodedata
 from datetime import date, datetime, timedelta
 from html import escape
 from math import erf, isnan, sqrt
@@ -28,6 +31,7 @@ from nba_model.settings import (
 
 ET = ZoneInfo("America/New_York")
 MODEL_VERSION = "v2.1"
+SITE_ROOT = Path(__file__).resolve().parent
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 LEGACY_MLB_BASE = PROJECT_ROOT.parent / "mlb_model_v2_working" / "mlb_model"
 DEFAULT_UFC_BASE = PROJECT_ROOT / "data" / "ufc"
@@ -142,7 +146,7 @@ ROOT_NAV_ITEMS = [
 NBA_NAV_ITEMS = [("Overview", "/nba"), ("Projections", "/nba/projections"), ("Results", "/nba/record"), ("Top Plays", "/nba/best-bets"), ("History", "/nba/history")]
 UFC_NAV_ITEMS = [("Overview", "/ufc"), ("Fight Card", "/ufc/fights"), ("Props", "/ufc/props")]
 PGA_NAV_ITEMS = [("Overview", "/pga"), ("Best Bets", "/pga/best-bets"), ("Leaderboard", "/pga/leaderboard")]
-MLB_PRIMARY_NAV = [("Overview", "/mlb"), ("Top Plays", "/mlb/best-bets"), ("Pitchers", "/mlb/pitcher-strikeouts"), ("Hitters", "/mlb/projections"), ("Results", "/mlb/record")]
+MLB_PRIMARY_NAV = [("Overview", "/mlb"), ("Top Plays", "/mlb/best-bets"), ("Weather", "/mlb/weather"), ("Pitchers", "/mlb/pitcher-strikeouts"), ("Hitters", "/mlb/projections"), ("Results", "/mlb/record")]
 MLB_HITTER_NAV = [
     ("Hit Targets", "/mlb/projections"),
     ("2+ Bases", "/mlb/two-plus-bases"),
@@ -323,6 +327,15 @@ def normalize_text(value, default=""):
     if text.lower() == "nan":
         return default
     return text
+
+
+def slugify_player_name(value):
+    text = normalize_text(value)
+    if not text:
+        return ""
+    decomposed = unicodedata.normalize("NFKD", text)
+    ascii_text = decomposed.encode("ascii", "ignore").decode("ascii").lower()
+    return re.sub(r"[^a-z0-9]+", "-", ascii_text).strip("-")
 
 
 def safe_float(value, default=None):
@@ -743,6 +756,214 @@ def load_mlb_best_bets():
         "model_version": MODEL_VERSION,
         "data_source_freshness": source_freshness_label(last_updated),
     }
+
+
+# -------------------------------------------------------------------
+# MLB Weather Display
+# -------------------------------------------------------------------
+MLB_WEATHER_PATH = SITE_ROOT / "mlb" / "outputs" / "mlb_weather_today.json"
+MAX_WEATHER_AGE_HOURS = 24
+
+
+def load_mlb_weather():
+    """Load MLB weather data from JSON file with graceful error handling."""
+    base_payload = {
+        "games": [],
+        "source_path": str(MLB_WEATHER_PATH),
+        "last_updated": None,
+        "stale": False,
+    }
+    if not MLB_WEATHER_PATH.exists():
+        return {
+            **base_payload,
+            "error": "Weather data is not available yet.",
+            "status": "missing",
+        }
+
+    last_updated = None
+    stale = False
+    try:
+        stat = MLB_WEATHER_PATH.stat()
+        last_updated = datetime.fromtimestamp(stat.st_mtime, tz=ET)
+        age_seconds = time.time() - stat.st_mtime
+        if age_seconds > MAX_WEATHER_AGE_HOURS * 3600:
+            stale = True
+    except Exception:
+        pass
+
+    try:
+        with open(MLB_WEATHER_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        if not isinstance(data, dict):
+            return {
+                **base_payload,
+                "error": "Weather data is not in the expected format.",
+                "status": "invalid",
+            }
+        data["games"] = data.get("games") if isinstance(data.get("games"), list) else []
+        data["source_path"] = str(MLB_WEATHER_PATH)
+        data["last_updated"] = last_updated
+        data["stale"] = stale
+        data["status"] = "stale" if stale else "ok"
+        if stale:
+            data["warning"] = f"Weather data is older than {MAX_WEATHER_AGE_HOURS} hours."
+        return data
+    except json.JSONDecodeError as e:
+        return {
+            **base_payload,
+            "error": f"Weather data could not be parsed: {e}",
+            "status": "parse_error",
+        }
+    except Exception as e:
+        return {
+            **base_payload,
+            "error": f"Weather data could not be read: {e}",
+            "status": "read_error",
+        }
+
+
+def build_mlb_weather_page():
+    """Build MLB weather display page."""
+    weather = load_mlb_weather()
+
+    games = weather.get("games", [])
+    error = weather.get("error")
+    warning = weather.get("warning")
+    generated_at = weather.get("generated_at", "")
+    slate_date = weather.get("slate_date", "")
+    last_updated = weather.get("last_updated")
+    generated_label = generated_at or "Not available"
+    last_updated_label = last_updated.strftime("%b %-d, %-I:%M %p ET") if isinstance(last_updated, datetime) else "Not available"
+
+    # Label colors (dark theme)
+    label_colors = {
+        "Power Boost": "#ef4444",
+        "Run Boost": "#22c55e",
+        "Pitcher Friendly": "#3b82f6",
+        "Wind Suppression": "#a855f7",
+        "Delay Risk": "#f59e0b",
+        "Neutral": "#6b7280",
+    }
+
+    rows_html = ""
+    if error:
+        rows_html = f"<tr><td colspan='99' class='weather-error'>{escape(error)}</td></tr>"
+    elif not games:
+        rows_html = "<tr><td colspan='99' class='weather-empty'>No weather data available</td></tr>"
+    else:
+        for game in games:
+            label = game.get("label", "Neutral")
+            color = label_colors.get(label, "#6b7280")
+            temp = game.get("temperature_f", "—")
+            wind = game.get("wind_speed_mph", "—")
+            wind_dir = game.get("wind_direction", "")
+            rain = game.get("rain_chance", "—")
+            summary = game.get("summary", "")
+            
+            home_team = game.get("home_team", "")
+            home_name = game.get("home_team_name", home_team)
+            away_team = game.get("away_team", "")
+            away_name = game.get("away_team_name", away_team)
+            venue = game.get("venue", "")
+            city = game.get("city", "")
+            roof = game.get("roof_type", "")
+
+            temp_display = f"{temp}&deg;F" if temp not in ("", None, "—") else "N/A"
+            wind_display = f"{wind} mph {escape(str(wind_dir))}".strip() if wind not in ("", None, "—") else "N/A"
+            rain_display = f"{rain}%" if rain not in ("", None, "—") else "N/A"
+            venue_meta = " · ".join([value for value in [city, roof.title() if roof else ""] if value])
+
+            rows_html += f"""
+        <tr class="weather-row">
+            <td class="matchup-cell">
+                <span class="team-away">{escape(away_name)}</span>
+                <span class="at-symbol">@</span>
+                <span class="team-home">{escape(home_name)}</span>
+            </td>
+            <td class="venue-cell">{escape(venue)}<span class="venue-city">{escape(venue_meta)}</span></td>
+            <td class="temp-cell">{temp_display}</td>
+            <td class="wind-cell">{wind_display}</td>
+            <td class="rain-cell">{rain_display}</td>
+            <td class="label-cell">
+                <span class="weather-label" style="background:{color}">{escape(label)}</span>
+            </td>
+            <td class="summary-cell">{escape(summary)}</td>
+        </tr>"""
+
+    notice_html = ""
+    if warning:
+        notice_html = f"<div class='weather-notice'>{escape(warning)}</div>"
+    elif error:
+        notice_html = "<div class='weather-notice'>The Weather tab will update automatically once today's JSON is written.</div>"
+
+    weather_cards = render_stat_cards([
+        ("Games", len(games), "MLB matchups in today's weather file."),
+        ("Slate Date", slate_date or "N/A", "Date attached to the weather output."),
+        ("Updated", last_updated_label, "File timestamp for the current weather JSON."),
+    ], compact=True)
+
+    body = f"""
+<section class="panel">
+    <div class="panel-head">
+        <div>
+            <div class="eyebrow">MLB Weather</div>
+            <h2>Today's Game Weather</h2>
+        </div>
+        <p class="muted">Ballpark conditions for today's MLB slate.</p>
+    </div>
+    {weather_cards}
+    <div class="meta-strip">
+        <span>Generated: {escape(str(generated_label))}</span>
+        <span>Source: {escape(str(weather.get('source', 'Weather JSON')))}</span>
+    </div>
+    {notice_html}
+</section>
+<section class="panel">
+    <div class="table-shell">
+        <table class="mlb-weather-table">
+            <thead>
+                <tr>
+                    <th>Matchup</th>
+                    <th>Venue</th>
+                    <th>Temp</th>
+                    <th>Wind</th>
+                    <th>Rain</th>
+                    <th>Label</th>
+                    <th>Summary</th>
+                </tr>
+            </thead>
+            <tbody>
+                {rows_html}
+            </tbody>
+        </table>
+    </div>
+</section>
+<style>
+.mlb-weather-table {{ width: 100%; font-size: 13px; }}
+.mlb-weather-table th {{ text-align: left; padding: 12px 16px; border-bottom: 2px solid var(--line); color: var(--accent); font-weight: 600; }}
+.mlb-weather-table td {{ padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.06); vertical-align: middle; }}
+.weather-row:hover {{ background: rgba(255,255,255,0.03); }}
+.matchup-cell {{ white-space: nowrap; }}
+.team-away {{ color: var(--text-muted); }}
+.at-symbol {{ color: var(--text-muted); margin: 0 6px; }}
+.team-home {{ font-weight: 600; }}
+.venue-cell {{ color: var(--text-secondary); font-size: 12px; }}
+.venue-city {{ display: block; font-size: 11px; color: var(--text-muted); }}
+.temp-cell, .wind-cell, .rain-cell {{ text-align: center; font-variant-numeric: tabular-nums; }}
+.weather-label {{ display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; color: white; text-transform: uppercase; letter-spacing: 0.03em; }}
+.summary-cell {{ color: var(--text-secondary); font-size: 12px; max-width: 200px; }}
+.weather-error, .weather-empty {{ text-align: center; padding: 40px; color: var(--text-muted); }}
+.meta-strip {{ font-size: 12px; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }}
+.weather-notice {{ margin-top: 14px; padding: 12px 14px; border: 1px solid rgba(245,158,11,0.25); border-radius: 8px; color: #fbbf24; background: rgba(245,158,11,0.08); font-size: 13px; }}
+</style>
+"""
+    return render_layout(
+        "MLB Weather",
+        "Ballpark weather conditions for today's MLB slate",
+        body,
+        "/mlb/weather",
+        render_mlb_nav("/mlb/weather")
+    )
 
 
 def load_mlb_pitcher_board():
@@ -1246,7 +1467,7 @@ def build_mlb_hitter_projection_board():
 
     stat_configs = [
         ("Hits", "Hit Probability", "HIT", None),
-        ("Total Bases", "Total Bases >= 2", "TB", None),
+        ("2+ Bases", "Total Bases >= 2", "TB", None),
         ("RBI", "RBI Probability", "RBI", None),
         ("Home Runs", "Home Run Probability", "HR", None),
         ("Stolen Bases", "Stolen Base Probability", "SB", None),
@@ -1357,6 +1578,224 @@ def build_mlb_pitcher_projection_board():
             })
     rows.sort(key=lambda item: (item["sort_projection"], item["sort_edge"]), reverse=True)
     return rows
+
+
+def collect_mlb_player_slugs():
+    slugs = {}
+    for row in build_mlb_hitter_projection_board():
+        name = normalize_text(row.get("player"))
+        slug = slugify_player_name(name)
+        if slug:
+            slugs.setdefault(slug, name)
+    for row in build_mlb_pitcher_projection_board():
+        name = normalize_text(row.get("player"))
+        slug = slugify_player_name(name)
+        if slug:
+            slugs.setdefault(slug, name)
+    return slugs
+
+
+def build_mlb_player_profile(slug):
+    target = slugify_player_name(slug)
+    if not target:
+        return None
+
+    hitter_rows = [
+        row for row in build_mlb_hitter_projection_board()
+        if slugify_player_name(row.get("player")) == target
+    ]
+    pitcher_rows = [
+        row for row in build_mlb_pitcher_projection_board()
+        if slugify_player_name(row.get("player")) == target
+    ]
+    if not hitter_rows and not pitcher_rows:
+        return None
+
+    name = ""
+    team = ""
+    opponent = ""
+    for row in hitter_rows + pitcher_rows:
+        name = name or normalize_text(row.get("player"))
+        team = team or normalize_text(row.get("team"))
+        opponent = opponent or normalize_text(row.get("opponent"))
+
+    best_confidence = ""
+    best_rank = -1
+    for row in hitter_rows + pitcher_rows:
+        rank = confidence_rank(row.get("confidence"))
+        if rank > best_rank:
+            best_rank = rank
+            best_confidence = confidence_level(row.get("confidence"))
+
+    source_paths = []
+    if hitter_rows:
+        source_paths.append(MLB_FILES["hitters"])
+    if pitcher_rows:
+        source_paths.append(MLB_FILES["pitchers"])
+    timestamps = [ts for ts in (file_timestamp(path) for path in source_paths) if ts]
+    last_updated = max(timestamps) if timestamps else None
+
+    return {
+        "slug": target,
+        "name": name,
+        "team": team,
+        "opponent": opponent,
+        "confidence": best_confidence,
+        "hitter_rows": hitter_rows,
+        "pitcher_rows": pitcher_rows,
+        "last_updated": last_updated,
+    }
+
+
+def render_mlb_player_projection_card(heading, eyebrow, rows, is_hitter):
+    if not rows:
+        return ""
+    body_rows = []
+    for row in rows:
+        stat = escape(normalize_text(row.get("stat")) or "—")
+        if is_hitter:
+            projection = normalize_text(row.get("projection_display")) or metric_label(row.get("projection"))
+        else:
+            projection = metric_label(row.get("projection"))
+        line = row.get("line")
+        line_display = metric_label(line) if line is not None else "—"
+        confidence_badge = render_mlb_confidence_badge(row.get("confidence"))
+        body_rows.append(
+            "<tr>"
+            f"<td data-label='Stat'>{stat}</td>"
+            f"<td data-label='Today’s Projection'><strong>{escape(projection)}</strong></td>"
+            f"<td data-label='Line'>{escape(line_display)}</td>"
+            f"<td data-label='Confidence'>{confidence_badge}</td>"
+            "</tr>"
+        )
+    return (
+        "<section class='panel'>"
+        f"<div class='panel-head'><div><div class='eyebrow'>{escape(eyebrow)}</div><h2>{escape(heading)}</h2></div>"
+        "<p class='muted'>Today’s model projections. Projection is primary; any line is shown as supporting context.</p></div>"
+        "<div class='table-shell'><table><thead><tr>"
+        "<th>Stat</th><th>Today’s Projection</th><th>Line</th><th>Confidence</th>"
+        "</tr></thead><tbody>"
+        + "".join(body_rows)
+        + "</tbody></table></div></section>"
+    )
+
+
+def build_mlb_player_not_found_page(slug):
+    body = (
+        render_empty_state(
+            "Player Not Found",
+            "We couldn’t find today’s projection for that player.",
+            "This player may not be on today’s MLB slate. Browse the full hitter and pitcher boards for current projections.",
+        )
+        + render_page_actions([
+            ("View Hitter Projections", "/mlb/projections", "secondary"),
+            ("View Pitcher Projections", "/mlb/pitcher-strikeouts", "secondary"),
+        ])
+    )
+    return (
+        render_layout(
+            "Player Not Found",
+            "The requested MLB player profile is not available on today’s slate.",
+            body,
+            "/mlb",
+            render_mlb_nav("/mlb"),
+            hero_kicker="MLB Players",
+            document_title="Player Not Found | EdgeRanked AI",
+            meta_description="The requested EdgeRanked AI MLB player projection page is not available on today’s slate.",
+        ),
+        404,
+    )
+
+
+def build_mlb_player_page(slug):
+    profile = build_mlb_player_profile(slug)
+    if profile is None:
+        return build_mlb_player_not_found_page(slug)
+
+    name = profile["name"]
+    team = profile["team"]
+    opponent = profile["opponent"]
+
+    matchup = ""
+    if team and opponent:
+        matchup = f"{team} vs {opponent}"
+    elif team:
+        matchup = team
+    elif opponent:
+        matchup = f"vs {opponent}"
+
+    summary_cards = [
+        ("Team", team or "TBD", "Current team on today’s MLB slate."),
+        ("Opponent", opponent or "TBD", "Today’s opposing matchup."),
+    ]
+    if profile["confidence"]:
+        summary_cards.append((
+            "Model Confidence",
+            profile["confidence"],
+            "Highest model confidence across today’s projected markets.",
+        ))
+    summary_cards.append((
+        "Last Updated",
+        format_timestamp(profile["last_updated"]),
+        "When the backing MLB projection files were last refreshed.",
+    ))
+
+    intro = (
+        "<section class='panel'>"
+        "<div class='panel-head'><div><div class='eyebrow'>Today’s Projection</div>"
+        f"<h2>{escape(name)}</h2></div>"
+        f"<p class='muted'>{escape('Today’s EdgeRanked AI model projections for ' + name + ((' — ' + matchup) if matchup else '') + '.')}</p></div>"
+        + render_stat_cards(summary_cards)
+        + "</section>"
+    )
+
+    hitter_card = render_mlb_player_projection_card(
+        f"{name} — Hitter Projections", "Hitter", profile["hitter_rows"], is_hitter=True
+    )
+    pitcher_card = render_mlb_player_projection_card(
+        f"{name} — Pitcher Projections", "Pitcher", profile["pitcher_rows"], is_hitter=False
+    )
+
+    actions = render_page_actions([
+        ("All Hitter Projections", "/mlb/projections", "secondary"),
+        ("All Pitcher Projections", "/mlb/pitcher-strikeouts", "secondary"),
+    ])
+
+    body = intro + hitter_card + pitcher_card + actions
+
+    document_title = f"{name} Projection Today | EdgeRanked AI"
+    meta_description = (
+        f"View today’s {name} projections, matchup data, probabilities, "
+        "and model confidence from EdgeRanked AI."
+    )
+    subtitle = f"Today’s EdgeRanked AI projections for {name}" + (f" ({matchup})." if matchup else ".")
+
+    return render_layout(
+        name,
+        subtitle,
+        body,
+        "/mlb",
+        render_mlb_nav("/mlb"),
+        hero_kicker="MLB Player",
+        document_title=document_title,
+        meta_description=meta_description,
+    )
+
+
+def build_mlb_players_sitemap():
+    base_url = "https://edgerankedai.com"
+    slugs = collect_mlb_player_slugs()
+    lastmod = None
+    for path in (MLB_FILES["hitters"], MLB_FILES["pitchers"]):
+        ts = file_timestamp(path)
+        if ts and (lastmod is None or ts > lastmod):
+            lastmod = ts
+    lastmod_tag = f"<lastmod>{lastmod.date().isoformat()}</lastmod>" if lastmod else ""
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for slug in sorted(slugs):
+        lines.append(f"  <url><loc>{base_url}/mlb/player/{escape(slug)}</loc>{lastmod_tag}</url>")
+    lines.append("</urlset>")
+    return Response("\n".join(lines), mimetype="application/xml")
 
 
 def mlb_system_rows():
@@ -2251,8 +2690,14 @@ def render_mlb_projection_table(title, subtitle, rows, scope_id, entity_label="P
         edge = safe_float(row.get("edge"))
         confidence = normalize_text(row.get("confidence")) or "Low"
         lean = normalize_text(row.get("lean"))
+        player_slug = slugify_player_name(player)
+        player_label = escape(player or entity_label)
+        player_cell = (
+            f"<a class='player-link' href='/mlb/player/{player_slug}'><strong>{player_label}</strong></a>"
+            if player and player_slug else f"<strong>{player_label}</strong>"
+        )
         cells = [
-            f"<td data-label='{escape(entity_label)}'><strong>{escape(player or entity_label)}</strong></td>",
+            f"<td data-label='{escape(entity_label)}'>{player_cell}</td>",
             f"<td data-label='Team'>{escape(team or '—')}</td>",
             f"<td data-label='Opponent'>{escape(opponent)}</td>",
             f"<td data-label='Stat'>{escape(stat or 'N/A')}</td>",
@@ -3121,15 +3566,20 @@ def render_nba_best_bets_table(board):
     )
 
 
-def render_layout(title, subtitle, body_html, active_path, section_nav=None, hero_kicker=None, hero_media_html=""):
+def render_layout(title, subtitle, body_html, active_path, section_nav=None, hero_kicker=None, hero_media_html="", is_home=False, meta_description=None, document_title=None):
     section_nav_html = section_nav or ""
     kicker = hero_kicker or "Premium Sports Analytics"
+    head_title = document_title or title
+    meta_description_tag = (
+        f'\n  <meta name="description" content="{escape(meta_description)}">'
+        if meta_description else ""
+    )
     return f"""<!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{escape(title)}</title>
+  <title>{escape(head_title)}</title>{meta_description_tag}
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-L9N5JKN47H"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -3168,14 +3618,17 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }}
     a {{ color: inherit; }}
+    .player-link {{ color: var(--accent); text-decoration: none; }}
+    .player-link:hover {{ text-decoration: underline; }}
     img {{ display: block; }}
     .site-nav {{
       position: sticky;
       top: 0;
       z-index: 50;
-      border-bottom: 1px solid var(--line);
-      background: rgba(10, 15, 28, 0.9);
-      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(10, 15, 28, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }}
     .nav-shell, .shell, .footer-shell {{
       width: min(1280px, calc(100% - 32px));
@@ -4167,11 +4620,71 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
       .analytics-table-shell .cell-stack {{
         display: grid;
       }}
-      .footer-shell {{
+    .footer-shell {{
         flex-direction: column;
         text-align: center;
       }}
+      .premium-hero-shell {{ padding: 40px 0; }}
+      .home-section {{ padding: 40px 0; }}
+      .beta-banner-premium {{ flex-direction: column; gap: 20px; text-align: center; }}
+      .beta-banner-premium div {{ text-align: center; }}
     }}
+    .premium-hero-shell {{ width: min(1280px, calc(100% - 32px)); margin: 0 auto; padding: 80px 0 60px; text-align: center; position: relative; }}
+    .premium-hero-shell::before {{ content: ""; position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%); z-index: -1; pointer-events: none; }}
+    .premium-kicker {{ display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); color: #60a5fa; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 24px; }}
+    .premium-hero-title {{ font-size: clamp(40px, 6vw, 64px); font-weight: 900; line-height: 1.1; letter-spacing: -0.04em; color: #fff; margin: 0 0 24px; }}
+    .premium-hero-subtitle {{ font-size: clamp(18px, 2.5vw, 22px); color: #94a3b8; max-width: 760px; margin: 0 auto 40px; line-height: 1.6; }}
+    .premium-actions {{ display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }}
+    .premium-btn-primary {{ display: inline-flex; align-items: center; justify-content: center; height: 52px; padding: 0 32px; border-radius: 12px; background: #3b82f6; color: #fff; font-size: 16px; font-weight: 700; text-decoration: none; transition: all 0.2s; box-shadow: 0 8px 24px rgba(59, 130, 246, 0.25); }}
+    .premium-btn-primary:hover {{ background: #2563eb; transform: translateY(-2px); box-shadow: 0 12px 32px rgba(59, 130, 246, 0.35); }}
+    .premium-btn-secondary {{ display: inline-flex; align-items: center; justify-content: center; height: 52px; padding: 0 32px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #e2e8f0; font-size: 16px; font-weight: 600; text-decoration: none; transition: all 0.2s; }}
+    .premium-btn-secondary:hover {{ background: rgba(255, 255, 255, 0.1); color: #fff; }}
+    .home-section {{ padding: 80px 0; position: relative; }}
+    .home-section-header {{ text-align: center; margin-bottom: 56px; }}
+    .home-section-header h2 {{ font-size: 36px; font-weight: 800; color: #fff; margin: 0 0 16px; letter-spacing: -0.02em; }}
+    .home-section-header p {{ font-size: 18px; color: #94a3b8; max-width: 600px; margin: 0 auto; }}
+    .sport-cards-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }}
+    .premium-sport-card {{ display: flex; flex-direction: column; background: #121929; border: 1px solid #1e293b; border-radius: 20px; padding: 32px; text-decoration: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }}
+    .premium-sport-card::before {{ content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--card-accent, #3b82f6); opacity: 0.5; transition: opacity 0.3s; }}
+    .premium-sport-card:hover {{ transform: translateY(-4px); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); }}
+    .premium-sport-card:hover::before {{ opacity: 1; }}
+    .sport-card-icon {{ width: 48px; height: 48px; border-radius: 12px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; color: var(--card-accent, #fff); margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.05); }}
+    .sport-card-title {{ font-size: 24px; font-weight: 800; color: #fff; margin: 0 0 12px; }}
+    .sport-card-desc {{ font-size: 15px; color: #94a3b8; line-height: 1.6; margin: 0 0 24px; flex: 1; }}
+    .sport-card-meta {{ display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }}
+    .sport-card-row {{ display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }}
+    .sport-card-row:last-child {{ border-bottom: none; padding-bottom: 0; }}
+    .sport-card-label {{ color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }}
+    .sport-card-val {{ color: #e2e8f0; font-weight: 700; }}
+    .sport-card-cta {{ color: var(--card-accent, #3b82f6); font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 8px; }}
+    .methodology-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; }}
+    .methodology-item {{ padding: 32px; border-radius: 20px; background: rgba(18, 25, 41, 0.5); border: 1px solid rgba(255,255,255,0.05); }}
+    .methodology-item h3 {{ font-size: 20px; font-weight: 800; color: #fff; margin: 0 0 12px; }}
+    .methodology-item p {{ color: #94a3b8; line-height: 1.6; margin: 0; }}
+    .pricing-section {{ text-align: center; background: linear-gradient(180deg, transparent, rgba(59, 130, 246, 0.05) 50%, transparent); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }}
+    .pricing-card {{ max-width: 480px; margin: 0 auto; background: #121929; border: 1px solid #1e293b; border-radius: 24px; padding: 48px; box-shadow: 0 24px 48px rgba(0,0,0,0.4); position: relative; }}
+    .pricing-card::before {{ content: ""; position: absolute; top: -1px; left: 24px; right: 24px; height: 1px; background: linear-gradient(90deg, transparent, #3b82f6, transparent); }}
+    .price-tag {{ font-size: 64px; font-weight: 900; color: #fff; letter-spacing: -0.05em; margin: 24px 0 8px; }}
+    .price-period {{ font-size: 18px; color: #64748b; font-weight: 500; }}
+    .pricing-features {{ list-style: none; padding: 0; margin: 32px 0; text-align: left; }}
+    .pricing-features li {{ display: flex; align-items: center; gap: 12px; color: #e2e8f0; font-size: 15px; margin-bottom: 16px; }}
+    .pricing-features li::before {{ content: "✓"; color: #10b981; font-weight: 800; }}
+    .beta-banner-premium {{ background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 16px; padding: 24px 32px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 64px; }}
+    .beta-banner-premium div {{ text-align: left; }}
+    .beta-banner-premium h4 {{ color: #fff; margin: 0 0 8px; font-size: 18px; }}
+    .beta-banner-premium p {{ color: #94a3b8; margin: 0; font-size: 15px; }}
+    .analytics-preview-mock {{ max-width: 1000px; margin: 64px auto 0; background: #0f1725; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; box-shadow: 0 32px 64px rgba(0,0,0,0.5); overflow: hidden; }}
+    .mock-header {{ display: flex; gap: 8px; padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02); }}
+    .mock-dot {{ width: 12px; height: 12px; border-radius: 50%; background: #334155; }}
+    .mock-dot.r {{ background: #ef4444; }}
+    .mock-dot.y {{ background: #f59e0b; }}
+    .mock-dot.g {{ background: #10b981; }}
+    .mock-body {{ padding: 24px; }}
+    .mock-row {{ display: flex; justify-content: space-between; align-items: center; padding: 16px; background: #121929; border: 1px solid rgba(255,255,255,0.03); border-radius: 12px; margin-bottom: 12px; }}
+    .mock-row:last-child {{ margin-bottom: 0; }}
+    .mock-player {{ font-weight: 700; color: #fff; }}
+    .mock-stat {{ color: #94a3b8; font-size: 14px; }}
+    .mock-badge {{ background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 800; }}
   </style>
 </head>
 <body>
@@ -4187,17 +4700,19 @@ def render_layout(title, subtitle, body_html, active_path, section_nav=None, her
     </div>
   </nav>
   <div class="shell">
+    {"" if is_home else f"""
     <section class="hero">
       <div class="brand-row">
         <div class="hero-copy">
-          {hero_media_html}
-          <div class="hero-kicker">{escape(kicker)}</div>
-          <h1>{escape(title)}</h1>
-          <p class="hero-sub">{escape(subtitle)}</p>
+          {{hero_media_html}}
+          <div class="hero-kicker">{{escape(kicker)}}</div>
+          <h1>{{escape(title)}}</h1>
+          <p class="hero-sub">{{escape(subtitle)}}</p>
         </div>
       </div>
-      {section_nav_html}
+      {{section_nav_html}}
     </section>
+    """}
     <main class="content">
       {body_html}
     </main>
@@ -4232,7 +4747,7 @@ def get_mlb_dataset(spec_key):
     if kind == "mlb_hitters":
         return {"kind": kind, "records": load_hitter_summary(kind), "source_path": str(MLB_FILES["hitters"]), "last_updated": file_timestamp(MLB_FILES["hitters"])}
     if kind == "mlb_tb2":
-        return {"kind": kind, "records": load_hitter_summary(kind), "source_path": str(MLB_FILES["hitters"]), "last_updated": file_timestamp(MLB_FILES["hitters"])}
+        return {kind: kind, records: [row for row in build_mlb_hitter_projection_board() if normalize_text(row.get(stat)) == 2+ Bases], source_path: str(MLB_FILES[hitters]), last_updated: file_timestamp(MLB_FILES[hitters])}
     if kind == "mlb_rbi":
         return {"kind": kind, "records": load_hitter_summary(kind), "source_path": str(MLB_FILES["hitters"]), "last_updated": file_timestamp(MLB_FILES["hitters"])}
     if kind == "mlb_hitter_k":
@@ -4300,46 +4815,143 @@ def get_ufc_dataset(spec_key):
 
 def build_home_page():
     mlb_board = load_mlb_best_bets()
-    body = (
-        render_banner("Open Beta is live with free public access during beta testing. Premium memberships are coming soon.")
-        + render_page_actions([
-            ("Explore NBA Projections", "/nba/projections", "primary"),
-            ("Join Waitlist", "/waitlist", "secondary"),
-        ])
-        + "<section class='panel'>"
-        "<div class='panel-head'><div><div class='eyebrow'>Open Beta</div><h2>Free public access is live during beta testing.</h2></div>"
-        "<p class='muted'>Access NBA, MLB, PGA, and UFC dashboards now while we prepare launch updates and premium tools.</p></div>"
-        + render_stat_cards([
-            ("NBA", "Live", "Player projections, top plays, and tracked results are available now."),
-            ("MLB", "Live", "Daily strikeout targets, hitter boards, and results reporting."),
-            ("PGA", "New", "Tournament simulations, round props, and leaderboard views."),
-            ("Next Up", "Premium Tools", "Subscriber features and launch updates are being rolled out during beta."),
-        ], compact=True)
-        + "</section>"
-        + render_page_actions([
-            ("View Today's Board", "/mlb/best-bets", "primary"),
-            ("View Results", "/results", "secondary"),
-        ])
-        + render_home_mlb_featured_panel(mlb_board.get("top_plays", []))
-        + "<section class='panel'>"
-        "<div class='panel-head'><div><div class='eyebrow'>Select Dashboard</div><h2>Choose your sport</h2></div>"
-        "<p class='muted'>Open the sport you want and jump straight into the latest board, projections, and results.</p></div>"
-        + render_resource_cards([
-            ("NBA", "Projection explorer, matchup intelligence, verified results, and full-slate player analytics", "/nba", "Live"),
-            ("MLB", "Strikeout board, hitter targets, daily premium edges", "/mlb", "Live"),
-            ("UFC", "Fight forecasts, prop edges, finish probability", "/ufc", "Live"),
-            ("PGA", "Matchup edges, finishing targets, strokes gained projections", "/pga", "New"),
-        ])
-        + "</section>"
-    )
-    hero_media_html = "<img class='hero-emblem' src='/brand/emblem.png' alt='EdgeRanked emblem'>"
+    body = f"""
+    <div class="premium-hero-shell">
+      <div class="premium-kicker">EdgeRankedSportsAI</div>
+      <h1 class="premium-hero-title">Premium Multi-Sport Analytics</h1>
+      <p class="premium-hero-subtitle">EdgeRankedSportsAI delivers premium multi-sport projections, matchup intelligence, player trends, simulations, and weather/context analysis.</p>
+      <div class="premium-actions">
+        <a href="/nba/projections" class="premium-btn-primary">Explore Projections</a>
+        <a href="/waitlist" class="premium-btn-secondary">View Pricing</a>
+      </div>
+
+      <div class="analytics-preview-mock">
+        <div class="mock-header">
+          <div class="mock-dot r"></div><div class="mock-dot y"></div><div class="mock-dot g"></div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-row">
+            <div>
+              <div class="mock-player">Luka Doncic</div>
+              <div class="mock-stat">Points + Rebounds + Assists • vs. LAL</div>
+            </div>
+            <div class="mock-badge">High Confidence Edge</div>
+          </div>
+          <div class="mock-row">
+            <div>
+              <div class="mock-player">Shohei Ohtani</div>
+              <div class="mock-stat">Total Bases • Matchup Context: Strong</div>
+            </div>
+            <div class="mock-badge">Premium Pick</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="home-section">
+      <div class="beta-banner-premium">
+        <div>
+          <h4>Open Beta Access</h4>
+          <p>Free public access is currently live during beta testing. Premium memberships are coming soon.</p>
+        </div>
+        <a href="/waitlist" class="premium-btn-primary" style="height: 44px; font-size: 14px;">Join Waitlist</a>
+      </div>
+
+      <div class="home-section-header">
+        <h2>Choose Your Sport</h2>
+        <p>Access daily boards, full-slate player analytics, and model-driven projections.</p>
+      </div>
+      <div class="sport-cards-grid">
+        <a href="/mlb" class="premium-sport-card" style="--card-accent: #3b82f6;">
+          <div class="sport-card-icon">MLB</div>
+          <h3 class="sport-card-title">MLB Projections</h3>
+          <p class="sport-card-desc">Strikeout boards, hitter targets, and daily premium edges with weather and context adjustments.</p>
+          <div class="sport-card-meta">
+            <div class="sport-card-row"><span class="sport-card-label">Status</span><span class="sport-card-val" style="color: #10b981;">Live</span></div>
+            <div class="sport-card-row"><span class="sport-card-label">Data</span><span class="sport-card-val">Daily Updates</span></div>
+          </div>
+          <div class="sport-card-cta">View Dashboard &rarr;</div>
+        </a>
+        <a href="/nba" class="premium-sport-card" style="--card-accent: #f97316;">
+          <div class="sport-card-icon">NBA</div>
+          <h3 class="sport-card-title">NBA Intelligence</h3>
+          <p class="sport-card-desc">Projection explorer, matchup intelligence, verified results, and full-slate analytics.</p>
+          <div class="sport-card-meta">
+            <div class="sport-card-row"><span class="sport-card-label">Status</span><span class="sport-card-val" style="color: #10b981;">Live</span></div>
+            <div class="sport-card-row"><span class="sport-card-label">Data</span><span class="sport-card-val">Daily Updates</span></div>
+          </div>
+          <div class="sport-card-cta" style="color: #f97316;">View Dashboard &rarr;</div>
+        </a>
+        <a href="/pga" class="premium-sport-card" style="--card-accent: #10b981;">
+          <div class="sport-card-icon">PGA</div>
+          <h3 class="sport-card-title">PGA Simulations</h3>
+          <p class="sport-card-desc">Matchup edges, finishing targets, and strokes gained projections.</p>
+          <div class="sport-card-meta">
+            <div class="sport-card-row"><span class="sport-card-label">Status</span><span class="sport-card-val" style="color: #3b82f6;">New</span></div>
+            <div class="sport-card-row"><span class="sport-card-label">Data</span><span class="sport-card-val">Tournament</span></div>
+          </div>
+          <div class="sport-card-cta" style="color: #10b981;">View Dashboard &rarr;</div>
+        </a>
+        <a href="/ufc" class="premium-sport-card" style="--card-accent: #ef4444;">
+          <div class="sport-card-icon">UFC</div>
+          <h3 class="sport-card-title">UFC Forecasts</h3>
+          <p class="sport-card-desc">Fight forecasts, prop edges, and finish probabilities.</p>
+          <div class="sport-card-meta">
+            <div class="sport-card-row"><span class="sport-card-label">Status</span><span class="sport-card-val" style="color: #10b981;">Live</span></div>
+            <div class="sport-card-row"><span class="sport-card-label">Data</span><span class="sport-card-val">Event Specific</span></div>
+          </div>
+          <div class="sport-card-cta" style="color: #ef4444;">View Dashboard &rarr;</div>
+        </a>
+      </div>
+    </section>
+
+    <section class="home-section">
+      <div class="home-section-header">
+        <h2>Data-Driven Methodology</h2>
+        <p>Built for serious bettors and data-first sports fans seeking market advantages.</p>
+      </div>
+      <div class="methodology-grid">
+        <div class="methodology-item">
+          <h3>Simulation Systems</h3>
+          <p>Every board is powered by real projection models, thousands of simulations, and live data inputs.</p>
+        </div>
+        <div class="methodology-item">
+          <h3>Matchup Context</h3>
+          <p>We adjust for weather, referee assignments, defensive schemes, and opponent context.</p>
+        </div>
+        <div class="methodology-item">
+          <h3>Accountable Reporting</h3>
+          <p>Transparent outcomes and win-rate visibility stay visible across the site. We track every result.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-section pricing-section">
+      <div class="home-section-header">
+        <h2>Premium Access</h2>
+        <p>Get full access to all sports, models, and daily projections.</p>
+      </div>
+      <div class="pricing-card">
+        <div class="premium-kicker" style="margin-bottom: 0;">Pro Membership</div>
+        <div class="price-tag">$19.99<span class="price-period">/mo</span></div>
+        <ul class="pricing-features">
+          <li>Daily Multi-Sport Projections</li>
+          <li>Matchup Analysis & Intelligence</li>
+          <li>Full Simulation Insights</li>
+          <li>Mobile-Optimized Dashboards</li>
+          <li>Transparent Tracked Results</li>
+        </ul>
+        <a href="/waitlist" class="premium-btn-primary" style="width: 100%;">Join Waitlist</a>
+      </div>
+    </section>
+    """
+    
     return render_layout(
-        "EdgeRanked Open Beta",
-        "Free public access during beta testing for NBA, MLB, PGA, and upcoming model releases.",
-        body,
-        "/",
-        hero_kicker="Open Beta",
-        hero_media_html=hero_media_html,
+        title="EdgeRankedSportsAI | Premium Analytics",
+        subtitle="",
+        body_html=body,
+        active_path="/",
+        is_home=True
     )
 
 
@@ -4767,7 +5379,7 @@ def build_mlb_dataset_page(spec_key):
         hitter_rows = build_mlb_hitter_projection_board()
         target_stat = {
             "projections": None,
-            "two_plus_bases": "Total Bases",
+            "two_plus_bases": "2+ Bases",
             "rbi_targets": "RBI",
             "hitter_strikeouts": "Hitter Strikeouts",
             "stolen_bases": "Stolen Bases",
@@ -5042,6 +5654,22 @@ a{color:#60a5fa!important}
     @flask_app.get("/mlb")
     def mlb_home():
         return build_mlb_home()
+
+    @flask_app.get("/mlb/weather")
+    def mlb_weather_page():
+        return build_mlb_weather_page()
+
+    @flask_app.get("/mlb/player/<player_slug>")
+    def mlb_player_page(player_slug):
+        return build_mlb_player_page(player_slug)
+
+    @flask_app.get("/sitemap_mlb_players.xml")
+    def mlb_players_sitemap():
+        return build_mlb_players_sitemap()
+
+    @flask_app.get("/api/mlb/weather")
+    def mlb_weather_api():
+        return jsonify(load_mlb_weather())
 
     @flask_app.get("/ufc")
     def ufc_home():

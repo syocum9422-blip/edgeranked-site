@@ -10,7 +10,7 @@ window.addEventListener("load", async function () {
     // Remove any duplicate dynamic auth links first
     document.querySelectorAll(".er-auth-link").forEach(el => el.remove());
 
-    const nav = document.querySelector("nav") || document.body;
+    const nav = document.querySelector(".auth-actions") || document.querySelector("nav") || document.body;
 
     if (window.Clerk.user) {
       if (createBtn) createBtn.style.display = "none";
@@ -19,18 +19,12 @@ window.addEventListener("load", async function () {
       const account = document.createElement("a");
       account.href = "/account";
       account.textContent = "Account";
-      account.className = "er-auth-link";
-      account.style.marginLeft = "12px";
-      account.style.color = "#60a5fa";
-      account.style.fontWeight = "600";
+      account.className = "cta-btn secondary er-auth-link account-link";
 
       const logout = document.createElement("a");
       logout.href = "#";
       logout.textContent = "Logout";
-      logout.className = "er-auth-link";
-      logout.style.marginLeft = "12px";
-      logout.style.color = "#f87171";
-      logout.style.fontWeight = "600";
+      logout.className = "cta-btn secondary er-auth-link logout-link";
       logout.onclick = async function (e) {
         e.preventDefault();
         await window.Clerk.signOut();
