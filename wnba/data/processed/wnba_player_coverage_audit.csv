@@ -1,89 +1,70 @@
 player_name,team,opponent,has_live_line,has_history,history_source,included,reason
-Allisha Gray,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
-Angel Reese,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
-Rhyne Howard,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
-Kamilla Cardoso,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
-Skylar Diggins,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
-Aaliyah Edwards,CON,NYL,True,True,csv,True,included
-Diamond Miller,CON,NYL,True,True,csv,True,included
-Leila Lacan,CON,NYL,True,True,csv,True,included
-Saniya Rivers,CON,NYL,True,True,csv,True,included
-Leila Lacan + Pauline Astier,CON/NYL,,True,False,,False,excluded_not_on_canonical_slate
-Leila Lacan + Satou Sabally,CON/NYL,,True,False,,False,excluded_not_on_canonical_slate
-Arike Ogunbowale,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
-Azzi Fudd,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
-Jessica Shepard,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
-Paige Bueckers,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
-Gabby Williams,GSV,,True,True,csv,False,excluded_not_on_canonical_slate
-Janelle Salaün,GSV,,True,True,csv,False,excluded_not_on_canonical_slate
-Kayla Thornton,GSV,,True,True,csv,False,excluded_not_on_canonical_slate
-Veronica Burton,GSV,,True,True,csv,False,excluded_not_on_canonical_slate
-Aliyah Boston,IND,WAS,True,True,csv,True,included
-Aliyah Boston + Monique Billings,IND,WAS,True,False,,False,no_history_found
-Caitlin Clark,IND,WAS,True,True,csv,True,included
-Kelsey Mitchell,IND,WAS,True,True,csv,True,included
-Kelsey Mitchell + Caitlin Clark,IND,WAS,True,False,,False,no_history_found
-Lexie Hull,IND,WAS,True,True,csv,True,included
-Monique Billings,IND,WAS,True,True,csv,True,included
-Sophie Cunningham,IND,WAS,True,True,csv,True,included
-Caitlin Clark + Kiki Iriafen,IND/WAS,,True,False,,False,excluded_not_on_canonical_slate
-Caitlin Clark + Shakira Austin,IND/WAS,,True,False,,False,excluded_not_on_canonical_slate
-Caitlin Clark + Sonia Citron,IND/WAS,,True,False,,False,excluded_not_on_canonical_slate
-Kelsey Mitchell + Kiki Iriafen,IND/WAS,,True,False,,False,excluded_not_on_canonical_slate
-Kelsey Mitchell + Shakira Austin,IND/WAS,,True,False,,False,excluded_not_on_canonical_slate
-Kelsey Mitchell + Sonia Citron,IND/WAS,,True,False,,False,excluded_not_on_canonical_slate
-A'ja Wilson,LVA,SEA,True,True,csv,True,included
-A'ja Wilson + Chelsea Gray,LVA,SEA,True,False,,False,no_history_found
-A'ja Wilson + Jackie Young,LVA,SEA,True,False,,False,no_history_found
-A'ja Wilson + NaLyssa Smith,LVA,SEA,True,False,,False,no_history_found
-Chelsea Gray,LVA,SEA,True,True,csv,True,included
-Chelsea Gray + NaLyssa Smith,LVA,SEA,True,False,,False,no_history_found
-Jackie Young,LVA,SEA,True,True,csv,True,included
-Jackie Young + Chelsea Gray,LVA,SEA,True,False,,False,no_history_found
-Jackie Young + NaLyssa Smith,LVA,SEA,True,False,,False,no_history_found
-Jewell Loyd,LVA,SEA,True,True,csv,True,included
-NaLyssa Smith,LVA,SEA,True,True,csv,True,included
-A'ja Wilson + Dominique Malonga,LVA/SEA,,True,False,,False,excluded_not_on_canonical_slate
-A'ja Wilson + Flau'jae Johnson,LVA/SEA,,True,False,,False,excluded_not_on_canonical_slate
-A'ja Wilson + Natisha Hiedeman,LVA/SEA,,True,False,,False,excluded_not_on_canonical_slate
-Jackie Young + Natisha Hiedeman,LVA/SEA,,True,False,,False,excluded_not_on_canonical_slate
-NaLyssa Smith + Dominique Malonga,LVA/SEA,,True,False,,False,excluded_not_on_canonical_slate
-NaLyssa Smith + Flau'jae Johnson,LVA/SEA,,True,False,,False,excluded_not_on_canonical_slate
-Courtney Williams,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
-Kayla McBride,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
-Natasha Howard,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
-Olivia Miles,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
-Breanna Stewart,NYL,CON,True,True,csv,True,included
-Breanna Stewart + Jonquel Jones,NYL,CON,True,False,,False,no_history_found
-Breanna Stewart + Satou Sabally,NYL,CON,True,False,,False,no_history_found
-Jonquel Jones,NYL,CON,True,True,csv,True,included
-Jonquel Jones + Satou Sabally,NYL,CON,True,False,,False,no_history_found
-Leonie Fiebich,NYL,CON,True,True,csv,True,included
-Marine Johannes,NYL,CON,True,True,csv,True,included
-Pauline Astier,NYL,CON,True,True,csv,True,included
-Satou Sabally,NYL,CON,True,True,csv,True,included
-Breanna Stewart + Leila Lacan,NYL/CON,,True,False,,False,excluded_not_on_canonical_slate
-Jonquel Jones + Leila Lacan,NYL/CON,,True,False,,False,excluded_not_on_canonical_slate
-Alyssa Thomas,PHX,,True,True,csv,False,excluded_not_on_canonical_slate
-Kahleah Copper,PHX,,True,True,csv,False,excluded_not_on_canonical_slate
-Awa Fam,SEA,LVA,True,True,csv,True,included
-Dominique Malonga,SEA,LVA,True,True,csv,True,included
-Dominique Malonga + Flau'jae Johnson,SEA,LVA,True,False,,False,no_history_found
-Flau'jae Johnson,SEA,LVA,True,True,csv,True,included
-Jade Melbourne,SEA,LVA,True,True,csv,True,included
-Natisha Hiedeman,SEA,LVA,True,True,csv,True,included
-Stefanie Dolson,SEA,LVA,True,True,csv,True,included
-Natisha Hiedeman + Chelsea Gray,SEA/LVA,,True,False,,False,excluded_not_on_canonical_slate
-Natisha Hiedeman + NaLyssa Smith,SEA/LVA,,True,False,,False,excluded_not_on_canonical_slate
-Georgia Amoore,WAS,IND,True,True,csv,True,included
-Kiki Iriafen,WAS,IND,True,True,csv,True,included
-Michaela Onyenwere,WAS,IND,True,True,csv,True,included
-Shakira Austin,WAS,IND,True,True,csv,True,included
-Shakira Austin + Kiki Iriafen,WAS,IND,True,False,,False,no_history_found
-Sonia Citron,WAS,IND,True,True,csv,True,included
-Sonia Citron + Kiki Iriafen,WAS,IND,True,False,,False,no_history_found
-Sonia Citron + Shakira Austin,WAS,IND,True,False,,False,no_history_found
-Kiki Iriafen + Aliyah Boston,WAS/IND,,True,False,,False,excluded_not_on_canonical_slate
-Kiki Iriafen + Monique Billings,WAS/IND,,True,False,,False,excluded_not_on_canonical_slate
-Shakira Austin + Aliyah Boston,WAS/IND,,True,False,,False,excluded_not_on_canonical_slate
-Shakira Austin + Monique Billings,WAS/IND,,True,False,,False,excluded_not_on_canonical_slate
+Allisha Gray,ATL,CHI,True,True,csv,True,included
+Angel Reese,ATL,CHI,True,True,csv,True,included
+Jordin Canada,ATL,CHI,True,True,csv,True,included
+Naz Hillmon,ATL,CHI,True,True,csv,True,included
+Rhyne Howard,ATL,CHI,True,True,csv,True,included
+Rhyne Howard + Allisha Gray,ATL,CHI,True,False,,False,no_history_found
+Allisha Gray + Kamilla Cardoso,ATL/CHI,,True,False,,False,excluded_not_on_canonical_slate
+Allisha Gray + Skylar Diggins,ATL/CHI,,True,False,,False,excluded_not_on_canonical_slate
+Angel Reese + Kamilla Cardoso,ATL/CHI,,True,False,,False,excluded_not_on_canonical_slate
+Angel Reese + Skylar Diggins,ATL/CHI,,True,False,,False,excluded_not_on_canonical_slate
+Rhyne Howard + Kamilla Cardoso,ATL/CHI,,True,False,,False,excluded_not_on_canonical_slate
+Rhyne Howard + Skylar Diggins,ATL/CHI,,True,False,,False,excluded_not_on_canonical_slate
+Azurá Stevens,CHI,ATL,True,True,csv,False,excluded_by_status_or_filter
+Kamilla Cardoso,CHI,ATL,True,True,csv,True,included
+Skylar Diggins,CHI,ATL,True,True,csv,True,included
+Aaliyah Edwards,CON,,True,True,csv,False,excluded_not_on_canonical_slate
+Leila Lacan,CON,,True,True,csv,False,excluded_not_on_canonical_slate
+Arike Ogunbowale,DAL,MIN,True,True,csv,True,included
+Azzi Fudd,DAL,MIN,True,True,csv,True,included
+Jessica Shepard,DAL,MIN,True,True,csv,True,included
+Maddy Siegrist,DAL,MIN,True,True,csv,True,included
+Paige Bueckers,DAL,MIN,True,True,csv,True,included
+Paige Bueckers + Jessica Shepard,DAL,MIN,True,False,,False,no_history_found
+Arike Ogunbowale + Courtney Williams,DAL/MIN,,True,False,,False,excluded_not_on_canonical_slate
+Arike Ogunbowale + Kayla McBride,DAL/MIN,,True,False,,False,excluded_not_on_canonical_slate
+Arike Ogunbowale + Natasha Howard,DAL/MIN,,True,False,,False,excluded_not_on_canonical_slate
+Arike Ogunbowale + Olivia Miles,DAL/MIN,,True,False,,False,excluded_not_on_canonical_slate
+Jessica Shepard + Courtney Williams,DAL/MIN,,True,False,,False,excluded_not_on_canonical_slate
+Jessica Shepard + Natasha Howard,DAL/MIN,,True,False,,False,excluded_not_on_canonical_slate
+Jessica Shepard + Nia Coffey,DAL/MIN,,True,False,,False,excluded_not_on_canonical_slate
+Jessica Shepard + Olivia Miles,DAL/MIN,,True,False,,False,excluded_not_on_canonical_slate
+Paige Bueckers + Courtney Williams,DAL/MIN,,True,False,,False,excluded_not_on_canonical_slate
+Paige Bueckers + Natasha Howard,DAL/MIN,,True,False,,False,excluded_not_on_canonical_slate
+Paige Bueckers + Olivia Miles,DAL/MIN,,True,False,,False,excluded_not_on_canonical_slate
+Cecilia Zandalasini,GSV,PHX,True,True,csv,True,included
+Gabby Williams,GSV,PHX,True,True,csv,True,included
+Janelle Salaün,GSV,PHX,True,True,csv,False,excluded_by_status_or_filter
+Janelle Salaün + Gabby Williams,GSV,PHX,True,False,,False,no_history_found
+Kayla Thornton,GSV,PHX,True,True,csv,True,included
+Veronica Burton,GSV,PHX,True,True,csv,True,included
+Aliyah Boston,IND,,True,True,csv,False,excluded_not_on_canonical_slate
+Caitlin Clark,IND,,True,True,csv,False,excluded_not_on_canonical_slate
+Kelsey Mitchell,IND,,True,True,csv,False,excluded_not_on_canonical_slate
+Dearica Hamby,LAS,,True,True,csv,False,excluded_not_on_canonical_slate
+Kelsey Plum,LAS,,True,True,csv,False,excluded_not_on_canonical_slate
+Nneka Ogwumike,LAS,,True,True,csv,False,excluded_not_on_canonical_slate
+Courtney Williams,MIN,DAL,True,True,csv,True,included
+Kayla McBride,MIN,DAL,True,True,csv,True,included
+Natasha Howard,MIN,DAL,True,True,csv,True,included
+Nia Coffey,MIN,DAL,True,True,csv,True,included
+Olivia Miles,MIN,DAL,True,True,csv,True,included
+Olivia Miles + Courtney Williams,MIN,DAL,True,False,,False,no_history_found
+Alyssa Thomas,PHX,GSV,True,True,csv,True,included
+Kahleah Copper,PHX,GSV,True,True,csv,True,included
+Natasha Mack,PHX,GSV,True,True,csv,True,included
+Alyssa Thomas + Gabby Williams,PHX/GSV,,True,False,,False,excluded_not_on_canonical_slate
+Alyssa Thomas + Janelle Salaün,PHX/GSV,,True,False,,False,excluded_not_on_canonical_slate
+Alyssa Thomas + Kayla Thornton,PHX/GSV,,True,False,,False,excluded_not_on_canonical_slate
+Alyssa Thomas + Veronica Burton,PHX/GSV,,True,False,,False,excluded_not_on_canonical_slate
+Kahleah Copper + Gabby Williams,PHX/GSV,,True,False,,False,excluded_not_on_canonical_slate
+Kahleah Copper + Janelle Salaün,PHX/GSV,,True,False,,False,excluded_not_on_canonical_slate
+Kahleah Copper + Veronica Burton,PHX/GSV,,True,False,,False,excluded_not_on_canonical_slate
+Natasha Mack + Kayla Thornton,PHX/GSV,,True,False,,False,excluded_not_on_canonical_slate
+Awa Fam,SEA,,True,True,csv,False,excluded_not_on_canonical_slate
+Dominique Malonga,SEA,,True,True,csv,False,excluded_not_on_canonical_slate
+Flau'jae Johnson,SEA,,True,True,csv,False,excluded_not_on_canonical_slate
+Natisha Hiedeman,SEA,,True,True,csv,False,excluded_not_on_canonical_slate
+Brittney Sykes,TOR,,True,True,csv,False,excluded_not_on_canonical_slate
+Marina Mabrey,TOR,,True,True,csv,False,excluded_not_on_canonical_slate

@@ -1,12 +1,12 @@
 {
   "actuals": {
-    "completed_events_ingested": 75,
-    "latest_actual_date": "2026-06-07",
-    "player_rows_total": 9789,
+    "completed_events_ingested": 74,
+    "latest_actual_date": "2026-06-08",
+    "player_rows_total": 9867,
     "source": "api:espn_boxscore",
-    "team_rows_total": 260
+    "team_rows_total": 266
   },
-  "generated_at_utc": "2026-06-08T18:02:29+00:00",
+  "generated_at_utc": "2026-06-09T11:30:45+00:00",
   "healthy": true,
   "learning": {
     "accuracy": 0.5718623481781376,
@@ -21,7 +21,7 @@
   },
   "published": {
     "published_flag": "yes",
-    "source_output_modified_at_utc": "2026-06-08T18:02:24.453993+00:00",
+    "source_output_modified_at_utc": "2026-06-08T22:32:26.795765+00:00",
     "stale_output_blocked": "yes"
   },
   "slate_status": {
@@ -35,22 +35,22 @@
   "source_freshness": {
     "app_view": {
       "exists": true,
-      "modified_at_utc": "2026-06-08T18:02:21.796972+00:00",
+      "modified_at_utc": "2026-06-08T22:32:23.549741+00:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/Projections_app_view.csv",
-      "size": 120908
+      "size": 120842
     },
     "best_bets": {
       "exists": true,
-      "modified_at_utc": "2026-06-08T18:02:24.453993+00:00",
+      "modified_at_utc": "2026-06-08T22:32:26.795765+00:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/wnba_best_bets_today.csv",
-      "size": 10586
+      "size": 10622
     },
     "production_status": "PASS",
     "projections": {
       "exists": true,
-      "modified_at_utc": "2026-06-08T18:02:21.719972+00:00",
+      "modified_at_utc": "2026-06-08T22:32:23.416740+00:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/projections.csv",
-      "size": 47658
+      "size": 47652
     },
     "promotion_scope": "confidence_calibration_only",
     "public_schema_changes": false

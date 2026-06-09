@@ -1,0 +1,5 @@
+player_name,team,had_history_before,rows_added,source,league_used,athlete_id,resolution_status
+Rhyne Howard + Allisha Gray,ATL,False,0,api:espn:wnba:gamelog,none,,no_history_found
+Paige Bueckers + Jessica Shepard,DAL,False,0,api:espn:wnba:gamelog,none,,no_history_found
+Janelle Salaün + Gabby Williams,GSV,False,0,api:espn:wnba:gamelog,none,,no_history_found
+Olivia Miles + Courtney Williams,MIN,False,0,api:espn:wnba:gamelog,none,,no_history_found

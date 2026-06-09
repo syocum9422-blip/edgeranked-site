@@ -1,49 +1,49 @@
 {
   "duplicate_games": [],
   "expected_game_count": 3,
-  "generated_at": "2026-06-08T18:31:22.648919-04:00",
+  "generated_at": "2026-06-09T07:32:04.257654-04:00",
   "generated_game_count": 3,
   "generated_games": [
     {
-      "away_team": "IND",
-      "game_id": "401856973",
-      "home_team": "WAS",
-      "start_time_utc": "2026-06-08T23:00Z"
+      "away_team": "ATL",
+      "game_id": "401856975",
+      "home_team": "CHI",
+      "start_time_utc": "2026-06-09T23:00Z"
     },
     {
-      "away_team": "NYL",
-      "game_id": "401856972",
-      "home_team": "CON",
-      "start_time_utc": "2026-06-08T23:00Z"
+      "away_team": "DAL",
+      "game_id": "401856976",
+      "home_team": "MIN",
+      "start_time_utc": "2026-06-10T00:00Z"
     },
     {
-      "away_team": "SEA",
-      "game_id": "401856974",
-      "home_team": "LVA",
-      "start_time_utc": "2026-06-09T02:00Z"
+      "away_team": "PHX",
+      "game_id": "401856977",
+      "home_team": "GSV",
+      "start_time_utc": "2026-06-10T02:00Z"
     }
   ],
   "missing_games": [],
-  "slate_date": "2026-06-08",
+  "slate_date": "2026-06-09",
   "status": "PASS",
   "trusted_games": [
     {
-      "away_team": "IND",
-      "game_id": "401856973",
-      "home_team": "WAS",
-      "start_time_utc": "2026-06-08T23:00Z"
+      "away_team": "ATL",
+      "game_id": "401856975",
+      "home_team": "CHI",
+      "start_time_utc": "2026-06-09T23:00Z"
     },
     {
-      "away_team": "NYL",
-      "game_id": "401856972",
-      "home_team": "CON",
-      "start_time_utc": "2026-06-08T23:00Z"
+      "away_team": "DAL",
+      "game_id": "401856976",
+      "home_team": "MIN",
+      "start_time_utc": "2026-06-10T00:00Z"
     },
     {
-      "away_team": "SEA",
-      "game_id": "401856974",
-      "home_team": "LVA",
-      "start_time_utc": "2026-06-09T02:00Z"
+      "away_team": "PHX",
+      "game_id": "401856977",
+      "home_team": "GSV",
+      "start_time_utc": "2026-06-10T02:00Z"
     }
   ],
   "trusted_source": "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard",
