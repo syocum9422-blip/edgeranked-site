@@ -53,3 +53,14 @@ venv/
 *.pem
 .DS_Store
 ._*
+
+# Daily/generated outputs
+mlb/outputs/
+mlb/data/
+mlb/learning/
+outputs/
+Best_Bets/archive/
+Best_Bets/*.csv
+*.csv
+*.json
+static/
