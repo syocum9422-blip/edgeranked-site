@@ -30,8 +30,31 @@ export EDGERANKED_LIVE_SITE_DIR="$LIVE_SITE_DIR"
 export EDGERANKED_PUBLISH_SPORTS="${EDGERANKED_PUBLISH_SPORTS:-nba}"
 export PYTHON_BIN="${PYTHON_BIN:-$REPO_DIR/.venv/bin/python}"
 
+HEALTHCHECK_URL="${NBA_0915_HEALTHCHECK_URL:-https://hc-ping.com/8e4a1961-a6e2-4b70-aad9-977e872cdd09}"
+
+ping_healthcheck() {
+  local suffix="${1:-}"
+  if [[ -n "$HEALTHCHECK_URL" ]]; then
+    curl -fsS -m 10 "$HEALTHCHECK_URL$suffix" >/dev/null 2>&1 || true
+  fi
+}
+
+on_exit() {
+  local exit_code=$?
+  if [[ "$exit_code" -eq 0 ]]; then
+    ping_healthcheck ""
+  else
+    ping_healthcheck "/fail"
+  fi
+  exit "$exit_code"
+}
+
+trap on_exit EXIT
+
 cd "$REPO_DIR"
 echo "=== AWS NBA wrapper ==="
 echo "Repo: $REPO_DIR"
 echo "Publish scope: $EDGERANKED_PUBLISH_SPORTS"
-exec bash "$REPO_DIR/scripts/run_nba_best_bets.sh"
+
+ping_healthcheck "/start"
+bash "$REPO_DIR/scripts/run_nba_best_bets.sh"
