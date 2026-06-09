@@ -5553,9 +5553,16 @@ def create_app():
         checks = {
             "mlb_pitchers": ("mlb/outputs/mlb_pitcher_projections_today.csv", 18),
             "mlb_hitters": ("mlb/outputs/hitter_predictions_today.csv", 18),
-            "nba_projections": ("outputs/nba_last_good/projections.csv", 72),
-            "nba_lines": ("outputs/nba_last_good/lines_today.csv", 72),
+            "mlb_public_safe": ("mlb/outputs/hitter_predictions_public_safe.csv", 18),
             "mlb_weather": ("mlb/outputs/mlb_weather_today.json", 18),
+            "mlb_hr_threats": ("mlb/outputs/hr_threats_public_safe.json", 18),
+            "mlb_tracking": ("mlb/outputs/hitter_tracking.csv", 36),
+
+            "nba_projections": ("outputs/nba_last_good/projections.csv", 96),
+            "nba_lines": ("outputs/nba_last_good/lines_today.csv", 96),
+
+            "wnba_projections": ("wnba/outputs/wnba_last_good/wnba_best_bets_today.csv", 48),
+            "ufc_outputs": ("data/ufc/website/ufc_site_payload.json", 168),
         }
 
         freshness = {}
