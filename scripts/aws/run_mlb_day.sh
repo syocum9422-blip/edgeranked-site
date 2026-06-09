@@ -534,6 +534,15 @@ FINAL_SYNC_MODEL_FILES=(
 FINAL_SYNC_WEATHER_FILE="mlb_weather_today.json"
 FINAL_SYNC_WEATHER_SRC_DIR="/home/ubuntu/EdgeRanked/site/mlb/outputs"
 
+# HR threat boards are generated under the MLB model tree but should be served
+# from the same live MLB output directory as every other public artifact.
+FINAL_SYNC_HR_SRC_DIR="/home/ubuntu/mlb_model/hr_threat/outputs"
+FINAL_SYNC_HR_FILES=(
+    "hr_threats_public_safe.json"
+    "under_the_radar_hr_threats_public_safe.json"
+    "hr_boosts_public_safe.json"
+)
+
 FINAL_SYNC_TARGETS=(
     "/home/ubuntu/EdgeRanked/site/mlb/outputs"
     "/home/ubuntu/edgeranked-sportsai/mlb/outputs"
@@ -573,12 +582,32 @@ if [ "$FINAL_SYNC_MISSING" -ne 0 ]; then
     exit 1
 fi
 
-TOTAL_REQUIRED=$(( ${#FINAL_SYNC_MODEL_FILES[@]} + 1 ))
-echo "[MLB FINAL SYNC] Pre-flight passed: all ${TOTAL_REQUIRED} required files present (${#FINAL_SYNC_MODEL_FILES[@]} from $SRC, 1 weather from $FINAL_SYNC_WEATHER_SRC_DIR)"
+TOTAL_REQUIRED=$(( ${#FINAL_SYNC_MODEL_FILES[@]} + ${#FINAL_SYNC_HR_FILES[@]} + 1 ))
+echo "[MLB FINAL SYNC] Pre-flight passed: all ${TOTAL_REQUIRED} required files present (${#FINAL_SYNC_MODEL_FILES[@]} from $SRC, ${#FINAL_SYNC_HR_FILES[@]} HR JSONs from $FINAL_SYNC_HR_SRC_DIR, 1 weather from $FINAL_SYNC_WEATHER_SRC_DIR)"
 
 for dest_dir in "${FINAL_SYNC_TARGETS[@]}"; do
     mkdir -p "$dest_dir"
 done
+
+# Verify HR threat JSONs before sync.
+for f in "${FINAL_SYNC_HR_FILES[@]}"; do
+    hr_src_file="$FINAL_SYNC_HR_SRC_DIR/$f"
+    if [ ! -f "$hr_src_file" ]; then
+        echo "[MLB FINAL SYNC] FAIL: missing HR source file: $hr_src_file"
+        FINAL_SYNC_MISSING=1
+        continue
+    fi
+    hr_size=$(stat -c%s "$hr_src_file" 2>/dev/null || echo "0")
+    if [ "$hr_size" -eq 0 ]; then
+        echo "[MLB FINAL SYNC] FAIL: empty HR source file: $hr_src_file"
+        FINAL_SYNC_MISSING=1
+    fi
+done
+
+if [ "$FINAL_SYNC_MISSING" -ne 0 ]; then
+    echo "[MLB FINAL SYNC] ERROR: HR threat artifacts missing/empty. Aborting BEFORE service restart."
+    exit 1
+fi
 
 FINAL_SYNC_COPIED=0
 FINAL_SYNC_FAILED=0
@@ -605,7 +634,29 @@ for f in "${FINAL_SYNC_MODEL_FILES[@]}"; do
     done
 done
 
-# 2) Weather: $FINAL_SYNC_WEATHER_SRC_DIR → both destinations (self-copy is a
+# 2) HR threat JSONs: model HR outputs → both destinations.
+for f in "${FINAL_SYNC_HR_FILES[@]}"; do
+    hr_src_file="$FINAL_SYNC_HR_SRC_DIR/$f"
+    hr_size=$(stat -c%s "$hr_src_file" 2>/dev/null || echo "0")
+    for dest_dir in "${FINAL_SYNC_TARGETS[@]}"; do
+        dest_file="$dest_dir/$f"
+        if cp -f "$hr_src_file" "$dest_file"; then
+            dest_size=$(stat -c%s "$dest_file" 2>/dev/null || echo "0")
+            if [ "$hr_size" -eq "$dest_size" ]; then
+                echo "[MLB FINAL SYNC] OK: $f ($(numfmt --to=iec $hr_size)) → $dest_dir"
+                FINAL_SYNC_COPIED=$((FINAL_SYNC_COPIED + 1))
+            else
+                echo "[MLB FINAL SYNC] FAIL: HR size mismatch after copy: $f (src=$hr_size dst=$dest_size) at $dest_file"
+                FINAL_SYNC_FAILED=$((FINAL_SYNC_FAILED + 1))
+            fi
+        else
+            echo "[MLB FINAL SYNC] FAIL: cp failed for HR file $f → $dest_file"
+            FINAL_SYNC_FAILED=$((FINAL_SYNC_FAILED + 1))
+        fi
+    done
+done
+
+# 3) Weather: $FINAL_SYNC_WEATHER_SRC_DIR → both destinations (self-copy is a
 # no-op for the source-equals-destination case, but keeps the post-sync invariant
 # "every destination has the freshest weather" explicit).
 for dest_dir in "${FINAL_SYNC_TARGETS[@]}"; do
