@@ -523,6 +523,9 @@ FINAL_SYNC_MODEL_FILES=(
     "lines_today.csv"
     "lines_today_raw.csv"
     "lines_today_audit.json"
+    "hitter_tracking.csv"
+    "pitcher_tracking.csv"
+    "bet_history.csv"
 )
 
 # Files generated outside $SRC. Weather is built by Step 5 into
