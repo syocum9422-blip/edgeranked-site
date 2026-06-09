@@ -12647,7 +12647,60 @@ def create_app():
 
     @flask_app.get("/api/health")
     def health():
-        return jsonify({"ok": True, "timestamp": now_et().isoformat()})
+        now = now_et()
+
+        checks = {
+            "mlb_pitchers": ("mlb/outputs/mlb_pitcher_projections_today.csv", 18),
+            "mlb_hitters": ("mlb/outputs/hitter_predictions_today.csv", 18),
+            "mlb_public_safe": ("mlb/outputs/hitter_predictions_public_safe.csv", 18),
+            "mlb_weather": ("mlb/outputs/mlb_weather_today.json", 18),
+            "mlb_hr_threats": ("mlb/outputs/hr_threats_public_safe.json", 18),
+            "mlb_tracking": ("mlb/outputs/hitter_tracking.csv", 36),
+
+            "nba_projections": ("outputs/nba_last_good/projections.csv", 96),
+            "nba_lines": ("outputs/nba_last_good/lines_today.csv", 96),
+
+            "wnba_projections": ("wnba/outputs/wnba_last_good/wnba_best_bets_today.csv", 48),
+            "ufc_outputs": ("data/ufc/website/ufc_site_payload.json", 168),
+        }
+
+        freshness = {}
+        ok = True
+
+        for name, (rel_path, max_age_hours) in checks.items():
+            path = Path(rel_path)
+            if not path.exists():
+                freshness[name] = {
+                    "ok": False,
+                    "status": "missing",
+                    "path": rel_path,
+                    "max_age_hours": max_age_hours,
+                }
+                ok = False
+                continue
+
+            mtime = datetime.fromtimestamp(path.stat().st_mtime, tz=now.tzinfo)
+            age_hours = round((now - mtime).total_seconds() / 3600, 2)
+            is_fresh = age_hours <= max_age_hours
+
+            freshness[name] = {
+                "ok": is_fresh,
+                "status": "fresh" if is_fresh else "stale",
+                "path": rel_path,
+                "age_hours": age_hours,
+                "max_age_hours": max_age_hours,
+                "modified_at": mtime.isoformat(),
+            }
+
+            if not is_fresh:
+                ok = False
+
+        status_code = 200 if ok else 503
+        return jsonify({
+            "ok": ok,
+            "timestamp": now.isoformat(),
+            "freshness": freshness,
+        }), status_code
 
     @flask_app.after_request
     def add_no_cache_headers(response):
