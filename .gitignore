@@ -64,3 +64,5 @@ Best_Bets/*.csv
 *.csv
 *.json
 static/
+auth_system/*.db-wal
+auth_system/*.db-shm
