@@ -12657,8 +12657,8 @@ def create_app():
             "mlb_hr_threats": ("mlb/outputs/hr_threats_public_safe.json", 18),
             "mlb_tracking": ("mlb/outputs/hitter_tracking.csv", 36),
 
-            "nba_projections": ("outputs/nba_last_good/projections.csv", 96),
-            "nba_lines": ("outputs/nba_last_good/lines_today.csv", 96),
+            "nba_projections": ("/srv/edgeranked-prod/outputs/nba_last_good/projections.csv", 96),
+            "nba_lines": ("/srv/edgeranked-prod/outputs/nba_last_good/lines_today.csv", 96),
 
             "wnba_projections": ("wnba/outputs/wnba_last_good/wnba_best_bets_today.csv", 48),
             "ufc_outputs": ("data/ufc/website/ufc_site_payload.json", 168),
@@ -12668,7 +12668,10 @@ def create_app():
         ok = True
 
         for name, (rel_path, max_age_hours) in checks.items():
+            live_root = Path(os.environ.get("EDGERANKED_MLB_BASE_DIR", "/home/ubuntu/edgeranked-sportsai"))
             path = Path(rel_path)
+            if not path.is_absolute():
+                path = live_root / rel_path
             if not path.exists():
                 freshness[name] = {
                     "ok": False,
