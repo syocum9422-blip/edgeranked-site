@@ -1,6 +1,29 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+MLB_HEALTHCHECK_URL="${MLB_HEALTHCHECK_URL:-https://hc-ping.com/0f9285fa-fcbd-4e58-8eb0-9a0a53a263e1}"
+
+ping_healthcheck() {
+  local suffix="${1:-}"
+  if [[ -n "$MLB_HEALTHCHECK_URL" ]]; then
+    curl -fsS -m 10 "$MLB_HEALTHCHECK_URL$suffix" >/dev/null 2>&1 || true
+  fi
+}
+
+on_exit() {
+  local exit_code=$?
+  if [[ "$exit_code" -eq 0 ]]; then
+    ping_healthcheck ""
+  else
+    ping_healthcheck "/fail"
+  fi
+  exit "$exit_code"
+}
+
+trap on_exit EXIT
+ping_healthcheck "/start"
+
+
 # MLB Pipeline - Canonical Single Source of Truth
 # SOURCE: /home/ubuntu/mlb_model/mlb/outputs
 # DESTINATION: /home/ubuntu/edgeranked-sportsai (served by Flask app)
