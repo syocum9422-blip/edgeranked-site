@@ -35,6 +35,7 @@ from nba_model.webapp.soccer_views import register_soccer_routes
 from nba_model.webapp.wnba_views import register_wnba_routes, render_wnba_player_name_html
 from nba_model.webapp import seo_tiers
 from nba_model.webapp import mlb_results_archive
+from nba_model.webapp import mlb_player_history
 from nba_model.webapp import mlb_stadiums
 from nba_model.webapp import accuracy_views
 
@@ -3075,7 +3076,7 @@ def build_mlb_player_not_found_page(slug):
         render_empty_state(
             "Player Not Found",
             "We couldn't find that MLB player.",
-            "This player may not be on today's MLB slate. Browse the live projection boards for every active player.",
+            "This player isn't in EdgeRanked's tracked MLB history or on today's slate. Browse the live projection boards for every active player.",
         )
         + render_page_actions(
             [
@@ -3098,90 +3099,105 @@ def build_mlb_player_not_found_page(slug):
 
 
 def build_mlb_player_page(slug):
+    """Permanent, premium-safe MLB player profile.
+
+    Known players (anyone in graded tracking history, or on today's slate)
+    always render. Content is historical outcomes only; today's model values
+    are never shown — on-slate players get a subscriber teaser instead.
+    """
     profile, payload = find_mlb_player_profile(slug)
-    if not profile:
+    history = mlb_player_history.get_history(
+        MLB_FILES["hitter_tracking"], MLB_FILES["pitcher_tracking"], slug
+    )
+    if not profile and not history:
         return build_mlb_player_not_found_page(slug)
 
-    player = normalize_text(profile.get("player"))
-    team = normalize_text(profile.get("team")).upper()
-    opponent = normalize_text(profile.get("opponent"))
-    player_type = normalize_text(profile.get("player_type")) or "Player"
-    matchup = normalize_text(profile.get("matchup")) or "Matchup pending"
-    confidence = normalize_text(profile.get("confidence")) or "Model View"
-    last_updated = payload.get("last_updated")
-    updated_label = format_timestamp(last_updated) if last_updated else ""
+    on_slate = profile is not None
+    player = ""
+    if history:
+        player = normalize_text(history.get("name"))
+    if not player and profile:
+        player = normalize_text(profile.get("player"))
+    team = normalize_text(profile.get("team")).upper() if on_slate else ""
+    opponent = normalize_text(profile.get("opponent")) if on_slate else ""
+    if history:
+        player_type = mlb_player_history.player_kind(history)
+    else:
+        player_type = normalize_text(profile.get("player_type")) or "Player"
+    tracked_games = 0
+    if history:
+        tracked_games = len(history.get("hitter_games") or []) + len(history.get("pitcher_games") or [])
 
     summary_cards = []
     if team:
         summary_cards.append(("Team", team, "Current club"))
     if opponent:
         summary_cards.append(("Opponent", opponent, "Today's matchup"))
-    summary_cards.append(("Player Type", player_type, "Model coverage"))
-    summary_cards.append(("Confidence", confidence, "Model read"))
+    summary_cards.append(("Player Type", player_type, "Tracked coverage"))
+    summary_cards.append((
+        "Slate Status",
+        "On today's MLB slate" if on_slate else "Not on today's slate",
+        "Profile stays available year-round",
+    ))
 
     body_parts = [
         "<section class='panel'>"
-        "<div class='panel-head'><div><div class='eyebrow'>Matchup</div>"
-        f"<h2>{escape(matchup)}</h2></div>"
-        f"<p class='muted'>{escape(render_mlb_confidence_badge_caption(confidence))}</p></div>"
+        "<div class='panel-head'><div><div class='eyebrow'>MLB Player</div>"
+        f"<h2>{escape(player)} — MLB Player Profile</h2></div>"
+        "<p class='muted'>Permanent player profile built from tracked, graded game outcomes.</p></div>"
         + render_stat_cards(summary_cards)
         + "</section>"
     ]
-    mlb_distributions = seo_tiers.value_distributions(
-        payload.get("records", []), ("hitter_stats", "pitcher_stats")
-    )
-    body_parts.append(
-        render_mlb_player_stat_section(
-            "Hitting Outlook",
-            "Public outlook tiers for today's hitting matchup.",
-            profile.get("hitter_stats", []),
-            mlb_distributions,
+
+    if on_slate:
+        body_parts.append(
+            seo_tiers.render_premium_locked_section(
+                seo_tiers.PREMIUM_PLAYER_ITEMS,
+                heading="Today's Projections Are Live",
+                note=(
+                    f"{player} is on today's MLB slate. Today's projections and "
+                    "advanced model insights are available to subscribers."
+                ),
+                cta_label="Unlock Today's MLB Projections",
+                cta_href="/pricing",
+            )
         )
-    )
-    body_parts.append(
-        render_mlb_player_stat_section(
-            "Pitching Outlook",
-            "Public outlook tiers for today's pitching matchup.",
-            profile.get("pitcher_stats", []),
-            mlb_distributions,
+
+    if history:
+        body_parts.append(mlb_player_history.render_history_body(history, SITE_ORIGIN))
+    else:
+        body_parts.append(
+            render_empty_state(
+                "History Pending",
+                "No graded games tracked yet.",
+                "This player's tracked game log and trend history will appear here once upcoming results are graded.",
+            )
         )
-    )
-    body_parts.append(
-        render_mlb_player_stat_section(
-            "Prop Outlook",
-            "Public outlook tiers for each prop market.",
-            profile.get("probabilities", []),
-        )
-    )
-    body_parts.append(seo_tiers.render_premium_locked_section(seo_tiers.PREMIUM_PLAYER_ITEMS))
+
     body_parts.append(
         render_page_actions(
             [
-                ("All MLB Projections", "/mlb/projections", "primary"),
-                ("MLB Best Bets", "/mlb/best-bets", "secondary"),
-                ("Pitcher Strikeouts", "/mlb/pitcher-strikeouts", "secondary"),
+                ("MLB Results Archive", "/mlb/results", "primary"),
+                ("All MLB Projections", "/mlb/projections", "secondary"),
+                ("MLB Stadium Guide", "/mlb/stadiums", "secondary"),
             ]
         )
     )
 
     body = "".join(part for part in body_parts if part)
 
-    subtitle_bits = [bit for bit in [team and f"{team}", opponent and f"vs {opponent}", player_type] if bit]
-    subtitle = " · ".join(subtitle_bits) if subtitle_bits else "MLB player profile"
-    if updated_label:
-        subtitle = f"{subtitle} · Updated {updated_label}"
-
-    meta_desc = (
-        f"{player} MLB projections, prop probabilities, and matchup analysis"
-        + (f" for {team}" if team else "")
-        + (f" vs {opponent}" if opponent else "")
-        + f". {player_type} model coverage from EdgeRanked AI."
-    )
-    document_title = (
-        f"{player} MLB Projections & Prop Probabilities"
-        + (f" ({team})" if team else "")
-        + " | EdgeRanked AI"
-    )
+    if history:
+        document_title, meta_desc = mlb_player_history.history_meta(history)
+        last_tracked = mlb_player_history.format_tracked_date(history.get("last_date", ""))
+        subtitle = f"{player_type} · {tracked_games} tracked games · Last tracked {last_tracked}"
+    else:
+        document_title = f"{player} MLB Player Profile | EdgeRanked AI"
+        meta_desc = (
+            f"{player} MLB player profile on EdgeRanked AI. Tracked game history, "
+            "recent form, and graded outcome logs as results are recorded."
+        )
+        subtitle_bits = [bit for bit in [team, opponent and f"vs {opponent}", player_type] if bit]
+        subtitle = " · ".join(subtitle_bits) if subtitle_bits else "MLB player profile"
 
     return render_layout(
         player,
@@ -3200,24 +3216,46 @@ def render_mlb_confidence_badge_caption(confidence):
 
 
 def build_mlb_players_sitemap():
+    """Every known MLB player: tracked history inventory + today's slate.
+
+    Historical players carry a per-player lastmod (their last graded game) so
+    the sitemap stays stable for inactive players instead of churning with the
+    daily slate.
+    """
     payload = build_mlb_player_projection_profiles()
     last_updated = payload.get("last_updated")
-    lastmod = last_updated.date().isoformat() if isinstance(last_updated, datetime) else date.today().isoformat()
+    slate_lastmod = last_updated.date().isoformat() if isinstance(last_updated, datetime) else date.today().isoformat()
     seen = set()
     urls = []
+
+    def add_url(slug, lastmod, changefreq):
+        urls.append(
+            "  <url>"
+            f"<loc>{MLB_PLAYER_SITE_URL}/mlb/player/{slug}</loc>"
+            f"<lastmod>{lastmod}</lastmod>"
+            f"<changefreq>{changefreq}</changefreq>"
+            "<priority>0.6</priority>"
+            "</url>"
+        )
+
+    try:
+        tracked = mlb_player_history.sitemap_players(
+            MLB_FILES["hitter_tracking"], MLB_FILES["pitcher_tracking"]
+        )
+    except Exception:
+        tracked = []
+    for slug, _name, lastmod in tracked:
+        if slug in seen:
+            continue
+        seen.add(slug)
+        add_url(slug, lastmod, "weekly")
+
     for record in payload.get("records", []):
         slug = slugify_player_name(record.get("player"))
         if not slug or slug in seen:
             continue
         seen.add(slug)
-        urls.append(
-            "  <url>"
-            f"<loc>{MLB_PLAYER_SITE_URL}/mlb/player/{slug}</loc>"
-            f"<lastmod>{lastmod}</lastmod>"
-            "<changefreq>daily</changefreq>"
-            "<priority>0.6</priority>"
-            "</url>"
-        )
+        add_url(slug, slate_lastmod, "daily")
     xml = (
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
         "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
