@@ -80,6 +80,11 @@ LIVE_INVARIANT_FILE="$LOG_DIR/live_invariants_pre.txt"
 # Step 1: grade hitters → updates hitter_tracking.csv
 run_step "01_grade_hitters"             "$PY" auto_grade_hitters_api.py
 
+# Step 1b: grade archived HR boards → hr_threat/graded/ (reads the actual_hr
+# values Step 1 just wrote into hitter_tracking; incomplete slates stay
+# pending, never fail). run_step is never-abort, so this cannot block grading.
+run_step "01b_grade_hr_boards"          "$PY" /home/ubuntu/mlb_model/hr_threat/grade_hr_boards.py
+
 # Step 2: grade pitchers → updates pitcher_tracking.csv
 run_step "02_grade_pitchers"            "$PY" auto_grade_pitchers_api.py
 

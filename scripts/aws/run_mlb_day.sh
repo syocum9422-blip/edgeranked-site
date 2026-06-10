@@ -35,6 +35,14 @@ mkdir -p /home/ubuntu/EdgeRanked/site/logs/cron
 
 cd /home/ubuntu
 
+# Hitter shadow columns (calibrated_hit_prob / blended_hit_prob /
+# calibrated_blended_hit_prob) — exported once so the router (Step 3), the
+# publish step (Step 4) and the tracking append (Step 4C) all see it.
+# Raw hit_prob remains the public value; these columns ride along for
+# side-by-side grading only. Rollback: delete this export (or set to 0).
+# See mlb_model/validation/audits/mlb_hitter_phase2_deployment_report_20260610.md
+export MLB_ENABLE_HITTER_HIT_PROB_CALIBRATION=1
+
 echo "Starting unified MLB run: $(date)"
 
 # ── Step 1: Fetch lines ──────────────────────────────────────────────────────
@@ -66,8 +74,8 @@ MLB_LAYER4_HITTER_MODE=1 \
 MLB_LAYER4_DIRECT_SIM_OUTPUTS=1 \
 MLB_LAYER4_PITCHER_MODE=1 \
 MLB_LAYER4_SHARED_SIM_ARTIFACT=/home/ubuntu/mlb_model/validation/layer4_shared_sim_outputs.json \
-MLB_LAYER4_DIRECT_N_SIMS=300 \
-MLB_LAYER4_DIRECT_MIN_N_SIMS=300 \
+MLB_LAYER4_DIRECT_N_SIMS=1000 \
+MLB_LAYER4_DIRECT_MIN_N_SIMS=1000 \
 MLB_LAYER4_DIRECT_MAX_GAMES=30 \
 MLB_ENABLE_LEGACY_BIAS_PENALTY=1 \
 python3 mlb_model/predict_hitter.py
@@ -75,8 +83,8 @@ python3 mlb_model/predict_hitter.py
 # ── Step 3: Run unified model router ────────────────────────────────────────
 MLB_USE_UNIFIED_LAYER4=1 \
 MLB_UNIFIED_FALLBACK_TO_LEGACY=1 \
-MLB_LAYER4_DIRECT_N_SIMS=300 \
-MLB_LAYER4_DIRECT_MIN_N_SIMS=300 \
+MLB_LAYER4_DIRECT_N_SIMS=1000 \
+MLB_LAYER4_DIRECT_MIN_N_SIMS=1000 \
 MLB_LAYER4_DIRECT_MAX_GAMES=30 \
 python3 -m mlb_model.production.unified_output_router
 
@@ -101,6 +109,17 @@ echo "[MLB HITTER-TRACK] Appending today's hitter projections to tracking..."
 python3 /home/ubuntu/EdgeRanked/site/mlb/learning/repair_tracking.py --mode all \
     >> /home/ubuntu/EdgeRanked/site/logs/cron/mlb_hitter_track.log 2>&1 \
     || echo "[MLB HITTER-TRACK] WARNING: append exited non-zero — continuing"
+
+# ── Step 4C-2: Tracking continuity gate (non-blocking, warning-first) ────────
+# Guards against a repeat of the Apr 14 – May 29 tracking blackout: verifies
+# today's hitter/pitcher rows actually landed in the canonical + site tracking
+# files. Warning-only — never aborts the run; sends a Healthchecks "/log"
+# event (not /fail) when row counts fall short.
+echo "[MLB TRACKING GATE] Checking tracking continuity..."
+MLB_HEALTHCHECK_URL="$MLB_HEALTHCHECK_URL" \
+python3 /home/ubuntu/mlb_model/validation/check_tracking_continuity.py \
+    >> /home/ubuntu/EdgeRanked/site/logs/cron/mlb_tracking_continuity.log 2>&1 \
+    || echo "[MLB TRACKING GATE] WARNING: continuity check exited non-zero — continuing"
 
 # ════════════════════════════════════════════════════════════════════════════
 # Availability chain (non-blocking, must run AFTER hitter outputs and BEFORE
@@ -144,6 +163,16 @@ if [ -x "$HR_THREAT_WRAPPER" ]; then
 else
     echo "[HR Threat] WARNING: wrapper not found or not executable: $HR_THREAT_WRAPPER"
 fi
+
+# ── HR board archival (non-blocking; pre-game snapshot for outcome grading) ──
+# Byte-exact copies of the three public-safe HR boards into
+# mlb_model/hr_threat/archives/ so they can be outcome-graded next morning.
+# Fails closed on missing/empty boards and never overwrites an existing
+# archive; failure never blocks the MLB pipeline.
+echo "[HR ARCHIVE] Archiving public-safe HR boards..."
+python3 /home/ubuntu/mlb_model/hr_threat/archive_hr_boards.py \
+    >> /home/ubuntu/EdgeRanked/site/logs/cron/mlb_hr_archive.log 2>&1 \
+    || echo "[HR ARCHIVE] WARNING: archive failed — continuing"
 
 # ── Step 4B-3: Build public-safe hitter board (non-blocking) ─────────────────
 # Joins hitter_predictions_full.csv + availability audit; writes
