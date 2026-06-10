@@ -190,8 +190,13 @@ def _pitcher_metrics(df):
         return None
     e = df["predicted_strikeouts"] - df["actual_strikeouts"]
     corr = df["predicted_strikeouts"].corr(df["actual_strikeouts"]) if len(df) > 5 else None
-    return {"n": len(df), "mae": round(float(e.abs().mean()), 3), "bias": round(float(e.mean()), 3),
-            "corr": (round(float(corr), 3) if corr is not None and corr == corr else None)}
+    spear = df["predicted_strikeouts"].corr(df["actual_strikeouts"], method="spearman") if len(df) > 5 else None
+    base_mae = float((df["actual_strikeouts"] - df["actual_strikeouts"].mean()).abs().mean())
+    return {"n": len(df), "mae": round(float(e.abs().mean()), 3),
+            "rmse": round(float(np.sqrt((e ** 2).mean())), 3), "bias": round(float(e.mean()), 3),
+            "corr": (round(float(corr), 3) if corr is not None and corr == corr else None),
+            "spearman": (round(float(spear), 3) if spear is not None and spear == spear else None),
+            "baseline_mae": round(base_mae, 3)}
 
 
 def _board_stats(g, board, window_df_dates):
@@ -298,11 +303,21 @@ def compute_payload():
             s5[w] = _pitcher_metrics(pw[w])
         prior = _pitcher_metrics(pw["prior_7d"])
         s5["trend_mae"] = _trend(s5["7d"] and s5["7d"]["mae"], prior and prior["mae"], TH["trend_eps_mae"], lower_better=True)
+        s5["trend_bias"] = _trend(s5["7d"] and abs(s5["7d"]["bias"]), prior and abs(prior["bias"]), TH["trend_eps_mae"], lower_better=True)
         s5["buckets"] = {}
         d30 = pw["30d"]
-        for label, lo, hi in (("low (<5)", 0, 5), ("mid (5–7)", 5, 7), ("high (7+)", 7, 99)):
+        for label, lo, hi in (("low (under 5)", 0, 5), ("mid (5–7)", 5, 7), ("high (7+)", 7, 99)):
             b = d30[(d30["predicted_strikeouts"] > lo) & (d30["predicted_strikeouts"] <= hi)]
             s5["buckets"][label] = _pitcher_metrics(b)
+        sea = s5.get("season")
+        if sea:
+            edge = sea["baseline_mae"] - sea["mae"]
+            hi_b = s5["buckets"].get("high (7+)")
+            verdict = (f"Season MAE {sea['mae']} vs predict-the-mean baseline {sea['baseline_mae']} "
+                       f"({'+' if edge >= 0 else ''}{edge:.3f} K edge) over {sea['n']} graded starts.")
+            if hi_b and hi_b["bias"] is not None and hi_b["bias"] > 1.0:
+                verdict += f" ⚠ High-end (7+) projections run +{hi_b['bias']:.2f} K hot over the last 30d."
+            s5["verdict"] = verdict
     pay["s5"] = s5
 
     # --- S6/7/8 HR boards
@@ -517,12 +532,16 @@ def build_body() -> str:
         parts.append(_sec("4 · Home run probability", "hitter_tracking.csv actual_hr", inner))
 
     if s5:
-        inner = _tbl(["window", "n", "MAE", "bias", "corr"],
-                     _window_rows(s5, ["n", "mae", "bias", "corr"]))
-        inner += f"<p>7d MAE trend vs prior 7d: {s5['trend_mae']}</p>"
-        inner += _tbl(["projected-K bucket (30d)", "n", "MAE", "bias"],
-                      [[lbl, m["n"], _num(m["mae"]), _num(m["bias"])] for lbl, m in s5.get("buckets", {}).items() if m])
-        parts.append(_sec("5 · Pitcher strikeouts", "pitcher_tracking.csv", inner))
+        verdict = s5.get("verdict")
+        inner = (f"<p style='font-size:14px'><strong>{escape(verdict)}</strong></p>" if verdict else "")
+        inner += _tbl(["window", "graded starts", "MAE", "RMSE", "bias", "Pearson", "Spearman", "baseline MAE"],
+                      _window_rows(s5, ["n", "mae", "rmse", "bias", "corr", "spearman", "baseline_mae"]))
+        inner += f"<p>7d vs prior 7d: MAE {s5['trend_mae']} · |bias| {s5.get('trend_bias', '→')}</p>"
+        inner += _tbl(["projected-K bucket (30d)", "n", "MAE", "RMSE", "bias"],
+                      [[escape(lbl), m["n"], _num(m["mae"]), _num(m["rmse"]), _num(m["bias"])]
+                       for lbl, m in s5.get("buckets", {}).items() if m])
+        parts.append(_sec("5 · Pitcher strikeouts — raw model (always shown, independent of calibration)",
+                          "pitcher_tracking.csv graded starts · baseline = predicting each window's mean K for everyone", inner))
 
     board_titles = {"hr_threats": ("6 · HR Threat board", "hr_threat_board_grades.csv (archived pre-game boards, outcome-graded)"),
                     "under_the_radar": ("7 · Under-the-radar HR board", "20-player additive board — graded separately"),
@@ -553,12 +572,18 @@ def build_body() -> str:
     s10 = pay["s10"]
     if s10.get("rows"):
         label = ("captured side-by-side tracking" if s10["captured"]
-                 else "calibration formula applied retroactively to graded raw projections (flag not yet enabled; outcomes real)")
-        inner = f"<p class='muted'>Source: {escape(label)}.</p>"
-        inner += _tbl(["variant", "n", "MAE", "bias"],
-                      [[("<strong>" + k + " ←</strong>" if k == s10.get("winner") else k), v["n"], _num(v["mae"]), _num(v["bias"])]
-                       for k, v in s10["rows"].items()])
-        parts.append(_sec("10 · Pitcher K calibration shadow", "raw vs piecewise-calibrated projection (winner by MAE)", inner))
+                 else "calibration formula applied retroactively to graded raw projections (flag MLB_ENABLE_PITCHER_K_CALIBRATION is OFF; outcomes real)")
+        r, c = s10["rows"]["raw"], s10["rows"]["calibrated"]
+        d_mae = r["mae"] - c["mae"]
+        status = "calibration improves MAE — candidate healthy" if d_mae > 0 else "calibration not helping — review before promoting"
+        inner = f"<p class='muted'>This section compares the <em>shadow calibration layer</em>; raw model performance lives in Section 5 regardless. Source: {escape(label)}.</p>"
+        inner += _tbl(["", "Raw", "Calibrated", "Improvement"],
+                      [["MAE", _num(r["mae"]), _num(c["mae"]), f"{'+' if d_mae >= 0 else ''}{d_mae:.3f} K ({d_mae / r['mae'] * 100:.1f}%)"],
+                       ["bias", _num(r["bias"]), _num(c["bias"]), f"{abs(r['bias']) - abs(c['bias']):+.3f} closer to zero"],
+                       ["sample", r["n"], c["n"], ""]])
+        inner += f"<p><strong>Status:</strong> {escape(status)} · winner by MAE: <strong>{escape(s10.get('winner', '—'))}</strong></p>"
+        parts.append(_sec("10 · Pitcher K calibration shadow (separate from raw model health)",
+                          "piecewise_strong_85_55_30 vs raw projection", inner))
 
     rec_rows = [[escape(n), _chip({"PROMOTE": "GREEN", "KEEP SHADOW": "YELLOW", "NEEDS DATA": "YELLOW", "ROLL BACK": "RED"}.get(v, "RED")) + f" <strong>{escape(v)}</strong>", escape(d)] for n, v, d in pay["s11"]]
     parts.append(_sec("11 · Promotion recommendations", "Advisory, derived from the documented promotion gates. Promotion is always a manual operator action.",
