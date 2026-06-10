@@ -42,8 +42,27 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 SPORTS_ROOT = PROJECT_ROOT.parent / "sports"
 
-NBA_WALKFORWARD_SUMMARY_PATH = PROJECT_ROOT / "nba_walkforward_audit_summary.json"
-NBA_WALKFORWARD_DETAIL_PATH = PROJECT_ROOT / "nba_walkforward_audit.csv"
+# Source-of-truth tree for generated artifacts that live at the repo root.
+# Production serves from a deployed copy (/srv/edgeranked-prod) that may not
+# carry freshly regenerated artifacts, so loaders fall back here.
+SITE_DATA_ROOT = Path(
+    os.environ.get("EDGERANKED_SITE_DATA_DIR", "/home/ubuntu/EdgeRanked/site")
+).expanduser()
+
+NBA_WALKFORWARD_SUMMARY_REL = "nba_walkforward_audit_summary.json"
+NBA_WALKFORWARD_DETAIL_REL = "nba_walkforward_audit.csv"
+MLB_TRACKING_FRESHNESS_REL = "mlb/outputs/learning/tracking_freshness.json"
+
+
+def _resolve_artifact(relative: str) -> Path:
+    """First existing copy of a repo-root artifact: deployed tree, then
+    source-of-truth tree. Falls back to the deployed path so a missing file
+    still flows through the fail-safe loaders."""
+    for base in (PROJECT_ROOT, SITE_DATA_ROOT):
+        candidate = base / relative
+        if candidate.exists():
+            return candidate
+    return PROJECT_ROOT / relative
 
 REQUIRED_DISCLAIMER = (
     "Some sports have deeper historical grading than others. "
@@ -234,12 +253,11 @@ def load_mlb_metrics():
     # Freshness badge only — never used for counts (the tracking files are
     # rewritten intraday, so row counts here can drift from the JSON).
     # The legacy MLB base dir has no learning/ folder, so fall back to the
-    # repo copy; both describe the same canonical tracking files.
+    # deployed tree, then the source-of-truth tree; all copies describe the
+    # same canonical tracking files.
     freshness = _read_json(mlb_dir / "learning" / "tracking_freshness.json")
     if freshness is None:
-        freshness = _read_json(
-            PROJECT_ROOT / "mlb" / "outputs" / "learning" / "tracking_freshness.json"
-        )
+        freshness = _read_json(_resolve_artifact(MLB_TRACKING_FRESHNESS_REL))
     if isinstance(freshness, dict):
         site_hitter = freshness.get("site_hitter") or freshness.get("canonical_hitter")
         if isinstance(site_hitter, dict):
@@ -250,14 +268,14 @@ def load_mlb_metrics():
 
 
 def load_nba_metrics():
-    summary = _read_json(NBA_WALKFORWARD_SUMMARY_PATH)
+    summary = _read_json(_resolve_artifact(NBA_WALKFORWARD_SUMMARY_REL))
     if not isinstance(summary, dict) or not summary.get("by_target"):
         return None
     return summary
 
 
 def load_nba_detail():
-    detail = _read_csv(NBA_WALKFORWARD_DETAIL_PATH)
+    detail = _read_csv(_resolve_artifact(NBA_WALKFORWARD_DETAIL_REL))
     if detail is None or detail.empty:
         return None
     needed = {"target", "cutoff", "test_rows", "mae"}
