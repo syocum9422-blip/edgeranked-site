@@ -265,3 +265,9 @@ game_date,team,opponent,pace,off_rating,def_rating,team_points,opp_points,team_r
 2026-06-08,WAS,IND,,,,76.0,78.0,31.0,21.0,9.0,api:espn_boxscore
 2026-06-08,LVA,SEA,,,,101.0,91.0,39.0,27.0,10.0,api:espn_boxscore
 2026-06-08,SEA,LVA,,,,91.0,101.0,27.0,22.0,12.0,api:espn_boxscore
+2026-06-09,ATL,CHI,,,,82.0,75.0,36.0,18.0,5.0,api:espn_boxscore
+2026-06-09,CHI,ATL,,,,75.0,82.0,25.0,17.0,8.0,api:espn_boxscore
+2026-06-09,DAL,MIN,,,,76.0,100.0,31.0,19.0,8.0,api:espn_boxscore
+2026-06-09,MIN,DAL,,,,100.0,76.0,41.0,21.0,7.0,api:espn_boxscore
+2026-06-09,GSV,PHX,,,,87.0,81.0,27.0,18.0,10.0,api:espn_boxscore
+2026-06-09,PHX,GSV,,,,81.0,87.0,33.0,23.0,9.0,api:espn_boxscore
