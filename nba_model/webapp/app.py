@@ -36,6 +36,7 @@ from nba_model.webapp.wnba_views import register_wnba_routes, render_wnba_player
 from nba_model.webapp import seo_tiers
 from nba_model.webapp import mlb_results_archive
 from nba_model.webapp import mlb_stadiums
+from nba_model.webapp import accuracy_views
 
 
 ET = ZoneInfo("America/New_York")
@@ -5045,6 +5046,7 @@ def render_footer():
         "<div class='footer-col'>"
         "<h4>Company</h4>"
         "<a href='/about'>About</a>"
+        "<a href='/accuracy'>Accuracy</a>"
         "<a href='/pricing'>Pricing</a>"
         "<a href='mailto:support@edgerankedai.com'>Contact</a>"
         "</div>"
@@ -9794,6 +9796,7 @@ img { max-width: 100%; display: block; }
     </div>
     <div class="footer-links">
       <a href="/about">About</a>
+      <a href="/accuracy">Accuracy</a>
       <a href="/pricing">Pricing</a>
       <a href="/soccer">Soccer</a>
       <a href="/privacy-policy">Privacy Policy</a>
@@ -12520,6 +12523,10 @@ SITEMAP_STATIC_PATHS = [
     ("/mlb/weather", "daily", "0.6"),
     ("/mlb/intel", "daily", "0.6"),
     ("/results", "daily", "0.7"),
+    ("/accuracy", "daily", "0.7"),
+    ("/accuracy/mlb", "daily", "0.6"),
+    ("/accuracy/nba", "daily", "0.6"),
+    ("/accuracy/wnba", "daily", "0.6"),
     ("/about", "monthly", "0.4"),
     ("/pricing", "monthly", "0.4"),
     ("/privacy-policy", "yearly", "0.2"),
@@ -12897,6 +12904,8 @@ a{color:#60a5fa!important}
     )
 
     mlb_stadiums.register_mlb_stadium_routes(flask_app, render_layout, SITE_ORIGIN)
+
+    accuracy_views.register_accuracy_routes(flask_app, render_layout, MLB_OUTPUT_DIR)
 
     @flask_app.get("/mlb/intel")
     def mlb_intel():
