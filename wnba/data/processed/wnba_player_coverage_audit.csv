@@ -1,9 +1,13 @@
 player_name,team,opponent,has_live_line,has_history,history_source,included,reason
 Allisha Gray,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
 Angel Reese,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
+Jordin Canada,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
+Naz Hillmon,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
 Rhyne Howard,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
 Azurá Stevens,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
+Gabriela Jaquez,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
 Kamilla Cardoso,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
+Natasha Cloud,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
 Skylar Diggins,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
 Aaliyah Edwards,CON,TOR,True,True,csv,True,included
 Brittney Griner,CON,TOR,True,True,csv,True,included
@@ -13,10 +17,12 @@ Saniya Rivers,CON,TOR,True,True,csv,True,included
 Arike Ogunbowale,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
 Azzi Fudd,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
 Jessica Shepard,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
+Maddy Siegrist,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
 Paige Bueckers,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
 Aliyah Boston,IND,,True,True,csv,False,excluded_not_on_canonical_slate
 Caitlin Clark,IND,,True,True,csv,False,excluded_not_on_canonical_slate
 Kelsey Mitchell,IND,,True,True,csv,False,excluded_not_on_canonical_slate
+Sophie Cunningham,IND,,True,True,csv,False,excluded_not_on_canonical_slate
 Ariel Atkins,LAS,SEA,True,True,csv,True,included
 Cameron Brink,LAS,SEA,True,True,csv,True,included
 Dearica Hamby,LAS,SEA,True,True,csv,True,included
@@ -31,6 +37,8 @@ Jonquel Jones,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
 Satou Sabally,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
 Alyssa Thomas,PHX,,True,True,csv,False,excluded_not_on_canonical_slate
 Kahleah Copper,PHX,,True,True,csv,False,excluded_not_on_canonical_slate
+Monique Akoa Makani,PHX,,True,True,csv,False,excluded_not_on_canonical_slate
+Natasha Mack,PHX,,True,True,csv,False,excluded_not_on_canonical_slate
 Bridget Carleton,POR,,True,True,csv,False,excluded_not_on_canonical_slate
 Carla Leite,POR,,True,True,csv,False,excluded_not_on_canonical_slate
 Awa Fam,SEA,LAS,True,True,csv,True,included

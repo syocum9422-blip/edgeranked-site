@@ -7,12 +7,12 @@
     "TOR"
   ],
   "error": "",
-  "excluded_players": 43,
+  "excluded_players": 51,
   "excluded_reasons": {
     "api_error": 1,
-    "excluded_not_on_canonical_slate": 42
+    "excluded_not_on_canonical_slate": 50
   },
-  "generated_at": "2026-06-10T07:33:06.988188-04:00",
+  "generated_at": "2026-06-10T14:02:25.947251-04:00",
   "included_players": 19,
   "message": "WNBA refresh passed.",
   "projected_teams": [
