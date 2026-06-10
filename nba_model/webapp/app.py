@@ -12737,7 +12737,20 @@ def create_app():
             )
             from flask import abort
             abort(403)
-        return build_internal_mlb_learning_page()
+        from flask import request as _req
+        if _req.args.get("v") == "1":
+            return build_internal_mlb_learning_page()  # legacy view (rollback path)
+        try:
+            from . import internal_mlb_learning_v2 as _v2
+        except ImportError:
+            import internal_mlb_learning_v2 as _v2
+        return render_layout(
+            "Internal · MLB Learning V2",
+            "Single source of truth for MLB model performance. Read-only, admin-only.",
+            _v2.build_body(),
+            "/internal/mlb-learning",
+            hero_kicker="Internal",
+        )
 
     @flask_app.get("/")
     def root():
