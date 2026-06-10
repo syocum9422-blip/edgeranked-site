@@ -43,6 +43,15 @@ cd /home/ubuntu
 # See mlb_model/validation/audits/mlb_hitter_phase2_deployment_report_20260610.md
 export MLB_ENABLE_HITTER_HIT_PROB_CALIBRATION=1
 
+# Pitcher K calibration SHADOW CAPTURE (approved 2026-06-10): the router emits
+# Calibrated_Projected_Strikeouts / calibrated_projected_strikeouts columns
+# next to the unchanged raw columns, and repair_tracking stores them
+# side-by-side as calibrated_predicted_strikeouts for raw-vs-calibrated
+# grading. Public display reads projected_strikeouts (raw) via an explicit
+# field allowlist and is NOT affected. This is tracking-only — NOT a display
+# swap. Rollback: delete this export.
+export MLB_ENABLE_PITCHER_K_CALIBRATION=1
+
 echo "Starting unified MLB run: $(date)"
 
 # ── Step 1: Fetch lines ──────────────────────────────────────────────────────
