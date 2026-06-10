@@ -10,9 +10,9 @@ Kamilla Cardoso,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
 Natasha Cloud,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
 Skylar Diggins,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
 Aaliyah Edwards,CON,TOR,True,True,csv,True,included
-Brittney Griner,CON,TOR,True,True,csv,True,included
 Diamond Miller,CON,TOR,True,True,csv,True,included
 Leila Lacan,CON,TOR,True,True,csv,True,included
+Olivia Nelson-Ododa,CON,TOR,True,True,csv,True,included
 Saniya Rivers,CON,TOR,True,True,csv,True,included
 Arike Ogunbowale,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
 Azzi Fudd,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
@@ -32,15 +32,19 @@ Nneka Ogwumike,LAS,SEA,True,True,csv,True,included
 A'ja Wilson,LVA,,True,True,csv,False,excluded_not_on_canonical_slate
 Chelsea Gray,LVA,,True,True,csv,False,excluded_not_on_canonical_slate
 Jackie Young,LVA,,True,True,csv,False,excluded_not_on_canonical_slate
+NaLyssa Smith,LVA,,True,True,csv,False,excluded_not_on_canonical_slate
 Breanna Stewart,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
 Jonquel Jones,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
-Satou Sabally,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
+Leonie Fiebich,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
+Marine Johannes,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
 Alyssa Thomas,PHX,,True,True,csv,False,excluded_not_on_canonical_slate
 Kahleah Copper,PHX,,True,True,csv,False,excluded_not_on_canonical_slate
 Monique Akoa Makani,PHX,,True,True,csv,False,excluded_not_on_canonical_slate
 Natasha Mack,PHX,,True,True,csv,False,excluded_not_on_canonical_slate
 Bridget Carleton,POR,,True,True,csv,False,excluded_not_on_canonical_slate
 Carla Leite,POR,,True,True,csv,False,excluded_not_on_canonical_slate
+Emily Engstler,POR,,True,True,csv,False,excluded_not_on_canonical_slate
+Megan Gustafson,POR,,True,True,csv,False,excluded_not_on_canonical_slate
 Awa Fam,SEA,LAS,True,True,csv,True,included
 Dominique Malonga,SEA,LAS,True,True,csv,True,included
 Flau'jae Johnson,SEA,LAS,True,True,csv,True,included
@@ -61,11 +65,8 @@ Brittney Sykes,TOR,CON,True,True,csv,True,included
 Laura Juškaitė,TOR,CON,True,False,,False,api_error
 Marina Mabrey,TOR,CON,True,True,csv,True,included
 Nyara Sabally,TOR,CON,True,True,csv,True,included
-Brittney Sykes + Brittney Griner,TOR/CON,,True,False,,False,excluded_not_on_canonical_slate
 Brittney Sykes + Leila Lacan,TOR/CON,,True,False,,False,excluded_not_on_canonical_slate
 Marina Mabrey + Aaliyah Edwards,TOR/CON,,True,False,,False,excluded_not_on_canonical_slate
-Marina Mabrey + Brittney Griner,TOR/CON,,True,False,,False,excluded_not_on_canonical_slate
 Marina Mabrey + Leila Lacan,TOR/CON,,True,False,,False,excluded_not_on_canonical_slate
 Nyara Sabally + Aaliyah Edwards,TOR/CON,,True,False,,False,excluded_not_on_canonical_slate
-Nyara Sabally + Brittney Griner,TOR/CON,,True,False,,False,excluded_not_on_canonical_slate
 Nyara Sabally + Leila Lacan,TOR/CON,,True,False,,False,excluded_not_on_canonical_slate
