@@ -11,12 +11,12 @@
     "POR"
   ],
   "error": "",
-  "excluded_players": 55,
+  "excluded_players": 58,
   "excluded_reasons": {
     "excluded_by_status_or_filter": 1,
-    "excluded_not_on_canonical_slate": 54
+    "excluded_not_on_canonical_slate": 57
   },
-  "generated_at": "2026-06-11T14:02:28.484253-04:00",
+  "generated_at": "2026-06-11T18:32:26.333260-04:00",
   "included_players": 41,
   "message": "WNBA refresh passed.",
   "projected_teams": [
