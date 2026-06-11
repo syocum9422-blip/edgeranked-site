@@ -37,6 +37,7 @@ from nba_model.webapp import seo_tiers
 from nba_model.webapp import mlb_results_archive
 from nba_model.webapp import mlb_player_history
 from nba_model.webapp import mlb_stadiums
+from nba_model.webapp import mlb_teams
 from nba_model.webapp import accuracy_views
 
 
@@ -3174,15 +3175,22 @@ def build_mlb_player_page(slug):
             )
         )
 
-    body_parts.append(
-        render_page_actions(
-            [
-                ("MLB Results Archive", "/mlb/results", "primary"),
-                ("All MLB Projections", "/mlb/projections", "secondary"),
-                ("MLB Stadium Guide", "/mlb/stadiums", "secondary"),
-            ]
+    page_actions = [("MLB Results Archive", "/mlb/results", "primary")]
+    try:
+        team_name, team_slug = mlb_teams.team_for_player(
+            MLB_OUTPUT_DIR, MLB_DATA_DIR, slugify_player_name(player)
         )
+    except Exception:
+        team_name, team_slug = None, None
+    if team_slug:
+        page_actions.append((f"{team_name} Team Page", f"/mlb/team/{team_slug}", "secondary"))
+    page_actions.extend(
+        [
+            ("All MLB Teams", "/mlb/teams", "secondary"),
+            ("All MLB Projections", "/mlb/projections", "secondary"),
+        ]
     )
+    body_parts.append(render_page_actions(page_actions))
 
     body = "".join(part for part in body_parts if part)
 
@@ -12626,6 +12634,17 @@ def build_master_sitemap():
     except Exception:
         pass
 
+    # MLB Teams: index + 30 team pages + 30 team strikeout pages.
+    try:
+        for path, changefreq, priority in mlb_teams.teams_sitemap_entries():
+            url_el = ET.SubElement(urlset, "url")
+            ET.SubElement(url_el, "loc").text = f"{SITE_ORIGIN}{path}"
+            ET.SubElement(url_el, "lastmod").text = today
+            ET.SubElement(url_el, "changefreq").text = changefreq
+            ET.SubElement(url_el, "priority").text = priority
+    except Exception:
+        pass
+
     ET.indent(urlset, space="  ")  # pretty-print: one tag per line (Python 3.9+)
     body = ET.tostring(urlset, encoding="unicode")
     xml = '<?xml version="1.0" encoding="UTF-8"?>\n' + body + "\n"
@@ -12955,6 +12974,10 @@ a{color:#60a5fa!important}
     )
 
     mlb_stadiums.register_mlb_stadium_routes(flask_app, render_layout, SITE_ORIGIN)
+
+    mlb_teams.register_mlb_team_routes(
+        flask_app, render_layout, MLB_OUTPUT_DIR, MLB_DATA_DIR, SITE_ORIGIN
+    )
 
     accuracy_views.register_accuracy_routes(flask_app, render_layout, MLB_OUTPUT_DIR)
 

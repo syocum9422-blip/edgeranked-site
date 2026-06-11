@@ -179,6 +179,13 @@ def _index(hitter_path, pitcher_path):
     return index, latest_date
 
 
+def all_player_histories(hitter_path, pitcher_path):
+    """Read-only graded-history index keyed by player slug (premium-safe by
+    construction — built only from whitelisted outcome columns)."""
+    index, latest_date = _index(hitter_path, pitcher_path)
+    return index, latest_date
+
+
 def get_history(hitter_path, pitcher_path, slug):
     """Return the tracked-history entry for a player slug, or None."""
     target = slugify_player_name(str(slug or "").replace("-", " "))
@@ -500,6 +507,14 @@ def _cards(cards):
             "</article>"
         )
     return "<div class='metric-grid'>" + "".join(body) + "</div>"
+
+
+# Shared render primitives, reused by the team pages module.
+render_panel = _panel
+render_table = _table
+render_cards_grid = _cards
+render_bar_strip = _bar_strip
+render_form_list = _form_list
 
 
 def player_kind(entry):
