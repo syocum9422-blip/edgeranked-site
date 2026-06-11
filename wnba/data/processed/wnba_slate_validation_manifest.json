@@ -1,37 +1,61 @@
 {
   "duplicate_games": [],
-  "expected_game_count": 2,
-  "generated_at": "2026-06-10T18:31:23.254011-04:00",
-  "generated_game_count": 2,
+  "expected_game_count": 4,
+  "generated_at": "2026-06-11T07:32:09.446652-04:00",
+  "generated_game_count": 4,
   "generated_games": [
     {
-      "away_team": "CON",
-      "game_id": "401856978",
-      "home_team": "TOR",
-      "start_time_utc": "2026-06-10T23:00Z"
+      "away_team": "CHI",
+      "game_id": "401856980",
+      "home_team": "IND",
+      "start_time_utc": "2026-06-11T23:00Z"
     },
     {
-      "away_team": "LAS",
-      "game_id": "401856979",
-      "home_team": "SEA",
-      "start_time_utc": "2026-06-11T02:00Z"
+      "away_team": "NYL",
+      "game_id": "401856981",
+      "home_team": "ATL",
+      "start_time_utc": "2026-06-11T23:30Z"
+    },
+    {
+      "away_team": "PHX",
+      "game_id": "401856982",
+      "home_team": "DAL",
+      "start_time_utc": "2026-06-12T01:00Z"
+    },
+    {
+      "away_team": "LVA",
+      "game_id": "401856983",
+      "home_team": "POR",
+      "start_time_utc": "2026-06-12T02:00Z"
     }
   ],
   "missing_games": [],
-  "slate_date": "2026-06-10",
+  "slate_date": "2026-06-11",
   "status": "PASS",
   "trusted_games": [
     {
-      "away_team": "CON",
-      "game_id": "401856978",
-      "home_team": "TOR",
-      "start_time_utc": "2026-06-10T23:00Z"
+      "away_team": "CHI",
+      "game_id": "401856980",
+      "home_team": "IND",
+      "start_time_utc": "2026-06-11T23:00Z"
     },
     {
-      "away_team": "LAS",
-      "game_id": "401856979",
-      "home_team": "SEA",
-      "start_time_utc": "2026-06-11T02:00Z"
+      "away_team": "NYL",
+      "game_id": "401856981",
+      "home_team": "ATL",
+      "start_time_utc": "2026-06-11T23:30Z"
+    },
+    {
+      "away_team": "PHX",
+      "game_id": "401856982",
+      "home_team": "DAL",
+      "start_time_utc": "2026-06-12T01:00Z"
+    },
+    {
+      "away_team": "LVA",
+      "game_id": "401856983",
+      "home_team": "POR",
+      "start_time_utc": "2026-06-12T02:00Z"
     }
   ],
   "trusted_source": "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard",
