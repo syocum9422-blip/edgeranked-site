@@ -180,6 +180,7 @@ def _team_data(output_dir, data_dir):
     data = {
         "rosters": {team: sorted(names) for team, names in rosters.items()},
         "probables": probables,
+        "player_team": player_team,
         "lineup_k": lineup_k,
         "team_k": team_k,
         "plays_today": plays_today,
@@ -188,22 +189,15 @@ def _team_data(output_dir, data_dir):
     return data
 
 
+def player_team_map(output_dir, data_dir):
+    """Last-known {player_slug: team_full_name} from public-safe roster files."""
+    return _team_data(output_dir, data_dir)["player_team"]
+
+
 def team_for_player(output_dir, data_dir, player_slug):
     """Last-known (team_name, team_slug) for a player slug, or (None, None)."""
     data = _team_data(output_dir, data_dir)
-    team = None
-    for team_name, names in data["rosters"].items():
-        for name in names:
-            if slugify_player_name(name) == player_slug:
-                team = team_name
-                break
-        if team:
-            break
-    if not team:
-        for team_name, pitcher in data["probables"].items():
-            if slugify_player_name(pitcher) == player_slug:
-                team = team_name
-                break
+    team = data["player_team"].get(player_slug)
     if team and team in BY_NAME:
         return team, BY_NAME[team]["slug"]
     return None, None
