@@ -108,7 +108,7 @@ _PUBLIC_EXACT = frozenset({
     "/mlb-preview", "/nba-preview", "/wnba-preview",
     "/mlb/weather", "/api/mlb/weather",
     "/mlb/intel", "/mlb/intel-preview", "/mlb/matchup-history",
-    "/mlb/results", "/mlb/stadiums", "/mlb/teams", "/mlb/leaderboards",
+    "/mlb/results", "/mlb/stadiums", "/mlb/teams", "/mlb/leaderboards", "/mlb/players",
     "/sitemap.xml", "/robots.txt",
     "/sitemap_mlb_players.xml",
     "/sitemap_mlb_games.xml",

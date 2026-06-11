@@ -133,9 +133,20 @@ def graded_dates(output_dir):
     return sorted(_archive(output_dir).keys(), reverse=True)
 
 
+# Dates with fewer graded rows than this still render, but stay out of the
+# sitemap so Google isn't pointed at thin pages (partially-graded blackout
+# tail dates with only 1-6 rows).
+SITEMAP_MIN_GRADED_ROWS = 12
+
+
 def leaderboards_sitemap_entries(output_dir):
+    archive = _archive(output_dir)
     entries = [("/mlb/leaderboards", "daily", "0.7", None)]
     for day in graded_dates(output_dir):
+        slate = archive.get(day, {})
+        rows = len(slate.get("hitters", [])) + len(slate.get("pitchers", []))
+        if rows < SITEMAP_MIN_GRADED_ROWS:
+            continue
         entries.append((f"/mlb/leaderboards/{day}", "monthly", "0.6", day))
     return entries
 
@@ -365,7 +376,10 @@ def build_date_body(day, output_dir, data_dir, site_origin):
 # Routes
 # --------------------------------------------------------------------------
 
-def register_mlb_leaderboard_routes(flask_app, render_layout, output_dir, data_dir, site_origin):
+def register_mlb_leaderboard_routes(flask_app, render_layout, output_dir, data_dir, site_origin, render_subnav=None):
+    def _section_nav():
+        return render_subnav("/mlb/leaderboards") if render_subnav else None
+
     @flask_app.get("/mlb/leaderboards")
     def mlb_leaderboards_index():
         count = len(graded_dates(output_dir))
@@ -374,6 +388,7 @@ def register_mlb_leaderboard_routes(flask_app, render_layout, output_dir, data_d
             f"Daily leaderboards from {count} graded MLB slates — hits, home runs, total bases, RBI, and strikeouts.",
             build_index_body(output_dir, data_dir, site_origin),
             "/mlb/leaderboards",
+            _section_nav(),
             hero_kicker="MLB Leaderboard Archive",
             meta_description=("Daily MLB leaderboard archive from EdgeRanked AI: top hit, home run, "
                               "total bases, RBI, and strikeout performances for every graded slate. "
@@ -392,6 +407,7 @@ def register_mlb_leaderboard_routes(flask_app, render_layout, output_dir, data_d
             "Top graded performances from this slate: hits, home runs, total bases, RBI, and strikeouts.",
             build_date_body(day, output_dir, data_dir, site_origin),
             "/mlb/leaderboards",
+            _section_nav(),
             hero_kicker="MLB Leaderboard Archive",
             meta_description=(f"MLB leaderboards for {pretty}: top hit, home run, total bases, RBI, and "
                               "pitcher strikeout performances from graded actual results."),

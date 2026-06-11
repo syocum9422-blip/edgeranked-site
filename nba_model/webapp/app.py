@@ -3225,6 +3225,125 @@ def render_mlb_confidence_badge_caption(confidence):
     return f"Model confidence: {normalize_text(confidence) or 'Model View'}"
 
 
+def build_mlb_discovery_section():
+    """Public-content discovery cards for the /mlb hub — crawl entry points
+    into the permanent MLB content graph. Links only, no projection values."""
+    cards = [
+        ("MLB Teams", "/mlb/teams", "All 30 club profiles with tracked performance history and rosters."),
+        ("Player Directory", "/mlb/players", "Every tracked MLB player profile, A–Z — game logs and trends."),
+        ("Daily Leaderboards", "/mlb/leaderboards", "Top graded performances for every tracked slate, archived daily."),
+        ("Results Archive", "/mlb/results", "Permanent day-by-day record of graded model results."),
+        ("Stadium Guide", "/mlb/stadiums", "Ballpark intelligence for all 30 MLB stadiums."),
+        ("Weather Center", "/mlb/weather", "Today's MLB weather conditions for every ballpark."),
+    ]
+    card_html = "".join(
+        "<article class='metric-card'>"
+        f"<div class='metric-label'>Explore</div>"
+        f"<div class='metric-value' style='font-size:20px'><a href='{href}'>{escape(label)}</a></div>"
+        f"<p class='metric-caption'>{escape(caption)}</p>"
+        "</article>"
+        for label, href, caption in cards
+    )
+    team_links = " · ".join(
+        f"<a href='/mlb/team/{t['slug']}'>{escape(t['name'])}</a>" for t in mlb_teams.TEAMS
+    )
+    return (
+        "<section class='panel'>"
+        "<div class='panel-head'><div><div class='eyebrow'>Free MLB Coverage</div>"
+        "<h2>Explore MLB Intelligence</h2></div>"
+        "<p class='muted'>Permanent, free research pages — player histories, team trends, leaderboards, and graded results.</p></div>"
+        f"<div class='metric-grid'>{card_html}</div>"
+        "</section>"
+        "<section class='panel'>"
+        "<div class='panel-head'><div><div class='eyebrow'>Teams</div>"
+        "<h2>Browse All 30 MLB Teams</h2></div>"
+        "<p class='muted'>Team profiles include tracked offensive history, strikeout tendencies, and player directories.</p></div>"
+        f"<p style='line-height:2.1'>{team_links}</p>"
+        "</section>"
+    )
+
+
+def build_mlb_players_index_page():
+    """Permanent A–Z directory of every known MLB player page."""
+    try:
+        tracked = mlb_player_history.sitemap_players(
+            MLB_FILES["hitter_tracking"], MLB_FILES["pitcher_tracking"]
+        )
+    except Exception:
+        tracked = []
+    players = {slug: name for slug, name, _ in tracked}
+    payload = build_mlb_player_projection_profiles()
+    for record in payload.get("records", []):
+        name = normalize_text(record.get("player"))
+        slug = slugify_player_name(name)
+        if slug and slug not in players:
+            players[slug] = name
+
+    def last_name_initial(name):
+        parts = [p for p in name.split() if p]
+        token = parts[-1] if parts else name
+        for ch in unicodedata.normalize("NFKD", token).upper():
+            if "A" <= ch <= "Z":
+                return ch
+        return "#"
+
+    groups = {}
+    for slug, name in players.items():
+        groups.setdefault(last_name_initial(name), []).append((name, slug))
+
+    body_parts = [
+        mlb_player_history.PAGE_STYLE,
+        "<section class='panel'><div class='panel-head'><div>"
+        "<div class='eyebrow'>MLB Players</div><h2>MLB Player Directory — A to Z</h2></div>"
+        f"<p class='muted'>{len(players)} permanent player profiles with tracked game logs, "
+        "trends, and graded outcome history. Grouped by last name.</p></div>"
+        "<p class='muted'><a href='/mlb/teams'>Browse by team</a> · "
+        "<a href='/mlb/leaderboards'>Daily leaderboards</a> · "
+        "<a href='/mlb/results'>Results archive</a></p></section>",
+    ]
+    for letter in sorted(groups):
+        entries = sorted(groups[letter], key=lambda item: item[0].split()[-1])
+        links = " · ".join(f"<a href='/mlb/player/{slug}'>{escape(name)}</a>" for name, slug in entries)
+        body_parts.append(
+            "<section class='panel'><div class='panel-head'><div>"
+            f"<div class='eyebrow'>{escape(letter)}</div><h2>{escape(letter)}</h2></div>"
+            f"<p class='muted'>{len(entries)} players</p></div>"
+            f"<p style='line-height:2.1'>{links}</p></section>"
+        )
+    json_ld = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "CollectionPage",
+                "name": "MLB Player Directory",
+                "url": f"{SITE_ORIGIN}/mlb/players",
+                "description": "A-Z directory of every tracked MLB player profile on EdgeRanked AI.",
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{SITE_ORIGIN}/"},
+                    {"@type": "ListItem", "position": 2, "name": "MLB", "item": f"{SITE_ORIGIN}/mlb"},
+                    {"@type": "ListItem", "position": 3, "name": "Players", "item": f"{SITE_ORIGIN}/mlb/players"},
+                ],
+            },
+        ],
+    }
+    body_parts.append(f"<script type='application/ld+json'>{json.dumps(json_ld)}</script>")
+
+    return render_layout(
+        "MLB Player Directory",
+        f"{len(players)} permanent MLB player profiles, A to Z — game logs, trends, and tracked outcomes.",
+        "".join(body_parts),
+        "/mlb/players",
+        render_mlb_nav("/mlb/players"),
+        hero_kicker="MLB Players",
+        meta_description=("A-Z directory of every tracked MLB player on EdgeRanked AI: permanent profiles "
+                          "with game logs, recent form, rolling trends, and graded outcome history."),
+        document_title="MLB Player Directory A-Z | EdgeRanked AI",
+    )
+
+
 def build_mlb_players_sitemap():
     """Every known MLB player: tracked history inventory + today's slate.
 
@@ -10197,13 +10316,14 @@ def build_preview_page(sport_key, active_route=None):
         + "</section>"
         + "<section class='panel'><div class='panel-head'><div><div class='eyebrow'>Live Samples</div><h2>What looks interesting</h2></div></div>" + sample_cards + "</section>"
         + "<section class='panel preview-board-footer'><div class='panel-head'><div><div class='eyebrow'>Premium Board</div><h2>Full slate lives behind the board</h2></div><p class='muted'>Open the premium view for filters, sortable tables, and every current projection.</p></div>" + render_page_actions(cta_actions.get(sport_key, [])) + "</section>"
+        + (build_mlb_discovery_section() if sport_key == "mlb" else "")
         + "</div>"
     )
     # /mlb and /mlb-preview serve identical content; consolidate both onto the
     # primary hub URL (/mlb, /nba, /wnba) so Google indexes the hub, not the
     # duplicate preview path.
     hub_path = "/" + sport_key
-    return render_layout(spec["heading"], spec["description"], body, route, None, hero_kicker="Slate Preview", canonical_path=hub_path)
+    return render_layout(spec["heading"], spec["description"], body, route, None, hero_kicker="Slate Preview", canonical_path=hub_path, meta_description=spec.get("description"))
 
 
 def build_nba_home():
@@ -12560,6 +12680,10 @@ def build_internal_mlb_learning_page():
 
 # Primary, publicly indexable URLs (paths only). Preview/duplicate paths are
 # intentionally excluded because they canonicalize onto these hubs.
+# Stable lastmod for evergreen/static sitemap entries (last substantive
+# content change). Bump when legal/static page content actually changes.
+SITEMAP_EVERGREEN_LASTMOD = "2026-06-08"
+
 SITEMAP_STATIC_PATHS = [
     ("/", "daily", "1.0"),
     ("/mlb", "daily", "0.9"),
@@ -12570,6 +12694,7 @@ SITEMAP_STATIC_PATHS = [
     ("/soccer", "daily", "0.8"),
     ("/mlb/weather", "daily", "0.6"),
     ("/mlb/intel", "daily", "0.6"),
+    ("/mlb/players", "daily", "0.7"),
     ("/results", "daily", "0.7"),
     ("/accuracy", "daily", "0.7"),
     ("/accuracy/mlb", "daily", "0.6"),
@@ -12609,7 +12734,9 @@ def build_master_sitemap():
     for path, changefreq, priority in SITEMAP_STATIC_PATHS:
         url_el = ET.SubElement(urlset, "url")
         ET.SubElement(url_el, "loc").text = f"{SITE_ORIGIN}{path}"
-        ET.SubElement(url_el, "lastmod").text = today
+        # Daily-changing hubs legitimately change every day; slow-changing
+        # pages get a stable lastmod so Google keeps trusting the field.
+        ET.SubElement(url_el, "lastmod").text = today if changefreq == "daily" else SITEMAP_EVERGREEN_LASTMOD
         ET.SubElement(url_el, "changefreq").text = changefreq
         ET.SubElement(url_el, "priority").text = priority
 
@@ -12626,11 +12753,12 @@ def build_master_sitemap():
         pass  # never let archive enumeration break the core sitemap
 
     # MLB Stadium Intelligence: index + 30 evergreen ballpark pages.
+    # Static curated content — stable lastmod, not "today".
     try:
         for path, changefreq, priority in mlb_stadiums.stadiums_sitemap_entries():
             url_el = ET.SubElement(urlset, "url")
             ET.SubElement(url_el, "loc").text = f"{SITE_ORIGIN}{path}"
-            ET.SubElement(url_el, "lastmod").text = today
+            ET.SubElement(url_el, "lastmod").text = SITEMAP_EVERGREEN_LASTMOD
             ET.SubElement(url_el, "changefreq").text = changefreq
             ET.SubElement(url_el, "priority").text = priority
     except Exception:
@@ -12638,10 +12766,10 @@ def build_master_sitemap():
 
     # MLB Teams: index + 30 team pages + 30 team strikeout pages.
     try:
-        for path, changefreq, priority in mlb_teams.teams_sitemap_entries():
+        for path, changefreq, priority, lastmod in mlb_teams.teams_sitemap_entries(MLB_OUTPUT_DIR):
             url_el = ET.SubElement(urlset, "url")
             ET.SubElement(url_el, "loc").text = f"{SITE_ORIGIN}{path}"
-            ET.SubElement(url_el, "lastmod").text = today
+            ET.SubElement(url_el, "lastmod").text = lastmod or today
             ET.SubElement(url_el, "changefreq").text = changefreq
             ET.SubElement(url_el, "priority").text = priority
     except Exception:
@@ -12983,17 +13111,20 @@ a{color:#60a5fa!important}
     )
 
     mlb_results_archive.register_mlb_results_routes(
-        flask_app, render_layout, MLB_OUTPUT_DIR, SITE_ORIGIN
+        flask_app, render_layout, MLB_OUTPUT_DIR, SITE_ORIGIN,
+        render_subnav=render_mlb_nav,
     )
 
     mlb_stadiums.register_mlb_stadium_routes(flask_app, render_layout, SITE_ORIGIN)
 
     mlb_teams.register_mlb_team_routes(
-        flask_app, render_layout, MLB_OUTPUT_DIR, MLB_DATA_DIR, SITE_ORIGIN
+        flask_app, render_layout, MLB_OUTPUT_DIR, MLB_DATA_DIR, SITE_ORIGIN,
+        render_subnav=render_mlb_nav,
     )
 
     mlb_leaderboards.register_mlb_leaderboard_routes(
-        flask_app, render_layout, MLB_OUTPUT_DIR, MLB_DATA_DIR, SITE_ORIGIN
+        flask_app, render_layout, MLB_OUTPUT_DIR, MLB_DATA_DIR, SITE_ORIGIN,
+        render_subnav=render_mlb_nav,
     )
 
     accuracy_views.register_accuracy_routes(flask_app, render_layout, MLB_OUTPUT_DIR)
@@ -13022,6 +13153,10 @@ a{color:#60a5fa!important}
     @flask_app.get("/api/mlb/player-projections")
     def mlb_player_projections_api():
         return jsonify(json_ready(seo_tiers.public_profiles_payload(build_mlb_player_projection_profiles())))
+
+    @flask_app.get("/mlb/players")
+    def mlb_players_index():
+        return build_mlb_players_index_page()
 
     @flask_app.get("/mlb/player/<player_slug>")
     def mlb_player_profile_page(player_slug):

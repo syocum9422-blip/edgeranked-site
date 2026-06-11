@@ -28,9 +28,18 @@ from __future__ import annotations
 
 import json
 import re
+import unicodedata
 from html import escape
 
 from flask import abort
+
+
+def _team_page_slug(team_name: str) -> str:
+    # Same slug scheme as mlb_teams.TEAMS (slugified full team name); computed
+    # locally because mlb_teams imports this module.
+    text = unicodedata.normalize("NFKD", str(team_name or "").strip())
+    ascii_text = text.encode("ascii", "ignore").decode("ascii").lower().replace("'", "")
+    return re.sub(r"[^a-z0-9]+", "-", ascii_text).strip("-")
 
 # --- Stadium dataset --------------------------------------------------------
 # Fields per record:
@@ -576,8 +585,14 @@ def render_stadium_body(site_origin: str, s: dict) -> str:
         (f"{s['elevation']:,} ft", "Elevation"), (s["roof"], "Roof"), (s["tz"], "Time Zone"),
     ]
     facts_html = "".join(f"<div class='st-fact'><div class='v'>{escape(v)}</div><div class='l'>{escape(l)}</div></div>" for v, l in facts)
+    team_slug = _team_page_slug(s["team"])
+    team_line = (
+        f"<p class='st-prose'>Home of the <a href='/mlb/team/{team_slug}'>{escape(s['team'])}</a> — "
+        f"see the <a href='/mlb/team/{team_slug}'>team profile</a> and "
+        f"<a href='/mlb/team/{team_slug}/strikeouts'>strikeout tendencies</a>.</p>"
+    )
     sec1 = _panel("Overview", f"{s['name']} Overview",
-                  f"<div class='st-facts'>{facts_html}</div><p class='st-prose'>{escape(overview_paragraph(s))}</p>")
+                  f"<div class='st-facts'>{facts_html}</div><p class='st-prose'>{escape(overview_paragraph(s))}</p>" + team_line)
 
     # Section 2 — dimensions
     dim_order = [("Left Field", d["lf"]), ("Left-Center", d["lc"]), ("Center Field", d["cf"]),
@@ -627,10 +642,11 @@ def render_stadium_body(site_origin: str, s: dict) -> str:
 
     # Section 8 — related resources
     related = ("<div class='st-related'>"
-               "<a href='/mlb/projections'>MLB Projections</a>"
+               f"<a href='/mlb/team/{team_slug}'>{escape(s['team'])} Team Profile</a>"
+               f"<a href='/mlb/team/{team_slug}/strikeouts'>{escape(s['team'])} Strikeouts</a>"
+               "<a href='/mlb/teams'>All MLB Teams</a>"
                "<a href='/mlb/weather'>MLB Weather</a>"
                "<a href='/mlb/results'>MLB Results Archive</a>"
-               "<a href='/mlb/intel'>MLB Intel</a>"
                "<a href='/mlb'>MLB Home</a>"
                "<a href='/mlb/stadiums'>All Stadiums</a>"
                "</div>")

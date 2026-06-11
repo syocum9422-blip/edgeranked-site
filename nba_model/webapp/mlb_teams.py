@@ -296,6 +296,9 @@ def build_team_index_body(site_origin):
         "<p class='muted'>Permanent profiles for all 30 MLB clubs: tracked offensive "
         "history, strikeout tendencies, rosters with player profile links, and home "
         "ballpark intelligence. Updated as graded results are recorded.</p>"
+        "<p class='muted'><a href='/mlb/players'>Browse the full A–Z player directory</a> · "
+        "<a href='/mlb/leaderboards'>Daily leaderboards</a> · "
+        "<a href='/mlb/stadiums'>Stadium guide</a></p>"
     )
     parts.append(render_panel("MLB Teams", "All 30 MLB Team Profiles", intro))
     order = ["AL East", "AL Central", "AL West", "NL East", "NL Central", "NL West"]
@@ -583,15 +586,29 @@ def build_team_strikeout_body(team, output_dir, data_dir, site_origin):
 # Routes + sitemap
 # --------------------------------------------------------------------------
 
-def teams_sitemap_entries():
-    entries = [("/mlb/teams", "weekly", "0.8")]
+def teams_sitemap_entries(output_dir=None):
+    """(path, changefreq, priority, lastmod). lastmod is the latest graded
+    tracking date — team content only changes when new results are graded."""
+    lastmod = None
+    if output_dir is not None:
+        try:
+            _, lastmod = all_player_histories(
+                Path(output_dir) / "hitter_tracking.csv",
+                Path(output_dir) / "pitcher_tracking.csv",
+            )
+        except Exception:
+            lastmod = None
+    entries = [("/mlb/teams", "weekly", "0.8", lastmod)]
     for team in TEAMS:
-        entries.append((f"/mlb/team/{team['slug']}", "daily", "0.7"))
-        entries.append((f"/mlb/team/{team['slug']}/strikeouts", "daily", "0.7"))
+        entries.append((f"/mlb/team/{team['slug']}", "daily", "0.7", lastmod))
+        entries.append((f"/mlb/team/{team['slug']}/strikeouts", "daily", "0.7", lastmod))
     return entries
 
 
-def register_mlb_team_routes(flask_app, render_layout, output_dir, data_dir, site_origin):
+def register_mlb_team_routes(flask_app, render_layout, output_dir, data_dir, site_origin, render_subnav=None):
+    def _section_nav():
+        return render_subnav("/mlb/teams") if render_subnav else None
+
     @flask_app.get("/mlb/teams")
     def mlb_teams_index():
         return render_layout(
@@ -599,6 +616,7 @@ def register_mlb_team_routes(flask_app, render_layout, output_dir, data_dir, sit
             "Permanent profiles, tracked performance history, and strikeout tendencies for all 30 MLB clubs.",
             build_team_index_body(site_origin),
             "/mlb/teams",
+            _section_nav(),
             hero_kicker="MLB Teams",
             meta_description=("All 30 MLB team profiles on EdgeRanked AI: tracked offensive history, "
                               "strikeout tendencies, rosters with player links, and ballpark intelligence."),
@@ -615,6 +633,7 @@ def register_mlb_team_routes(flask_app, render_layout, output_dir, data_dir, sit
             f"{team['division']} · {team['stadium_name']} · Tracked performance history",
             build_team_body(team, output_dir, data_dir, site_origin),
             "/mlb/teams",
+            _section_nav(),
             hero_kicker="MLB Team Profile",
             meta_description=(f"{team['name']} team profile on EdgeRanked AI: tracked offensive history, "
                               f"recent form, team leaders, roster player profiles, and {team['stadium_name']} context."),
@@ -631,6 +650,7 @@ def register_mlb_team_routes(flask_app, render_layout, output_dir, data_dir, sit
             f"{team['division']} · Lineup strikeout rates, trends, and tracked history",
             build_team_strikeout_body(team, output_dir, data_dir, site_origin),
             "/mlb/teams",
+            _section_nav(),
             hero_kicker="Team Strikeout Profile",
             meta_description=(f"How often do the {team['name']} strike out? Season batting K%, MLB rank, "
                               "recent strikeout trends, rolling metrics, and tracked game-by-game history."),

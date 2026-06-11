@@ -28,6 +28,12 @@ from pathlib import Path
 import pandas as pd
 from flask import abort
 
+from nba_model.webapp import mlb_teams as _mlb_teams
+from nba_model.webapp.mlb_player_history import (
+    all_player_histories as _all_player_histories,
+    slugify_player_name as _slugify,
+)
+
 HITTER_FILE = "hitter_tracking.csv"
 PITCHER_FILE = "pitcher_tracking.csv"
 SUMMARY_FILE = "daily_betting_summary.csv"
@@ -336,7 +342,32 @@ def _hit_badge(ok: bool, yes: str, no: str) -> str:
     return f"<span class='ra-badge {cls}'>{escape(yes if ok else no)}</span>"
 
 
-def render_daily_body(site_origin: str, slate: dict, prev_date, next_date) -> str:
+def known_player_slugs(output_dir: Path) -> frozenset:
+    """Slugs of every player with a permanent profile page (cached upstream)."""
+    try:
+        index, _ = _all_player_histories(output_dir / HITTER_FILE, output_dir / PITCHER_FILE)
+        return frozenset(index.keys())
+    except Exception:
+        return frozenset()
+
+
+def _player_link(name, known_slugs) -> str:
+    name = str(name or "").strip()
+    slug = _slugify(name)
+    if name and slug in known_slugs:
+        return f"<a href='/mlb/player/{slug}'>{escape(name)}</a>"
+    return escape(name or "—")
+
+
+def _team_link(team_name) -> str:
+    team = str(team_name or "").strip()
+    info = _mlb_teams.BY_NAME.get(team)
+    if info:
+        return f"<a href='/mlb/team/{info['slug']}'>{escape(team)}</a>"
+    return escape(team or "—")
+
+
+def render_daily_body(site_origin: str, slate: dict, prev_date, next_date, known_slugs=frozenset()) -> str:
     s = slate["summary"]
     date_str = s["date"]
     pretty = s["pretty_date"]
@@ -360,9 +391,9 @@ def render_daily_body(site_origin: str, slate: dict, prev_date, next_date) -> st
         rows = "".join(
             "<tr>"
             f"<td class='ra-rank'>#{r['rank']}</td>"
-            f"<td>{escape(r['player'])}</td>"
-            f"<td>{escape(r['team'])}</td>"
-            f"<td>vs {escape(r['matchup'])}</td>"
+            f"<td>{_player_link(r['player'], known_slugs)}</td>"
+            f"<td>{_team_link(r['team'])}</td>"
+            f"<td>vs {_player_link(r['matchup'], known_slugs)}</td>"
             f"<td>{_fmt(r['hr_prob'], 1, '%')}</td>"
             f"<td>{_hit_badge(r['homered'], 'Home Run', 'No Home Run')}</td>"
             "</tr>"
@@ -380,8 +411,8 @@ def render_daily_body(site_origin: str, slate: dict, prev_date, next_date) -> st
     if slate["k_results"]:
         rows = "".join(
             "<tr>"
-            f"<td>{escape(r['pitcher'])}</td>"
-            f"<td>{escape(r['opponent'])}</td>"
+            f"<td>{_player_link(r['pitcher'], known_slugs)}</td>"
+            f"<td>{_team_link(r['opponent'])}</td>"
             f"<td>{_fmt(r['projected'])}</td>"
             f"<td>{_fmt(r['actual'], 0)}</td>"
             f"<td>{_fmt_signed(r['diff'])}</td>"
@@ -401,9 +432,9 @@ def render_daily_body(site_origin: str, slate: dict, prev_date, next_date) -> st
     if slate["hit_results"]:
         rows = "".join(
             "<tr>"
-            f"<td>{escape(r['player'])}</td>"
-            f"<td>{escape(r['team'])}</td>"
-            f"<td>vs {escape(r['matchup'])}</td>"
+            f"<td>{_player_link(r['player'], known_slugs)}</td>"
+            f"<td>{_team_link(r['team'])}</td>"
+            f"<td>vs {_player_link(r['matchup'], known_slugs)}</td>"
             f"<td>{_fmt(r['hit_prob'], 1, '%')}</td>"
             f"<td>{_hit_badge(r['got_hit'], 'Hit', 'No Hit')}</td>"
             "</tr>"
@@ -421,13 +452,13 @@ def render_daily_body(site_origin: str, slate: dict, prev_date, next_date) -> st
     h = slate["highlights"]
     cols = []
     if h["top_hr"]:
-        items = "".join(f"<li>{escape(x['player'])} — {_fmt(x['hr_prob'], 1, '%')} HR probability</li>" for x in h["top_hr"])
+        items = "".join(f"<li>{_player_link(x['player'], known_slugs)} — {_fmt(x['hr_prob'], 1, '%')} HR probability</li>" for x in h["top_hr"])
         cols.append(f"<div class='ra-highlight'><h4>Top Home Run Calls</h4><ul>{items}</ul></div>")
     if h["top_k"]:
-        items = "".join(f"<li>{escape(x['pitcher'])} — proj {_fmt(x['projected'])}, recorded {_fmt(x['actual'], 0)}</li>" for x in h["top_k"])
+        items = "".join(f"<li>{_player_link(x['pitcher'], known_slugs)} — proj {_fmt(x['projected'])}, recorded {_fmt(x['actual'], 0)}</li>" for x in h["top_k"])
         cols.append(f"<div class='ra-highlight'><h4>Top Strikeout Calls</h4><ul>{items}</ul></div>")
     if h["surprises"]:
-        items = "".join(f"<li>{escape(x['name'])} — proj {_fmt(x['projected'])}, recorded {_fmt(x['actual'], 0)}</li>" for x in h["surprises"])
+        items = "".join(f"<li>{_player_link(x['name'], known_slugs)} — proj {_fmt(x['projected'])}, recorded {_fmt(x['actual'], 0)}</li>" for x in h["surprises"])
         cols.append(f"<div class='ra-highlight'><h4>Biggest Surprises</h4><ul>{items}</ul></div>")
     best_html = ""
     if h["best"]:
@@ -454,9 +485,11 @@ def render_daily_body(site_origin: str, slate: dict, prev_date, next_date) -> st
     related = ("<section class='panel'><div class='panel-head'><div>"
                "<div class='eyebrow'>Explore More</div><h2>Related MLB Pages</h2></div></div>"
                "<div class='ra-related'>"
+               f"<a href='/mlb/leaderboards/{date_str}'>Leaderboards for {escape(pretty)}</a>"
+               "<a href='/mlb/teams'>MLB Teams</a>"
+               "<a href='/mlb/players'>All MLB Players</a>"
                "<a href='/mlb/projections'>MLB Projections</a>"
                "<a href='/mlb/weather'>MLB Weather</a>"
-               "<a href='/mlb/intel'>MLB Intel</a>"
                "<a href='/mlb'>MLB Home</a>"
                "</div></section>")
 
@@ -565,9 +598,12 @@ def results_sitemap_entries(output_dir: Path) -> list[tuple[str, str, str, str]]
 # --- route registration -----------------------------------------------------
 
 
-def register_mlb_results_routes(flask_app, render_layout, output_dir, site_origin):
+def register_mlb_results_routes(flask_app, render_layout, output_dir, site_origin, render_subnav=None):
     """Install /mlb/results and /mlb/results/<date> on the host Flask app."""
     output_dir = Path(output_dir)
+
+    def _section_nav():
+        return render_subnav("/mlb/results") if render_subnav else None
 
     @flask_app.get("/mlb/results")
     def mlb_results_hub():
@@ -578,6 +614,7 @@ def register_mlb_results_routes(flask_app, render_layout, output_dir, site_origi
             "Daily, transparent MLB model results — home run threats, strikeout projections, and hit probability outcomes.",
             body,
             "/mlb/results",
+            _section_nav(),
             meta_description="Browse EdgeRanked AI's MLB Results Archive: a permanent, day-by-day record of home run threat, strikeout, and hit probability model outcomes for every graded slate.",
             document_title="MLB Results Archive | EdgeRanked AI",
             hero_kicker="MLB",
@@ -596,12 +633,16 @@ def register_mlb_results_routes(flask_app, render_layout, output_dir, site_origi
         idx = dates.index(date_str)
         prev_date = dates[idx + 1] if idx + 1 < len(dates) else None  # older
         next_date = dates[idx - 1] if idx - 1 >= 0 else None  # newer
-        body = render_daily_body(site_origin, slate, prev_date, next_date)
+        body = render_daily_body(
+            site_origin, slate, prev_date, next_date,
+            known_slugs=known_player_slugs(output_dir),
+        )
         return render_layout(
             f"MLB Model Results — {pretty}",
             "Home run threat, strikeout, and hit probability results for this MLB slate.",
             body,
             "/mlb/results",
+            _section_nav(),
             meta_description=(f"EdgeRanked AI MLB model results for {pretty}: top home run threats, pitcher "
                               f"strikeout projections versus actuals, and hit probability outcomes with graded results."),
             document_title=f"MLB Results — {pretty} | EdgeRanked AI",
