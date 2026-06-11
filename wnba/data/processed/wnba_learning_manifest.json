@@ -11,8 +11,8 @@
     "/home/ubuntu/EdgeRanked/sports/wnba/learning/errors/projection_errors.csv"
   ],
   "games_graded": 30,
-  "generated_at": "2026-06-11T07:33:12.268495-04:00",
-  "history_rows": 1415,
+  "generated_at": "2026-06-11T14:02:28.361805-04:00",
+  "history_rows": 1423,
   "last_graded_date": "2026-06-10",
   "log_loss": null,
   "minutes_error_rows": 808,
