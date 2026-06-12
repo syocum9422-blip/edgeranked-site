@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import math
 import os
+import unicodedata
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Tuple
 
@@ -89,7 +90,10 @@ def safe_read_csv(path: Path, required: bool = False, logger: Optional[logging.L
 def canonicalize_name(value: object) -> str:
     if pd.isna(value):
         return ""
-    return " ".join(str(value).replace(".", " ").replace(",", " ").lower().split())
+    # Fold diacritics so e.g. PrizePicks "Juškaitė" matches ESPN "Juskaite" — every feed
+    # builds player_key through this function at load time, so folding stays consistent.
+    text = unicodedata.normalize("NFKD", str(value)).encode("ascii", "ignore").decode("ascii")
+    return " ".join(text.replace(".", " ").replace(",", " ").lower().split())
 
 
 def standardize_team_abbrev(value: object) -> str:

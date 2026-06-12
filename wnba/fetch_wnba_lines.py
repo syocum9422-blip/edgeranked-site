@@ -228,7 +228,7 @@ def extract_rows(payload):
     return df
 
 
-def filter_and_normalize(df):
+def filter_and_normalize(df, logger=None):
     """Filter to today's slate and normalize stat names."""
     if df.empty:
         return df
@@ -237,6 +237,21 @@ def filter_and_normalize(df):
     df = df.dropna(subset=["player_name", "stat", "line"])
     df["player_name"] = df["player_name"].astype(str).str.strip()
     df["stat"] = df["stat"].astype(str).str.strip().str.lower()
+
+    # Two-player combo props ("A + B") are a separate PrizePicks market, not players.
+    # Left in the feed they pollute the coverage audit and trigger history backfills
+    # for phantom names. Park them in their own file for possible future pricing.
+    combo_mask = df["player_name"].str.contains(r" \+ ", regex=True)
+    if combo_mask.any():
+        combos = df[combo_mask]
+        combo_path = RAW_SPORTSBOOK_LINES_PATH.parent / "wnba_combo_lines_raw.csv"
+        combos.to_csv(combo_path, index=False)
+        if logger:
+            logger.info(
+                "Separated %d two-player combo lines (%d names) to %s",
+                len(combos), combos["player_name"].nunique(), combo_path,
+            )
+        df = df[~combo_mask]
 
     if df.empty:
         return df
@@ -307,6 +322,24 @@ def write_lines(df, source_mode, logger):
     df = df[columns]
     df.to_csv(RAW_SPORTSBOOK_LINES_PATH, index=False)
     logger.info("Wrote %d lines to %s [source=%s]", len(df), RAW_SPORTSBOOK_LINES_PATH, source_mode)
+    append_line_snapshot(df, logger)
+
+
+def append_line_snapshot(df, logger):
+    """Append this fetch to the day's line-snapshot file so intraday line movement,
+    pulled lines, and stale prices are observable downstream (Phase 8)."""
+    try:
+        snapshot_dir = RAW_SPORTSBOOK_LINES_PATH.parent / "line_snapshots"
+        snapshot_dir.mkdir(parents=True, exist_ok=True)
+        et_day = datetime.now(EASTERN).strftime("%Y%m%d")
+        snapshot_path = snapshot_dir / f"wnba_lines_snapshots_{et_day}.csv"
+        snap = df.copy()
+        snap["snapshot_at"] = datetime.now(timezone.utc).isoformat()
+        snap.to_csv(snapshot_path, mode="a", header=not snapshot_path.exists(), index=False)
+        logger.info("Appended %d lines to snapshot %s", len(snap), snapshot_path)
+    except Exception as exc:
+        # Snapshots are observability, never a reason to fail the fetch.
+        logger.warning("Could not append line snapshot: %s", exc)
 
 
 def main():
@@ -329,7 +362,7 @@ def main():
     try:
         payload, is_off_season = fetch_prizepicks_payload()
         raw_df = extract_rows(payload)
-        filtered_df = filter_and_normalize(raw_df)
+        filtered_df = filter_and_normalize(raw_df, logger)
 
         if filtered_df.empty:
             logger.warning("PrizePicks returned no usable WNBA projection rows (off-season or API issue)")

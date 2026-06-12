@@ -16,6 +16,7 @@ from wnba_model_config import (
     CANONICAL_SPORTSBOOK_LINES_PATH,
     MATCH_AUDIT_PATH,
     PROJECTIONS_PATH,
+    RAW_SPORTSBOOK_LINES_PATH,
     SIMULATION_DETAIL_PATH,
     STAT_ALIASES,
     UNMATCHED_PLAYERS_PATH,
@@ -84,10 +85,97 @@ BEST_BET_COLUMNS = [
     "actual_value",
     "bet_result",
     "bet_quality_score",
+    "line_open",
+    "line_move",
+    "line_pulled",
     "empty_state_reason",
     "candidate_count",
     "qualified_count",
 ]
+
+LINE_SNAPSHOT_STAT_MAP = {
+    "pts": "points",
+    "reb": "rebounds",
+    "ast": "assists",
+    "3pm": "threes_made",
+    "fg3m": "threes_made",
+    "stl": "steals",
+    "blk": "blocks",
+}
+
+
+def load_line_movement_features(logger) -> pd.DataFrame:
+    """Per (player_key, stat) intraday line state from today's snapshot file (Phase 8):
+    opening line, latest line, movement, and whether the line is still in the most
+    recent fetch (a pulled line usually means a started game or a late scratch)."""
+    columns = ["player_key", "stat", "line_open", "line_latest", "line_move", "line_pulled"]
+    snapshot_dir = RAW_SPORTSBOOK_LINES_PATH.parent / "line_snapshots"
+    et_day = today_timestamp().strftime("%Y%m%d")
+    snapshot_path = snapshot_dir / f"wnba_lines_snapshots_{et_day}.csv"
+    if not snapshot_path.exists():
+        candidates = sorted(snapshot_dir.glob("wnba_lines_snapshots_*.csv")) if snapshot_dir.exists() else []
+        if not candidates:
+            logger.info("No line snapshot file yet (%s); movement features skipped.", snapshot_path)
+            return pd.DataFrame(columns=columns)
+        snapshot_path = candidates[-1]
+    try:
+        snaps = pd.read_csv(snapshot_path)
+    except Exception as exc:
+        logger.warning("Could not read line snapshots %s: %s", snapshot_path, exc)
+        return pd.DataFrame(columns=columns)
+    if snaps.empty or "snapshot_at" not in snaps.columns:
+        return pd.DataFrame(columns=columns)
+
+    snaps["player_key"] = snaps["player_name"].map(canonicalize_name)
+    snaps["stat"] = snaps["stat"].astype(str).str.strip().str.lower().replace(LINE_SNAPSHOT_STAT_MAP)
+    snaps["line"] = pd.to_numeric(snaps["line"], errors="coerce")
+    snaps = snaps.dropna(subset=["player_key", "stat", "line", "snapshot_at"])
+    if snaps.empty:
+        return pd.DataFrame(columns=columns)
+
+    latest_batch = snaps["snapshot_at"].max()
+    snaps = snaps.sort_values("snapshot_at")
+    grouped = snaps.groupby(["player_key", "stat"]).agg(
+        line_open=("line", "first"),
+        line_latest=("line", "last"),
+        last_seen=("snapshot_at", "max"),
+    ).reset_index()
+    grouped["line_move"] = grouped["line_latest"] - grouped["line_open"]
+    grouped["line_pulled"] = grouped["last_seen"] != latest_batch
+    moved = grouped[grouped["line_move"] != 0]
+    if len(moved):
+        logger.info(
+            "Line movement: %d of %d player-stat lines moved intraday; %d pulled from latest fetch.",
+            len(moved), len(grouped), int(grouped["line_pulled"].sum()),
+        )
+    return grouped[columns]
+
+
+def attach_line_movement(best_bets: pd.DataFrame, logger) -> pd.DataFrame:
+    """Annotate the board with movement features and drop bets whose line was pulled
+    from the latest fetch — those bets are not currently offered, so publishing them
+    only degrades the board. Removal-only: this can never add a bet."""
+    for column in ("line_open", "line_move", "line_pulled"):
+        if column not in best_bets.columns:
+            best_bets[column] = np.nan
+    if best_bets.empty or "player_name" not in best_bets.columns:
+        return best_bets
+    movement = load_line_movement_features(logger)
+    if movement.empty:
+        best_bets["line_pulled"] = False
+        return best_bets
+    best_bets = best_bets.drop(columns=["line_open", "line_move", "line_pulled"])
+    best_bets["_pk"] = best_bets["player_name"].map(canonicalize_name)
+    merged = best_bets.merge(
+        movement.rename(columns={"player_key": "_pk"}),
+        on=["_pk", "stat"],
+        how="left",
+    ).drop(columns=["_pk", "line_latest"], errors="ignore")
+    merged["line_pulled"] = merged["line_pulled"].fillna(False).astype(bool)
+    pulled = merged[merged["line_pulled"]]
+    for record in pulled[["player_name", "stat", "line"]].to_dict("records"):
+        logger.info("Dropping bet on pulled line: %(player_name)s %(stat)s %(line)s", record)
+    return merged[~merged["line_pulled"]].reset_index(drop=True)
 
 
 APP_STAT_NAMES = {stat: alias.upper() for stat, alias in STAT_ALIASES.items()}
@@ -726,6 +814,8 @@ def main() -> None:
     simulation_detail = pd.read_csv(SIMULATION_DETAIL_PATH)
     build_diagnostics(simulation_detail)
     best_bets = rank_bets(simulation_detail, logger)
+    if not best_bets.empty:
+        best_bets = attach_line_movement(best_bets, logger)
     if best_bets.empty:
         reason = "no_simulation_rows" if simulation_detail.empty else "no_candidates_met_edge_and_hit_rate_thresholds"
         best_bets = empty_state_best_bets(reason, len(simulation_detail), 0)
