@@ -1,11 +1,6 @@
 player_name,team,position,est_return_date,status,status_text,comment,fetched_at,_data_source,player_key
-Ashlon Jackson,CONNECTICUT SUN,G,Jun 13,day-to-day,Day-To-Day,,2026-06-12T18:01:22.187925+00:00,api:espn_injuries,ashlon jackson
-Aneesah Morrow,CONNECTICUT SUN,F,Jun 13,day-to-day,Day-To-Day,,2026-06-12T18:01:22.188056+00:00,api:espn_injuries,aneesah morrow
-Hailey Van Lith,CONNECTICUT SUN,G,Jun 13,day-to-day,Day-To-Day,,2026-06-12T18:01:22.188138+00:00,api:espn_injuries,hailey van lith
-Brittney Griner,CONNECTICUT SUN,C,Jun 13,day-to-day,Day-To-Day,,2026-06-12T18:01:22.188211+00:00,api:espn_injuries,brittney griner
-Sophie Cunningham,INDIANA FEVER,G,Jun 13,day-to-day,Day-To-Day,,2026-06-12T18:01:22.188361+00:00,api:espn_injuries,sophie cunningham
-Kate Martin,LOS ANGELES SPARKS,G,Jun 13,day-to-day,Day-To-Day,,2026-06-12T18:01:22.188499+00:00,api:espn_injuries,kate martin
-Marta Suarez,PHOENIX MERCURY,F,Jun 13,day-to-day,Day-To-Day,,2026-06-12T18:01:22.188633+00:00,api:espn_injuries,marta suarez
-Kiana Williams,PHOENIX MERCURY,G,Jun 13,day-to-day,Day-To-Day,,2026-06-12T18:01:22.188697+00:00,api:espn_injuries,kiana williams
-Nyara Sabally,TORONTO TEMPO,F,Jun 12,day-to-day,Day-To-Day,Jun 11: Sabally is questionable for Friday's game against the Mystics due to a right hamstring injury.,2026-06-12T18:01:22.188830+00:00,api:espn_injuries,nyara sabally
-Kiki Iriafen,WASHINGTON MYSTICS,F,Jun 12,day-to-day,Day-To-Day,Jun 11: Iriafen (ankle) is questionable for Friday's game against the Tempo.,2026-06-12T18:01:22.189167+00:00,api:espn_injuries,kiki iriafen
+Sophie Cunningham,INDIANA FEVER,G,Jun 13,day-to-day,Day-To-Day,,2026-06-12T22:31:23.834293+00:00,api:espn_injuries,sophie cunningham
+Kate Martin,LOS ANGELES SPARKS,G,Jun 13,day-to-day,Day-To-Day,,2026-06-12T22:31:23.834493+00:00,api:espn_injuries,kate martin
+Marta Suarez,PHOENIX MERCURY,F,Jun 13,day-to-day,Day-To-Day,,2026-06-12T22:31:23.834639+00:00,api:espn_injuries,marta suarez
+Kiana Williams,PHOENIX MERCURY,G,Jun 13,day-to-day,Day-To-Day,,2026-06-12T22:31:23.834707+00:00,api:espn_injuries,kiana williams
+Kiki Iriafen,WASHINGTON MYSTICS,F,Jun 12,day-to-day,Day-To-Day,Jun 11: Iriafen (ankle) is questionable for Friday's game against the Tempo.,2026-06-12T22:31:23.834845+00:00,api:espn_injuries,kiki iriafen

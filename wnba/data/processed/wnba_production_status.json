@@ -7,12 +7,12 @@
     "WAS"
   ],
   "error": "",
-  "excluded_players": 30,
+  "excluded_players": 36,
   "excluded_reasons": {
-    "excluded_not_on_canonical_slate": 30
+    "excluded_not_on_canonical_slate": 36
   },
-  "generated_at": "2026-06-12T14:02:21.470282-04:00",
-  "included_players": 18,
+  "generated_at": "2026-06-12T18:32:22.792642-04:00",
+  "included_players": 17,
   "message": "WNBA refresh passed.",
   "projected_teams": [
     "GSV",
