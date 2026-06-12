@@ -1,6 +1,7 @@
 player_name,team,position,est_return_date,status,status_text,comment,fetched_at,_data_source,player_key
-Sophie Cunningham,INDIANA FEVER,G,Jun 13,day-to-day,Day-To-Day,,2026-06-12T22:31:23.834293+00:00,api:espn_injuries,sophie cunningham
-Kate Martin,LOS ANGELES SPARKS,G,Jun 13,day-to-day,Day-To-Day,,2026-06-12T22:31:23.834493+00:00,api:espn_injuries,kate martin
-Marta Suarez,PHOENIX MERCURY,F,Jun 13,day-to-day,Day-To-Day,,2026-06-12T22:31:23.834639+00:00,api:espn_injuries,marta suarez
-Kiana Williams,PHOENIX MERCURY,G,Jun 13,day-to-day,Day-To-Day,,2026-06-12T22:31:23.834707+00:00,api:espn_injuries,kiana williams
-Kiki Iriafen,WASHINGTON MYSTICS,F,Jun 12,day-to-day,Day-To-Day,Jun 11: Iriafen (ankle) is questionable for Friday's game against the Tempo.,2026-06-12T22:31:23.834845+00:00,api:espn_injuries,kiki iriafen
+Sophie Cunningham,INDIANA FEVER,G,Jun 13,day-to-day,Day-To-Day,Jun 12: Cunningham (elbow) is probable  for Saturday's game against Connecticut.,2026-06-12T23:15:04.562606+00:00,api:espn_injuries,sophie cunningham
+Caitlin Clark,INDIANA FEVER,G,Jun 13,day-to-day,Day-To-Day,Jun 12: Clark (back) is listed as probable for Saturday's game against the Sun.,2026-06-12T23:15:04.562721+00:00,api:espn_injuries,caitlin clark
+Kate Martin,LOS ANGELES SPARKS,G,Jun 13,day-to-day,Day-To-Day,,2026-06-12T23:15:04.562882+00:00,api:espn_injuries,kate martin
+Marta Suarez,PHOENIX MERCURY,F,Jun 13,day-to-day,Day-To-Day,,2026-06-12T23:15:04.563027+00:00,api:espn_injuries,marta suarez
+Kiana Williams,PHOENIX MERCURY,G,Jun 13,day-to-day,Day-To-Day,,2026-06-12T23:15:04.563096+00:00,api:espn_injuries,kiana williams
+Kiki Iriafen,WASHINGTON MYSTICS,F,Jun 12,day-to-day,Day-To-Day,Jun 11: Iriafen (ankle) is questionable for Friday's game against the Tempo.,2026-06-12T23:15:04.563238+00:00,api:espn_injuries,kiki iriafen
