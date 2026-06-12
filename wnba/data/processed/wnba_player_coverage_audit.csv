@@ -1,5 +1,8 @@
 player_name,team,opponent,has_live_line,has_history,history_source,included,reason
+Aaliyah Edwards,CON,,True,True,csv,False,excluded_not_on_canonical_slate
+Diamond Miller,CON,,True,True,csv,False,excluded_not_on_canonical_slate
 Leila Lacan,CON,,True,True,csv,False,excluded_not_on_canonical_slate
+Saniya Rivers,CON,,True,True,csv,False,excluded_not_on_canonical_slate
 Arike Ogunbowale,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
 Azzi Fudd,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
 Jessica Shepard,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
@@ -17,7 +20,9 @@ Kelsey Plum,LAS,,True,True,csv,False,excluded_not_on_canonical_slate
 Nneka Ogwumike,LAS,,True,True,csv,False,excluded_not_on_canonical_slate
 A'ja Wilson,LVA,,True,True,csv,False,excluded_not_on_canonical_slate
 Chelsea Gray,LVA,,True,True,csv,False,excluded_not_on_canonical_slate
+Chennedy Carter,LVA,,True,True,csv,False,excluded_not_on_canonical_slate
 Jackie Young,LVA,,True,True,csv,False,excluded_not_on_canonical_slate
+NaLyssa Smith,LVA,,True,True,csv,False,excluded_not_on_canonical_slate
 Courtney Williams,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
 Kayla McBride,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
 Natasha Howard,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
