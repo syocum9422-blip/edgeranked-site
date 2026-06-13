@@ -1,4 +1,9 @@
 player_name,team,opponent,has_live_line,has_history,history_source,included,reason
+Allisha Gray,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
+Angel Reese,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
+Jordin Canada,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
+Naz Hillmon,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
+Rhyne Howard,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
 Aaliyah Edwards,CON,IND,True,True,csv,True,included
 Aneesah Morrow,CON,IND,True,True,csv,True,included
 Brittney Griner,CON,IND,True,True,csv,True,included
@@ -32,6 +37,7 @@ Nia Coffey,MIN,LVA,True,True,csv,True,included
 Olivia Miles,MIN,LVA,True,True,csv,True,included
 Breanna Stewart,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
 Jonquel Jones,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
+Satou Sabally,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
 Alyssa Thomas,PHX,LAS,True,True,csv,True,included
 DeWanna Bonner,PHX,LAS,True,True,csv,True,included
 Kahleah Copper,PHX,LAS,True,True,csv,True,included
@@ -42,5 +48,8 @@ Carla Leite,POR,DAL,True,True,csv,True,included
 Emily Engstler,POR,DAL,True,True,csv,True,included
 Megan Gustafson,POR,DAL,True,True,csv,True,included
 Sarah Ashlee Barker,POR,DAL,True,True,csv,True,included
+Brittney Sykes,TOR,,True,True,csv,False,excluded_not_on_canonical_slate
+Marina Mabrey,TOR,,True,True,csv,False,excluded_not_on_canonical_slate
+Michaela Onyenwere,WAS,,True,True,csv,False,excluded_not_on_canonical_slate
 Shakira Austin,WAS,,True,True,csv,False,excluded_not_on_canonical_slate
 Sonia Citron,WAS,,True,True,csv,False,excluded_not_on_canonical_slate
