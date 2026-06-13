@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-10T07:00:15.152880+00:00",
+  "generated_at": "2026-06-13T06:00:16.484530+00:00",
   "sport": "ufc",
   "event": {
     "name": "UFC Freedom 250",
@@ -1295,9 +1295,152 @@
       }
     },
     {
-      "fight_id": "b0bb0826b07e",
+      "fight_id": "7ef6b3551787",
       "card_position": 10,
       "card_label": "Card Position 10",
+      "fight_title": "Giga Chikadze vs Vinicius Oliveira",
+      "weight_class": "Featherweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Giga Chikadze",
+      "fighter_blue": "Vinicius Oliveira",
+      "predicted_winner": "Giga Chikadze",
+      "predicted_winner_pct": 60.2,
+      "confidence_tier": "competitive",
+      "win_probabilities": {
+        "red_pct": 60.2,
+        "blue_pct": 39.8
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 25.7,
+        "submission_pct": 9.2,
+        "decision_pct": 65.1,
+        "inside_distance_pct": 34.9
+      },
+      "totals": {
+        "over_1_5_pct": 83.8,
+        "under_1_5_pct": 16.2,
+        "over_2_5_pct": 69.3,
+        "under_2_5_pct": 30.7
+      },
+      "expectations": {
+        "fight_time_mins": 12.8527,
+        "red_takedowns": 0.1879,
+        "blue_takedowns": 1.3696
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 65.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 34.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 65.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 25.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 9.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Vinicius Oliveira win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 39.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Giga Chikadze win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 60.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 83.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 16.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 69.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 30.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "b0bb0826b07e",
+      "card_position": 11,
+      "card_label": "Card Position 11",
       "fight_title": "Hyder Amil vs Christian Rodriguez",
       "weight_class": "Featherweight",
       "scheduled_rounds": 3,
@@ -1439,8 +1582,8 @@
     },
     {
       "fight_id": "94058ebc4496",
-      "card_position": 11,
-      "card_label": "Card Position 11",
+      "card_position": 12,
+      "card_label": "Card Position 12",
       "fight_title": "Andre Lima vs Kevin Borjas",
       "weight_class": "Flyweight",
       "scheduled_rounds": 3,
@@ -1582,8 +1725,8 @@
     },
     {
       "fight_id": "6f2e518cebbd",
-      "card_position": 12,
-      "card_label": "Card Position 12",
+      "card_position": 13,
+      "card_label": "Card Position 13",
       "fight_title": "Melsik Baghdasaryan vs Murtazali Magomedov",
       "weight_class": "Featherweight",
       "scheduled_rounds": 3,
@@ -1725,8 +1868,8 @@
     },
     {
       "fight_id": "a5dd34c5ae47",
-      "card_position": 13,
-      "card_label": "Card Position 13",
+      "card_position": 14,
+      "card_label": "Card Position 14",
       "fight_title": "Bia Mesquita vs Melissa Mullins",
       "weight_class": "Women's Bantamweight",
       "scheduled_rounds": 3,
@@ -1867,9 +2010,152 @@
       }
     },
     {
+      "fight_id": "4555581ae6f5",
+      "card_position": 15,
+      "card_label": "Card Position 15",
+      "fight_title": "Jhonata Diniz vs Jose Montanha",
+      "weight_class": "Heavyweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Jhonata Diniz",
+      "fighter_blue": "Jose Montanha",
+      "predicted_winner": "Jhonata Diniz",
+      "predicted_winner_pct": 69.5,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 69.5,
+        "blue_pct": 30.5
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 28.4,
+        "submission_pct": 7.8,
+        "decision_pct": 63.8,
+        "inside_distance_pct": 36.2
+      },
+      "totals": {
+        "over_1_5_pct": 84.5,
+        "under_1_5_pct": 15.5,
+        "over_2_5_pct": 70.3,
+        "under_2_5_pct": 29.7
+      },
+      "expectations": {
+        "fight_time_mins": 12.6911,
+        "red_takedowns": 0.6136,
+        "blue_takedowns": 1.2734
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 63.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 36.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 63.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 28.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 7.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Jose Montanha win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 30.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Jhonata Diniz win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 69.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 84.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 15.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 70.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 29.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
       "fight_id": "af184c9a4edf",
-      "card_position": 14,
-      "card_label": "Card Position 14",
+      "card_position": 16,
+      "card_label": "Card Position 16",
       "fight_title": "Allan Nascimento vs Mitch Raposo",
       "weight_class": "Flyweight",
       "scheduled_rounds": 3,
@@ -2011,8 +2297,8 @@
     },
     {
       "fight_id": "075133e4f0dc",
-      "card_position": 15,
-      "card_label": "Card Position 15",
+      "card_position": 17,
+      "card_label": "Card Position 17",
       "fight_title": "Gaston Bolanos vs Michael Aswell Jr.",
       "weight_class": "Featherweight",
       "scheduled_rounds": 3,
@@ -2154,8 +2440,8 @@
     },
     {
       "fight_id": "9cbe88ab1302",
-      "card_position": 16,
-      "card_label": "Card Position 16",
+      "card_position": 18,
+      "card_label": "Card Position 18",
       "fight_title": "Karol Rosa vs Luana Santos",
       "weight_class": "Women's Bantamweight",
       "scheduled_rounds": 3,
@@ -2288,292 +2574,6 @@
             "selection": "under",
             "line": 2.5,
             "probability_pct": 44.8,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ]
-      }
-    },
-    {
-      "fight_id": "4555581ae6f5",
-      "card_position": 17,
-      "card_label": "Card Position 17",
-      "fight_title": "Jhonata Diniz vs Jose Montanha",
-      "weight_class": "Heavyweight",
-      "scheduled_rounds": 3,
-      "fighter_red": "Jhonata Diniz",
-      "fighter_blue": "Jose Montanha",
-      "predicted_winner": "Jhonata Diniz",
-      "predicted_winner_pct": 69.5,
-      "confidence_tier": "medium",
-      "win_probabilities": {
-        "red_pct": 69.5,
-        "blue_pct": 30.5
-      },
-      "method_probabilities": {
-        "ko_tko_pct": 28.4,
-        "submission_pct": 7.8,
-        "decision_pct": 63.8,
-        "inside_distance_pct": 36.2
-      },
-      "totals": {
-        "over_1_5_pct": 84.5,
-        "under_1_5_pct": 15.5,
-        "over_2_5_pct": 70.3,
-        "under_2_5_pct": 29.7
-      },
-      "expectations": {
-        "fight_time_mins": 12.6911,
-        "red_takedowns": 0.6136,
-        "blue_takedowns": 1.2734
-      },
-      "prop_probabilities": {
-        "inside_distance": [
-          {
-            "label": "Fight goes to decision",
-            "selection": "no",
-            "line": null,
-            "probability_pct": 63.8,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Fight ends inside distance",
-            "selection": "yes",
-            "line": null,
-            "probability_pct": 36.2,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ],
-        "method": [
-          {
-            "label": "Win by Decision",
-            "selection": "decision",
-            "line": null,
-            "probability_pct": 63.8,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Win by KO/TKO",
-            "selection": "ko_tko",
-            "line": null,
-            "probability_pct": 28.4,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Win by Submission",
-            "selection": "submission",
-            "line": null,
-            "probability_pct": 7.8,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ],
-        "moneyline": [
-          {
-            "label": "Jose Montanha win",
-            "selection": "blue",
-            "line": null,
-            "probability_pct": 30.5,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Jhonata Diniz win",
-            "selection": "red",
-            "line": null,
-            "probability_pct": 69.5,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ],
-        "total_rounds": [
-          {
-            "label": "Over 1.5 rounds",
-            "selection": "over",
-            "line": 1.5,
-            "probability_pct": 84.5,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Under 1.5 rounds",
-            "selection": "under",
-            "line": 1.5,
-            "probability_pct": 15.5,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Over 2.5 rounds",
-            "selection": "over",
-            "line": 2.5,
-            "probability_pct": 70.3,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Under 2.5 rounds",
-            "selection": "under",
-            "line": 2.5,
-            "probability_pct": 29.7,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ]
-      }
-    },
-    {
-      "fight_id": "7ef6b3551787",
-      "card_position": 18,
-      "card_label": "Card Position 18",
-      "fight_title": "Giga Chikadze vs Vinicius Oliveira",
-      "weight_class": "Featherweight",
-      "scheduled_rounds": 3,
-      "fighter_red": "Giga Chikadze",
-      "fighter_blue": "Vinicius Oliveira",
-      "predicted_winner": "Giga Chikadze",
-      "predicted_winner_pct": 60.2,
-      "confidence_tier": "competitive",
-      "win_probabilities": {
-        "red_pct": 60.2,
-        "blue_pct": 39.8
-      },
-      "method_probabilities": {
-        "ko_tko_pct": 25.7,
-        "submission_pct": 9.2,
-        "decision_pct": 65.1,
-        "inside_distance_pct": 34.9
-      },
-      "totals": {
-        "over_1_5_pct": 83.8,
-        "under_1_5_pct": 16.2,
-        "over_2_5_pct": 69.3,
-        "under_2_5_pct": 30.7
-      },
-      "expectations": {
-        "fight_time_mins": 12.8527,
-        "red_takedowns": 0.1879,
-        "blue_takedowns": 1.3696
-      },
-      "prop_probabilities": {
-        "inside_distance": [
-          {
-            "label": "Fight goes to decision",
-            "selection": "no",
-            "line": null,
-            "probability_pct": 65.1,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Fight ends inside distance",
-            "selection": "yes",
-            "line": null,
-            "probability_pct": 34.9,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ],
-        "method": [
-          {
-            "label": "Win by Decision",
-            "selection": "decision",
-            "line": null,
-            "probability_pct": 65.1,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Win by KO/TKO",
-            "selection": "ko_tko",
-            "line": null,
-            "probability_pct": 25.7,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Win by Submission",
-            "selection": "submission",
-            "line": null,
-            "probability_pct": 9.2,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ],
-        "moneyline": [
-          {
-            "label": "Vinicius Oliveira win",
-            "selection": "blue",
-            "line": null,
-            "probability_pct": 39.8,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Giga Chikadze win",
-            "selection": "red",
-            "line": null,
-            "probability_pct": 60.2,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ],
-        "total_rounds": [
-          {
-            "label": "Over 1.5 rounds",
-            "selection": "over",
-            "line": 1.5,
-            "probability_pct": 83.8,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Under 1.5 rounds",
-            "selection": "under",
-            "line": 1.5,
-            "probability_pct": 16.2,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Over 2.5 rounds",
-            "selection": "over",
-            "line": 2.5,
-            "probability_pct": 69.3,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Under 2.5 rounds",
-            "selection": "under",
-            "line": 2.5,
-            "probability_pct": 30.7,
             "source": "simulation",
             "projection_player": null,
             "projection_opponent": null

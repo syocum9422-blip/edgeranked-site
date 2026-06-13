@@ -98,6 +98,17 @@ dc02d6ce620e,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Ion Cutelaba,Navajo 
 dc02d6ce620e,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Ion Cutelaba,Navajo Stirling,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7273393088184871
 dc02d6ce620e,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Ion Cutelaba,Navajo Stirling,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.45906812805511227
 dc02d6ce620e,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Ion Cutelaba,Navajo Stirling,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5409318719448877
+7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,moneyline,Giga Chikadze win,red,,0.6020775354981328
+7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,moneyline,Vinicius Oliveira win,blue,,0.3979224645018672
+7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,inside_distance,Fight ends inside distance,yes,,0.34885744153129156
+7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,inside_distance,Fight goes to decision,no,,0.6511425584687085
+7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,method,Win by KO/TKO,ko_tko,,0.2570940389115608
+7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,method,Win by Submission,submission,,0.09176340261973077
+7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,method,Win by Decision,decision,,0.6511425584687085
+7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.16217057649042996
+7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.83782942350957
+7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.30741355877476556
+7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6925864412252345
 b0bb0826b07e,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Hyder Amil,Christian Rodriguez,simulation,,,moneyline,Hyder Amil win,red,,0.6795917537404356
 b0bb0826b07e,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Hyder Amil,Christian Rodriguez,simulation,,,moneyline,Christian Rodriguez win,blue,,0.32040824625956443
 b0bb0826b07e,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Hyder Amil,Christian Rodriguez,simulation,,,inside_distance,Fight ends inside distance,yes,,0.35339016630407427
@@ -142,6 +153,17 @@ a5dd34c5ae47,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Bia Mesquita,Melissa
 a5dd34c5ae47,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Bia Mesquita,Melissa Mullins,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.38317615486591794
 a5dd34c5ae47,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Bia Mesquita,Melissa Mullins,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.7191074950968879
 a5dd34c5ae47,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Bia Mesquita,Melissa Mullins,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.28089250490311213
+4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,moneyline,Jhonata Diniz win,red,,0.6947720782384994
+4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,moneyline,Jose Montanha win,blue,,0.3052279217615006
+4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3620810334414434
+4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,inside_distance,Fight goes to decision,no,,0.6379189665585566
+4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,method,Win by KO/TKO,ko_tko,,0.2838057278268895
+4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,method,Win by Submission,submission,,0.07827530561455384
+4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,method,Win by Decision,decision,,0.6379189665585566
+4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.15520289664221426
+4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.8447971033577857
+4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.2965188638363138
+4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.7034811361636861
 af184c9a4edf,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Allan Nascimento,Mitch Raposo,simulation,,,moneyline,Allan Nascimento win,red,,0.736421040793905
 af184c9a4edf,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Allan Nascimento,Mitch Raposo,simulation,,,moneyline,Mitch Raposo win,blue,,0.263578959206095
 af184c9a4edf,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Allan Nascimento,Mitch Raposo,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5328244874721884
@@ -175,28 +197,6 @@ af184c9a4edf,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Allan Nascimento,Mit
 9cbe88ab1302,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Karol Rosa,Luana Santos,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7457613467263776
 9cbe88ab1302,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Karol Rosa,Luana Santos,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4482675106387922
 9cbe88ab1302,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Karol Rosa,Luana Santos,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5517324893612078
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,moneyline,Jhonata Diniz win,red,,0.6947720782384994
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,moneyline,Jose Montanha win,blue,,0.3052279217615006
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3620810334414434
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,inside_distance,Fight goes to decision,no,,0.6379189665585566
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,method,Win by KO/TKO,ko_tko,,0.2838057278268895
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,method,Win by Submission,submission,,0.07827530561455384
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,method,Win by Decision,decision,,0.6379189665585566
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.15520289664221426
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.8447971033577857
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.2965188638363138
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.7034811361636861
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,moneyline,Giga Chikadze win,red,,0.6020775354981328
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,moneyline,Vinicius Oliveira win,blue,,0.3979224645018672
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,inside_distance,Fight ends inside distance,yes,,0.34885744153129156
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,inside_distance,Fight goes to decision,no,,0.6511425584687085
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,method,Win by KO/TKO,ko_tko,,0.2570940389115608
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,method,Win by Submission,submission,,0.09176340261973077
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,method,Win by Decision,decision,,0.6511425584687085
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.16217057649042996
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.83782942350957
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.30741355877476556
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6925864412252345
 20e1c2f6d30d,UFC Fight Night: Fiziev vs. Torres,2026-06-27,Rafael Fiziev,Manuel Torres,simulation,,,moneyline,Rafael Fiziev win,red,,0.5932701938958451
 20e1c2f6d30d,UFC Fight Night: Fiziev vs. Torres,2026-06-27,Rafael Fiziev,Manuel Torres,simulation,,,moneyline,Manuel Torres win,blue,,0.4067298061041549
 20e1c2f6d30d,UFC Fight Night: Fiziev vs. Torres,2026-06-27,Rafael Fiziev,Manuel Torres,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4676227805486694
