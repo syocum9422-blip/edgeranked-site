@@ -1,3 +1,5 @@
 home_team,away_team,game_id,start_time_utc,start_time,game_date_et,included_reason,game_date,_data_source
-SEA,GSV,401856985,2026-06-13T02:00Z,2026-06-13T02:00Z,2026-06-12,start_time_within_et_day,2026-06-12,api:espn
-WAS,TOR,401856984,2026-06-12T23:30Z,2026-06-12T23:30Z,2026-06-12,start_time_within_et_day,2026-06-12,api:espn
+POR,DAL,401856988,2026-06-14T00:30Z,2026-06-14T00:30Z,2026-06-13,start_time_within_et_day,2026-06-13,api:espn
+CON,IND,401856986,2026-06-13T22:00Z,2026-06-13T22:00Z,2026-06-13,start_time_within_et_day,2026-06-13,api:espn
+PHX,LAS,401856989,2026-06-14T02:00Z,2026-06-14T02:00Z,2026-06-13,start_time_within_et_day,2026-06-13,api:espn
+LVA,MIN,401856987,2026-06-14T00:00Z,2026-06-14T00:00Z,2026-06-13,start_time_within_et_day,2026-06-13,api:espn
