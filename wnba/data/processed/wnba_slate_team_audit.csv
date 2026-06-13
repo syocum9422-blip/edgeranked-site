@@ -1,8 +1,8 @@
 team,source_schedule,source_prizepicks,included,reason
 ATL,False,True,False,excluded_not_on_canonical_slate
-CON,True,True,True,scheduled_and_live_prizepicks
+CON,True,False,True,scheduled
 DAL,True,True,True,scheduled_and_live_prizepicks
-IND,True,True,True,scheduled_and_live_prizepicks
+IND,True,False,True,scheduled
 LAS,True,True,True,scheduled_and_live_prizepicks
 LVA,True,True,True,scheduled_and_live_prizepicks
 MIN,True,True,True,scheduled_and_live_prizepicks
