@@ -1,12 +1,12 @@
 team,source_schedule,source_prizepicks,included,reason
-ATL,True,True,True,scheduled_and_live_prizepicks
+ATL,True,False,True,scheduled
 DAL,False,True,False,excluded_not_on_canonical_slate
 GSV,False,True,False,excluded_not_on_canonical_slate
 IND,False,True,False,excluded_not_on_canonical_slate
 LAS,False,True,False,excluded_not_on_canonical_slate
 LVA,False,True,False,excluded_not_on_canonical_slate
 MIN,False,True,False,excluded_not_on_canonical_slate
-NYL,True,True,True,scheduled_and_live_prizepicks
+NYL,True,False,True,scheduled
 POR,False,True,False,excluded_not_on_canonical_slate
-TOR,True,True,True,scheduled_and_live_prizepicks
-WAS,True,True,True,scheduled_and_live_prizepicks
+TOR,True,False,True,scheduled
+WAS,True,False,True,scheduled

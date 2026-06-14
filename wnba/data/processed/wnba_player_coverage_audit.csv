@@ -1,9 +1,4 @@
 player_name,team,opponent,has_live_line,has_history,history_source,included,reason
-Allisha Gray,ATL,TOR,True,True,csv,True,included
-Angel Reese,ATL,TOR,True,True,csv,True,included
-Jordin Canada,ATL,TOR,True,True,csv,True,included
-Naz Hillmon,ATL,TOR,True,True,csv,True,included
-Rhyne Howard,ATL,TOR,True,True,csv,True,included
 Arike Ogunbowale,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
 Azzi Fudd,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
 Jessica Shepard,DAL,,True,True,csv,False,excluded_not_on_canonical_slate
@@ -30,22 +25,8 @@ Courtney Williams,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
 Kayla McBride,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
 Natasha Howard,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
 Olivia Miles,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
-Breanna Stewart,NYL,WAS,True,True,csv,True,included
-Jonquel Jones,NYL,WAS,True,True,csv,True,included
-Leonie Fiebich,NYL,WAS,True,True,csv,True,included
-Marine Johannes,NYL,WAS,True,True,csv,True,included
-Pauline Astier,NYL,WAS,True,True,csv,True,included
-Sabrina Ionescu,NYL,WAS,True,True,csv,True,included
-Satou Sabally,NYL,WAS,True,True,csv,True,included
 Bridget Carleton,POR,,True,True,csv,False,excluded_not_on_canonical_slate
 Carla Leite,POR,,True,True,csv,False,excluded_not_on_canonical_slate
 Emily Engstler,POR,,True,True,csv,False,excluded_not_on_canonical_slate
 Megan Gustafson,POR,,True,True,csv,False,excluded_not_on_canonical_slate
 Sarah Ashlee Barker,POR,,True,True,csv,False,excluded_not_on_canonical_slate
-Brittney Sykes,TOR,ATL,True,True,csv,True,included
-Julie Allemand,TOR,ATL,True,True,csv,True,included
-Marina Mabrey,TOR,ATL,True,True,csv,True,included
-Lauren Betts,WAS,NYL,True,True,csv,True,included
-Michaela Onyenwere,WAS,NYL,True,True,csv,True,included
-Shakira Austin,WAS,NYL,True,True,csv,True,included
-Sonia Citron,WAS,NYL,True,True,csv,True,included
