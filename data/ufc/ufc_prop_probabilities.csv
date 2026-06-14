@@ -98,17 +98,17 @@ dc02d6ce620e,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Ion Cutelaba,Navajo 
 dc02d6ce620e,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Ion Cutelaba,Navajo Stirling,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7273393088184871
 dc02d6ce620e,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Ion Cutelaba,Navajo Stirling,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.45906812805511227
 dc02d6ce620e,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Ion Cutelaba,Navajo Stirling,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5409318719448877
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,moneyline,Giga Chikadze win,red,,0.6020775354981328
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,moneyline,Vinicius Oliveira win,blue,,0.3979224645018672
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,inside_distance,Fight ends inside distance,yes,,0.34885744153129156
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,inside_distance,Fight goes to decision,no,,0.6511425584687085
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,method,Win by KO/TKO,ko_tko,,0.2570940389115608
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,method,Win by Submission,submission,,0.09176340261973077
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,method,Win by Decision,decision,,0.6511425584687085
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.16217057649042996
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.83782942350957
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.30741355877476556
-7ef6b3551787,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Giga Chikadze,Vinicius Oliveira,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6925864412252345
+821ba49e2bde,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Vinicius Oliveira,Andre Fili,simulation,,,moneyline,Vinicius Oliveira win,red,,0.8248180843787296
+821ba49e2bde,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Vinicius Oliveira,Andre Fili,simulation,,,moneyline,Andre Fili win,blue,,0.1751819156212704
+821ba49e2bde,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Vinicius Oliveira,Andre Fili,simulation,,,inside_distance,Fight ends inside distance,yes,,0.36594193936191666
+821ba49e2bde,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Vinicius Oliveira,Andre Fili,simulation,,,inside_distance,Fight goes to decision,no,,0.6340580606380833
+821ba49e2bde,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Vinicius Oliveira,Andre Fili,simulation,,,method,Win by KO/TKO,ko_tko,,0.2566783654281612
+821ba49e2bde,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Vinicius Oliveira,Andre Fili,simulation,,,method,Win by Submission,submission,,0.10926357393375544
+821ba49e2bde,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Vinicius Oliveira,Andre Fili,simulation,,,method,Win by Decision,decision,,0.6340580606380833
+821ba49e2bde,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Vinicius Oliveira,Andre Fili,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.21836261216308783
+821ba49e2bde,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Vinicius Oliveira,Andre Fili,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7816373878369122
+821ba49e2bde,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Vinicius Oliveira,Andre Fili,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3438941424231929
+821ba49e2bde,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Vinicius Oliveira,Andre Fili,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6561058575768071
 b0bb0826b07e,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Hyder Amil,Christian Rodriguez,simulation,,,moneyline,Hyder Amil win,red,,0.6795917537404356
 b0bb0826b07e,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Hyder Amil,Christian Rodriguez,simulation,,,moneyline,Christian Rodriguez win,blue,,0.32040824625956443
 b0bb0826b07e,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Hyder Amil,Christian Rodriguez,simulation,,,inside_distance,Fight ends inside distance,yes,,0.35339016630407427
@@ -197,6 +197,28 @@ af184c9a4edf,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Allan Nascimento,Mit
 9cbe88ab1302,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Karol Rosa,Luana Santos,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7457613467263776
 9cbe88ab1302,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Karol Rosa,Luana Santos,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4482675106387922
 9cbe88ab1302,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Karol Rosa,Luana Santos,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5517324893612078
+46484bd6c1bb,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Leon Shahbazyan,Levan Chokheli,simulation,,,moneyline,Leon Shahbazyan win,red,,0.7290062152162007
+46484bd6c1bb,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Leon Shahbazyan,Levan Chokheli,simulation,,,moneyline,Levan Chokheli win,blue,,0.2709937847837993
+46484bd6c1bb,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Leon Shahbazyan,Levan Chokheli,simulation,,,inside_distance,Fight ends inside distance,yes,,0.36663677750188917
+46484bd6c1bb,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Leon Shahbazyan,Levan Chokheli,simulation,,,inside_distance,Fight goes to decision,no,,0.6333632224981108
+46484bd6c1bb,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Leon Shahbazyan,Levan Chokheli,simulation,,,method,Win by KO/TKO,ko_tko,,0.25184728513914245
+46484bd6c1bb,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Leon Shahbazyan,Levan Chokheli,simulation,,,method,Win by Submission,submission,,0.11478949236274673
+46484bd6c1bb,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Leon Shahbazyan,Levan Chokheli,simulation,,,method,Win by Decision,decision,,0.6333632224981108
+46484bd6c1bb,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Leon Shahbazyan,Levan Chokheli,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.21050034496056697
+46484bd6c1bb,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Leon Shahbazyan,Levan Chokheli,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7894996550394331
+46484bd6c1bb,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Leon Shahbazyan,Levan Chokheli,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.32519599176306163
+46484bd6c1bb,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Leon Shahbazyan,Levan Chokheli,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6748040082369384
+b26bc3c6826b,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Shane Collins,Otari Tanzilovi,simulation,,,moneyline,Shane Collins win,red,,0.7290062152162007
+b26bc3c6826b,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Shane Collins,Otari Tanzilovi,simulation,,,moneyline,Otari Tanzilovi win,blue,,0.2709937847837993
+b26bc3c6826b,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Shane Collins,Otari Tanzilovi,simulation,,,inside_distance,Fight ends inside distance,yes,,0.36663677750188917
+b26bc3c6826b,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Shane Collins,Otari Tanzilovi,simulation,,,inside_distance,Fight goes to decision,no,,0.6333632224981108
+b26bc3c6826b,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Shane Collins,Otari Tanzilovi,simulation,,,method,Win by KO/TKO,ko_tko,,0.25184728513914245
+b26bc3c6826b,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Shane Collins,Otari Tanzilovi,simulation,,,method,Win by Submission,submission,,0.11478949236274673
+b26bc3c6826b,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Shane Collins,Otari Tanzilovi,simulation,,,method,Win by Decision,decision,,0.6333632224981108
+b26bc3c6826b,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Shane Collins,Otari Tanzilovi,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.21050034496056697
+b26bc3c6826b,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Shane Collins,Otari Tanzilovi,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7894996550394331
+b26bc3c6826b,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Shane Collins,Otari Tanzilovi,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.32519599176306163
+b26bc3c6826b,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Shane Collins,Otari Tanzilovi,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6748040082369384
 20e1c2f6d30d,UFC Fight Night: Fiziev vs. Torres,2026-06-27,Rafael Fiziev,Manuel Torres,simulation,,,moneyline,Rafael Fiziev win,red,,0.5932701938958451
 20e1c2f6d30d,UFC Fight Night: Fiziev vs. Torres,2026-06-27,Rafael Fiziev,Manuel Torres,simulation,,,moneyline,Manuel Torres win,blue,,0.4067298061041549
 20e1c2f6d30d,UFC Fight Night: Fiziev vs. Torres,2026-06-27,Rafael Fiziev,Manuel Torres,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4676227805486694
