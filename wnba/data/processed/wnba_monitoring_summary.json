@@ -1,12 +1,12 @@
 {
   "actuals": {
     "completed_events_ingested": 76,
-    "latest_actual_date": "2026-06-12",
-    "player_rows_total": 10134,
+    "latest_actual_date": "2026-06-13",
+    "player_rows_total": 10234,
     "source": "api:espn_boxscore",
-    "team_rows_total": 288
+    "team_rows_total": 296
   },
-  "generated_at_utc": "2026-06-13T22:32:31+00:00",
+  "generated_at_utc": "2026-06-14T11:30:49+00:00",
   "healthy": true,
   "learning": {
     "accuracy": 0.5576451349141456,
@@ -21,7 +21,7 @@
   },
   "published": {
     "published_flag": "yes",
-    "source_output_modified_at_utc": "2026-06-13T22:32:25.459460+00:00",
+    "source_output_modified_at_utc": "2026-06-14T00:45:04.874470+00:00",
     "stale_output_blocked": "yes"
   },
   "slate_status": {
@@ -41,9 +41,9 @@
     },
     "best_bets": {
       "exists": true,
-      "modified_at_utc": "2026-06-13T22:32:25.459460+00:00",
+      "modified_at_utc": "2026-06-14T00:45:04.874470+00:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/wnba_best_bets_today.csv",
-      "size": 11021
+      "size": 10492
     },
     "production_status": "PASS",
     "projections": {
