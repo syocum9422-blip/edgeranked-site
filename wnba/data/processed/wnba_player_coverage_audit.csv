@@ -1,4 +1,6 @@
 player_name,team,opponent,has_live_line,has_history,history_source,included,reason
+Kamilla Cardoso,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
+Skylar Diggins,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
 Arike Ogunbowale,DAL,LVA,True,True,csv,True,included
 Azzi Fudd,DAL,LVA,True,True,csv,True,included
 Jessica Shepard,DAL,LVA,True,True,csv,True,included
@@ -28,6 +30,8 @@ Kayla McBride,MIN,POR,True,True,csv,True,included
 Natasha Howard,MIN,POR,True,True,csv,True,included
 Nia Coffey,MIN,POR,True,True,csv,True,included
 Olivia Miles,MIN,POR,True,True,csv,True,included
+Breanna Stewart,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
+Jonquel Jones,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
 Bridget Carleton,POR,MIN,True,True,csv,True,included
 Carla Leite,POR,MIN,True,True,csv,True,included
 Emily Engstler,POR,MIN,True,True,csv,True,included
@@ -35,3 +39,5 @@ Megan Gustafson,POR,MIN,True,True,csv,True,included
 Sarah Ashlee Barker,POR,MIN,True,True,csv,True,included
 Brittney Sykes,TOR,,True,True,csv,False,excluded_not_on_canonical_slate
 Marina Mabrey,TOR,,True,True,csv,False,excluded_not_on_canonical_slate
+Shakira Austin,WAS,,True,True,csv,False,excluded_not_on_canonical_slate
+Sonia Citron,WAS,,True,True,csv,False,excluded_not_on_canonical_slate
