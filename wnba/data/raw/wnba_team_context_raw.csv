@@ -295,3 +295,7 @@ game_date,team,opponent,pace,off_rating,def_rating,team_points,opp_points,team_r
 2026-06-13,POR,DAL,,,,84.0,83.0,32.0,26.0,14.0,api:espn_boxscore
 2026-06-13,LAS,PHX,,,,111.0,102.0,37.0,21.0,15.0,api:espn_boxscore
 2026-06-13,PHX,LAS,,,,102.0,111.0,38.0,26.0,13.0,api:espn_boxscore
+2026-06-14,NYL,WAS,,,,86.0,64.0,30.0,22.0,11.0,api:espn_boxscore
+2026-06-14,WAS,NYL,,,,64.0,86.0,32.0,17.0,7.0,api:espn_boxscore
+2026-06-14,ATL,TOR,,,,102.0,77.0,44.0,22.0,14.0,api:espn_boxscore
+2026-06-14,TOR,ATL,,,,77.0,102.0,24.0,23.0,9.0,api:espn_boxscore

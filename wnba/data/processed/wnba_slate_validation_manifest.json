@@ -1,37 +1,49 @@
 {
   "duplicate_games": [],
-  "expected_game_count": 2,
-  "generated_at": "2026-06-14T18:31:23.184394-04:00",
-  "generated_game_count": 2,
+  "expected_game_count": 3,
+  "generated_at": "2026-06-15T07:32:08.390690-04:00",
+  "generated_game_count": 3,
   "generated_games": [
     {
-      "away_team": "ATL",
-      "game_id": "401856991",
-      "home_team": "TOR",
-      "start_time_utc": "2026-06-14T19:00Z"
+      "away_team": "LVA",
+      "game_id": "401856992",
+      "home_team": "DAL",
+      "start_time_utc": "2026-06-16T00:00Z"
     },
     {
-      "away_team": "WAS",
-      "game_id": "401856990",
-      "home_team": "NYL",
-      "start_time_utc": "2026-06-14T19:00Z"
+      "away_team": "POR",
+      "game_id": "401856993",
+      "home_team": "MIN",
+      "start_time_utc": "2026-06-16T00:00Z"
+    },
+    {
+      "away_team": "LAS",
+      "game_id": "401856994",
+      "home_team": "GSV",
+      "start_time_utc": "2026-06-16T02:00Z"
     }
   ],
   "missing_games": [],
-  "slate_date": "2026-06-14",
+  "slate_date": "2026-06-15",
   "status": "PASS",
   "trusted_games": [
     {
-      "away_team": "ATL",
-      "game_id": "401856991",
-      "home_team": "TOR",
-      "start_time_utc": "2026-06-14T19:00Z"
+      "away_team": "LVA",
+      "game_id": "401856992",
+      "home_team": "DAL",
+      "start_time_utc": "2026-06-16T00:00Z"
     },
     {
-      "away_team": "WAS",
-      "game_id": "401856990",
-      "home_team": "NYL",
-      "start_time_utc": "2026-06-14T19:00Z"
+      "away_team": "POR",
+      "game_id": "401856993",
+      "home_team": "MIN",
+      "start_time_utc": "2026-06-16T00:00Z"
+    },
+    {
+      "away_team": "LAS",
+      "game_id": "401856994",
+      "home_team": "GSV",
+      "start_time_utc": "2026-06-16T02:00Z"
     }
   ],
   "trusted_source": "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard",
