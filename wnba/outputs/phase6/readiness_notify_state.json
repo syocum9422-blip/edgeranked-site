@@ -1,6 +1,6 @@
 {
-  "last_state": "INSUFFICIENT_DATA",
-  "last_observed_at": "2026-06-08T12:02:50.259478+00:00",
-  "last_notified_state": null,
-  "last_notified_at": null
+  "last_state": "HOLD",
+  "last_observed_at": "2026-06-15T12:03:03.539893+00:00",
+  "last_notified_state": "HOLD",
+  "last_notified_at": "2026-06-15T12:03:03.539956+00:00"
 }
