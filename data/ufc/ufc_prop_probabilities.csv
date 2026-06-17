@@ -1,81 +1,4 @@
 fight_id,event_name,event_date,fighter_red,fighter_blue,source,projection_player,projection_opponent,market_type,market_label,selection,line,probability
-174ba941e1e9,UFC Freedom 250,2026-06-14,Ilia Topuria,Justin Gaethje,simulation,,,moneyline,Ilia Topuria win,red,,0.7423965528061752
-174ba941e1e9,UFC Freedom 250,2026-06-14,Ilia Topuria,Justin Gaethje,simulation,,,moneyline,Justin Gaethje win,blue,,0.2576034471938248
-174ba941e1e9,UFC Freedom 250,2026-06-14,Ilia Topuria,Justin Gaethje,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5429056693107769
-174ba941e1e9,UFC Freedom 250,2026-06-14,Ilia Topuria,Justin Gaethje,simulation,,,inside_distance,Fight goes to decision,no,,0.4570943306892231
-174ba941e1e9,UFC Freedom 250,2026-06-14,Ilia Topuria,Justin Gaethje,simulation,,,method,Win by KO/TKO,ko_tko,,0.23612920521841552
-174ba941e1e9,UFC Freedom 250,2026-06-14,Ilia Topuria,Justin Gaethje,simulation,,,method,Win by Submission,submission,,0.30677646409236137
-174ba941e1e9,UFC Freedom 250,2026-06-14,Ilia Topuria,Justin Gaethje,simulation,,,method,Win by Decision,decision,,0.4570943306892231
-174ba941e1e9,UFC Freedom 250,2026-06-14,Ilia Topuria,Justin Gaethje,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.36871207533225625
-174ba941e1e9,UFC Freedom 250,2026-06-14,Ilia Topuria,Justin Gaethje,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6312879246677437
-174ba941e1e9,UFC Freedom 250,2026-06-14,Ilia Topuria,Justin Gaethje,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4735885419235017
-174ba941e1e9,UFC Freedom 250,2026-06-14,Ilia Topuria,Justin Gaethje,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5264114580764983
-5298e5e0a60d,UFC Freedom 250,2026-06-14,Alex Pereira,Ciryl Gane,simulation,,,moneyline,Alex Pereira win,red,,0.7519681078337017
-5298e5e0a60d,UFC Freedom 250,2026-06-14,Alex Pereira,Ciryl Gane,simulation,,,moneyline,Ciryl Gane win,blue,,0.24803189216629828
-5298e5e0a60d,UFC Freedom 250,2026-06-14,Alex Pereira,Ciryl Gane,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3976685850341771
-5298e5e0a60d,UFC Freedom 250,2026-06-14,Alex Pereira,Ciryl Gane,simulation,,,inside_distance,Fight goes to decision,no,,0.6023314149658229
-5298e5e0a60d,UFC Freedom 250,2026-06-14,Alex Pereira,Ciryl Gane,simulation,,,method,Win by KO/TKO,ko_tko,,0.22887706538058403
-5298e5e0a60d,UFC Freedom 250,2026-06-14,Alex Pereira,Ciryl Gane,simulation,,,method,Win by Submission,submission,,0.16879151965359313
-5298e5e0a60d,UFC Freedom 250,2026-06-14,Alex Pereira,Ciryl Gane,simulation,,,method,Win by Decision,decision,,0.6023314149658229
-5298e5e0a60d,UFC Freedom 250,2026-06-14,Alex Pereira,Ciryl Gane,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.21946372867751318
-5298e5e0a60d,UFC Freedom 250,2026-06-14,Alex Pereira,Ciryl Gane,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7805362713224868
-5298e5e0a60d,UFC Freedom 250,2026-06-14,Alex Pereira,Ciryl Gane,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.37030029272777004
-5298e5e0a60d,UFC Freedom 250,2026-06-14,Alex Pereira,Ciryl Gane,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6296997072722299
-93b6d0ca7a9c,UFC Freedom 250,2026-06-14,Sean O'Malley,Aiemann Zahabi,simulation,,,moneyline,Sean O'Malley win,red,,0.8139010890360765
-93b6d0ca7a9c,UFC Freedom 250,2026-06-14,Sean O'Malley,Aiemann Zahabi,simulation,,,moneyline,Aiemann Zahabi win,blue,,0.1860989109639235
-93b6d0ca7a9c,UFC Freedom 250,2026-06-14,Sean O'Malley,Aiemann Zahabi,simulation,,,inside_distance,Fight ends inside distance,yes,,0.428302506028372
-93b6d0ca7a9c,UFC Freedom 250,2026-06-14,Sean O'Malley,Aiemann Zahabi,simulation,,,inside_distance,Fight goes to decision,no,,0.571697493971628
-93b6d0ca7a9c,UFC Freedom 250,2026-06-14,Sean O'Malley,Aiemann Zahabi,simulation,,,method,Win by KO/TKO,ko_tko,,0.31174886760594256
-93b6d0ca7a9c,UFC Freedom 250,2026-06-14,Sean O'Malley,Aiemann Zahabi,simulation,,,method,Win by Submission,submission,,0.11655363842242943
-93b6d0ca7a9c,UFC Freedom 250,2026-06-14,Sean O'Malley,Aiemann Zahabi,simulation,,,method,Win by Decision,decision,,0.571697493971628
-93b6d0ca7a9c,UFC Freedom 250,2026-06-14,Sean O'Malley,Aiemann Zahabi,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.21462120184228003
-93b6d0ca7a9c,UFC Freedom 250,2026-06-14,Sean O'Malley,Aiemann Zahabi,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7853787981577199
-93b6d0ca7a9c,UFC Freedom 250,2026-06-14,Sean O'Malley,Aiemann Zahabi,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.377856439418608
-93b6d0ca7a9c,UFC Freedom 250,2026-06-14,Sean O'Malley,Aiemann Zahabi,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.622143560581392
-4fe79fd63f72,UFC Freedom 250,2026-06-14,Josh Hokit,Derrick Lewis,simulation,,,moneyline,Josh Hokit win,red,,0.7912703061974585
-4fe79fd63f72,UFC Freedom 250,2026-06-14,Josh Hokit,Derrick Lewis,simulation,,,moneyline,Derrick Lewis win,blue,,0.20872969380254147
-4fe79fd63f72,UFC Freedom 250,2026-06-14,Josh Hokit,Derrick Lewis,simulation,,,inside_distance,Fight ends inside distance,yes,,0.49331496988797985
-4fe79fd63f72,UFC Freedom 250,2026-06-14,Josh Hokit,Derrick Lewis,simulation,,,inside_distance,Fight goes to decision,no,,0.5066850301120202
-4fe79fd63f72,UFC Freedom 250,2026-06-14,Josh Hokit,Derrick Lewis,simulation,,,method,Win by KO/TKO,ko_tko,,0.3674205754842056
-4fe79fd63f72,UFC Freedom 250,2026-06-14,Josh Hokit,Derrick Lewis,simulation,,,method,Win by Submission,submission,,0.12589439440377426
-4fe79fd63f72,UFC Freedom 250,2026-06-14,Josh Hokit,Derrick Lewis,simulation,,,method,Win by Decision,decision,,0.5066850301120202
-4fe79fd63f72,UFC Freedom 250,2026-06-14,Josh Hokit,Derrick Lewis,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.4289320820244426
-4fe79fd63f72,UFC Freedom 250,2026-06-14,Josh Hokit,Derrick Lewis,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.5710679179755573
-4fe79fd63f72,UFC Freedom 250,2026-06-14,Josh Hokit,Derrick Lewis,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4659229888064012
-4fe79fd63f72,UFC Freedom 250,2026-06-14,Josh Hokit,Derrick Lewis,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5340770111935988
-f5e57e5647fc,UFC Freedom 250,2026-06-14,Mauricio Ruffy,Michael Chandler,simulation,,,moneyline,Mauricio Ruffy win,red,,0.7153422563249319
-f5e57e5647fc,UFC Freedom 250,2026-06-14,Mauricio Ruffy,Michael Chandler,simulation,,,moneyline,Michael Chandler win,blue,,0.28465774367506813
-f5e57e5647fc,UFC Freedom 250,2026-06-14,Mauricio Ruffy,Michael Chandler,simulation,,,inside_distance,Fight ends inside distance,yes,,0.31746425184115945
-f5e57e5647fc,UFC Freedom 250,2026-06-14,Mauricio Ruffy,Michael Chandler,simulation,,,inside_distance,Fight goes to decision,no,,0.6825357481588405
-f5e57e5647fc,UFC Freedom 250,2026-06-14,Mauricio Ruffy,Michael Chandler,simulation,,,method,Win by KO/TKO,ko_tko,,0.22186874977600518
-f5e57e5647fc,UFC Freedom 250,2026-06-14,Mauricio Ruffy,Michael Chandler,simulation,,,method,Win by Submission,submission,,0.09559550206515424
-f5e57e5647fc,UFC Freedom 250,2026-06-14,Mauricio Ruffy,Michael Chandler,simulation,,,method,Win by Decision,decision,,0.6825357481588405
-f5e57e5647fc,UFC Freedom 250,2026-06-14,Mauricio Ruffy,Michael Chandler,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.1742627265602958
-f5e57e5647fc,UFC Freedom 250,2026-06-14,Mauricio Ruffy,Michael Chandler,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.8257372734397042
-f5e57e5647fc,UFC Freedom 250,2026-06-14,Mauricio Ruffy,Michael Chandler,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.31412271784796125
-f5e57e5647fc,UFC Freedom 250,2026-06-14,Mauricio Ruffy,Michael Chandler,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6858772821520387
-0a00520d9348,UFC Freedom 250,2026-06-14,Bo Nickal,Kyle Daukaus,simulation,,,moneyline,Bo Nickal win,red,,0.863676625698098
-0a00520d9348,UFC Freedom 250,2026-06-14,Bo Nickal,Kyle Daukaus,simulation,,,moneyline,Kyle Daukaus win,blue,,0.136323374301902
-0a00520d9348,UFC Freedom 250,2026-06-14,Bo Nickal,Kyle Daukaus,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4442821606600873
-0a00520d9348,UFC Freedom 250,2026-06-14,Bo Nickal,Kyle Daukaus,simulation,,,inside_distance,Fight goes to decision,no,,0.5557178393399127
-0a00520d9348,UFC Freedom 250,2026-06-14,Bo Nickal,Kyle Daukaus,simulation,,,method,Win by KO/TKO,ko_tko,,0.2922399180019377
-0a00520d9348,UFC Freedom 250,2026-06-14,Bo Nickal,Kyle Daukaus,simulation,,,method,Win by Submission,submission,,0.1520422426581496
-0a00520d9348,UFC Freedom 250,2026-06-14,Bo Nickal,Kyle Daukaus,simulation,,,method,Win by Decision,decision,,0.5557178393399127
-0a00520d9348,UFC Freedom 250,2026-06-14,Bo Nickal,Kyle Daukaus,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.2784531926266013
-0a00520d9348,UFC Freedom 250,2026-06-14,Bo Nickal,Kyle Daukaus,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7215468073733987
-0a00520d9348,UFC Freedom 250,2026-06-14,Bo Nickal,Kyle Daukaus,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.40111600600326935
-0a00520d9348,UFC Freedom 250,2026-06-14,Bo Nickal,Kyle Daukaus,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5988839939967306
-8f7de25dba61,UFC Freedom 250,2026-06-14,Diego Lopes,Steve Garcia,simulation,,,moneyline,Diego Lopes win,red,,0.6598561512091163
-8f7de25dba61,UFC Freedom 250,2026-06-14,Diego Lopes,Steve Garcia,simulation,,,moneyline,Steve Garcia win,blue,,0.34014384879088366
-8f7de25dba61,UFC Freedom 250,2026-06-14,Diego Lopes,Steve Garcia,simulation,,,inside_distance,Fight ends inside distance,yes,,0.46026222421988167
-8f7de25dba61,UFC Freedom 250,2026-06-14,Diego Lopes,Steve Garcia,simulation,,,inside_distance,Fight goes to decision,no,,0.5397377757801183
-8f7de25dba61,UFC Freedom 250,2026-06-14,Diego Lopes,Steve Garcia,simulation,,,method,Win by KO/TKO,ko_tko,,0.21705210084291293
-8f7de25dba61,UFC Freedom 250,2026-06-14,Diego Lopes,Steve Garcia,simulation,,,method,Win by Submission,submission,,0.24321012337696873
-8f7de25dba61,UFC Freedom 250,2026-06-14,Diego Lopes,Steve Garcia,simulation,,,method,Win by Decision,decision,,0.5397377757801183
-8f7de25dba61,UFC Freedom 250,2026-06-14,Diego Lopes,Steve Garcia,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.28160176053248465
-8f7de25dba61,UFC Freedom 250,2026-06-14,Diego Lopes,Steve Garcia,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7183982394675154
-8f7de25dba61,UFC Freedom 250,2026-06-14,Diego Lopes,Steve Garcia,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.46658671798942086
-8f7de25dba61,UFC Freedom 250,2026-06-14,Diego Lopes,Steve Garcia,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5334132820105791
 3ed90fd59696,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Manel Kape,Kyoji Horiguchi,simulation,,,moneyline,Manel Kape win,red,,0.7747269376408592
 3ed90fd59696,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Manel Kape,Kyoji Horiguchi,simulation,,,moneyline,Kyoji Horiguchi win,blue,,0.2252730623591408
 3ed90fd59696,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Manel Kape,Kyoji Horiguchi,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3465990715229996
@@ -153,17 +76,6 @@ a5dd34c5ae47,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Bia Mesquita,Melissa
 a5dd34c5ae47,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Bia Mesquita,Melissa Mullins,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.38317615486591794
 a5dd34c5ae47,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Bia Mesquita,Melissa Mullins,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.7191074950968879
 a5dd34c5ae47,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Bia Mesquita,Melissa Mullins,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.28089250490311213
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,moneyline,Jhonata Diniz win,red,,0.6947720782384994
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,moneyline,Jose Montanha win,blue,,0.3052279217615006
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3620810334414434
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,inside_distance,Fight goes to decision,no,,0.6379189665585566
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,method,Win by KO/TKO,ko_tko,,0.2838057278268895
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,method,Win by Submission,submission,,0.07827530561455384
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,method,Win by Decision,decision,,0.6379189665585566
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.15520289664221426
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.8447971033577857
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.2965188638363138
-4555581ae6f5,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Jhonata Diniz,Jose Montanha,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.7034811361636861
 af184c9a4edf,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Allan Nascimento,Mitch Raposo,simulation,,,moneyline,Allan Nascimento win,red,,0.736421040793905
 af184c9a4edf,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Allan Nascimento,Mitch Raposo,simulation,,,moneyline,Mitch Raposo win,blue,,0.263578959206095
 af184c9a4edf,UFC Fight Night: Kape vs. Horiguchi,2026-06-20,Allan Nascimento,Mitch Raposo,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5328244874721884
