@@ -15,12 +15,14 @@ Aaliyah Edwards,CON,WAS,True,True,csv,True,included
 Aneesah Morrow,CON,WAS,True,True,csv,True,included
 Brittney Griner,CON,WAS,True,True,csv,True,included
 Diamond Miller,CON,WAS,True,True,csv,True,included
+Kennedy Burke,CON,WAS,True,True,csv,True,included
 Leila Lacan,CON,WAS,True,True,csv,True,included
 Saniya Rivers,CON,WAS,True,True,csv,True,included
 Arike Ogunbowale,DAL,GSV,True,True,csv,True,included
 Azzi Fudd,DAL,GSV,True,True,csv,True,included
 Jessica Shepard,DAL,GSV,True,True,csv,True,included
 Paige Bueckers,DAL,GSV,True,True,csv,True,included
+Cecilia Zandalasini,GSV,DAL,True,True,csv,True,included
 Gabby Williams,GSV,DAL,True,True,csv,True,included
 Janelle Salaün,GSV,DAL,True,True,csv,True,included
 Kayla Thornton,GSV,DAL,True,True,csv,True,included
@@ -29,6 +31,7 @@ Veronica Burton,GSV,DAL,True,True,csv,True,included
 Aliyah Boston,IND,,True,True,csv,False,excluded_not_on_canonical_slate
 Caitlin Clark,IND,,True,True,csv,False,excluded_not_on_canonical_slate
 Kelsey Mitchell,IND,,True,True,csv,False,excluded_not_on_canonical_slate
+Monique Billings,IND,,True,True,csv,False,excluded_not_on_canonical_slate
 Sophie Cunningham,IND,,True,True,csv,False,excluded_not_on_canonical_slate
 Ariel Atkins,LAS,MIN,True,True,csv,True,included
 Dearica Hamby,LAS,MIN,True,True,csv,True,included
@@ -54,7 +57,6 @@ Satou Sabally,NYL,CHI,True,True,csv,True,included
 Alyssa Thomas,PHX,LVA,True,True,csv,True,included
 DeWanna Bonner,PHX,LVA,True,True,csv,True,included
 Kahleah Copper,PHX,LVA,True,True,csv,True,included
-Lexi Held,PHX,LVA,True,True,csv,True,included
 Monique Akoa Makani,PHX,LVA,True,True,csv,True,included
 Natasha Mack,PHX,LVA,True,True,csv,True,included
 Noemie Brochant,PHX,LVA,True,True,csv,True,included
@@ -68,7 +70,5 @@ Dominique Malonga,SEA,POR,True,True,csv,True,included
 Flau'jae Johnson,SEA,POR,True,True,csv,True,included
 Jade Melbourne,SEA,POR,True,True,csv,True,included
 Natisha Hiedeman,SEA,POR,True,True,csv,True,included
-Kiki Iriafen,WAS,CON,True,True,csv,True,included
 Michaela Onyenwere,WAS,CON,True,True,csv,True,included
-Shakira Austin,WAS,CON,True,True,csv,True,included
 Sonia Citron,WAS,CON,True,True,csv,True,included

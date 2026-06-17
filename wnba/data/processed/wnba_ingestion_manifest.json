@@ -37,7 +37,7 @@
       ],
       "exists": true,
       "latest_date": "2026-06-16",
-      "modified_at_et": "2026-06-17T14:00:42.087415457-04:00",
+      "modified_at_et": "2026-06-17T18:30:43.017867327-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_player_games.csv",
       "rows": 10378
     },
@@ -56,7 +56,7 @@
       ],
       "exists": true,
       "latest_date": null,
-      "modified_at_et": "2026-06-17T14:01:23.147429943-04:00",
+      "modified_at_et": "2026-06-17T18:31:24.216123343-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_player_status.csv",
       "rows": 8
     },
@@ -74,7 +74,7 @@
       ],
       "exists": true,
       "latest_date": "2026-06-17",
-      "modified_at_et": "2026-06-17T14:01:23.640681982-04:00",
+      "modified_at_et": "2026-06-17T18:31:24.718126535-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_schedule_today.csv",
       "rows": 6
     },
@@ -97,9 +97,9 @@
       ],
       "exists": true,
       "latest_date": null,
-      "modified_at_et": "2026-06-17T14:01:22.944677591-04:00",
+      "modified_at_et": "2026-06-17T18:31:24.030122042-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_sportsbook_lines.csv",
-      "rows": 356
+      "rows": 342
     },
     "team_context": {
       "columns": [
@@ -118,7 +118,7 @@
       ],
       "exists": true,
       "latest_date": "2026-06-16",
-      "modified_at_et": "2026-06-17T14:01:17.306640863-04:00",
+      "modified_at_et": "2026-06-17T18:31:18.250086307-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_team_context.csv",
       "rows": 308
     },
@@ -268,10 +268,10 @@
       ],
       "exists": true,
       "latest_date": "2026-06-17",
-      "modified_at_et": "2026-06-17T14:02:16.827028275-04:00",
+      "modified_at_et": "2026-06-17T18:32:17.741459846-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/processed/wnba_today_features.csv",
       "rows": 175
     }
   },
-  "generated_at": "2026-06-17T14:02:31.113877-04:00"
+  "generated_at": "2026-06-17T18:32:33.881942-04:00"
 }
