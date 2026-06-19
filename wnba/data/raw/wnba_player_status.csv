@@ -1,15 +1,10 @@
 player_name,team,position,est_return_date,status,status_text,comment,fetched_at,_data_source,player_key
-Caitlin Clark,INDIANA FEVER,G,Jun 18,day-to-day,Day-To-Day,Jun 17: Clark (back) is probable for Thursday's game versus the Dream.,2026-06-18T22:31:24.362855+00:00,api:espn_injuries,caitlin clark
-Chennedy Carter,LAS VEGAS ACES,G,Jun 21,day-to-day,Day-To-Day,,2026-06-18T22:31:24.363060+00:00,api:espn_injuries,chennedy carter
-Kate Martin,LOS ANGELES SPARKS,G,Jun 21,day-to-day,Day-To-Day,,2026-06-18T22:31:24.363233+00:00,api:espn_injuries,kate martin
-Kelsey Plum,LOS ANGELES SPARKS,G,Jun 21,day-to-day,Day-To-Day,,2026-06-18T22:31:24.363321+00:00,api:espn_injuries,kelsey plum
-Liatu King,MINNESOTA LYNX,F,Jun 19,day-to-day,Day-To-Day,,2026-06-18T22:31:24.363484+00:00,api:espn_injuries,liatu king
-Marine Fauthoux,NEW YORK LIBERTY,G,Jun 19,day-to-day,Day-To-Day,,2026-06-18T22:31:24.363623+00:00,api:espn_injuries,marine fauthoux
-Betnijah Laney-Hamilton,NEW YORK LIBERTY,G,Jun 19,day-to-day,Day-To-Day,,2026-06-18T22:31:24.363688+00:00,api:espn_injuries,betnijah laney-hamilton
-Kiana Williams,PHOENIX MERCURY,G,Jun 20,day-to-day,Day-To-Day,,2026-06-18T22:31:24.363821+00:00,api:espn_injuries,kiana williams
-Marta Suarez,PHOENIX MERCURY,F,Jun 20,day-to-day,Day-To-Day,,2026-06-18T22:31:24.363884+00:00,api:espn_injuries,marta suarez
-Jordan Horston,SEATTLE STORM,F,Jun 20,day-to-day,Day-To-Day,,2026-06-18T22:31:24.364013+00:00,api:espn_injuries,jordan horston
-Julie Allemand,TORONTO TEMPO,G,Jun 19,day-to-day,Day-To-Day,"Jun 16: Allemand (head) will not return to Tuesday's game against Indiana, Zulfi Sheikh of Sportsnet reports. She'll finish with no points (0-2 FG, 0-2 3Pt) and one assist across 11 minutes.",2026-06-18T22:31:24.364146+00:00,api:espn_injuries,julie allemand
-Brittney Sykes,TORONTO TEMPO,G,Jun 19,day-to-day,Day-To-Day,"Jun 16: Sykes (foot) won't return to Tuesday's game against the Fever, Zulfi Sheikh of Sportsnet reports. She'll finish with 11 points (5-8 FG, 1-1 3Pt, 0-1 FT), three assists and two rebounds across 19 minutes.",2026-06-18T22:31:24.364211+00:00,api:espn_injuries,brittney sykes
-Darianna Littlepage-Buggs,WASHINGTON MYSTICS,G,Jun 19,day-to-day,Day-To-Day,,2026-06-18T22:31:24.364341+00:00,api:espn_injuries,darianna littlepage-buggs
-Shakira Austin,WASHINGTON MYSTICS,C,Jun 19,day-to-day,Day-To-Day,,2026-06-18T22:31:24.364405+00:00,api:espn_injuries,shakira austin
+Aaliyah Nye,ATLANTA DREAM,G,Jun 20,day-to-day,Day-To-Day,,2026-06-19T11:32:10.653284+00:00,api:espn_injuries,aaliyah nye
+Chennedy Carter,LAS VEGAS ACES,G,Jun 21,day-to-day,Day-To-Day,,2026-06-19T11:32:10.653488+00:00,api:espn_injuries,chennedy carter
+Kate Martin,LOS ANGELES SPARKS,G,Jun 21,day-to-day,Day-To-Day,,2026-06-19T11:32:10.653641+00:00,api:espn_injuries,kate martin
+Kelsey Plum,LOS ANGELES SPARKS,G,Jun 21,day-to-day,Day-To-Day,,2026-06-19T11:32:10.653711+00:00,api:espn_injuries,kelsey plum
+Betnijah Laney-Hamilton,NEW YORK LIBERTY,G,Jun 19,day-to-day,Day-To-Day,Jun 18: Laney-Hamilton (knee) is questionable for Friday's game against the Mystics.,2026-06-19T11:32:10.653850+00:00,api:espn_injuries,betnijah laney-hamilton
+Kiana Williams,PHOENIX MERCURY,G,Jun 20,day-to-day,Day-To-Day,,2026-06-19T11:32:10.653983+00:00,api:espn_injuries,kiana williams
+Marta Suarez,PHOENIX MERCURY,F,Jun 20,day-to-day,Day-To-Day,,2026-06-19T11:32:10.654048+00:00,api:espn_injuries,marta suarez
+Jordan Horston,SEATTLE STORM,F,Jun 20,day-to-day,Day-To-Day,,2026-06-19T11:32:10.654178+00:00,api:espn_injuries,jordan horston
+Shakira Austin,WASHINGTON MYSTICS,C,Jun 19,day-to-day,Day-To-Day,Jun 18: Austin (knee) is listed as questionable for Friday against the Liberty.,2026-06-19T11:32:10.654309+00:00,api:espn_injuries,shakira austin

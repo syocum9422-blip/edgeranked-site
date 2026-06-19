@@ -137,6 +137,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-09,2026,Aaliyah Nye,ATL,CHI,A,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-1.0,aaliyah nye,0,csv
 2026-06-11,2026,Aaliyah Nye,ATL,NYL,H,1.0,0.0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,aaliyah nye,1,csv
 2026-06-14,2026,Aaliyah Nye,ATL,TOR,A,1.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,aaliyah nye,0,csv
+2026-06-18,2026,Aaliyah Nye,ATL,IND,A,,,,,,,,,,,,,,,,aaliyah nye,0,csv
 2026-05-09,2026,Aicha Coulibaly,CHI,POR,A,6.0,0.0,2.0,1.0,0.0,0.0,0.0,0.0,3.0,0.0,0.0,0.0,0.0,2.0,0.0,aicha coulibaly,0,csv
 2026-05-13,2026,Aicha Coulibaly,CHI,GSV,A,,,,,,,,,,,,,,,,aicha coulibaly,0,csv
 2026-05-15,2026,Aicha Coulibaly,CHI,PHX,A,16.0,8.0,1.0,0.0,0.0,1.0,0.0,0.0,6.0,4.0,0.0,0.0,0.0,1.0,12.0,aicha coulibaly,0,csv
@@ -341,6 +342,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-11,2026,Aliyah Boston,IND,CHI,H,32.0,34.0,12.0,3.0,2.0,1.0,2.0,3.0,26.0,13.0,6.0,6.0,7.0,5.0,9.0,aliyah boston,1,csv
 2026-06-13,2026,Aliyah Boston,IND,CON,A,32.0,13.0,11.0,5.0,1.0,1.0,0.0,2.0,13.0,5.0,5.0,2.0,2.0,9.0,16.0,aliyah boston,0,csv
 2026-06-16,2026,Aliyah Boston,IND,TOR,H,26.0,18.0,11.0,4.0,1.0,2.0,2.0,3.0,11.0,7.0,3.0,3.0,2.0,9.0,6.0,aliyah boston,1,csv
+2026-06-18,2026,Aliyah Boston,IND,ATL,H,34.0,23.0,8.0,3.0,1.0,1.0,3.0,4.0,15.0,8.0,8.0,6.0,0.0,8.0,-2.0,aliyah boston,1,csv
 2023-05-20,2023,Allisha Gray,ATL,DAL,A,30.0,10.0,7.0,7.0,0.0,0.0,0.0,,,,,,,,,allisha gray,0,csv
 2023-05-24,2023,Allisha Gray,ATL,MIN,A,35.0,26.0,10.0,1.0,3.0,1.0,2.0,,,,,,,,,allisha gray,0,csv
 2023-05-28,2023,Allisha Gray,ATL,IND,H,32.0,19.0,4.0,4.0,3.0,0.0,0.0,,,,,,,,,allisha gray,1,csv
@@ -477,6 +479,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-09,2026,Allisha Gray,ATL,CHI,A,35.0,14.0,4.0,1.0,0.0,3.0,0.0,1.0,11.0,6.0,2.0,2.0,0.0,4.0,8.0,allisha gray,0,csv
 2026-06-11,2026,Allisha Gray,ATL,NYL,H,31.0,18.0,3.0,2.0,1.0,1.0,0.0,0.0,11.0,7.0,9.0,3.0,1.0,2.0,-1.0,allisha gray,1,csv
 2026-06-14,2026,Allisha Gray,ATL,TOR,A,35.0,26.0,3.0,7.0,5.0,1.0,0.0,0.0,14.0,8.0,6.0,5.0,0.0,3.0,26.0,allisha gray,0,csv
+2026-06-18,2026,Allisha Gray,ATL,IND,A,34.0,17.0,0.0,3.0,1.0,3.0,0.0,2.0,11.0,6.0,5.0,4.0,0.0,0.0,16.0,allisha gray,0,csv
 2025-05-16,2025,Alysha Clark,LVA,NYL,H,26.3,11.5,6.5,1.4,1.0,1.3,0.3,,,,,,,,,alysha clark,1,csv
 2025-05-18,2025,Alysha Clark,LVA,NYL,H,27.2,10.9,7.6,1.7,0.8,0.7,0.5,,,,,,,,,alysha clark,1,csv
 2025-05-20,2025,Alysha Clark,LVA,NYL,H,23.2,9.5,6.6,2.0,2.8,1.3,0.8,,,,,,,,,alysha clark,1,csv
@@ -805,6 +808,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-09,2026,Angel Reese,ATL,CHI,A,35.0,17.0,17.0,4.0,1.0,2.0,0.0,6.0,12.0,5.0,6.0,6.0,5.0,12.0,18.0,angel reese,0,csv
 2026-06-11,2026,Angel Reese,ATL,NYL,H,33.0,25.0,9.0,3.0,0.0,2.0,1.0,2.0,22.0,11.0,6.0,3.0,6.0,3.0,-7.0,angel reese,1,csv
 2026-06-14,2026,Angel Reese,ATL,TOR,A,27.0,15.0,17.0,1.0,0.0,1.0,1.0,2.0,19.0,6.0,6.0,3.0,11.0,6.0,18.0,angel reese,0,csv
+2026-06-18,2026,Angel Reese,ATL,IND,A,29.0,21.0,11.0,1.0,0.0,0.0,0.0,4.0,14.0,8.0,8.0,5.0,4.0,7.0,8.0,angel reese,0,csv
 2026-05-08,2026,Angela Dugalic,WAS,TOR,A,12.0,2.0,2.0,0.0,0.0,0.0,0.0,1.0,4.0,1.0,0.0,0.0,0.0,2.0,-10.0,angela dugalic,0,csv
 2026-05-10,2026,Angela Dugalic,WAS,NYL,H,10.0,5.0,2.0,0.0,1.0,1.0,0.0,0.0,4.0,2.0,2.0,0.0,0.0,2.0,3.0,angela dugalic,1,csv
 2026-05-15,2026,Angela Dugalic,WAS,IND,A,6.0,0.0,3.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,3.0,-7.0,angela dugalic,0,csv
@@ -1109,7 +1113,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-08,2026,Awa Fam,SEA,LVA,A,29.0,16.0,3.0,1.0,1.0,0.0,0.0,3.0,11.0,7.0,1.0,1.0,1.0,2.0,-13.0,awa fam,0,csv
 2026-06-10,2026,Awa Fam,SEA,LAS,H,30.0,12.0,6.0,4.0,2.0,0.0,2.0,3.0,6.0,4.0,2.0,2.0,1.0,5.0,-1.0,awa fam,1,csv
 2026-06-12,2026,Awa Fam,SEA,GSV,H,35.0,8.0,6.0,1.0,2.0,0.0,1.0,1.0,9.0,3.0,2.0,0.0,1.0,5.0,7.0,awa fam,1,csv
-2026-06-17,2026,Awa Fam,SEA,POR,A,29.0,18.0,5.0,1.0,3.0,0.0,1.0,1.0,10.0,6.0,3.0,3.0,3.0,2.0,-14.0,awa fam,0,csv
+2026-06-17,2026,Awa Fam,SEA,POR,A,29.0,18.0,5.0,1.0,3.0,0.0,0.0,1.0,10.0,6.0,3.0,3.0,3.0,2.0,-14.0,awa fam,0,csv
 2026-05-09,2026,Awak Kuier,DAL,IND,A,2.0,0.0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,awak kuier,0,csv
 2026-05-12,2026,Awak Kuier,DAL,ATL,H,15.0,6.0,4.0,1.0,1.0,0.0,1.0,0.0,4.0,2.0,2.0,1.0,1.0,3.0,9.0,awak kuier,1,csv
 2026-05-14,2026,Awak Kuier,DAL,MIN,H,6.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,6.0,awak kuier,1,csv
@@ -1708,6 +1712,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-09,2026,Brionna Jones,ATL,CHI,A,,,,,,,,,,,,,,,,brionna jones,0,csv
 2026-06-11,2026,Brionna Jones,ATL,NYL,H,,,,,,,,,,,,,,,,brionna jones,1,csv
 2026-06-14,2026,Brionna Jones,ATL,TOR,A,,,,,,,,,,,,,,,,brionna jones,0,csv
+2026-06-18,2026,Brionna Jones,ATL,IND,A,,,,,,,,,,,,,,,,brionna jones,0,csv
 2023-05-20,2023,Brittney Griner,CON,LAS,A,25.0,18.0,6.0,2.0,0.0,0.0,4.0,,,,,,,,,brittney griner,0,csv
 2023-05-21,2023,Brittney Griner,CON,CHI,H,31.0,27.0,10.0,1.0,1.0,1.0,4.0,,,,,,,,,brittney griner,1,csv
 2023-05-26,2023,Brittney Griner,CON,MIN,H,31.0,19.0,8.0,1.0,0.0,0.0,3.0,,,,,,,,,brittney griner,1,csv
@@ -1977,6 +1982,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-11,2026,Caitlin Clark,IND,CHI,H,40.0,32.0,7.0,10.0,1.0,0.0,0.0,5.0,18.0,8.0,15.0,15.0,2.0,5.0,14.0,caitlin clark,1,csv
 2026-06-13,2026,Caitlin Clark,IND,CON,A,36.0,25.0,3.0,5.0,5.0,0.0,1.0,6.0,17.0,10.0,0.0,0.0,0.0,3.0,15.0,caitlin clark,0,csv
 2026-06-16,2026,Caitlin Clark,IND,TOR,H,32.0,21.0,5.0,14.0,1.0,1.0,1.0,6.0,15.0,5.0,14.0,10.0,1.0,4.0,14.0,caitlin clark,1,csv
+2026-06-18,2026,Caitlin Clark,IND,ATL,H,31.0,26.0,2.0,7.0,2.0,0.0,0.0,5.0,17.0,8.0,12.0,8.0,0.0,2.0,-13.0,caitlin clark,1,csv
 2024-05-16,2024,Cameron Brink,LAS,ATL,H,20.0,11.0,2.0,4.0,2.0,0.0,2.0,,,,,,,,,cameron brink,1,csv
 2024-05-18,2024,Cameron Brink,LAS,LVA,A,25.0,3.0,8.0,0.0,0.0,1.0,5.0,,,,,,,,,cameron brink,0,csv
 2024-05-22,2024,Cameron Brink,LAS,WAS,H,30.0,4.0,8.0,3.0,0.0,3.0,4.0,,,,,,,,,cameron brink,1,csv
@@ -2497,6 +2503,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-11,2026,Damiris Dantas,IND,CHI,H,5.0,2.0,1.0,0.0,0.0,0.0,0.0,1.0,3.0,1.0,0.0,0.0,0.0,1.0,-7.0,damiris dantas,1,csv
 2026-06-13,2026,Damiris Dantas,IND,CON,A,,,,,,,,,,,,,,,,damiris dantas,0,csv
 2026-06-16,2026,Damiris Dantas,IND,TOR,H,2.0,4.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,4.0,4.0,1.0,0.0,-2.0,damiris dantas,1,csv
+2026-06-18,2026,Damiris Dantas,IND,ATL,H,,,,,,,,,,,,,,,,damiris dantas,1,csv
 2026-05-13,2026,Dana Evans,LVA,CON,A,,,,,,,,,,,,,,,,dana evans,0,csv
 2026-05-15,2026,Dana Evans,LVA,CON,A,,,,,,,,,,,,,,,,dana evans,0,csv
 2026-06-11,2026,Dana Evans,LVA,POR,A,,,,,,,,,,,,,,,,dana evans,0,csv
@@ -2976,7 +2983,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-08,2026,Dominique Malonga,SEA,LVA,A,17.0,19.0,5.0,0.0,1.0,1.0,0.0,2.0,12.0,7.0,4.0,4.0,3.0,2.0,8.0,dominique malonga,0,csv
 2026-06-10,2026,Dominique Malonga,SEA,LAS,H,24.0,15.0,7.0,2.0,1.0,0.0,0.0,4.0,11.0,6.0,2.0,2.0,0.0,7.0,5.0,dominique malonga,1,csv
 2026-06-12,2026,Dominique Malonga,SEA,GSV,H,25.0,9.0,8.0,2.0,0.0,0.0,1.0,2.0,10.0,3.0,3.0,3.0,3.0,5.0,-8.0,dominique malonga,1,csv
-2026-06-17,2026,Dominique Malonga,SEA,POR,A,35.0,28.0,11.0,3.0,0.0,2.0,2.0,1.0,19.0,12.0,6.0,4.0,3.0,8.0,-2.0,dominique malonga,0,csv
+2026-06-17,2026,Dominique Malonga,SEA,POR,A,35.0,28.0,11.0,3.0,0.0,2.0,3.0,1.0,19.0,12.0,6.0,4.0,3.0,8.0,-2.0,dominique malonga,0,csv
 2026-05-09,2026,Dorka Juhasz,MIN,ATL,H,,,,,,,,,,,,,,,,dorka juhasz,1,csv
 2026-05-12,2026,Dorka Juhasz,MIN,PHX,A,,,,,,,,,,,,,,,,dorka juhasz,0,csv
 2026-05-17,2026,Dorka Juhasz,MIN,CHI,H,,,,,,,,,,,,,,,,dorka juhasz,1,csv
@@ -3649,6 +3656,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-11,2026,Grace VanSlooten,IND,CHI,H,,,,,,,,,,,,,,,,grace vanslooten,1,csv
 2026-06-13,2026,Grace VanSlooten,IND,CON,A,,,,,,,,,,,,,,,,grace vanslooten,0,csv
 2026-06-16,2026,Grace VanSlooten,IND,TOR,H,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,grace vanslooten,1,csv
+2026-06-18,2026,Grace VanSlooten,IND,ATL,H,,,,,,,,,,,,,,,,grace vanslooten,1,csv
 2025-05-17,2025,Hailey Van Lith,CON,IND,A,4.0,4.0,0.0,0.0,0.0,0.0,0.0,,,,,,,,,hailey van lith,0,csv
 2025-05-23,2025,Hailey Van Lith,CON,NYL,H,15.0,4.0,0.0,6.0,0.0,0.0,0.0,,,,,,,,,hailey van lith,1,csv
 2025-05-30,2025,Hailey Van Lith,CON,DAL,H,8.0,2.0,1.0,0.0,0.0,1.0,0.0,,,,,,,,,hailey van lith,1,csv
@@ -3855,6 +3863,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-09,2026,Indya Nivar,ATL,CHI,A,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,indya nivar,0,csv
 2026-06-11,2026,Indya Nivar,ATL,NYL,H,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,indya nivar,1,csv
 2026-06-14,2026,Indya Nivar,ATL,TOR,A,1.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,indya nivar,0,csv
+2026-06-18,2026,Indya Nivar,ATL,IND,A,,,,,,,,,,,,,,,,indya nivar,0,csv
 2026-05-19,2026,Isabelle Harrison,TOR,PHX,A,,,,,,,,,,,,,,,,isabelle harrison,0,csv
 2026-05-21,2026,Isabelle Harrison,TOR,MIN,A,,,,,,,,,,,,,,,,isabelle harrison,0,csv
 2026-05-23,2026,Isabelle Harrison,TOR,POR,H,,,,,,,,,,,,,,,,isabelle harrison,1,csv
@@ -3879,6 +3888,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-09,2026,Isobel Borlase,ATL,CHI,A,10.0,4.0,1.0,0.0,0.0,0.0,0.0,1.0,3.0,1.0,2.0,2.0,1.0,0.0,-3.0,isobel borlase,0,csv
 2026-06-11,2026,Isobel Borlase,ATL,NYL,H,19.0,5.0,2.0,0.0,1.0,0.0,0.0,0.0,4.0,2.0,0.0,0.0,1.0,1.0,-14.0,isobel borlase,1,csv
 2026-06-14,2026,Isobel Borlase,ATL,TOR,A,18.0,17.0,3.0,1.0,2.0,0.0,0.0,1.0,6.0,5.0,5.0,5.0,0.0,3.0,22.0,isobel borlase,0,csv
+2026-06-18,2026,Isobel Borlase,ATL,IND,A,13.0,9.0,2.0,0.0,0.0,0.0,1.0,0.0,7.0,4.0,1.0,1.0,0.0,2.0,-1.0,isobel borlase,0,csv
 2025-05-16,2025,Jackie Young,LVA,NYL,H,30.5,19.0,5.0,5.6,3.0,1.5,0.6,,,,,,,,,jackie young,1,csv
 2025-05-18,2025,Jackie Young,LVA,NYL,H,29.6,14.5,6.1,4.5,2.1,1.3,0.5,,,,,,,,,jackie young,1,csv
 2025-05-20,2025,Jackie Young,LVA,NYL,H,30.7,20.5,1.6,7.9,2.5,1.9,0.0,,,,,,,,,jackie young,1,csv
@@ -4675,6 +4685,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-09,2026,Jordin Canada,ATL,CHI,A,33.0,14.0,1.0,6.0,0.0,0.0,0.0,4.0,12.0,6.0,3.0,2.0,0.0,1.0,8.0,jordin canada,0,csv
 2026-06-11,2026,Jordin Canada,ATL,NYL,H,29.0,3.0,3.0,7.0,0.0,2.0,0.0,1.0,5.0,0.0,4.0,3.0,0.0,3.0,1.0,jordin canada,1,csv
 2026-06-14,2026,Jordin Canada,ATL,TOR,A,28.0,5.0,5.0,9.0,1.0,3.0,0.0,2.0,8.0,2.0,0.0,0.0,2.0,3.0,30.0,jordin canada,0,csv
+2026-06-18,2026,Jordin Canada,ATL,IND,A,29.0,18.0,2.0,5.0,1.0,4.0,0.0,1.0,10.0,5.0,8.0,7.0,0.0,2.0,9.0,jordin canada,0,csv
 2026-05-09,2026,Jovana Nogic,PHX,LVA,A,21.0,19.0,0.0,4.0,4.0,2.0,0.0,1.0,8.0,5.0,5.0,5.0,0.0,0.0,26.0,jovana nogic,0,csv
 2026-05-10,2026,Jovana Nogic,PHX,GSV,A,27.0,16.0,1.0,1.0,4.0,0.0,0.0,4.0,6.0,5.0,2.0,2.0,1.0,0.0,3.0,jovana nogic,0,csv
 2026-05-12,2026,Jovana Nogic,PHX,MIN,H,17.0,2.0,1.0,2.0,0.0,3.0,0.0,1.0,6.0,0.0,2.0,2.0,1.0,0.0,5.0,jovana nogic,1,csv
@@ -5415,6 +5426,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-11,2026,Kelsey Mitchell,IND,CHI,H,39.0,19.0,1.0,3.0,2.0,3.0,0.0,2.0,17.0,7.0,4.0,3.0,0.0,1.0,-2.0,kelsey mitchell,1,csv
 2026-06-13,2026,Kelsey Mitchell,IND,CON,A,37.0,19.0,2.0,5.0,2.0,1.0,0.0,4.0,15.0,6.0,7.0,5.0,0.0,2.0,11.0,kelsey mitchell,0,csv
 2026-06-16,2026,Kelsey Mitchell,IND,TOR,H,32.0,27.0,1.0,2.0,3.0,0.0,0.0,4.0,11.0,9.0,6.0,6.0,0.0,1.0,17.0,kelsey mitchell,1,csv
+2026-06-18,2026,Kelsey Mitchell,IND,ATL,H,34.0,26.0,1.0,1.0,3.0,1.0,0.0,2.0,15.0,10.0,3.0,3.0,0.0,1.0,0.0,kelsey mitchell,1,csv
 2025-05-16,2025,Kelsey Plum,LVA,NYL,H,30.4,26.2,1.0,6.3,1.1,0.7,0.2,,,,,,,,,kelsey plum,1,csv
 2025-05-18,2025,Kelsey Plum,LVA,NYL,H,29.1,18.9,4.5,2.2,2.8,0.6,0.0,,,,,,,,,kelsey plum,1,csv
 2025-05-20,2025,Kelsey Plum,LVA,NYL,H,30.7,21.7,4.7,2.7,2.7,1.8,0.0,,,,,,,,,kelsey plum,1,csv
@@ -6422,6 +6434,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-11,2026,Lexie Hull,IND,CHI,H,32.0,11.0,8.0,1.0,1.0,2.0,0.0,1.0,13.0,3.0,4.0,4.0,7.0,1.0,8.0,lexie hull,1,csv
 2026-06-13,2026,Lexie Hull,IND,CON,A,22.0,2.0,6.0,2.0,0.0,0.0,0.0,2.0,3.0,0.0,2.0,2.0,3.0,3.0,12.0,lexie hull,0,csv
 2026-06-16,2026,Lexie Hull,IND,TOR,H,20.0,6.0,4.0,0.0,0.0,0.0,0.0,0.0,6.0,3.0,0.0,0.0,1.0,3.0,2.0,lexie hull,1,csv
+2026-06-18,2026,Lexie Hull,IND,ATL,H,11.0,2.0,3.0,0.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,0.0,0.0,3.0,-6.0,lexie hull,1,csv
 2026-05-09,2026,Li Yueru,DAL,IND,A,4.0,3.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,4.0,3.0,0.0,1.0,0.0,li yueru,0,csv
 2026-05-12,2026,Li Yueru,DAL,ATL,H,,,,,,,,,,,,,,,,li yueru,1,csv
 2026-05-14,2026,Li Yueru,DAL,MIN,H,,,,,,,,,,,,,,,,li yueru,1,csv
@@ -6636,6 +6649,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-09,2026,Madina Okot,ATL,CHI,A,5.0,0.0,2.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,0.0,0.0,2.0,0.0,-9.0,madina okot,0,csv
 2026-06-11,2026,Madina Okot,ATL,NYL,H,7.0,3.0,1.0,1.0,0.0,0.0,0.0,0.0,1.0,1.0,2.0,1.0,0.0,1.0,-7.0,madina okot,1,csv
 2026-06-14,2026,Madina Okot,ATL,TOR,A,6.0,0.0,3.0,0.0,0.0,1.0,0.0,1.0,1.0,0.0,0.0,0.0,0.0,3.0,-9.0,madina okot,0,csv
+2026-06-18,2026,Madina Okot,ATL,IND,A,5.0,0.0,4.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,4.0,3.0,madina okot,0,csv
 2026-05-09,2026,Makayla Timpson,IND,DAL,H,19.0,11.0,2.0,1.0,0.0,0.0,0.0,0.0,6.0,5.0,2.0,1.0,0.0,2.0,-2.0,makayla timpson,1,csv
 2026-05-13,2026,Makayla Timpson,IND,LAS,A,9.0,2.0,1.0,1.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,0.0,0.0,1.0,-3.0,makayla timpson,0,csv
 2026-05-15,2026,Makayla Timpson,IND,WAS,H,4.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0,0.0,-1.0,makayla timpson,1,csv
@@ -6650,6 +6664,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-11,2026,Makayla Timpson,IND,CHI,H,20.0,4.0,6.0,0.0,0.0,0.0,2.0,2.0,3.0,2.0,0.0,0.0,1.0,5.0,-9.0,makayla timpson,1,csv
 2026-06-13,2026,Makayla Timpson,IND,CON,A,11.0,2.0,5.0,0.0,0.0,0.0,2.0,1.0,1.0,1.0,1.0,0.0,2.0,3.0,-5.0,makayla timpson,0,csv
 2026-06-16,2026,Makayla Timpson,IND,TOR,H,23.0,2.0,6.0,0.0,0.0,1.0,2.0,2.0,3.0,1.0,0.0,0.0,1.0,5.0,17.0,makayla timpson,1,csv
+2026-06-18,2026,Makayla Timpson,IND,ATL,H,21.0,6.0,4.0,0.0,0.0,3.0,0.0,1.0,3.0,2.0,2.0,2.0,2.0,2.0,8.0,makayla timpson,1,csv
 2026-05-08,2026,Maria Conde,TOR,WAS,H,15.0,2.0,3.0,0.0,0.0,0.0,0.0,1.0,4.0,0.0,2.0,2.0,2.0,1.0,6.0,maria conde,1,csv
 2026-05-13,2026,Maria Conde,TOR,SEA,H,29.0,16.0,8.0,0.0,4.0,1.0,0.0,1.0,13.0,6.0,0.0,0.0,2.0,6.0,11.0,maria conde,1,csv
 2026-05-15,2026,Maria Conde,TOR,LAS,A,20.0,6.0,4.0,0.0,2.0,1.0,0.0,2.0,6.0,2.0,0.0,0.0,2.0,2.0,0.0,maria conde,0,csv
@@ -7326,6 +7341,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-11,2026,Monique Billings,IND,CHI,H,10.0,0.0,2.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,0.0,-2.0,monique billings,1,csv
 2026-06-13,2026,Monique Billings,IND,CON,A,27.0,10.0,8.0,2.0,0.0,1.0,2.0,0.0,5.0,3.0,4.0,4.0,1.0,7.0,18.0,monique billings,0,csv
 2026-06-16,2026,Monique Billings,IND,TOR,H,20.0,5.0,7.0,0.0,0.0,0.0,0.0,0.0,5.0,1.0,4.0,3.0,3.0,4.0,10.0,monique billings,1,csv
+2026-06-18,2026,Monique Billings,IND,ATL,H,13.0,6.0,2.0,1.0,0.0,1.0,0.0,1.0,3.0,2.0,2.0,2.0,2.0,0.0,-10.0,monique billings,1,csv
 2023-06-03,2023,Myisha Hines-Allen,IND,MIN,H,8.0,4.0,2.0,0.0,0.0,1.0,0.0,,,,,,,,,myisha hines-allen,1,csv
 2023-06-10,2023,Myisha Hines-Allen,IND,SEA,A,11.0,0.0,5.0,1.0,0.0,1.0,0.0,,,,,,,,,myisha hines-allen,0,csv
 2023-06-11,2023,Myisha Hines-Allen,IND,SEA,A,11.0,1.0,6.0,0.0,0.0,0.0,0.0,,,,,,,,,myisha hines-allen,0,csv
@@ -7455,6 +7471,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-11,2026,Myisha Hines-Allen,IND,CHI,H,23.0,5.0,9.0,3.0,0.0,0.0,1.0,1.0,3.0,2.0,2.0,1.0,0.0,9.0,25.0,myisha hines-allen,1,csv
 2026-06-13,2026,Myisha Hines-Allen,IND,CON,A,10.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,-9.0,myisha hines-allen,0,csv
 2026-06-16,2026,Myisha Hines-Allen,IND,TOR,H,7.0,0.0,2.0,2.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,2.0,5.0,myisha hines-allen,1,csv
+2026-06-18,2026,Myisha Hines-Allen,IND,ATL,H,9.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,-3.0,myisha hines-allen,1,csv
 2026-06-09,2026,Nadia Fingall,GSV,PHX,H,,,,,,,,,,,,,,,,nadia fingall,1,csv
 2026-06-12,2026,Nadia Fingall,GSV,SEA,A,,,,,,,,,,,,,,,,nadia fingall,0,csv
 2026-06-15,2026,Nadia Fingall,GSV,LAS,H,,,,,,,,,,,,,,,,nadia fingall,1,csv
@@ -8134,6 +8151,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-09,2026,Naz Hillmon,ATL,CHI,A,38.0,16.0,6.0,1.0,3.0,1.0,0.0,0.0,12.0,6.0,1.0,1.0,2.0,4.0,9.0,naz hillmon,0,csv
 2026-06-11,2026,Naz Hillmon,ATL,NYL,H,30.0,7.0,1.0,3.0,1.0,0.0,0.0,1.0,8.0,3.0,0.0,0.0,1.0,0.0,-18.0,naz hillmon,1,csv
 2026-06-14,2026,Naz Hillmon,ATL,TOR,A,32.0,9.0,6.0,1.0,0.0,1.0,0.0,0.0,8.0,4.0,1.0,1.0,1.0,5.0,11.0,naz hillmon,0,csv
+2026-06-18,2026,Naz Hillmon,ATL,IND,A,32.0,17.0,4.0,2.0,3.0,1.0,1.0,2.0,8.0,4.0,6.0,6.0,1.0,3.0,4.0,naz hillmon,0,csv
 2026-05-08,2026,Ndjakalenga Mwenentanda,GSV,SEA,A,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-2.0,ndjakalenga mwenentanda,0,csv
 2026-05-10,2026,Ndjakalenga Mwenentanda,GSV,PHX,H,,,,,,,,,,,,,,,,ndjakalenga mwenentanda,1,csv
 2026-05-13,2026,Ndjakalenga Mwenentanda,GSV,CHI,H,,,,,,,,,,,,,,,,ndjakalenga mwenentanda,1,csv
@@ -8977,6 +8995,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-11,2026,Raven Johnson,IND,CHI,H,13.0,3.0,0.0,0.0,1.0,2.0,0.0,0.0,1.0,1.0,0.0,0.0,0.0,0.0,4.0,raven johnson,1,csv
 2026-06-13,2026,Raven Johnson,IND,CON,A,3.0,3.0,1.0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,0.0,0.0,1.0,0.0,-4.0,raven johnson,0,csv
 2026-06-16,2026,Raven Johnson,IND,TOR,H,14.0,6.0,0.0,1.0,2.0,0.0,0.0,1.0,5.0,2.0,0.0,0.0,0.0,0.0,15.0,raven johnson,1,csv
+2026-06-18,2026,Raven Johnson,IND,ATL,H,3.0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,0.0,0.0,0.0,0.0,-5.0,raven johnson,1,csv
 2026-05-08,2026,Rebecca Allen,NYL,CON,H,,,,,,,,,,,,,,,,rebecca allen,1,csv
 2026-05-10,2026,Rebecca Allen,NYL,WAS,A,,,,,,,,,,,,,,,,rebecca allen,0,csv
 2026-05-14,2026,Rebecca Allen,NYL,POR,A,14.0,3.0,0.0,1.0,1.0,1.0,0.0,0.0,3.0,1.0,0.0,0.0,0.0,0.0,-11.0,rebecca allen,0,csv
@@ -9121,6 +9140,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-09,2026,Rhyne Howard,ATL,CHI,A,36.0,17.0,3.0,5.0,1.0,3.0,0.0,1.0,17.0,7.0,2.0,2.0,2.0,1.0,8.0,rhyne howard,0,csv
 2026-06-11,2026,Rhyne Howard,ATL,NYL,H,36.0,24.0,4.0,3.0,5.0,4.0,1.0,1.0,18.0,7.0,6.0,5.0,0.0,4.0,-12.0,rhyne howard,1,csv
 2026-06-14,2026,Rhyne Howard,ATL,TOR,A,38.0,24.0,6.0,2.0,4.0,1.0,3.0,1.0,18.0,9.0,2.0,2.0,0.0,6.0,26.0,rhyne howard,0,csv
+2026-06-18,2026,Rhyne Howard,ATL,IND,A,38.0,16.0,5.0,6.0,1.0,2.0,1.0,1.0,12.0,6.0,3.0,3.0,3.0,2.0,4.0,rhyne howard,0,csv
 2024-05-16,2024,Rickea Jackson,CHI,ATL,H,18.0,7.0,3.0,0.0,0.0,1.0,0.0,,,,,,,,,rickea jackson,1,csv
 2024-05-18,2024,Rickea Jackson,CHI,LVA,A,22.0,13.0,1.0,0.0,2.0,1.0,0.0,,,,,,,,,rickea jackson,0,csv
 2024-05-22,2024,Rickea Jackson,CHI,WAS,H,31.0,9.0,3.0,1.0,1.0,0.0,1.0,,,,,,,,,rickea jackson,1,csv
@@ -9585,6 +9605,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-09,2026,Sika Kone,ATL,CHI,A,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-2.0,sika kone,0,csv
 2026-06-11,2026,Sika Kone,ATL,NYL,H,3.0,2.0,1.0,0.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,0.0,0.0,1.0,5.0,sika kone,1,csv
 2026-06-14,2026,Sika Kone,ATL,TOR,A,2.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,4.0,sika kone,0,csv
+2026-06-18,2026,Sika Kone,ATL,IND,A,5.0,3.0,1.0,0.0,0.0,0.0,0.0,1.0,1.0,1.0,4.0,1.0,1.0,0.0,-6.0,sika kone,0,csv
 2024-05-15,2024,Skylar Diggins,CHI,MIN,H,31.0,10.0,1.0,6.0,0.0,2.0,1.0,,,,,,,,,skylar diggins,1,csv
 2024-05-18,2024,Skylar Diggins,CHI,MIN,A,41.0,22.0,2.0,5.0,0.0,3.0,3.0,,,,,,,,,skylar diggins,0,csv
 2024-05-19,2024,Skylar Diggins,CHI,WAS,A,33.0,18.0,5.0,5.0,1.0,1.0,0.0,,,,,,,,,skylar diggins,0,csv
@@ -9739,7 +9760,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-08,2026,Sonia Citron,WAS,IND,H,38.0,12.0,0.0,5.0,2.0,1.0,2.0,2.0,9.0,3.0,4.0,4.0,0.0,0.0,-5.0,sonia citron,1,csv
 2026-06-12,2026,Sonia Citron,WAS,TOR,H,34.0,17.0,5.0,3.0,1.0,2.0,0.0,2.0,16.0,6.0,5.0,4.0,1.0,4.0,1.0,sonia citron,1,csv
 2026-06-14,2026,Sonia Citron,WAS,NYL,A,31.0,12.0,3.0,2.0,1.0,0.0,0.0,1.0,9.0,3.0,6.0,5.0,1.0,2.0,-17.0,sonia citron,0,csv
-2026-06-17,2026,Sonia Citron,WAS,CON,A,38.0,26.0,12.0,4.0,0.0,0.0,1.0,3.0,13.0,7.0,12.0,12.0,1.0,11.0,9.0,sonia citron,0,csv
+2026-06-17,2026,Sonia Citron,WAS,CON,A,38.0,26.0,11.0,4.0,0.0,0.0,1.0,3.0,13.0,7.0,12.0,12.0,1.0,10.0,9.0,sonia citron,0,csv
 2023-05-21,2023,Sophie Cunningham,IND,CHI,H,19.0,2.0,3.0,2.0,0.0,0.0,0.0,,,,,,,,,sophie cunningham,1,csv
 2023-05-26,2023,Sophie Cunningham,IND,MIN,H,24.0,13.0,5.0,3.0,3.0,2.0,0.0,,,,,,,,,sophie cunningham,1,csv
 2023-06-03,2023,Sophie Cunningham,IND,LAS,H,35.0,19.0,3.0,0.0,0.0,0.0,1.0,,,,,,,,,sophie cunningham,1,csv
@@ -9856,6 +9877,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-11,2026,Sophie Cunningham,IND,CHI,H,,,,,,,,,,,,,,,,sophie cunningham,1,csv
 2026-06-13,2026,Sophie Cunningham,IND,CON,A,18.0,11.0,2.0,0.0,3.0,0.0,0.0,1.0,5.0,4.0,0.0,0.0,0.0,2.0,-2.0,sophie cunningham,0,csv
 2026-06-16,2026,Sophie Cunningham,IND,TOR,H,24.0,24.0,6.0,2.0,6.0,0.0,0.0,0.0,11.0,8.0,2.0,2.0,1.0,5.0,26.0,sophie cunningham,1,csv
+2026-06-18,2026,Sophie Cunningham,IND,ATL,H,30.0,12.0,2.0,2.0,2.0,0.0,0.0,1.0,5.0,4.0,2.0,2.0,0.0,2.0,-7.0,sophie cunningham,1,csv
 2023-05-19,2023,Stefanie Dolson,SEA,WAS,A,18.0,2.0,4.0,0.0,0.0,0.0,1.0,,,,,,,,,stefanie dolson,0,csv
 2023-05-21,2023,Stefanie Dolson,SEA,IND,H,15.0,1.0,3.0,3.0,0.0,0.0,1.0,,,,,,,,,stefanie dolson,1,csv
 2023-05-27,2023,Stefanie Dolson,SEA,CON,H,15.0,2.0,2.0,4.0,0.0,0.0,0.0,,,,,,,,,stefanie dolson,1,csv
@@ -10119,6 +10141,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-09,2026,Te-Hina Paopao,ATL,CHI,A,7.0,0.0,2.0,1.0,0.0,0.0,0.0,1.0,2.0,0.0,0.0,0.0,0.0,2.0,-1.0,te-hina paopao,0,csv
 2026-06-11,2026,Te-Hina Paopao,ATL,NYL,H,11.0,3.0,0.0,2.0,1.0,1.0,0.0,0.0,4.0,1.0,0.0,0.0,0.0,0.0,-17.0,te-hina paopao,1,csv
 2026-06-14,2026,Te-Hina Paopao,ATL,TOR,A,12.0,6.0,0.0,0.0,2.0,0.0,0.0,0.0,7.0,2.0,0.0,0.0,0.0,0.0,-5.0,te-hina paopao,0,csv
+2026-06-18,2026,Te-Hina Paopao,ATL,IND,A,14.0,7.0,1.0,3.0,1.0,0.0,0.0,1.0,5.0,3.0,0.0,0.0,0.0,1.0,-2.0,te-hina paopao,0,csv
 2026-05-29,2026,Teaira McCowan,MIN,CHI,A,10.0,0.0,4.0,1.0,0.0,0.0,2.0,2.0,2.0,0.0,0.0,0.0,0.0,4.0,11.0,teaira mccowan,0,csv
 2026-06-01,2026,Teaira McCowan,MIN,PHX,A,16.0,6.0,6.0,0.0,0.0,1.0,0.0,2.0,4.0,3.0,0.0,0.0,1.0,5.0,13.0,teaira mccowan,0,csv
 2026-06-04,2026,Teaira McCowan,MIN,GSV,H,2.0,0.0,2.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,2.0,0.0,-1.0,teaira mccowan,1,csv
@@ -10361,6 +10384,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-11,2026,Tyasha Harris,IND,CHI,H,11.0,4.0,0.0,1.0,0.0,0.0,1.0,0.0,3.0,2.0,0.0,0.0,0.0,0.0,0.0,tyasha harris,1,csv
 2026-06-13,2026,Tyasha Harris,IND,CON,A,4.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,-2.0,tyasha harris,0,csv
 2026-06-16,2026,Tyasha Harris,IND,TOR,H,,,,,,,,,,,,,,,,tyasha harris,1,csv
+2026-06-18,2026,Tyasha Harris,IND,ATL,H,14.0,0.0,2.0,2.0,0.0,1.0,0.0,1.0,1.0,0.0,0.0,0.0,1.0,1.0,3.0,tyasha harris,1,csv
 2026-05-12,2026,Valeriane Ayayi,PHX,MIN,H,17.0,6.0,4.0,3.0,2.0,1.0,0.0,2.0,4.0,2.0,0.0,0.0,1.0,3.0,1.0,valeriane ayayi,1,csv
 2026-05-15,2026,Valeriane Ayayi,PHX,CHI,H,12.0,8.0,2.0,1.0,0.0,0.0,0.0,1.0,6.0,3.0,3.0,2.0,1.0,1.0,-8.0,valeriane ayayi,1,csv
 2026-05-19,2026,Valeriane Ayayi,PHX,TOR,H,12.0,3.0,3.0,1.0,0.0,2.0,0.0,0.0,1.0,0.0,6.0,3.0,0.0,3.0,-1.0,valeriane ayayi,1,csv
