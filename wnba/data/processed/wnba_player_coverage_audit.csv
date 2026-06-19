@@ -2,6 +2,7 @@ player_name,team,opponent,has_live_line,has_history,history_source,included,reas
 Allisha Gray,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
 Angel Reese,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
 Jordin Canada,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
+Naz Hillmon,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
 Rhyne Howard,ATL,,True,True,csv,False,excluded_not_on_canonical_slate
 Azurá Stevens,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
 Gabriela Jaquez,CHI,,True,True,csv,False,excluded_not_on_canonical_slate
@@ -23,6 +24,7 @@ Veronica Burton,GSV,MIN,True,True,csv,True,included
 Aliyah Boston,IND,,True,True,csv,False,excluded_not_on_canonical_slate
 Caitlin Clark,IND,,True,True,csv,False,excluded_not_on_canonical_slate
 Kelsey Mitchell,IND,,True,True,csv,False,excluded_not_on_canonical_slate
+Sophie Cunningham,IND,,True,True,csv,False,excluded_not_on_canonical_slate
 Courtney Williams,MIN,GSV,True,True,csv,True,included
 Kayla McBride,MIN,GSV,True,True,csv,True,included
 Natasha Howard,MIN,GSV,True,True,csv,True,included
@@ -41,6 +43,7 @@ Natasha Mack,PHX,,True,True,csv,False,excluded_not_on_canonical_slate
 Awa Fam,SEA,,True,True,csv,False,excluded_not_on_canonical_slate
 Dominique Malonga,SEA,,True,True,csv,False,excluded_not_on_canonical_slate
 Flau'jae Johnson,SEA,,True,True,csv,False,excluded_not_on_canonical_slate
+Jade Melbourne,SEA,,True,True,csv,False,excluded_not_on_canonical_slate
 Natisha Hiedeman,SEA,,True,True,csv,False,excluded_not_on_canonical_slate
 Julie Allemand,TOR,CON,True,True,csv,True,included
 Laura Juškaitė,TOR,CON,True,True,csv,True,included
