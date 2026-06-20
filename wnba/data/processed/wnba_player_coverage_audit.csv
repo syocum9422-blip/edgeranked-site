@@ -1,9 +1,4 @@
 player_name,team,opponent,has_live_line,has_history,history_source,included,reason
-Allisha Gray,ATL,IND,True,True,csv,True,included
-Angel Reese,ATL,IND,True,True,csv,True,included
-Jordin Canada,ATL,IND,True,True,csv,True,included
-Naz Hillmon,ATL,IND,True,True,csv,True,included
-Rhyne Howard,ATL,IND,True,True,csv,True,included
 Azurá Stevens,CHI,DAL,True,True,csv,True,included
 Gabriela Jaquez,CHI,DAL,True,True,csv,True,included
 Kamilla Cardoso,CHI,DAL,True,True,csv,True,included
@@ -16,14 +11,12 @@ Jessica Shepard,DAL,CHI,True,True,csv,True,included
 Paige Bueckers,DAL,CHI,True,True,csv,True,included
 Cecilia Zandalasini,GSV,,True,True,csv,False,excluded_not_on_canonical_slate
 Gabby Williams,GSV,,True,True,csv,False,excluded_not_on_canonical_slate
+Janelle Salaün,GSV,,True,True,csv,False,excluded_not_on_canonical_slate
 Kayla Thornton,GSV,,True,True,csv,False,excluded_not_on_canonical_slate
 Veronica Burton,GSV,,True,True,csv,False,excluded_not_on_canonical_slate
-Aliyah Boston,IND,ATL,True,True,csv,True,included
-Caitlin Clark,IND,ATL,True,True,csv,True,included
-Kelsey Mitchell,IND,ATL,True,True,csv,True,included
-Monique Billings,IND,ATL,True,True,csv,True,included
-Sophie Cunningham,IND,ATL,True,True,csv,True,included
+Ariel Atkins,LAS,,True,True,csv,False,excluded_not_on_canonical_slate
 Dearica Hamby,LAS,,True,True,csv,False,excluded_not_on_canonical_slate
+Erica Wheeler,LAS,,True,True,csv,False,excluded_not_on_canonical_slate
 Kelsey Plum,LAS,,True,True,csv,False,excluded_not_on_canonical_slate
 Nneka Ogwumike,LAS,,True,True,csv,False,excluded_not_on_canonical_slate
 A'ja Wilson,LVA,,True,True,csv,False,excluded_not_on_canonical_slate
@@ -33,13 +26,15 @@ NaLyssa Smith,LVA,,True,True,csv,False,excluded_not_on_canonical_slate
 Courtney Williams,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
 Kayla McBride,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
 Natasha Howard,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
+Nia Coffey,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
 Olivia Miles,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
 Breanna Stewart,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
 Jonquel Jones,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
+Leonie Fiebich,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
 Sabrina Ionescu,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
+Satou Sabally,NYL,,True,True,csv,False,excluded_not_on_canonical_slate
 Alyssa Thomas,PHX,SEA,True,True,csv,True,included
 Kahleah Copper,PHX,SEA,True,True,csv,True,included
-Monique Akoa Makani,PHX,SEA,True,True,csv,True,included
 Natasha Mack,PHX,SEA,True,True,csv,True,included
 Awa Fam,SEA,PHX,True,True,csv,True,included
 Dominique Malonga,SEA,PHX,True,True,csv,True,included

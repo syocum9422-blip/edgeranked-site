@@ -1,11 +1,9 @@
 player_name,team,position,est_return_date,status,status_text,comment,fetched_at,_data_source,player_key
-Alysha Clark,DALLAS WINGS,F,Jun 20,day-to-day,Day-To-Day,Jun 19: Clark (left leg) is questionable for Saturday's game against Chicago.,2026-06-20T11:32:10.860154+00:00,api:espn_injuries,alysha clark
-Alanna Smith,DALLAS WINGS,F,Jun 20,day-to-day,Day-To-Day,Jun 19: Smith (illness) is listed as questionable for Saturday's game against the Sky.,2026-06-20T11:32:10.860264+00:00,api:espn_injuries,alanna smith
-Caitlin Clark,INDIANA FEVER,G,Jun 20,day-to-day,Day-To-Day,Jun 19: Clark (back) is probable for Saturday's game against the Dream.,2026-06-20T11:32:10.860422+00:00,api:espn_injuries,caitlin clark
-Chennedy Carter,LAS VEGAS ACES,G,Jun 21,day-to-day,Day-To-Day,,2026-06-20T11:32:10.860579+00:00,api:espn_injuries,chennedy carter
-Kelsey Plum,LOS ANGELES SPARKS,G,Jun 21,day-to-day,Day-To-Day,"Jun 19: Plum (leg) could return for Sunday's game against the Liberty, according to Los Angeles reporter Justin Russo.",2026-06-20T11:32:10.860718+00:00,api:espn_injuries,kelsey plum
-Kate Martin,LOS ANGELES SPARKS,G,Jun 21,day-to-day,Day-To-Day,,2026-06-20T11:32:10.860784+00:00,api:espn_injuries,kate martin
-Eliska Hamzova,MINNESOTA LYNX,G,Jun 21,day-to-day,Day-To-Day,,2026-06-20T11:32:10.860916+00:00,api:espn_injuries,eliska hamzova
-Betnijah Laney-Hamilton,NEW YORK LIBERTY,G,Jun 21,day-to-day,Day-To-Day,,2026-06-20T11:32:10.861046+00:00,api:espn_injuries,betnijah laney-hamilton
-Monique Akoa Makani,PHOENIX MERCURY,G,Jun 20,day-to-day,Day-To-Day,Jun 19: Akoa Makani (hamstring) is listed as questionable for Saturday's game against the Storm.,2026-06-20T11:32:10.861178+00:00,api:espn_injuries,monique akoa makani
-Darianna Littlepage-Buggs,WASHINGTON MYSTICS,G,Jun 21,day-to-day,Day-To-Day,,2026-06-20T11:32:10.861305+00:00,api:espn_injuries,darianna littlepage-buggs
+Alysha Clark,DALLAS WINGS,F,Jun 20,day-to-day,Day-To-Day,Jun 19: Clark (left leg) is questionable for Saturday's game against Chicago.,2026-06-20T18:01:24.599189+00:00,api:espn_injuries,alysha clark
+Alanna Smith,DALLAS WINGS,F,Jun 20,day-to-day,Day-To-Day,Jun 19: Smith (illness) is listed as questionable for Saturday's game against the Sky.,2026-06-20T18:01:24.599337+00:00,api:espn_injuries,alanna smith
+Chennedy Carter,LAS VEGAS ACES,G,Jun 21,day-to-day,Day-To-Day,,2026-06-20T18:01:24.599514+00:00,api:espn_injuries,chennedy carter
+Kelsey Plum,LOS ANGELES SPARKS,G,Jun 21,day-to-day,Day-To-Day,"Jun 19: Plum (leg) could return for Sunday's game against the Liberty, according to Los Angeles reporter Justin Russo.",2026-06-20T18:01:24.599655+00:00,api:espn_injuries,kelsey plum
+Kate Martin,LOS ANGELES SPARKS,G,Jun 21,day-to-day,Day-To-Day,,2026-06-20T18:01:24.599725+00:00,api:espn_injuries,kate martin
+Eliska Hamzova,MINNESOTA LYNX,G,Jun 21,day-to-day,Day-To-Day,,2026-06-20T18:01:24.599858+00:00,api:espn_injuries,eliska hamzova
+Betnijah Laney-Hamilton,NEW YORK LIBERTY,G,Jun 21,day-to-day,Day-To-Day,,2026-06-20T18:01:24.599989+00:00,api:espn_injuries,betnijah laney-hamilton
+Darianna Littlepage-Buggs,WASHINGTON MYSTICS,G,Jun 21,day-to-day,Day-To-Day,,2026-06-20T18:01:24.600117+00:00,api:espn_injuries,darianna littlepage-buggs

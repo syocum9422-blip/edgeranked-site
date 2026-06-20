@@ -1,9 +1,9 @@
 team,source_schedule,source_prizepicks,included,reason
-ATL,True,True,True,scheduled_and_live_prizepicks
+ATL,True,False,True,scheduled
 CHI,True,True,True,scheduled_and_live_prizepicks
 DAL,True,True,True,scheduled_and_live_prizepicks
 GSV,False,True,False,excluded_not_on_canonical_slate
-IND,True,True,True,scheduled_and_live_prizepicks
+IND,True,False,True,scheduled
 LAS,False,True,False,excluded_not_on_canonical_slate
 LVA,False,True,False,excluded_not_on_canonical_slate
 MIN,False,True,False,excluded_not_on_canonical_slate
