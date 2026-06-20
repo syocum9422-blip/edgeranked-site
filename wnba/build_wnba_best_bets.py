@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from datetime import datetime, timezone
 
 import numpy as np
@@ -44,6 +45,15 @@ LOW_CONFIDENCE_HIT_RATE_CAP = 0.62
 LOW_MINUTES_HIT_RATE_CAP = 0.62
 UNCERTAIN_MINUTES_HIT_RATE_CAP = 0.68
 SMALL_EDGE_HIT_RATE_CAP = 0.70
+MARKET_VALIDATION_REPORT_PATH = BEST_BETS_DIR.parent / "data" / "processed" / "wnba_market_validation_report.csv"
+CONFIDENCE_BUCKET_REPORT_PATH = BEST_BETS_DIR.parent / "data" / "processed" / "wnba_confidence_bucket_report.csv"
+MEANINGFUL_MARKET_SAMPLE_SIZE = 50
+MARKET_STRENGTH_SAMPLE_TARGET = 200
+CONFIDENCE_BUCKET_SAMPLE_TARGET = 300
+PROJECTION_EDGE_NORMALIZER = 8.0
+MARKET_QUALIFICATION_REPORT_PATH = BEST_BETS_DIR.parent / "data" / "processed" / "wnba_market_qualification_report.csv"
+MARKET_QUALIFICATION_COMPARISON_PATH = BEST_BETS_DIR.parent / "data" / "processed" / "wnba_market_qualification_board_comparison.csv"
+
 BEST_BET_COLUMNS = [
     "DATE",
     "PLAYER",
@@ -415,6 +425,421 @@ def apply_confidence_guardrails(hit_rate: object, row: pd.Series, confidence_lab
     return max(0.01, min(calibrated, MAX_CALIBRATED_HIT_RATE)), steps
 
 
+def market_aware_ranking_enabled() -> bool:
+    return os.environ.get("WNBA_ENABLE_MARKET_AWARE_RANKING", "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def safe_numeric(value: object, default: float = np.nan) -> float:
+    number = pd.to_numeric(value, errors="coerce")
+    if pd.isna(number):
+        return default
+    return float(number)
+
+
+def score_rate(value: object) -> float:
+    number = safe_numeric(value, 0.50)
+    return float(np.clip((number - 0.50) / 0.20, 0.0, 1.0))
+
+
+def reliability_score(sample_size: object, target: int) -> float:
+    sample = safe_numeric(sample_size, 0.0)
+    return float(np.clip(sample / max(target, 1), 0.0, 1.0))
+
+
+def load_market_validation_report(logger) -> pd.DataFrame:
+    columns = [
+        "market",
+        "market_sample_size",
+        "win_pct",
+        "mae",
+        "rolling_30_day_accuracy",
+        "market_strength_score",
+        "market_sample_reliability",
+        "weak_market_warning",
+        "market_trust_label",
+    ]
+    if not MARKET_VALIDATION_REPORT_PATH.exists():
+        logger.info("WNBA market-aware ranking skipped market report: missing %s", MARKET_VALIDATION_REPORT_PATH)
+        return pd.DataFrame(columns=columns)
+    try:
+        report = pd.read_csv(MARKET_VALIDATION_REPORT_PATH)
+    except Exception as exc:
+        logger.warning("WNBA market-aware ranking could not read %s: %s", MARKET_VALIDATION_REPORT_PATH, exc)
+        return pd.DataFrame(columns=columns)
+    if report.empty or "market" not in report.columns:
+        return pd.DataFrame(columns=columns)
+
+    report = report.copy()
+    report["market"] = report["market"].astype(str).str.lower().str.strip()
+    for column in ["sample_size", "win_pct", "mae", "rolling_30_day_accuracy"]:
+        if column not in report.columns:
+            report[column] = np.nan
+        report[column] = pd.to_numeric(report[column], errors="coerce")
+
+    max_mae = report["mae"].dropna().max()
+    if pd.isna(max_mae) or max_mae <= 0:
+        max_mae = 1.0
+    report["win_rate_component"] = report["win_pct"].map(score_rate)
+    report["recent_30d_component"] = report["rolling_30_day_accuracy"].map(score_rate)
+    report["mae_component"] = (1.0 - (report["mae"] / max_mae)).clip(lower=0.0, upper=1.0).fillna(0.5)
+    report["market_sample_reliability"] = report["sample_size"].map(lambda value: reliability_score(value, MARKET_STRENGTH_SAMPLE_TARGET))
+    report["market_sample_size"] = report["sample_size"]
+    report["market_strength_score"] = (
+        0.45 * report["win_rate_component"]
+        + 0.20 * report["recent_30d_component"]
+        + 0.20 * report["mae_component"]
+        + 0.15 * report["market_sample_reliability"]
+    ).clip(lower=0.0, upper=1.0)
+    weak_mask = (report["sample_size"] >= MEANINGFUL_MARKET_SAMPLE_SIZE) & (report["win_pct"] < 0.52)
+    strong_mask = (report["sample_size"] >= MEANINGFUL_MARKET_SAMPLE_SIZE) & (report["win_pct"] >= 0.58)
+    report["weak_market_warning"] = np.where(
+        weak_mask,
+        "weak_market_under_52pct_meaningful_sample",
+        "",
+    )
+    report["market_trust_label"] = np.where(weak_mask, "LOW_TRUST", np.where(strong_mask, "STRONG_MARKET", "STANDARD"))
+    return report[columns].drop_duplicates("market", keep="last")
+
+
+def load_confidence_bucket_report(logger) -> pd.DataFrame:
+    columns = ["confidence_bucket", "confidence_bucket_sample_size", "realized_accuracy", "confidence_bucket_reliability"]
+    if not CONFIDENCE_BUCKET_REPORT_PATH.exists():
+        logger.info("WNBA market-aware ranking skipped confidence report: missing %s", CONFIDENCE_BUCKET_REPORT_PATH)
+        return pd.DataFrame(columns=columns)
+    try:
+        report = pd.read_csv(CONFIDENCE_BUCKET_REPORT_PATH)
+    except Exception as exc:
+        logger.warning("WNBA market-aware ranking could not read %s: %s", CONFIDENCE_BUCKET_REPORT_PATH, exc)
+        return pd.DataFrame(columns=columns)
+    if report.empty or "confidence_bucket" not in report.columns:
+        return pd.DataFrame(columns=columns)
+    report = report.copy()
+    for column in ["sample_size", "realized_accuracy"]:
+        if column not in report.columns:
+            report[column] = np.nan
+        report[column] = pd.to_numeric(report[column], errors="coerce")
+    report["confidence_bucket"] = report["confidence_bucket"].astype(str).str.strip()
+    report["confidence_bucket_reliability"] = report["sample_size"].map(lambda value: reliability_score(value, CONFIDENCE_BUCKET_SAMPLE_TARGET))
+    report["confidence_bucket_sample_size"] = report["sample_size"]
+    return report[columns].drop_duplicates("confidence_bucket", keep="last")
+
+
+def confidence_bucket_for_market_ranking(value: object) -> str:
+    number = pd.to_numeric(value, errors="coerce")
+    if pd.isna(number):
+        return "missing"
+    if number < 0.55:
+        return "50-55%"
+    if number < 0.60:
+        return "55-60%"
+    if number < 0.65:
+        return "60-65%"
+    if number < 0.70:
+        return "65-70%"
+    return "70%+"
+
+
+def apply_market_aware_ranking(ranked: pd.DataFrame, logger) -> pd.DataFrame:
+    if ranked.empty:
+        return ranked
+    market_report = load_market_validation_report(logger)
+    confidence_report = load_confidence_bucket_report(logger)
+    if market_report.empty or confidence_report.empty:
+        logger.warning("WNBA market-aware ranking enabled but required reports are unavailable; falling back to production ranking.")
+        return ranked
+
+    work = ranked.copy()
+    work["confidence_bucket"] = work["hit_rate"].map(confidence_bucket_for_market_ranking)
+    work = work.merge(market_report.rename(columns={"market": "stat"}), on="stat", how="left")
+    work = work.merge(confidence_report, on="confidence_bucket", how="left")
+
+    work["market_strength_score"] = pd.to_numeric(work["market_strength_score"], errors="coerce").fillna(0.50)
+    work["market_sample_reliability"] = pd.to_numeric(work["market_sample_reliability"], errors="coerce").fillna(0.0)
+    work["realized_accuracy"] = pd.to_numeric(work["realized_accuracy"], errors="coerce")
+    work["confidence_bucket_reliability"] = pd.to_numeric(work["confidence_bucket_reliability"], errors="coerce").fillna(0.0)
+    work["recalibrated_confidence_score"] = (
+        work["confidence_bucket_reliability"] * work["realized_accuracy"].fillna(work["hit_rate"])
+        + (1.0 - work["confidence_bucket_reliability"]) * work["hit_rate"]
+    ).clip(lower=0.0, upper=1.0)
+    work["projection_edge_score"] = (work["line_delta"].abs() / PROJECTION_EDGE_NORMALIZER).clip(lower=0.0, upper=1.0).fillna(0.0)
+    work["market_aware_rank_score"] = 100.0 * (
+        0.40 * work["market_strength_score"]
+        + 0.30 * work["recalibrated_confidence_score"]
+        + 0.15 * work["market_sample_reliability"]
+        + 0.15 * work["projection_edge_score"]
+    )
+    work["MARKET_STRENGTH_SCORE"] = work["market_strength_score"].round(4)
+    work["RECALIBRATED_CONFIDENCE"] = work["recalibrated_confidence_score"].round(4)
+    work["MARKET_SAMPLE_SIZE"] = pd.to_numeric(work["market_sample_size"], errors="coerce")
+    work["MARKET_WIN_PCT"] = pd.to_numeric(work["win_pct"], errors="coerce").round(4)
+    work["MARKET_ROLLING_30D"] = pd.to_numeric(work["rolling_30_day_accuracy"], errors="coerce").round(4)
+    work["MARKET_TRUST_LABEL"] = work["market_trust_label"].fillna("UNKNOWN")
+    work["MARKET_WARNING"] = work["weak_market_warning"].fillna("")
+    work["bet_quality_score"] = work["market_aware_rank_score"]
+    work = work.sort_values(
+        [
+            "market_aware_rank_score",
+            "market_strength_score",
+            "recalibrated_confidence_score",
+            "market_sample_reliability",
+            "projection_edge_score",
+        ],
+        ascending=[False, False, False, False, False],
+    )
+    logger.info(
+        "WNBA market-aware ranking applied using %s and %s",
+        MARKET_VALIDATION_REPORT_PATH,
+        CONFIDENCE_BUCKET_REPORT_PATH,
+    )
+    return work.reset_index(drop=True)
+
+
+MARKET_QUALIFICATION_RULES = {
+    "pa": {"suppress": True, "min_edge": 3.0, "label": "SUPPRESSED"},
+    "assists": {"allowed_side": "under", "min_edge": 1.0, "confidence_cap": 0.60, "label": "LOW_TRUST"},
+    "pra": {"allowed_side": "under", "min_edge": 5.0, "label": "QUALIFIED"},
+    "ra": {"allowed_side": "under", "min_edge": 0.0, "label": "QUALIFIED"},
+    "pr": {"min_edge": 5.0, "label": "QUALIFIED"},
+    "points": {"min_edge": 5.0, "label": "QUALIFIED"},
+    "rebounds": {"min_edge": 1.5, "label": "STRONG_MARKET"},
+    "steals": {"insufficient_sample": True, "label": "INSUFFICIENT_SAMPLE"},
+    "threes_made": {"insufficient_sample": True, "label": "INSUFFICIENT_SAMPLE"},
+}
+
+
+def market_qualification_enabled() -> bool:
+    return os.environ.get("WNBA_ENABLE_MARKET_QUALIFICATION", "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def market_qualification_mode() -> str:
+    mode = os.environ.get("WNBA_MARKET_QUALIFICATION_MODE", "hard").strip().lower()
+    return mode if mode in {"soft", "hard"} else "hard"
+
+
+def soft_pa_allowed() -> bool:
+    return os.environ.get("WNBA_MARKET_QUALIFICATION_ALLOW_PA", "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def qualification_reason(row: pd.Series, rule: dict) -> tuple[bool, str]:
+    stat = str(row.get("stat", "")).lower()
+    side = str(row.get("side", "")).lower()
+    abs_edge = abs(safe_numeric(row.get("line_delta"), 0.0))
+    if rule.get("suppress"):
+        return True, f"{stat}_market_suppressed"
+    allowed_side = rule.get("allowed_side")
+    if allowed_side and side != allowed_side:
+        return True, f"{stat}_{side}_disallowed_{allowed_side}_only"
+    min_edge = safe_numeric(rule.get("min_edge"), 0.0)
+    if abs_edge < min_edge:
+        return True, f"{stat}_edge_below_{min_edge:g}"
+    return False, ""
+
+
+def soft_qualification_for_row(row: pd.Series) -> dict:
+    stat = str(row.get("stat", "")).lower()
+    side = str(row.get("side", "")).lower()
+    abs_edge = abs(safe_numeric(row.get("line_delta"), 0.0))
+    action = "kept"
+    label = "QUALIFIED"
+    reason = ""
+    penalty = 1.0
+    confidence_cap = None
+    if stat == "pa" and not soft_pa_allowed():
+        return {
+            "action": "removed",
+            "label": "SUPPRESSED",
+            "reason": "pa_market_suppressed_soft_default",
+            "penalty": 0.0,
+            "confidence_cap": 0.55,
+        }
+    if stat == "assists":
+        label = "LOW_TRUST"
+        confidence_cap = 0.60
+        penalty = 0.78
+        if side != "under":
+            label = "WEAK_SIDE"
+            reason = "assists_over_weak_side"
+            penalty = 0.60
+        elif abs_edge < 1.0:
+            reason = "assists_edge_below_1"
+            penalty = 0.70
+    elif stat == "pra":
+        confidence_cap = 0.55 if side == "over" else 0.60
+        if side == "over":
+            label = "WEAK_SIDE"
+            reason = "pra_over_weak_side"
+            penalty = 0.55
+        elif abs_edge < 5.0:
+            label = "LOW_TRUST"
+            reason = "pra_edge_below_5"
+            penalty = 0.72
+    elif stat == "ra":
+        if side != "under":
+            label = "WEAK_SIDE"
+            reason = "ra_over_weak_side"
+            penalty = 0.55
+        else:
+            label = "QUALIFIED"
+    elif stat == "pr":
+        confidence_cap = 0.60
+        if abs_edge < 5.0:
+            label = "LOW_TRUST"
+            reason = "pr_edge_below_5"
+            penalty = 0.72
+    elif stat == "points":
+        if abs_edge < 5.0:
+            label = "LOW_TRUST"
+            reason = "points_edge_below_5"
+            penalty = 0.76
+    elif stat == "rebounds":
+        label = "STRONG_MARKET"
+        if abs_edge < 1.5:
+            reason = "rebounds_edge_below_1.5"
+            penalty = 0.88
+    elif stat in {"steals", "threes_made"}:
+        label = "INSUFFICIENT_SAMPLE"
+        reason = "insufficient_sample"
+        penalty = 0.70
+    return {
+        "action": action if penalty == 1.0 else "downranked",
+        "label": label,
+        "reason": reason,
+        "penalty": penalty,
+        "confidence_cap": confidence_cap,
+    }
+
+
+def hard_qualification_for_row(row: pd.Series) -> dict:
+    stat = str(row.get("stat", "")).lower()
+    rule = MARKET_QUALIFICATION_RULES.get(stat, {"label": "QUALIFIED", "min_edge": 0.0})
+    suppressed, reason = qualification_reason(row, rule)
+    label = str(rule.get("label", "QUALIFIED"))
+    if suppressed:
+        return {"action": "removed", "label": "SUPPRESSED", "reason": reason, "penalty": 0.0, "confidence_cap": rule.get("confidence_cap")}
+    if rule.get("insufficient_sample"):
+        return {"action": "downranked", "label": "INSUFFICIENT_SAMPLE", "reason": "insufficient_sample", "penalty": 0.70, "confidence_cap": rule.get("confidence_cap")}
+    if label == "LOW_TRUST":
+        return {"action": "downranked", "label": label, "reason": reason, "penalty": 0.85, "confidence_cap": rule.get("confidence_cap")}
+    return {"action": "kept", "label": label, "reason": reason, "penalty": 1.0, "confidence_cap": rule.get("confidence_cap")}
+
+
+def ensure_soft_market_rank(work: pd.DataFrame, logger) -> pd.DataFrame:
+    if "market_aware_rank_score" in work.columns:
+        return work
+    ranked = apply_market_aware_ranking(work, logger)
+    if "market_aware_rank_score" in ranked.columns:
+        return ranked
+    ranked = ranked.copy()
+    ranked["market_aware_rank_score"] = ranked["bet_quality_score"]
+    ranked["projection_edge_score"] = ranked["line_delta"].abs().fillna(0.0) / PROJECTION_EDGE_NORMALIZER
+    ranked["projection_edge_score"] = ranked["projection_edge_score"].clip(lower=0.0, upper=1.0)
+    return ranked
+
+
+def qualification_output_paths(mode: str) -> tuple[Path, Path]:
+    report_path = MARKET_QUALIFICATION_REPORT_PATH.with_name(f"wnba_market_qualification_report_{mode}.csv")
+    comparison_path = MARKET_QUALIFICATION_COMPARISON_PATH.with_name(f"wnba_market_qualification_board_comparison_{mode}.csv")
+    return report_path, comparison_path
+
+
+def apply_market_qualification(ranked: pd.DataFrame, logger) -> pd.DataFrame:
+    if ranked.empty:
+        return ranked
+    mode = market_qualification_mode()
+    if mode == "soft":
+        ranked = ensure_soft_market_rank(ranked, logger)
+    before = ranked.copy().reset_index(drop=True)
+    work = ranked.copy()
+    rows = []
+    keep_mask = []
+    trust_labels = []
+    qualification_reasons = []
+    downrank_factors = []
+    confidence_caps = []
+    for _, row in work.iterrows():
+        result = soft_qualification_for_row(row) if mode == "soft" else hard_qualification_for_row(row)
+        keep_mask.append(result["action"] != "removed")
+        trust_labels.append(result["label"])
+        qualification_reasons.append(result["reason"])
+        downrank_factors.append(result["penalty"])
+        confidence_caps.append(result.get("confidence_cap"))
+        rows.append(
+            {
+                "mode": mode,
+                "player_name": row.get("player_name"),
+                "team": row.get("team"),
+                "opponent": row.get("opponent"),
+                "stat": str(row.get("stat", "")).lower(),
+                "side": row.get("side"),
+                "line": row.get("line"),
+                "projection_mean": row.get("projection_mean"),
+                "line_delta": row.get("line_delta"),
+                "hit_rate_before": row.get("hit_rate"),
+                "bet_quality_score_before": row.get("bet_quality_score"),
+                "market_aware_rank_score_before": row.get("market_aware_rank_score", row.get("bet_quality_score")),
+                "qualification_action": result["action"],
+                "public_trust_label": result["label"],
+                "qualification_reason": result["reason"],
+                "downrank_factor": result["penalty"],
+                "confidence_cap": result.get("confidence_cap"),
+            }
+        )
+    report = pd.DataFrame(rows)
+    work["PUBLIC_TRUST_LABEL"] = trust_labels
+    work["QUALIFICATION_REASON"] = qualification_reasons
+    work["QUALIFICATION_DOWNRANK_FACTOR"] = downrank_factors
+    work["ORIGINAL_HIT_RATE"] = work["hit_rate"]
+    work["ORIGINAL_BET_QUALITY_SCORE"] = work["bet_quality_score"]
+
+    confidence_cap_mask = []
+    for position, (idx, row) in enumerate(work.iterrows()):
+        cap = confidence_caps[position]
+        if cap is None or not keep_mask[position]:
+            confidence_cap_mask.append(False)
+            continue
+        old_hit_rate = safe_numeric(row.get("hit_rate"), np.nan)
+        if pd.notna(old_hit_rate) and old_hit_rate > float(cap):
+            work.at[idx, "hit_rate"] = float(cap)
+            work.at[idx, "HIT_RATE"] = float(cap)
+            work.at[idx, "BET_CONFIDENCE"] = max(0.0, (float(cap) - 0.5) * 100.0)
+            confidence_cap_mask.append(True)
+        else:
+            confidence_cap_mask.append(False)
+    work["CONFIDENCE_CAPPED"] = confidence_cap_mask
+    base_score = work["market_aware_rank_score"] if mode == "soft" and "market_aware_rank_score" in work.columns else work["bet_quality_score"]
+    work["bet_quality_score"] = base_score * work["QUALIFICATION_DOWNRANK_FACTOR"]
+    report["hit_rate_after"] = work["hit_rate"].values
+    report["bet_quality_score_after"] = work["bet_quality_score"].values
+    report["confidence_capped"] = confidence_cap_mask
+    kept = work[pd.Series(keep_mask, index=work.index)].copy()
+
+    MARKET_QUALIFICATION_REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    report_path, comparison_path = qualification_output_paths(mode)
+    report.to_csv(report_path, index=False)
+    report.to_csv(MARKET_QUALIFICATION_REPORT_PATH, index=False)
+    before_top = before.head(MAX_BETS_TOTAL).copy()
+    before_top["board_version"] = f"before_{mode}_qualification"
+    after_top = kept.sort_values(["bet_quality_score", "edge", "hit_rate", "confidence_score"], ascending=[False, False, False, False]).head(MAX_BETS_TOTAL).copy()
+    after_top["board_version"] = f"after_{mode}_qualification"
+    comparison_cols = [
+        "board_version", "PLAYER", "STAT", "BET", "LINE", "PROJECTION", "HIT_RATE", "ABS_EDGE",
+        "bet_quality_score", "PUBLIC_TRUST_LABEL", "QUALIFICATION_REASON",
+    ]
+    comparison = pd.concat([before_top, after_top], ignore_index=True, sort=False)
+    for column in comparison_cols:
+        if column not in comparison.columns:
+            comparison[column] = np.nan
+    comparison[comparison_cols].to_csv(comparison_path, index=False)
+    comparison[comparison_cols].to_csv(MARKET_QUALIFICATION_COMPARISON_PATH, index=False)
+    summary = report.groupby(["stat", "side", "qualification_action", "public_trust_label"], dropna=False).size().reset_index(name="rows")
+    for rec in summary.to_dict("records"):
+        logger.info(
+            "WNBA market qualification | mode=%s stat=%s side=%s action=%s label=%s rows=%s",
+            mode, rec["stat"], rec["side"], rec["qualification_action"], rec["public_trust_label"], rec["rows"],
+        )
+    return kept.sort_values(["bet_quality_score", "edge", "hit_rate", "confidence_score"], ascending=[False, False, False, False]).reset_index(drop=True)
+
+
 def rank_bets(simulation_detail: pd.DataFrame, logger) -> pd.DataFrame:
     if simulation_detail.empty:
         return pd.DataFrame(columns=BEST_BET_COLUMNS)
@@ -550,10 +975,15 @@ def rank_bets(simulation_detail: pd.DataFrame, logger) -> pd.DataFrame:
         + 0.03 * ranked["projected_minutes"].clip(lower=0)
         + ranked["line_delta"].abs().fillna(0)
     )
-    ranked = ranked.sort_values(
-        ["bet_quality_score", "edge", "hit_rate", "confidence_score"],
-        ascending=[False, False, False, False],
-    )
+    if market_aware_ranking_enabled():
+        ranked = apply_market_aware_ranking(ranked, logger)
+    else:
+        ranked = ranked.sort_values(
+            ["bet_quality_score", "edge", "hit_rate", "confidence_score"],
+            ascending=[False, False, False, False],
+        )
+    if market_qualification_enabled():
+        ranked = apply_market_qualification(ranked, logger)
     ranked = ranked.groupby("player_name", group_keys=False).head(MAX_BETS_PER_PLAYER)
     ranked = ranked.groupby("stat", group_keys=False).head(MAX_BETS_PER_STAT)
     ranked = ranked.head(MAX_BETS_TOTAL).reset_index(drop=True)

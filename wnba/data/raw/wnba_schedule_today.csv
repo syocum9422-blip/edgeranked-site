@@ -1,4 +1,4 @@
 home_team,away_team,game_id,start_time_utc,start_time,game_date_et,included_reason,game_date,_data_source
 DAL,CHI,401857008,2026-06-21T00:00Z,2026-06-21T00:00Z,2026-06-20,start_time_within_et_day,2026-06-20,api:espn
 ATL,IND,401857006,2026-06-20T17:00Z,2026-06-20T17:00Z,2026-06-20,start_time_within_et_day,2026-06-20,api:espn
-PHX,SEA,401857007,2026-06-20T19:00Z,2026-06-20T19:00Z,2026-06-20,start_time_within_et_day,2026-06-20,api:espn
+PHX,SEA,401857007,2026-06-20T19:07Z,2026-06-20T19:07Z,2026-06-20,start_time_within_et_day,2026-06-20,api:espn

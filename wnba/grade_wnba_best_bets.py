@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import os
+import subprocess
+import sys
+
 import numpy as np
 import pandas as pd
 
@@ -15,6 +19,20 @@ def grade_bet(side: str, line: float, actual_value: float) -> str:
     if side == "over":
         return "win" if actual_value > line else "loss"
     return "win" if actual_value < line else "loss"
+
+
+def learning_audit_enabled() -> bool:
+    return os.environ.get("WNBA_ENABLE_LEARNING_AUDIT", "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def run_learning_audit(logger) -> None:
+    if not learning_audit_enabled():
+        return
+    script_path = GRADED_BETS_PATH.parents[1] / "wnba_learning_audit.py"
+    result = subprocess.run([sys.executable, str(script_path)], cwd=script_path.parent)
+    if result.returncode != 0:
+        raise RuntimeError(f"WNBA learning audit failed with exit code {result.returncode}")
+    logger.info("WNBA learning audit completed via WNBA_ENABLE_LEARNING_AUDIT")
 
 
 def main() -> None:
@@ -38,6 +56,7 @@ def main() -> None:
     graded.to_csv(GRADED_BETS_PATH, index=False)
     bet_history.to_csv(BETTING_RECORD_PATH, index=False)
     logger.info("Saved graded bets to %s", GRADED_BETS_PATH)
+    run_learning_audit(logger)
 
 
 if __name__ == "__main__":

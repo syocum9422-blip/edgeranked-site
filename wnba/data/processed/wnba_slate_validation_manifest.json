@@ -1,7 +1,7 @@
 {
   "duplicate_games": [],
   "expected_game_count": 3,
-  "generated_at": "2026-06-20T14:01:25.113088-04:00",
+  "generated_at": "2026-06-20T18:31:25.523917-04:00",
   "generated_game_count": 3,
   "generated_games": [
     {
@@ -14,7 +14,7 @@
       "away_team": "SEA",
       "game_id": "401857007",
       "home_team": "PHX",
-      "start_time_utc": "2026-06-20T19:00Z"
+      "start_time_utc": "2026-06-20T19:07Z"
     },
     {
       "away_team": "CHI",
@@ -37,7 +37,7 @@
       "away_team": "SEA",
       "game_id": "401857007",
       "home_team": "PHX",
-      "start_time_utc": "2026-06-20T19:00Z"
+      "start_time_utc": "2026-06-20T19:07Z"
     },
     {
       "away_team": "CHI",
