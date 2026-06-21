@@ -37,7 +37,7 @@
       ],
       "exists": true,
       "latest_date": "2026-06-20",
-      "modified_at_et": "2026-06-21T14:00:44.881021261-04:00",
+      "modified_at_et": "2026-06-21T18:30:43.260482072-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_player_games.csv",
       "rows": 10687
     },
@@ -56,9 +56,9 @@
       ],
       "exists": true,
       "latest_date": null,
-      "modified_at_et": "2026-06-21T14:01:26.326262474-04:00",
+      "modified_at_et": "2026-06-21T18:31:24.251438141-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_player_status.csv",
-      "rows": 9
+      "rows": 6
     },
     "schedule": {
       "columns": [
@@ -74,7 +74,7 @@
       ],
       "exists": true,
       "latest_date": "2026-06-21",
-      "modified_at_et": "2026-06-21T14:01:27.008266211-04:00",
+      "modified_at_et": "2026-06-21T18:31:24.778709650-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_schedule_today.csv",
       "rows": 3
     },
@@ -97,9 +97,9 @@
       ],
       "exists": true,
       "latest_date": null,
-      "modified_at_et": "2026-06-21T14:01:26.057260990-04:00",
+      "modified_at_et": "2026-06-21T18:31:24.050705671-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_sportsbook_lines.csv",
-      "rows": 295
+      "rows": 236
     },
     "team_context": {
       "columns": [
@@ -118,7 +118,7 @@
       ],
       "exists": true,
       "latest_date": "2026-06-20",
-      "modified_at_et": "2026-06-21T14:01:20.161227703-04:00",
+      "modified_at_et": "2026-06-21T18:31:18.453675032-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_team_context.csv",
       "rows": 334
     },
@@ -268,10 +268,10 @@
       ],
       "exists": true,
       "latest_date": "2026-06-21",
-      "modified_at_et": "2026-06-21T14:02:42.143690825-04:00",
+      "modified_at_et": "2026-06-21T18:32:27.950056553-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/processed/wnba_today_features.csv",
       "rows": 85
     }
   },
-  "generated_at": "2026-06-21T14:02:57.045273-04:00"
+  "generated_at": "2026-06-21T18:32:36.820227-04:00"
 }
