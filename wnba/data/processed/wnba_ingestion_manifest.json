@@ -36,10 +36,10 @@
         "_data_source"
       ],
       "exists": true,
-      "latest_date": "2026-06-20",
-      "modified_at_et": "2026-06-21T18:30:43.260482072-04:00",
+      "latest_date": "2026-06-21",
+      "modified_at_et": "2026-06-22T07:31:33.491885900-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_player_games.csv",
-      "rows": 10687
+      "rows": 10756
     },
     "player_status": {
       "columns": [
@@ -56,9 +56,9 @@
       ],
       "exists": true,
       "latest_date": null,
-      "modified_at_et": "2026-06-21T18:31:24.251438141-04:00",
+      "modified_at_et": "2026-06-22T07:32:14.470305681-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_player_status.csv",
-      "rows": 6
+      "rows": 8
     },
     "schedule": {
       "columns": [
@@ -73,10 +73,10 @@
         "_data_source"
       ],
       "exists": true,
-      "latest_date": "2026-06-21",
-      "modified_at_et": "2026-06-21T18:31:24.778709650-04:00",
+      "latest_date": "2026-06-22",
+      "modified_at_et": "2026-06-22T07:32:14.953142881-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_schedule_today.csv",
-      "rows": 3
+      "rows": 4
     },
     "sportsbook_lines": {
       "columns": [
@@ -97,9 +97,9 @@
       ],
       "exists": true,
       "latest_date": null,
-      "modified_at_et": "2026-06-21T18:31:24.050705671-04:00",
+      "modified_at_et": "2026-06-22T07:32:14.279138803-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_sportsbook_lines.csv",
-      "rows": 236
+      "rows": 195
     },
     "team_context": {
       "columns": [
@@ -117,10 +117,10 @@
         "_data_source"
       ],
       "exists": true,
-      "latest_date": "2026-06-20",
-      "modified_at_et": "2026-06-21T18:31:18.453675032-04:00",
+      "latest_date": "2026-06-21",
+      "modified_at_et": "2026-06-22T07:32:08.691105366-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_team_context.csv",
-      "rows": 334
+      "rows": 340
     },
     "today_features": {
       "columns": [
@@ -267,11 +267,11 @@
         "pos_blocks_allowed_last_10_y"
       ],
       "exists": true,
-      "latest_date": "2026-06-21",
-      "modified_at_et": "2026-06-21T18:32:27.950056553-04:00",
+      "latest_date": "2026-06-22",
+      "modified_at_et": "2026-06-22T07:33:08.047466516-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/processed/wnba_today_features.csv",
-      "rows": 85
+      "rows": 112
     }
   },
-  "generated_at": "2026-06-21T18:32:36.820227-04:00"
+  "generated_at": "2026-06-22T07:33:19.031690-04:00"
 }

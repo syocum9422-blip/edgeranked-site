@@ -1,23 +1,23 @@
 # WNBA Nightly Learning Report
 
-Generated: 2026-06-21T04:25:05Z
-Graded predictions in ledger: 1506
+Generated: 2026-06-22T04:25:05Z
+Graded predictions in ledger: 1553
 
 ## Best-Performing Markets
      market  sample_size  win_pct      mae  calibration
-   rebounds          127 0.666667 2.129161    -0.091061
+   rebounds          132 0.672131 2.150950    -0.080382
 threes_made           10 0.600000 0.951522    -0.126266
-        pra          325 0.555556 8.388900    -0.284689
-     points          345 0.550296 6.092865    -0.236639
-         pr          335 0.549849 7.279508    -0.263877
+        pra          336 0.561194 8.317366    -0.272140
+     points          358 0.560000 5.927234    -0.220984
+         ra           77 0.560000 3.545770    -0.187308
 
 ## Worst-Performing Markets
  market  sample_size  win_pct      mae  calibration
-     pa          205 0.463054 7.658432    -0.328947
-assists           70 0.492063 2.172834    -0.306616
- steals           14 0.500000 0.891661    -0.274853
-     ra           75 0.547945 3.529125    -0.203248
-     pr          335 0.549849 7.279508    -0.263877
+     pa          208 0.466019 7.618426    -0.323335
+assists           71 0.484375 2.175334    -0.312144
+ steals           15 0.533333 0.845517    -0.232939
+     pr          346 0.540936 7.208500    -0.266281
+ points          358 0.560000 5.927234    -0.220984
 
 ## Biggest Misses
       date          player market  side  projection  sportsbook_line  actual_result  absolute_error
@@ -48,17 +48,17 @@ assists           70 0.492063 2.172834    -0.306616
 ## Team Accuracy
 team  sample_size  accuracy      mae
  POR          111  0.669725 6.721727
+ DAL          111  0.614679 5.264993
  NYL          139  0.602941 6.709045
- DAL           96  0.574468 5.750535
- IND          103  0.554455 5.375656
- PHX          128  0.551181 7.566826
+ IND          109  0.560748 5.321707
+ PHX          135  0.552239 7.414418
  GSV          101  0.550000 5.530308
- CHI           41  0.536585 7.459394
- ATL           94  0.532609 5.577169
+ SEA           98  0.547368 5.036511
  LVA          120  0.530435 6.261713
  MIN          109  0.528846 5.422643
- SEA           93  0.522222 5.222225
+ ATL           96  0.526882 5.528613
  CON           86  0.517647 5.788593
+ WAS           67  0.515152 9.171248
 
 ## Player Outliers
          player  sample_size  accuracy       mae
@@ -71,28 +71,28 @@ Chennedy Carter           11  0.363636 10.643571
     Leila Lacan            5  0.200000 10.351339
  Janelle Salaun            5  0.000000 10.123911
     Carla Leite           32  0.593750  9.952199
- Kahleah Copper           34  0.636364  9.870423
 Hailey Van Lith            7  0.428571  9.607210
+ Kahleah Copper           36  0.628571  9.413411
  Brittney Sykes           36  0.400000  9.360317
 
 ## Confidence Calibration
 confidence_bucket  sample_size  realized_accuracy  avg_predicted_hit_rate  calibration_gap
-           55-60%           84           0.621951                0.580723         0.041228
-           60-65%          309           0.483553                0.623096        -0.139543
-           65-70%          135           0.492308                0.671930        -0.179623
+           55-60%           92           0.611111                0.581343         0.029768
+           60-65%          344           0.500000                0.623123        -0.123123
+           65-70%          139           0.507463                0.671435        -0.163972
              70%+          978           0.566353                0.893755        -0.327401
 
 ## Challenger Summary
 segment      market  sample_size  production_mae  challenger_mae  production_brier  challenger_brier
-    all         all         1506        6.338798        6.180121          0.324874          0.286136
- market     assists           70        2.172834        2.231509          0.341214          0.303375
- market          pa          205        7.658432        7.513044          0.357232          0.309195
- market      points          345        6.092865        6.095002          0.325418          0.290268
- market          pr          335        7.279508        6.991053          0.330050          0.288234
- market         pra          325        8.388900        7.908765          0.334139          0.284866
- market          ra           75        3.529125        3.630231          0.307190          0.290379
- market    rebounds          127        2.129161        2.182491          0.244967          0.227412
- market      steals           14        0.891661        2.028440          0.268236          0.264341
+    all         all         1553        6.264620        6.118721          0.321767          0.284217
+ market     assists           71        2.175334        2.231608          0.342389          0.304848
+ market          pa          208        7.618426        7.483724          0.355428          0.308114
+ market      points          358        5.927234        5.944802          0.320267          0.286232
+ market          pr          346        7.208500        6.911471          0.329340          0.288678
+ market         pra          336        8.317366        7.877875          0.329770          0.282339
+ market          ra           77        3.545770        3.662852          0.303239          0.287333
+ market    rebounds          132        2.150950        2.203408          0.242829          0.226230
+ market      steals           15        0.845517        1.995898          0.258702          0.254676
  market threes_made           10        0.951522        1.791287          0.218406          0.228135
 
 Promotion recommendation: do_not_promote (shadow_improved_mae_and_brier_but_promotion_is_advisory_only)
