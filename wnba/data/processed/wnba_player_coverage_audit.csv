@@ -24,6 +24,10 @@ Caitlin Clark,IND,PHX,True,True,csv,True,included
 Kelsey Mitchell,IND,PHX,True,True,csv,True,included
 Monique Billings,IND,PHX,True,True,csv,True,included
 Sophie Cunningham,IND,PHX,True,True,csv,True,included
+Courtney Williams,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
+Kayla McBride,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
+Natasha Howard,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
+Olivia Miles,MIN,,True,True,csv,False,excluded_not_on_canonical_slate
 Alyssa Thomas,PHX,IND,True,True,csv,True,included
 DeWanna Bonner,PHX,IND,True,True,csv,True,included
 Kahleah Copper,PHX,IND,True,True,csv,True,included
@@ -31,9 +35,14 @@ Natasha Mack,PHX,IND,True,True,csv,True,included
 Awa Fam,SEA,DAL,True,True,csv,True,included
 Dominique Malonga,SEA,DAL,True,True,csv,True,included
 Flau'jae Johnson,SEA,DAL,True,True,csv,True,included
+Jade Melbourne,SEA,DAL,True,True,csv,True,included
 Natisha Hiedeman,SEA,DAL,True,True,csv,True,included
 Isabelle Harrison,TOR,ATL,True,True,csv,True,included
 Julie Allemand,TOR,ATL,True,True,csv,True,included
 Laura Juškaitė,TOR,ATL,True,True,csv,True,included
 Maria Conde,TOR,ATL,True,True,csv,True,included
 Marina Mabrey,TOR,ATL,True,True,csv,True,included
+Kiki Iriafen,WAS,,True,True,csv,False,excluded_not_on_canonical_slate
+Michaela Onyenwere,WAS,,True,True,csv,False,excluded_not_on_canonical_slate
+Shakira Austin,WAS,,True,True,csv,False,excluded_not_on_canonical_slate
+Sonia Citron,WAS,,True,True,csv,False,excluded_not_on_canonical_slate
