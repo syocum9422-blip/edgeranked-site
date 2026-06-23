@@ -5,12 +5,12 @@
     "NYL"
   ],
   "error": "",
-  "excluded_players": 40,
+  "excluded_players": 41,
   "excluded_reasons": {
-    "excluded_not_on_canonical_slate": 40
+    "excluded_not_on_canonical_slate": 41
   },
-  "generated_at": "2026-06-23T07:33:10.443612-04:00",
-  "included_players": 11,
+  "generated_at": "2026-06-23T14:02:27.609228-04:00",
+  "included_players": 13,
   "message": "WNBA refresh passed.",
   "projected_teams": [
     "LVA",
