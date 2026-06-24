@@ -41,6 +41,7 @@ PIPELINE_STEPS = [
     ("Build WNBA today features", "build_wnba_features_today.py"),
     ("Simulate WNBA today", "simulate_wnba_today.py"),
     ("Build WNBA best bets", "build_wnba_best_bets.py"),
+    ("Run WNBA combo hybrid minutes canary", "wnba_combo_hybrid_minutes_canary.py"),
 ]
 
 SNAPSHOT_FILES = [
@@ -194,9 +195,12 @@ def run_step(label: str, script_name: str) -> None:
         raise FileNotFoundError(f"Missing pipeline script: {script_path}")
 
     cmd = [project_python(), str(script_path)]
+    env = os.environ.copy()
+    if script_name == "wnba_combo_hybrid_minutes_canary.py":
+        env.setdefault("WNBA_ENABLE_COMBO_HYBRID_MINUTES_CANARY", "1")
     print(f"\n===== {label} =====")
     print("Running:", " ".join(cmd))
-    result = subprocess.run(cmd, cwd=BASE_DIR)
+    result = subprocess.run(cmd, cwd=BASE_DIR, env=env)
     if result.returncode != 0:
         raise RuntimeError(f"Step failed: {label} ({script_name})")
 

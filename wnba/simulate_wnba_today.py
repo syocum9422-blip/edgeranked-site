@@ -3,14 +3,18 @@ from __future__ import annotations
 import math
 import os
 import zlib
+from pathlib import Path
 
+import joblib
 import numpy as np
 import pandas as pd
 
 from wnba_model_config import (
     APP_VIEW_PROJECTIONS_PATH,
+    DATASET_PATH,
     MINUTES_MODEL_PATH,
     MONTE_CARLO_SIMS,
+    PROCESSED_DIR,
     PROJECTIONS_PATH,
     PROJECTIONS_ARCHIVE_DIR,
     SIMULATION_DETAIL_PATH,
@@ -83,6 +87,7 @@ P7_COUPLED_SAMPLING = _p7_flag("WNBA_P7_COUPLED_SAMPLING", True)
 P7_DISCRETE_COUNTS = _p7_flag("WNBA_P7_DISCRETE_COUNTS", True)
 P7_DISCRETE_ASSISTS = _p7_flag("WNBA_P7_DISCRETE_ASSISTS", True)
 P7_GAME_STATE = _p7_flag("WNBA_P7_GAME_STATE", True)
+PHASE13_COMBO_HYBRID_MINUTES_PRODUCTION = _p7_flag("WNBA_ENABLE_COMBO_HYBRID_MINUTES_PRODUCTION", True)
 
 # Active-branch minutes haircut by status: a player listed questionable/day-to-day who does
 # play tends to log fewer minutes than her healthy projection.
@@ -106,6 +111,24 @@ REDIS_BOOST_SCALE = 0.5
 REDIS_BENEFICIARY_MIN_FLOOR = 12.0
 
 DISCRETE_BASE_STATS = {"steals", "blocks", "threes_made"}
+
+PHASE13_COMBO_HYBRID_MINUTES_BLEND = {
+    "pa": 0.25,
+    "pr": 1.00,
+    "pra": 0.50,
+}
+PHASE13_COMBO_COMPONENTS = {
+    "pa": ["points", "assists"],
+    "pr": ["points", "rebounds"],
+    "pra": ["points", "rebounds", "assists"],
+}
+PHASE13_SHADOW_MODEL_DIR = Path(__file__).resolve().parent / "data" / "models" / "shadow_hybrid_minutes"
+PHASE13_PRODUCTION_MINUTES_MODEL = PHASE13_SHADOW_MODEL_DIR / "wnba_minutes_production_like.pkl"
+PHASE13_ROLE_MINUTES_MODEL = PHASE13_SHADOW_MODEL_DIR / "wnba_minutes_role_pattern.pkl"
+PHASE13_COMPARISON_PATH = PROCESSED_DIR / "wnba_phase13_combo_hybrid_minutes_projection_comparison.csv"
+PHASE13_REPORT_PATH = (
+    Path(__file__).resolve().parent / "learning" / "reports" / "wnba_phase13_combo_hybrid_minutes_production_report.md"
+)
 
 # Shared per-game environment draws.
 GAME_STATE_PACE_STD = 0.055   # game-to-game pace variation around expectation
@@ -477,6 +500,121 @@ def summarize_samples(samples: np.ndarray) -> dict[str, float]:
     }
 
 
+def add_phase13_role_features(frame: pd.DataFrame) -> pd.DataFrame:
+    """Add Phase 12 role-pattern features needed by the shadow minutes model.
+
+    Today's feature rows do not contain lag/rank role features, so use the latest
+    historical role snapshot per player as the production-safe estimate.
+    """
+    out = frame.copy()
+    for base in [
+        "pos_points_allowed_last_10",
+        "pos_rebounds_allowed_last_10",
+        "pos_assists_allowed_last_10",
+        "pos_threes_made_allowed_last_10",
+        "pos_steals_allowed_last_10",
+        "pos_blocks_allowed_last_10",
+    ]:
+        if base not in out.columns:
+            for candidate in (f"{base}_y", f"{base}_x"):
+                if candidate in out.columns:
+                    out[base] = out[candidate]
+                    break
+    role_features = [
+        "minutes_lag_1",
+        "minutes_lag_2",
+        "minutes_lag_3",
+        "minutes_delta_1_over_5",
+        "minutes_trend_pct_3_over_10",
+        "rotation_minutes_share_last_10",
+        "rotation_rank_last_10",
+        "rotation_rank_last_3",
+        "rotation_rank_delta_3_over_10",
+        "role_change_flag",
+        "rotation_tier",
+    ]
+    if all(column in out.columns for column in role_features):
+        return out
+    if not DATASET_PATH.exists():
+        return out
+
+    history = pd.read_csv(DATASET_PATH, parse_dates=["game_date"])
+    if history.empty or "player_key" not in history.columns:
+        return out
+    history = history.sort_values(["player_key", "game_date"]).copy()
+    for lag in [1, 2, 3]:
+        history[f"minutes_lag_{lag}"] = history.groupby("player_key")["minutes"].shift(lag)
+    history["minutes_delta_1_over_5"] = history["minutes_lag_1"] - history["minutes_rolling_mean_5"]
+    history["minutes_trend_pct_3_over_10"] = history["minutes_trend_3_over_10"] / history[
+        "minutes_rolling_mean_10"
+    ].replace(0, np.nan)
+    history["minutes_trend_pct_3_over_10"] = history["minutes_trend_pct_3_over_10"].replace(
+        [np.inf, -np.inf], np.nan
+    )
+    team_minutes = history.groupby(["game_date", "team"])["minutes_rolling_mean_10"].transform("sum")
+    history["rotation_minutes_share_last_10"] = history["minutes_rolling_mean_10"] / team_minutes.replace(0, np.nan)
+    history["rotation_rank_last_10"] = history.groupby(["game_date", "team"])["minutes_rolling_mean_10"].rank(
+        method="dense", ascending=False
+    )
+    history["rotation_rank_last_3"] = history.groupby(["game_date", "team"])["minutes_rolling_mean_3"].rank(
+        method="dense", ascending=False
+    )
+    history["rotation_rank_delta_3_over_10"] = history["rotation_rank_last_10"] - history["rotation_rank_last_3"]
+    history["rotation_tier"] = pd.cut(
+        history["rotation_rank_last_10"],
+        bins=[0, 3, 5, 8, 99],
+        labels=["core", "starter_level", "rotation", "deep"],
+    ).astype(str)
+    history["role_change_flag"] = (
+        (history["minutes_delta_1_over_5"].abs() >= 6)
+        | (history["minutes_trend_3_over_10"].abs() >= 5)
+        | (history["rotation_rank_delta_3_over_10"].abs() >= 2)
+    ).astype(int)
+
+    latest = history.drop_duplicates("player_key", keep="last")[["player_key", *role_features]]
+    return out.merge(latest, on="player_key", how="left", suffixes=("", "_phase13_role"))
+
+
+def apply_phase13_combo_hybrid_minutes(projection_frame: pd.DataFrame, stat_models: dict, logger=None) -> pd.DataFrame:
+    """Compute combo-only hybrid component projections for PA/PR/PRA.
+
+    Base points/rebounds/assists projections remain untouched. The hybrid outputs are
+    stored in separate phase13_* columns and consumed only when building PA/PR/PRA.
+    """
+    frame = projection_frame.copy()
+    for market in PHASE13_COMBO_HYBRID_MINUTES_BLEND:
+        frame[f"phase13_{market}_enabled"] = False
+        frame[f"phase13_{market}_blend"] = PHASE13_COMBO_HYBRID_MINUTES_BLEND[market]
+        frame[f"phase13_{market}_minutes"] = np.nan
+        frame[f"phase13_{market}_proj"] = np.nan
+
+    if not PHASE13_COMBO_HYBRID_MINUTES_PRODUCTION:
+        return frame
+    if not PHASE13_ROLE_MINUTES_MODEL.exists():
+        if logger is not None:
+            logger.warning("Phase 13 combo hybrid minutes disabled: missing %s", PHASE13_ROLE_MINUTES_MODEL)
+        return frame
+
+    role_model = joblib.load(PHASE13_ROLE_MINUTES_MODEL)
+    role_frame = add_phase13_role_features(frame)
+    role_minutes = predict_ensemble(role_model, role_frame)[2]
+    production_minutes = pd.to_numeric(frame["projected_minutes"], errors="coerce").fillna(0).to_numpy()
+
+    for market, blend in PHASE13_COMBO_HYBRID_MINUTES_BLEND.items():
+        hybrid_minutes = np.clip((1.0 - blend) * production_minutes + blend * role_minutes, 0, 40)
+        market_frame = role_frame.copy()
+        market_frame["minutes"] = hybrid_minutes
+        frame[f"phase13_{market}_enabled"] = True
+        frame[f"phase13_{market}_minutes"] = hybrid_minutes
+        total = np.zeros(len(frame))
+        for component in PHASE13_COMBO_COMPONENTS[market]:
+            component_pred = predict_ensemble(stat_models[component], market_frame)[2]
+            frame[f"phase13_{market}_{component}_proj"] = component_pred
+            total += component_pred
+        frame[f"phase13_{market}_proj"] = total
+
+    return frame
+
 def build_projection_rows(today_features: pd.DataFrame, stat_models: dict, minutes_model: dict) -> pd.DataFrame:
     projection_frame = today_features.copy()
     m_ridge, m_tree, m_pred = predict_ensemble(minutes_model, projection_frame)
@@ -516,6 +654,7 @@ def simulate_player_row(
     sportsbook_lines: pd.DataFrame,
     status_lookup: dict[str, str],
     p7_events: list | None = None,
+    phase13_comparison_rows: list | None = None,
 ) -> tuple[dict, list[dict]]:
     minutes_mean = float(row["projected_minutes"])
     baseline_minutes = pd.to_numeric(row.get("baseline_minutes"), errors="coerce")
@@ -695,7 +834,42 @@ def simulate_player_row(
 
 
     for combo_name, (stat_list, stat_key, stat_label) in COMBO_STATS.items():
-        combo_samples = np.sum([stat_samples[stat] for stat in stat_list], axis=0)
+        production_combo_samples = np.sum([stat_samples[stat] for stat in stat_list], axis=0)
+        combo_samples = production_combo_samples
+        phase13_enabled = bool(row.get(f"phase13_{combo_name}_enabled", False))
+        if PHASE13_COMBO_HYBRID_MINUTES_PRODUCTION and combo_name in PHASE13_COMBO_HYBRID_MINUTES_BLEND and phase13_enabled:
+            hybrid_component_samples = []
+            for stat in stat_list:
+                hybrid_projection = pd.to_numeric(row.get(f"phase13_{combo_name}_{stat}_proj"), errors="coerce")
+                production_projection = pd.to_numeric(row.get(f"{stat}_proj"), errors="coerce")
+                if pd.isna(hybrid_projection) or pd.isna(production_projection):
+                    hybrid_component_samples.append(stat_samples[stat])
+                    continue
+                if production_projection <= 0:
+                    ratio = 0.0 if hybrid_projection <= 0 else 1.0
+                else:
+                    ratio = float(np.clip(hybrid_projection / production_projection, 0.0, 3.0))
+                hybrid_component_samples.append(stat_samples[stat] * ratio)
+            combo_samples = np.sum(hybrid_component_samples, axis=0)
+            if phase13_comparison_rows is not None:
+                before_projection = float(np.mean(production_combo_samples))
+                after_projection = float(np.mean(combo_samples))
+                phase13_comparison_rows.append(
+                    {
+                        "game_date": game_date,
+                        "player_key": player_key,
+                        "player_name": row.get("player_name", ""),
+                        "team": row.get("team", ""),
+                        "opponent": row.get("opponent", ""),
+                        "market": combo_name.upper(),
+                        "blend_shadow_minutes": PHASE13_COMBO_HYBRID_MINUTES_BLEND[combo_name],
+                        "production_minutes": minutes_mean,
+                        "hybrid_minutes": row.get(f"phase13_{combo_name}_minutes"),
+                        "before_projection": before_projection,
+                        "after_projection": after_projection,
+                        "projection_delta": after_projection - before_projection,
+                    }
+                )
         stat_summary = summarize_samples(combo_samples)
         summary[f"{stat_key}_PROJ"] = round(stat_summary["mean"], 2)
         summary[f"SIM_{stat_key}_P10"] = round(stat_summary["p10"], 2)
@@ -737,7 +911,7 @@ def simulate_player_row(
                     "projected_minutes": minutes_mean,
                     "confidence": confidence,
                     "confidence_label": confidence.title(),
-                    "model_projection": np.nan,  # No single model projection for combos
+                    "model_projection": row.get(f"phase13_{combo_name}_proj") if phase13_enabled else np.nan,
                     "line_delta": float(np.mean(combo_samples)) - line,
                 }
             )
@@ -747,6 +921,73 @@ def simulate_player_row(
 
 
 
+
+def write_phase13_comparison_report(rows: list[dict]) -> None:
+    columns = [
+        "game_date",
+        "player_key",
+        "player_name",
+        "team",
+        "opponent",
+        "market",
+        "blend_shadow_minutes",
+        "production_minutes",
+        "hybrid_minutes",
+        "before_projection",
+        "after_projection",
+        "projection_delta",
+    ]
+    report = pd.DataFrame(rows, columns=columns)
+    PHASE13_COMPARISON_PATH.parent.mkdir(parents=True, exist_ok=True)
+    report.to_csv(PHASE13_COMPARISON_PATH, index=False)
+
+    PHASE13_REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    lines = [
+        "# WNBA Phase 13 Combo Hybrid Minutes Production Report",
+        "",
+        f"Generated: {pd.Timestamp.now(tz='UTC').replace(microsecond=0).isoformat().replace('+00:00', 'Z')}",
+        "",
+        "## Production Logic",
+        f"- Rollback flag: `WNBA_ENABLE_COMBO_HYBRID_MINUTES_PRODUCTION` (default: {'ON' if PHASE13_COMBO_HYBRID_MINUTES_PRODUCTION else 'OFF'}).",
+        "- Applies only to PA, PR, and PRA combo-market projection samples.",
+        "- PA uses 25% shadow role-pattern minutes and 75% current production minutes.",
+        "- PR uses 100% shadow role-pattern minutes.",
+        "- PRA uses 50% shadow role-pattern minutes and 50% current production minutes.",
+        "- Points, rebounds, assists, RA, steals, blocks, 3PM, and SB base-market outputs are not rewritten.",
+        "",
+        "## Before/After Summary",
+    ]
+    if report.empty:
+        lines.append("- No PA/PR/PRA projection rows were generated for this slate.")
+    else:
+        grouped = report.groupby("market", dropna=False).agg(
+            rows=("player_key", "count"),
+            avg_before_projection=("before_projection", "mean"),
+            avg_after_projection=("after_projection", "mean"),
+            avg_projection_delta=("projection_delta", "mean"),
+            max_abs_projection_delta=("projection_delta", lambda s: float(pd.to_numeric(s, errors="coerce").abs().max())),
+        ).reset_index()
+        for _, row in grouped.iterrows():
+            lines.append(
+                f"- {row['market']}: rows={int(row['rows'])}, "
+                f"avg before={row['avg_before_projection']:.3f}, "
+                f"avg after={row['avg_after_projection']:.3f}, "
+                f"avg delta={row['avg_projection_delta']:.3f}, "
+                f"max abs delta={row['max_abs_projection_delta']:.3f}"
+            )
+    lines.extend(
+        [
+            "",
+            "## Report Files",
+            f"- CSV comparison: `{PHASE13_COMPARISON_PATH}`",
+            f"- Markdown report: `{PHASE13_REPORT_PATH}`",
+            "",
+            "## Rollback",
+            "- Set `WNBA_ENABLE_COMBO_HYBRID_MINUTES_PRODUCTION=0` and rerun `python3 run_wnba_model.py`.",
+            "- The canary remains independent via `WNBA_ENABLE_COMBO_HYBRID_MINUTES_CANARY=1`.",
+        ]
+    )
+    PHASE13_REPORT_PATH.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 def build_app_view(projections: pd.DataFrame) -> pd.DataFrame:
     rows = []
@@ -842,6 +1083,11 @@ def main() -> None:
         P7_ACTIVE_PROB, P7_REDISTRIBUTION, P7_COUPLED_SAMPLING, P7_DISCRETE_COUNTS,
         P7_DISCRETE_ASSISTS, P7_GAME_STATE,
     )
+    logger.info(
+        "Phase 13 combo hybrid minutes production: enabled=%s blends=%s",
+        PHASE13_COMBO_HYBRID_MINUTES_PRODUCTION,
+        PHASE13_COMBO_HYBRID_MINUTES_BLEND,
+    )
     p7_events: list[dict] = []
     if P7_REDISTRIBUTION:
         absences = build_absences_from_status(player_status, games_log, projections_input, logger)
@@ -849,11 +1095,21 @@ def main() -> None:
             projections_input, games_log, absences, p7_events, logger
         )
 
+    projections_input = apply_phase13_combo_hybrid_minutes(projections_input, stat_models, logger)
+
     rng = np.random.default_rng(42)
     projection_rows = []
     simulation_rows = []
+    phase13_comparison_rows = []
     for _, row in projections_input.iterrows():
-        summary_row, detail_rows = simulate_player_row(row, rng, sportsbook_lines, status_lookup, p7_events=p7_events)
+        summary_row, detail_rows = simulate_player_row(
+            row,
+            rng,
+            sportsbook_lines,
+            status_lookup,
+            p7_events=p7_events,
+            phase13_comparison_rows=phase13_comparison_rows,
+        )
         projection_rows.append(summary_row)
         simulation_rows.extend(detail_rows)
 
@@ -1008,7 +1264,9 @@ def main() -> None:
 
     simulation_detail = pd.DataFrame(simulation_rows, columns=SIMULATION_DETAIL_COLUMNS)
     simulation_detail.to_csv(SIMULATION_DETAIL_PATH, index=False)
+    write_phase13_comparison_report(phase13_comparison_rows)
     logger.info("Saved projections to %s and simulation detail to %s", PROJECTIONS_PATH, SIMULATION_DETAIL_PATH)
+    logger.info("Saved Phase 13 combo hybrid minutes comparison to %s", PHASE13_COMPARISON_PATH)
 
 
 if __name__ == "__main__":

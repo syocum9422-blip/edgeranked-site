@@ -41,6 +41,7 @@ game_date,team,opponent,pace,off_rating,def_rating,team_points,opp_points,team_r
 2026-05-18,CON,POR,,,,82.0,83.0,32.0,23.0,7.0,csv
 2026-05-20,CON,SEA,,,,80.0,78.0,38.0,14.0,5.0,csv
 2026-05-22,CON,SEA,,,,59.0,77.0,33.0,15.0,4.0,csv
+2026-05-25,CON,GSV,,,,70.0,97.0,32.0,13.0,6.0,csv
 2026-05-09,DAL,IND,,,,107.0,104.0,27.0,26.0,12.0,csv
 2026-05-12,DAL,ATL,,,,72.0,77.0,34.0,15.0,4.0,csv
 2026-05-14,DAL,MIN,,,,86.0,90.0,26.0,22.0,5.0,csv
@@ -53,6 +54,7 @@ game_date,team,opponent,pace,off_rating,def_rating,team_points,opp_points,team_r
 2026-05-13,GSV,CHI,,,,63.0,69.0,42.0,10.0,7.0,csv
 2026-05-21,GSV,NYL,,,,87.0,70.0,36.0,18.0,13.0,csv
 2026-05-22,GSV,IND,,,,82.0,90.0,28.0,11.0,7.0,csv
+2026-05-25,GSV,CON,,,,97.0,70.0,35.0,24.0,13.0,csv
 2025-05-16,IND,CON,79.8,103.2,95.8,80.4,70.0,,,,csv
 2025-05-18,IND,CON,76.4,108.3,99.4,89.1,55.2,,,,csv
 2025-05-20,IND,CON,83.7,104.3,101.8,65.7,78.8,,,,csv
@@ -155,6 +157,7 @@ game_date,team,opponent,pace,off_rating,def_rating,team_points,opp_points,team_r
 2026-05-14,NYL,POR,,,,100.0,82.0,32.0,32.0,15.0,csv
 2026-05-21,NYL,GSV,,,,70.0,87.0,37.0,20.0,6.0,csv
 2026-05-24,NYL,DAL,,,,76.0,91.0,34.0,21.0,8.0,csv
+2026-05-25,NYL,POR,,,,74.0,81.0,27.0,17.0,8.0,csv
 2026-05-09,PHX,LVA,,,,99.0,66.0,37.0,23.0,11.0,csv
 2026-05-10,PHX,GSV,,,,79.0,95.0,24.0,20.0,11.0,csv
 2026-05-12,PHX,MIN,,,,84.0,88.0,31.0,20.0,9.0,csv
@@ -168,6 +171,7 @@ game_date,team,opponent,pace,off_rating,def_rating,team_points,opp_points,team_r
 2026-05-18,POR,CON,,,,83.0,82.0,27.0,23.0,7.0,csv
 2026-05-20,POR,IND,,,,73.0,90.0,28.0,9.0,3.0,csv
 2026-05-23,POR,TOR,,,,99.0,80.0,33.0,24.0,11.0,csv
+2026-05-25,POR,NYL,,,,81.0,74.0,29.0,18.0,9.0,csv
 2026-05-08,SEA,GSV,,,,80.0,91.0,41.0,16.0,9.0,csv
 2026-05-10,SEA,CON,,,,89.0,82.0,32.0,14.0,10.0,csv
 2026-05-13,SEA,TOR,,,,73.0,86.0,28.0,18.0,7.0,csv
@@ -187,10 +191,6 @@ game_date,team,opponent,pace,off_rating,def_rating,team_points,opp_points,team_r
 2026-05-15,WAS,IND,,,,104.0,102.0,44.0,18.0,6.0,csv
 2026-05-18,WAS,DAL,,,,69.0,92.0,24.0,16.0,5.0,csv
 2026-05-24,WAS,SEA,,,,85.0,97.0,26.0,14.0,4.0,csv
-2026-05-25,NYL,POR,,,,74.0,81.0,27.0,17.0,8.0,api:espn_boxscore
-2026-05-25,POR,NYL,,,,81.0,74.0,29.0,18.0,9.0,api:espn_boxscore
-2026-05-25,CON,GSV,,,,70.0,97.0,32.0,13.0,6.0,api:espn_boxscore
-2026-05-25,GSV,CON,,,,97.0,70.0,35.0,24.0,13.0,api:espn_boxscore
 2026-05-27,NYL,PHX,,,,84.0,74.0,32.0,19.0,14.0,api:espn_boxscore
 2026-05-27,PHX,NYL,,,,74.0,84.0,32.0,19.0,10.0,api:espn_boxscore
 2026-05-27,CHI,TOR,,,,104.0,111.0,27.0,31.0,7.0,api:espn_boxscore
@@ -344,6 +344,8 @@ game_date,team,opponent,pace,off_rating,def_rating,team_points,opp_points,team_r
 2026-06-22,ATL,TOR,,,,94.0,87.0,32.0,23.0,9.0,api:espn_boxscore
 2026-06-22,TOR,ATL,,,,87.0,94.0,31.0,22.0,9.0,api:espn_boxscore
 2026-06-22,IND,PHX,,,,86.0,77.0,39.0,15.0,10.0,api:espn_boxscore
-2026-06-22,PHX,IND,,,,77.0,86.0,30.0,19.0,5.0,api:espn_boxscore
+2026-06-22,PHX,IND,,,,77.0,86.0,29.0,19.0,5.0,api:espn_boxscore
 2026-06-22,DAL,SEA,,,,112.0,110.0,34.0,30.0,9.0,api:espn_boxscore
 2026-06-22,SEA,DAL,,,,110.0,112.0,34.0,29.0,13.0,api:espn_boxscore
+2026-06-23,LVA,NYL,,,,76.0,87.0,32.0,23.0,8.0,api:espn_boxscore
+2026-06-23,NYL,LVA,,,,87.0,76.0,34.0,19.0,13.0,api:espn_boxscore
