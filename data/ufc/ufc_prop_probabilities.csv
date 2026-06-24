@@ -186,6 +186,17 @@ b666ed543692,UFC 329: McGregor vs. Holloway 2,2026-07-11,Cory Sandhagen,Mario Ba
 9adb2a65530c,UFC 329: McGregor vs. Holloway 2,2026-07-11,Brandon Royval,Lone'er Kavanagh,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6255223155460389
 9adb2a65530c,UFC 329: McGregor vs. Holloway 2,2026-07-11,Brandon Royval,Lone'er Kavanagh,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.6069237436939313
 9adb2a65530c,UFC 329: McGregor vs. Holloway 2,2026-07-11,Brandon Royval,Lone'er Kavanagh,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.3930762563060687
+e230d3e6938c,UFC 329: McGregor vs. Holloway 2,2026-07-11,King Green,Terrance McKinney,simulation,,,moneyline,King Green win,red,,0.6570360967909228
+e230d3e6938c,UFC 329: McGregor vs. Holloway 2,2026-07-11,King Green,Terrance McKinney,simulation,,,moneyline,Terrance McKinney win,blue,,0.3429639032090772
+e230d3e6938c,UFC 329: McGregor vs. Holloway 2,2026-07-11,King Green,Terrance McKinney,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5127294817311512
+e230d3e6938c,UFC 329: McGregor vs. Holloway 2,2026-07-11,King Green,Terrance McKinney,simulation,,,inside_distance,Fight goes to decision,no,,0.4872705182688488
+e230d3e6938c,UFC 329: McGregor vs. Holloway 2,2026-07-11,King Green,Terrance McKinney,simulation,,,method,Win by KO/TKO,ko_tko,,0.3452523193976569
+e230d3e6938c,UFC 329: McGregor vs. Holloway 2,2026-07-11,King Green,Terrance McKinney,simulation,,,method,Win by Submission,submission,,0.1674771623334943
+e230d3e6938c,UFC 329: McGregor vs. Holloway 2,2026-07-11,King Green,Terrance McKinney,simulation,,,method,Win by Decision,decision,,0.4872705182688488
+e230d3e6938c,UFC 329: McGregor vs. Holloway 2,2026-07-11,King Green,Terrance McKinney,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.4308721381924757
+e230d3e6938c,UFC 329: McGregor vs. Holloway 2,2026-07-11,King Green,Terrance McKinney,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.5691278618075243
+e230d3e6938c,UFC 329: McGregor vs. Holloway 2,2026-07-11,King Green,Terrance McKinney,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.44310277262358094
+e230d3e6938c,UFC 329: McGregor vs. Holloway 2,2026-07-11,King Green,Terrance McKinney,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.556897227376419
 804cdcfe0b6d,UFC 329: McGregor vs. Holloway 2,2026-07-11,Nikita Krylov,Robert Whittaker,simulation,,,moneyline,Nikita Krylov win,red,,0.737812598013928
 804cdcfe0b6d,UFC 329: McGregor vs. Holloway 2,2026-07-11,Nikita Krylov,Robert Whittaker,simulation,,,moneyline,Robert Whittaker win,blue,,0.26218740198607204
 804cdcfe0b6d,UFC 329: McGregor vs. Holloway 2,2026-07-11,Nikita Krylov,Robert Whittaker,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5757085600186195
@@ -252,6 +263,17 @@ ea6da5068461,UFC 329: McGregor vs. Holloway 2,2026-07-11,Damian Pinas,Cesar Alme
 ea6da5068461,UFC 329: McGregor vs. Holloway 2,2026-07-11,Damian Pinas,Cesar Almeida,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7130058427046067
 ea6da5068461,UFC 329: McGregor vs. Holloway 2,2026-07-11,Damian Pinas,Cesar Almeida,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.41204290987114867
 ea6da5068461,UFC 329: McGregor vs. Holloway 2,2026-07-11,Damian Pinas,Cesar Almeida,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5879570901288513
+3e8eb55043a6,UFC 329: McGregor vs. Holloway 2,2026-07-11,Farid Basharat,Ethyn Ewing,simulation,,,moneyline,Farid Basharat win,red,,0.8794095886665452
+3e8eb55043a6,UFC 329: McGregor vs. Holloway 2,2026-07-11,Farid Basharat,Ethyn Ewing,simulation,,,moneyline,Ethyn Ewing win,blue,,0.12059041133345483
+3e8eb55043a6,UFC 329: McGregor vs. Holloway 2,2026-07-11,Farid Basharat,Ethyn Ewing,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3678531767352866
+3e8eb55043a6,UFC 329: McGregor vs. Holloway 2,2026-07-11,Farid Basharat,Ethyn Ewing,simulation,,,inside_distance,Fight goes to decision,no,,0.6321468232647134
+3e8eb55043a6,UFC 329: McGregor vs. Holloway 2,2026-07-11,Farid Basharat,Ethyn Ewing,simulation,,,method,Win by KO/TKO,ko_tko,,0.25976536873381323
+3e8eb55043a6,UFC 329: McGregor vs. Holloway 2,2026-07-11,Farid Basharat,Ethyn Ewing,simulation,,,method,Win by Submission,submission,,0.1080878080014734
+3e8eb55043a6,UFC 329: McGregor vs. Holloway 2,2026-07-11,Farid Basharat,Ethyn Ewing,simulation,,,method,Win by Decision,decision,,0.6321468232647134
+3e8eb55043a6,UFC 329: McGregor vs. Holloway 2,2026-07-11,Farid Basharat,Ethyn Ewing,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.22067021203494042
+3e8eb55043a6,UFC 329: McGregor vs. Holloway 2,2026-07-11,Farid Basharat,Ethyn Ewing,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7793297879650596
+3e8eb55043a6,UFC 329: McGregor vs. Holloway 2,2026-07-11,Farid Basharat,Ethyn Ewing,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3157733505145561
+3e8eb55043a6,UFC 329: McGregor vs. Holloway 2,2026-07-11,Farid Basharat,Ethyn Ewing,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6842266494854439
 72973500fca2,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ryan Gandra,Zach Reese,simulation,,,moneyline,Ryan Gandra win,red,,0.5399524353623891
 72973500fca2,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ryan Gandra,Zach Reese,simulation,,,moneyline,Zach Reese win,blue,,0.4600475646376109
 72973500fca2,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ryan Gandra,Zach Reese,simulation,,,inside_distance,Fight ends inside distance,yes,,0.6089046633059385

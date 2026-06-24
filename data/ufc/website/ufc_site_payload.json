@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-06-21T07:00:14.576094+00:00",
+  "generated_at": "2026-06-24T07:00:15.685071+00:00",
   "sport": "ufc",
   "event": {
     "name": "UFC Fight Night: Fiziev vs. Torres",
     "date": "2026-06-27",
-    "fight_count": 25
+    "fight_count": 27
   },
   "fights": [
     {
@@ -2439,9 +2439,152 @@
       }
     },
     {
-      "fight_id": "804cdcfe0b6d",
+      "fight_id": "e230d3e6938c",
       "card_position": 18,
       "card_label": "Card Position 18",
+      "fight_title": "King Green vs Terrance McKinney",
+      "weight_class": "Lightweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "King Green",
+      "fighter_blue": "Terrance McKinney",
+      "predicted_winner": "King Green",
+      "predicted_winner_pct": 65.7,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 65.7,
+        "blue_pct": 34.3
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 34.5,
+        "submission_pct": 16.7,
+        "decision_pct": 48.7,
+        "inside_distance_pct": 51.3
+      },
+      "totals": {
+        "over_1_5_pct": 56.9,
+        "under_1_5_pct": 43.1,
+        "over_2_5_pct": 55.7,
+        "under_2_5_pct": 44.3
+      },
+      "expectations": {
+        "fight_time_mins": 8.4033,
+        "red_takedowns": 0.6853,
+        "blue_takedowns": 2.34
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 48.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 51.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 48.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 34.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 16.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Terrance McKinney win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 34.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "King Green win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 65.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 56.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 43.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 55.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 44.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "804cdcfe0b6d",
+      "card_position": 19,
+      "card_label": "Card Position 19",
       "fight_title": "Nikita Krylov vs Robert Whittaker",
       "weight_class": "Light Heavyweight",
       "scheduled_rounds": 3,
@@ -2583,8 +2726,8 @@
     },
     {
       "fight_id": "ccaac8c6e78a",
-      "card_position": 19,
-      "card_label": "Card Position 19",
+      "card_position": 20,
+      "card_label": "Card Position 20",
       "fight_title": "Gable Steveson vs Elisha Ellison",
       "weight_class": "Heavyweight",
       "scheduled_rounds": 3,
@@ -2726,8 +2869,8 @@
     },
     {
       "fight_id": "0f0f0f8aeaed",
-      "card_position": 20,
-      "card_label": "Card Position 20",
+      "card_position": 21,
+      "card_label": "Card Position 21",
       "fight_title": "Cody Garbrandt vs Adrian Yanez",
       "weight_class": "Bantamweight",
       "scheduled_rounds": 3,
@@ -2869,8 +3012,8 @@
     },
     {
       "fight_id": "e82c15720856",
-      "card_position": 21,
-      "card_label": "Card Position 21",
+      "card_position": 22,
+      "card_label": "Card Position 22",
       "fight_title": "Luke Riley vs Kai Kamaka III",
       "weight_class": "Featherweight",
       "scheduled_rounds": 3,
@@ -3012,8 +3155,8 @@
     },
     {
       "fight_id": "63c8f62f5efd",
-      "card_position": 22,
-      "card_label": "Card Position 22",
+      "card_position": 23,
+      "card_label": "Card Position 23",
       "fight_title": "Tracy Cortez vs Wang Cong",
       "weight_class": "Women's Flyweight",
       "scheduled_rounds": 3,
@@ -3155,8 +3298,8 @@
     },
     {
       "fight_id": "ea6da5068461",
-      "card_position": 23,
-      "card_label": "Card Position 23",
+      "card_position": 24,
+      "card_label": "Card Position 24",
       "fight_title": "Damian Pinas vs Cesar Almeida",
       "weight_class": "Middleweight",
       "scheduled_rounds": 3,
@@ -3297,9 +3440,152 @@
       }
     },
     {
+      "fight_id": "3e8eb55043a6",
+      "card_position": 25,
+      "card_label": "Card Position 25",
+      "fight_title": "Farid Basharat vs Ethyn Ewing",
+      "weight_class": "Bantamweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Farid Basharat",
+      "fighter_blue": "Ethyn Ewing",
+      "predicted_winner": "Farid Basharat",
+      "predicted_winner_pct": 87.9,
+      "confidence_tier": "high",
+      "win_probabilities": {
+        "red_pct": 87.9,
+        "blue_pct": 12.1
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 26.0,
+        "submission_pct": 10.8,
+        "decision_pct": 63.2,
+        "inside_distance_pct": 36.8
+      },
+      "totals": {
+        "over_1_5_pct": 77.9,
+        "under_1_5_pct": 22.1,
+        "over_2_5_pct": 68.4,
+        "under_2_5_pct": 31.6
+      },
+      "expectations": {
+        "fight_time_mins": 12.2597,
+        "red_takedowns": 2.2586,
+        "blue_takedowns": 0.267
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 63.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 36.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 63.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 26.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 10.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Ethyn Ewing win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 12.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Farid Basharat win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 87.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 77.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 22.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 68.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 31.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
       "fight_id": "72973500fca2",
-      "card_position": 24,
-      "card_label": "Card Position 24",
+      "card_position": 26,
+      "card_label": "Card Position 26",
       "fight_title": "Ryan Gandra vs Zach Reese",
       "weight_class": "Middleweight",
       "scheduled_rounds": 3,
@@ -3441,7 +3727,7 @@
     },
     {
       "fight_id": "7876dd12e775",
-      "card_position": 25,
+      "card_position": 27,
       "card_label": "Opening Fight",
       "fight_title": "Ode Osbourne vs Cody Durden",
       "weight_class": "Flyweight",
