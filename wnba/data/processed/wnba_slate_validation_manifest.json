@@ -1,61 +1,49 @@
 {
   "duplicate_games": [],
-  "expected_game_count": 4,
-  "generated_at": "2026-06-24T18:31:25.015098-04:00",
-  "generated_game_count": 4,
+  "expected_game_count": 3,
+  "generated_at": "2026-06-25T07:32:12.752750-04:00",
+  "generated_game_count": 3,
   "generated_games": [
     {
-      "away_team": "MIN",
-      "game_id": "401857018",
-      "home_team": "WAS",
-      "start_time_utc": "2026-06-24T23:30Z"
+      "away_team": "LAS",
+      "game_id": "401857021",
+      "home_team": "TOR",
+      "start_time_utc": "2026-06-25T23:00Z"
     },
     {
-      "away_team": "PHX",
-      "game_id": "401857017",
-      "home_team": "IND",
-      "start_time_utc": "2026-06-24T23:30Z"
+      "away_team": "DAL",
+      "game_id": "401857022",
+      "home_team": "LVA",
+      "start_time_utc": "2026-06-26T02:00Z"
     },
     {
-      "away_team": "POR",
-      "game_id": "401857019",
-      "home_team": "CHI",
-      "start_time_utc": "2026-06-25T00:00Z"
-    },
-    {
-      "away_team": "ATL",
-      "game_id": "401857020",
-      "home_team": "GSV",
-      "start_time_utc": "2026-06-25T02:00Z"
+      "away_team": "NYL",
+      "game_id": "401857023",
+      "home_team": "SEA",
+      "start_time_utc": "2026-06-26T02:00Z"
     }
   ],
   "missing_games": [],
-  "slate_date": "2026-06-24",
+  "slate_date": "2026-06-25",
   "status": "PASS",
   "trusted_games": [
     {
-      "away_team": "MIN",
-      "game_id": "401857018",
-      "home_team": "WAS",
-      "start_time_utc": "2026-06-24T23:30Z"
+      "away_team": "LAS",
+      "game_id": "401857021",
+      "home_team": "TOR",
+      "start_time_utc": "2026-06-25T23:00Z"
     },
     {
-      "away_team": "PHX",
-      "game_id": "401857017",
-      "home_team": "IND",
-      "start_time_utc": "2026-06-24T23:30Z"
+      "away_team": "DAL",
+      "game_id": "401857022",
+      "home_team": "LVA",
+      "start_time_utc": "2026-06-26T02:00Z"
     },
     {
-      "away_team": "POR",
-      "game_id": "401857019",
-      "home_team": "CHI",
-      "start_time_utc": "2026-06-25T00:00Z"
-    },
-    {
-      "away_team": "ATL",
-      "game_id": "401857020",
-      "home_team": "GSV",
-      "start_time_utc": "2026-06-25T02:00Z"
+      "away_team": "NYL",
+      "game_id": "401857023",
+      "home_team": "SEA",
+      "start_time_utc": "2026-06-26T02:00Z"
     }
   ],
   "trusted_source": "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard",

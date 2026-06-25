@@ -1,12 +1,11 @@
 player_name,team,position,est_return_date,status,status_text,comment,fetched_at,_data_source,player_key
-Natasha Cloud,CHICAGO SKY,G,Jun 24,day-to-day,Day-To-Day,Jun 24: Cloud (illness) is questionable for Tuesday's game against the Fire.,2026-06-24T22:31:24.507209+00:00,api:espn_injuries,natasha cloud
-Saniya Rivers,CONNECTICUT SUN,G,Jun 26,day-to-day,Day-To-Day,"Jun 22: Rivers won't return to Monday's game against the Sky due to a left ankle sprain, and she'll finish with four points (0-2 FG, 4-4 FT), three rebounds and one block in 13 minutes.",2026-06-24T22:31:24.507399+00:00,api:espn_injuries,saniya rivers
-Haley Jones,DALLAS WINGS,G,Jun 25,day-to-day,Day-To-Day,,2026-06-24T22:31:24.507570+00:00,api:espn_injuries,haley jones
-Alanna Smith,DALLAS WINGS,F,Jun 25,day-to-day,Day-To-Day,,2026-06-24T22:31:24.507641+00:00,api:espn_injuries,alanna smith
-Alysha Clark,DALLAS WINGS,F,Jun 25,day-to-day,Day-To-Day,,2026-06-24T22:31:24.507709+00:00,api:espn_injuries,alysha clark
-Caitlin Clark,INDIANA FEVER,G,Jun 24,day-to-day,Day-To-Day,Jun 23: Clark (back) is probable for Wednesday's game against Phoenix.,2026-06-24T22:31:24.507847+00:00,api:espn_injuries,caitlin clark
-Kate Martin,LOS ANGELES SPARKS,G,Jun 25,day-to-day,Day-To-Day,,2026-06-24T22:31:24.507980+00:00,api:espn_injuries,kate martin
-Satou Sabally,NEW YORK LIBERTY,F,Jun 25,day-to-day,Day-To-Day,,2026-06-24T22:31:24.508110+00:00,api:espn_injuries,satou sabally
-Karlie Samuelson,PORTLAND FIRE,G,Jun 24,day-to-day,Day-To-Day,Jun 23: Samuelson (foot) is questionable for Wednesday's game against the Sky.,2026-06-24T22:31:24.508240+00:00,api:espn_injuries,karlie samuelson
-Carla Leite,PORTLAND FIRE,G,Jun 24,day-to-day,Day-To-Day,Jun 23: Leite (ankle) is listed as questionable for Wednesday's game against the Sky.,2026-06-24T22:31:24.508305+00:00,api:espn_injuries,carla leite
-Jade Melbourne,SEATTLE STORM,G,Jun 25,day-to-day,Day-To-Day,,2026-06-24T22:31:24.508431+00:00,api:espn_injuries,jade melbourne
+Allisha Gray,ATLANTA DREAM,G,Jun 26,day-to-day,Day-To-Day,"Jun 24: Gray won't return to Wednesday's game against the Valkyries due to an upper-body injury, Kendra Andrews of ESPN reports. She'll finish with eight points (3-10 FG, 1-5 3Pt, 1-3 FT), one rebound and one steal in 25 minutes.",2026-06-25T11:32:12.253288+00:00,api:espn_injuries,allisha gray
+Maddy Westbeld,CHICAGO SKY,F,Jun 26,day-to-day,Day-To-Day,,2026-06-25T11:32:12.253488+00:00,api:espn_injuries,maddy westbeld
+Saniya Rivers,CONNECTICUT SUN,G,Jun 26,day-to-day,Day-To-Day,"Jun 22: Rivers won't return to Monday's game against the Sky due to a left ankle sprain, and she'll finish with four points (0-2 FG, 4-4 FT), three rebounds and one block in 13 minutes.",2026-06-25T11:32:12.253642+00:00,api:espn_injuries,saniya rivers
+Alysha Clark,DALLAS WINGS,F,Jun 25,day-to-day,Day-To-Day,Jun 24: Clark (leg) is listed as probable for Thursday's game versus the Aces.,2026-06-25T11:32:12.253783+00:00,api:espn_injuries,alysha clark
+Caitlin Clark,INDIANA FEVER,G,Jun 27,day-to-day,Day-To-Day,"Jun 24: Clark has been ruled out for the remainder of Wednesday's game against the Mercury due to a back injury, Chloe Peterson of The Indianapolis Star reports.",2026-06-25T11:32:12.253921+00:00,api:espn_injuries,caitlin clark
+Liatu King,MINNESOTA LYNX,F,Jun 28,day-to-day,Day-To-Day,,2026-06-25T11:32:12.254053+00:00,api:espn_injuries,liatu king
+Satou Sabally,NEW YORK LIBERTY,F,Jun 25,day-to-day,Day-To-Day,,2026-06-25T11:32:12.254182+00:00,api:espn_injuries,satou sabally
+Shay Ciezki,PHOENIX MERCURY,G,Jun 27,day-to-day,Day-To-Day,,2026-06-25T11:32:12.254310+00:00,api:espn_injuries,shay ciezki
+Natasha Mack,PHOENIX MERCURY,F,Jun 27,day-to-day,Day-To-Day,,2026-06-25T11:32:12.254373+00:00,api:espn_injuries,natasha mack
+Darianna Littlepage-Buggs,WASHINGTON MYSTICS,G,Jun 26,day-to-day,Day-To-Day,,2026-06-25T11:32:12.254515+00:00,api:espn_injuries,darianna littlepage-buggs
