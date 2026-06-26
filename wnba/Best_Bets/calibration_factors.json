@@ -1,24 +1,24 @@
 {
   "confidence_label": {
     "Low": {
-      "bets": 577,
-      "losses": 278,
-      "win_rate": 0.5179,
-      "wins": 299
+      "bets": 583,
+      "losses": 280,
+      "win_rate": 0.5195,
+      "wins": 303
     },
     "Medium": {
-      "bets": 1100,
-      "losses": 483,
-      "win_rate": 0.5605,
-      "wins": 617
+      "bets": 1140,
+      "losses": 509,
+      "win_rate": 0.5531,
+      "wins": 631
     }
   },
   "global": {
     "ALL": {
-      "bets": 1677,
-      "losses": 761,
-      "win_rate": 0.5459,
-      "wins": 916
+      "bets": 1723,
+      "losses": 789,
+      "win_rate": 0.5418,
+      "wins": 934
     }
   },
   "hit_rate_bucket": {
@@ -29,27 +29,27 @@
       "wins": 60
     },
     "65-70%": {
-      "bets": 415,
-      "losses": 202,
-      "win_rate": 0.513,
-      "wins": 213
+      "bets": 428,
+      "losses": 207,
+      "win_rate": 0.5161,
+      "wins": 221
     },
     "70-75%": {
-      "bets": 183,
-      "losses": 89,
-      "win_rate": 0.5131,
-      "wins": 94
+      "bets": 193,
+      "losses": 95,
+      "win_rate": 0.5075,
+      "wins": 98
     },
     "75-80%": {
-      "bets": 118,
-      "losses": 58,
-      "win_rate": 0.5079,
-      "wins": 60
+      "bets": 136,
+      "losses": 70,
+      "win_rate": 0.4861,
+      "wins": 66
     },
     "80-100%": {
-      "bets": 114,
-      "losses": 54,
-      "win_rate": 0.5246,
+      "bets": 119,
+      "losses": 59,
+      "win_rate": 0.5039,
       "wins": 60
     },
     "80-100%+": {
@@ -60,24 +60,24 @@
     }
   },
   "metadata": {
-    "created_at_utc": "2026-06-25T11:30:28Z",
-    "graded_bets": 1677,
-    "losses": 761,
-    "overall_win_rate": 0.5459,
-    "wins": 916
+    "created_at_utc": "2026-06-26T11:30:28Z",
+    "graded_bets": 1723,
+    "losses": 789,
+    "overall_win_rate": 0.5418,
+    "wins": 934
   },
   "side": {
     "OVER": {
-      "bets": 500,
-      "losses": 240,
-      "win_rate": 0.5196,
-      "wins": 260
+      "bets": 503,
+      "losses": 242,
+      "win_rate": 0.5185,
+      "wins": 261
     },
     "UNDER": {
-      "bets": 1177,
-      "losses": 521,
-      "win_rate": 0.5569,
-      "wins": 656
+      "bets": 1220,
+      "losses": 547,
+      "win_rate": 0.5512,
+      "wins": 673
     }
   },
   "stat_side": {
@@ -88,10 +88,10 @@
       "wins": 11
     },
     "ASSISTS::UNDER": {
-      "bets": 43,
-      "losses": 21,
-      "win_rate": 0.5102,
-      "wins": 22
+      "bets": 45,
+      "losses": 22,
+      "win_rate": 0.5098,
+      "wins": 23
     },
     "PA::OVER": {
       "bets": 52,
@@ -100,34 +100,34 @@
       "wins": 24
     },
     "PA::UNDER": {
-      "bets": 168,
-      "losses": 91,
-      "win_rate": 0.4598,
-      "wins": 77
+      "bets": 180,
+      "losses": 97,
+      "win_rate": 0.4624,
+      "wins": 83
     },
     "POINTS::OVER": {
-      "bets": 129,
-      "losses": 56,
-      "win_rate": 0.563,
-      "wins": 73
+      "bets": 131,
+      "losses": 57,
+      "win_rate": 0.562,
+      "wins": 74
     },
     "POINTS::UNDER": {
-      "bets": 261,
-      "losses": 112,
-      "win_rate": 0.5693,
-      "wins": 149
+      "bets": 265,
+      "losses": 113,
+      "win_rate": 0.572,
+      "wins": 152
     },
     "PR::OVER": {
-      "bets": 106,
-      "losses": 52,
-      "win_rate": 0.5089,
+      "bets": 107,
+      "losses": 53,
+      "win_rate": 0.5044,
       "wins": 54
     },
     "PR::UNDER": {
-      "bets": 272,
-      "losses": 123,
-      "win_rate": 0.5468,
-      "wins": 149
+      "bets": 283,
+      "losses": 132,
+      "win_rate": 0.5329,
+      "wins": 151
     },
     "PRA::OVER": {
       "bets": 91,
@@ -136,10 +136,10 @@
       "wins": 45
     },
     "PRA::UNDER": {
-      "bets": 283,
-      "losses": 121,
-      "win_rate": 0.5709,
-      "wins": 162
+      "bets": 294,
+      "losses": 130,
+      "win_rate": 0.5567,
+      "wins": 164
     },
     "RA::OVER": {
       "bets": 26,
@@ -148,10 +148,10 @@
       "wins": 9
     },
     "RA::UNDER": {
-      "bets": 61,
+      "bets": 62,
       "losses": 24,
-      "win_rate": 0.597,
-      "wins": 37
+      "win_rate": 0.6029,
+      "wins": 38
     },
     "REBOUNDS::OVER": {
       "bets": 56,
@@ -160,10 +160,10 @@
       "wins": 35
     },
     "REBOUNDS::UNDER": {
-      "bets": 76,
+      "bets": 78,
       "losses": 24,
-      "win_rate": 0.6707,
-      "wins": 52
+      "win_rate": 0.6786,
+      "wins": 54
     },
     "STEALS::OVER": {
       "bets": 11,
@@ -294,10 +294,10 @@
       "wins": 1
     },
     "ASSISTS::UNDER::Medium::70-75%": {
-      "bets": 5,
-      "losses": 2,
-      "win_rate": 0.5455,
-      "wins": 3
+      "bets": 7,
+      "losses": 3,
+      "win_rate": 0.5385,
+      "wins": 4
     },
     "ASSISTS::UNDER::Medium::75-80%": {
       "bets": 3,
@@ -378,10 +378,10 @@
       "wins": 1
     },
     "PA::UNDER::Low::65-70%": {
-      "bets": 41,
-      "losses": 29,
-      "win_rate": 0.3191,
-      "wins": 12
+      "bets": 43,
+      "losses": 30,
+      "win_rate": 0.3265,
+      "wins": 13
     },
     "PA::UNDER::Low::70-75%": {
       "bets": 1,
@@ -414,27 +414,27 @@
       "wins": 5
     },
     "PA::UNDER::Medium::65-70%": {
-      "bets": 14,
-      "losses": 7,
+      "bets": 16,
+      "losses": 8,
       "win_rate": 0.5,
-      "wins": 7
+      "wins": 8
     },
     "PA::UNDER::Medium::70-75%": {
-      "bets": 17,
-      "losses": 10,
-      "win_rate": 0.4348,
-      "wins": 7
+      "bets": 20,
+      "losses": 11,
+      "win_rate": 0.4615,
+      "wins": 9
     },
     "PA::UNDER::Medium::75-80%": {
-      "bets": 7,
-      "losses": 3,
-      "win_rate": 0.5385,
-      "wins": 4
+      "bets": 10,
+      "losses": 4,
+      "win_rate": 0.5625,
+      "wins": 6
     },
     "PA::UNDER::Medium::80-100%": {
-      "bets": 5,
-      "losses": 2,
-      "win_rate": 0.5455,
+      "bets": 7,
+      "losses": 4,
+      "win_rate": 0.4615,
       "wins": 3
     },
     "PA::UNDER::Medium::80-100%+": {
@@ -492,16 +492,16 @@
       "wins": 9
     },
     "POINTS::OVER::Medium::70-75%": {
-      "bets": 11,
-      "losses": 3,
-      "win_rate": 0.6471,
+      "bets": 12,
+      "losses": 4,
+      "win_rate": 0.6111,
       "wins": 8
     },
     "POINTS::OVER::Medium::75-80%": {
-      "bets": 9,
+      "bets": 10,
       "losses": 2,
-      "win_rate": 0.6667,
-      "wins": 7
+      "win_rate": 0.6875,
+      "wins": 8
     },
     "POINTS::OVER::Medium::80-100%": {
       "bets": 10,
@@ -522,10 +522,10 @@
       "wins": 5
     },
     "POINTS::UNDER::Low::65-70%": {
-      "bets": 35,
+      "bets": 36,
       "losses": 17,
-      "win_rate": 0.5122,
-      "wins": 18
+      "win_rate": 0.5238,
+      "wins": 19
     },
     "POINTS::UNDER::Low::75-80%": {
       "bets": 4,
@@ -552,15 +552,15 @@
       "wins": 7
     },
     "POINTS::UNDER::Medium::65-70%": {
-      "bets": 37,
+      "bets": 39,
       "losses": 11,
-      "win_rate": 0.6744,
-      "wins": 26
+      "win_rate": 0.6889,
+      "wins": 28
     },
     "POINTS::UNDER::Medium::70-75%": {
-      "bets": 39,
-      "losses": 17,
-      "win_rate": 0.5556,
+      "bets": 40,
+      "losses": 18,
+      "win_rate": 0.5435,
       "wins": 22
     },
     "POINTS::UNDER::Medium::75-80%": {
@@ -612,9 +612,9 @@
       "wins": 2
     },
     "PR::OVER::Medium::65-70%": {
-      "bets": 19,
-      "losses": 8,
-      "win_rate": 0.56,
+      "bets": 20,
+      "losses": 9,
+      "win_rate": 0.5385,
       "wins": 11
     },
     "PR::OVER::Medium::70-75%": {
@@ -648,10 +648,10 @@
       "wins": 3
     },
     "PR::UNDER::Low::65-70%": {
-      "bets": 42,
-      "losses": 21,
-      "win_rate": 0.5,
-      "wins": 21
+      "bets": 45,
+      "losses": 22,
+      "win_rate": 0.5098,
+      "wins": 23
     },
     "PR::UNDER::Low::75-80%": {
       "bets": 1,
@@ -678,27 +678,27 @@
       "wins": 7
     },
     "PR::UNDER::Medium::65-70%": {
-      "bets": 26,
-      "losses": 12,
-      "win_rate": 0.5312,
+      "bets": 27,
+      "losses": 13,
+      "win_rate": 0.5152,
       "wins": 14
     },
     "PR::UNDER::Medium::70-75%": {
-      "bets": 19,
-      "losses": 12,
-      "win_rate": 0.4,
+      "bets": 20,
+      "losses": 13,
+      "win_rate": 0.3846,
       "wins": 7
     },
     "PR::UNDER::Medium::75-80%": {
-      "bets": 12,
-      "losses": 9,
-      "win_rate": 0.3333,
+      "bets": 17,
+      "losses": 14,
+      "win_rate": 0.2609,
       "wins": 3
     },
     "PR::UNDER::Medium::80-100%": {
-      "bets": 11,
-      "losses": 6,
-      "win_rate": 0.4706,
+      "bets": 12,
+      "losses": 7,
+      "win_rate": 0.4444,
       "wins": 5
     },
     "PR::UNDER::Medium::80-100%+": {
@@ -804,21 +804,21 @@
       "wins": 13
     },
     "PRA::UNDER::Medium::70-75%": {
-      "bets": 35,
-      "losses": 14,
-      "win_rate": 0.5854,
+      "bets": 36,
+      "losses": 15,
+      "win_rate": 0.5714,
       "wins": 21
     },
     "PRA::UNDER::Medium::75-80%": {
-      "bets": 16,
-      "losses": 10,
-      "win_rate": 0.4091,
-      "wins": 6
+      "bets": 24,
+      "losses": 16,
+      "win_rate": 0.3667,
+      "wins": 8
     },
     "PRA::UNDER::Medium::80-100%": {
-      "bets": 5,
-      "losses": 4,
-      "win_rate": 0.3636,
+      "bets": 7,
+      "losses": 6,
+      "win_rate": 0.3077,
       "wins": 1
     },
     "PRA::UNDER::Medium::80-100%+": {
@@ -912,10 +912,10 @@
       "wins": 9
     },
     "RA::UNDER::Medium::70-75%": {
-      "bets": 5,
+      "bets": 6,
       "losses": 2,
-      "win_rate": 0.5455,
-      "wins": 3
+      "win_rate": 0.5833,
+      "wins": 4
     },
     "RA::UNDER::Medium::75-80%": {
       "bets": 5,
@@ -1026,10 +1026,10 @@
       "wins": 3
     },
     "REBOUNDS::UNDER::Medium::65-70%": {
-      "bets": 8,
+      "bets": 9,
       "losses": 3,
-      "win_rate": 0.5714,
-      "wins": 5
+      "win_rate": 0.6,
+      "wins": 6
     },
     "REBOUNDS::UNDER::Medium::70-75%": {
       "bets": 9,
@@ -1038,10 +1038,10 @@
       "wins": 4
     },
     "REBOUNDS::UNDER::Medium::75-80%": {
-      "bets": 7,
+      "bets": 8,
       "losses": 1,
-      "win_rate": 0.6923,
-      "wins": 6
+      "win_rate": 0.7143,
+      "wins": 7
     },
     "REBOUNDS::UNDER::Medium::80-100%": {
       "bets": 6,

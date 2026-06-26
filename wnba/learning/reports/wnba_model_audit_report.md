@@ -1,6 +1,6 @@
 # WNBA Model Audit Report
 
-Generated: 2026-06-25T04:25:04Z
+Generated: 2026-06-26T04:25:05Z
 
 ## Feature Impact
 The trained stat model report shows points and rebounds have the highest predictive signal by R2, while steals and blocks have weak R2 and are dominated by event variance. The active feature set is heavily driven by rolling player rates, rolling minutes, season averages, team/opponent last-10 context, position allowance, rest, and home/away.
@@ -16,11 +16,11 @@ Use `signed_projection_bias` in `data/processed/wnba_market_validation_report.cs
 
 ## Worst Markets
  market  sample_size  win_pct      mae  signed_projection_bias  calibration
-     pa          217 0.460465 7.628624               -2.679642    -0.322344
-assists           74 0.492537 2.155063               -0.098440    -0.297916
- steals           15 0.533333 0.845517                0.140514    -0.232939
-     pr          375 0.547425 7.106827               -2.211671    -0.246053
-     ra           88 0.547619 3.534463               -0.391905    -0.184862
+     pa          222 0.459091 7.601099               -2.763580    -0.320376
+assists           75 0.485294 2.155119               -0.125918    -0.303962
+     ra           91 0.528736 3.498137               -0.459181    -0.202399
+     pr          385 0.537037 7.108158               -2.227230    -0.253685
+    pra          376 0.553476 8.058333               -2.908382    -0.261544
 
 ## Stale or Heuristic Components
 - Player positions and player statuses remain CSV/manual-source dependent.
