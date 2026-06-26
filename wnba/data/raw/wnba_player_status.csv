@@ -1,10 +1,9 @@
 player_name,team,position,est_return_date,status,status_text,comment,fetched_at,_data_source,player_key
-Caitlin Clark,INDIANA FEVER,G,Jun 27,day-to-day,Day-To-Day,"Jun 24: Clark has been ruled out for the remainder of Wednesday's game against the Mercury due to a back injury, Chloe Peterson of The Indianapolis Star reports.",2026-06-26T11:32:12.965115+00:00,api:espn_injuries,caitlin clark
-Kate Martin,LOS ANGELES SPARKS,G,Jun 27,day-to-day,Day-To-Day,,2026-06-26T11:32:12.965298+00:00,api:espn_injuries,kate martin
-Liatu King,MINNESOTA LYNX,F,Jun 28,day-to-day,Day-To-Day,,2026-06-26T11:32:12.965471+00:00,api:espn_injuries,liatu king
-Satou Sabally,NEW YORK LIBERTY,F,Jun 28,day-to-day,Day-To-Day,,2026-06-26T11:32:12.965610+00:00,api:espn_injuries,satou sabally
-Breanna Stewart,NEW YORK LIBERTY,F,Jun 28,day-to-day,Day-To-Day,,2026-06-26T11:32:12.965679+00:00,api:espn_injuries,breanna stewart
-Shay Ciezki,PHOENIX MERCURY,G,Jun 27,day-to-day,Day-To-Day,,2026-06-26T11:32:12.965814+00:00,api:espn_injuries,shay ciezki
-Natasha Mack,PHOENIX MERCURY,F,Jun 27,day-to-day,Day-To-Day,,2026-06-26T11:32:12.965877+00:00,api:espn_injuries,natasha mack
-Karlie Samuelson,PORTLAND FIRE,G,Jun 26,day-to-day,Day-To-Day,Jun 25: Samuelson is questionable for Friday's game in Chicago due to a left middle finger injury.,2026-06-26T11:32:12.966008+00:00,api:espn_injuries,karlie samuelson
-Taina Mair,SEATTLE STORM,G,Jun 27,day-to-day,Day-To-Day,,2026-06-26T11:32:12.966136+00:00,api:espn_injuries,taina mair
+Kate Martin,LOS ANGELES SPARKS,G,Jun 27,day-to-day,Day-To-Day,,2026-06-26T18:01:25.501243+00:00,api:espn_injuries,kate martin
+Liatu King,MINNESOTA LYNX,F,Jun 28,day-to-day,Day-To-Day,,2026-06-26T18:01:25.501430+00:00,api:espn_injuries,liatu king
+Satou Sabally,NEW YORK LIBERTY,F,Jun 28,day-to-day,Day-To-Day,,2026-06-26T18:01:25.501595+00:00,api:espn_injuries,satou sabally
+Breanna Stewart,NEW YORK LIBERTY,F,Jun 28,day-to-day,Day-To-Day,,2026-06-26T18:01:25.501663+00:00,api:espn_injuries,breanna stewart
+Shay Ciezki,PHOENIX MERCURY,G,Jun 27,day-to-day,Day-To-Day,,2026-06-26T18:01:25.501799+00:00,api:espn_injuries,shay ciezki
+Natasha Mack,PHOENIX MERCURY,F,Jun 27,day-to-day,Day-To-Day,,2026-06-26T18:01:25.501865+00:00,api:espn_injuries,natasha mack
+Karlie Samuelson,PORTLAND FIRE,G,Jun 26,day-to-day,Day-To-Day,Jun 25: Samuelson is questionable for Friday's game in Chicago due to a left middle finger injury.,2026-06-26T18:01:25.502000+00:00,api:espn_injuries,karlie samuelson
+Taina Mair,SEATTLE STORM,G,Jun 27,day-to-day,Day-To-Day,,2026-06-26T18:01:25.502131+00:00,api:espn_injuries,taina mair
