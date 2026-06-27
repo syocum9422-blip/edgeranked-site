@@ -1,49 +1,49 @@
 {
   "duplicate_games": [],
   "expected_game_count": 3,
-  "generated_at": "2026-06-26T18:31:24.199293-04:00",
+  "generated_at": "2026-06-27T07:32:15.392475-04:00",
   "generated_game_count": 3,
   "generated_games": [
     {
-      "away_team": "POR",
-      "game_id": "401857025",
-      "home_team": "CHI",
-      "start_time_utc": "2026-06-26T23:30Z"
+      "away_team": "PHX",
+      "game_id": "401857027",
+      "home_team": "TOR",
+      "start_time_utc": "2026-06-27T18:00Z"
     },
     {
-      "away_team": "WAS",
-      "game_id": "401857024",
-      "home_team": "CON",
-      "start_time_utc": "2026-06-26T23:30Z"
+      "away_team": "LAS",
+      "game_id": "401857028",
+      "home_team": "IND",
+      "start_time_utc": "2026-06-28T00:00Z"
     },
     {
       "away_team": "ATL",
-      "game_id": "401857026",
-      "home_team": "GSV",
-      "start_time_utc": "2026-06-27T02:00Z"
+      "game_id": "401857029",
+      "home_team": "SEA",
+      "start_time_utc": "2026-06-28T01:00Z"
     }
   ],
   "missing_games": [],
-  "slate_date": "2026-06-26",
+  "slate_date": "2026-06-27",
   "status": "PASS",
   "trusted_games": [
     {
-      "away_team": "POR",
-      "game_id": "401857025",
-      "home_team": "CHI",
-      "start_time_utc": "2026-06-26T23:30Z"
+      "away_team": "PHX",
+      "game_id": "401857027",
+      "home_team": "TOR",
+      "start_time_utc": "2026-06-27T18:00Z"
     },
     {
-      "away_team": "WAS",
-      "game_id": "401857024",
-      "home_team": "CON",
-      "start_time_utc": "2026-06-26T23:30Z"
+      "away_team": "LAS",
+      "game_id": "401857028",
+      "home_team": "IND",
+      "start_time_utc": "2026-06-28T00:00Z"
     },
     {
       "away_team": "ATL",
-      "game_id": "401857026",
-      "home_team": "GSV",
-      "start_time_utc": "2026-06-27T02:00Z"
+      "game_id": "401857029",
+      "home_team": "SEA",
+      "start_time_utc": "2026-06-28T01:00Z"
     }
   ],
   "trusted_source": "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard",
