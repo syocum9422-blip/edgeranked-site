@@ -1,9 +1,15 @@
 team,source_schedule,source_prizepicks,included,reason
 ATL,True,True,True,scheduled_and_live_prizepicks
+CHI,False,True,False,excluded_not_on_canonical_slate
+DAL,False,True,False,excluded_not_on_canonical_slate
+GSV,False,True,False,excluded_not_on_canonical_slate
 IND,True,True,True,scheduled_and_live_prizepicks
 LAS,True,True,True,scheduled_and_live_prizepicks
 LVA,False,True,False,excluded_not_on_canonical_slate
+MIN,False,True,False,excluded_not_on_canonical_slate
 NYL,False,True,False,excluded_not_on_canonical_slate
 PHX,True,True,True,scheduled_and_live_prizepicks
+POR,False,True,False,excluded_not_on_canonical_slate
 SEA,True,True,True,scheduled_and_live_prizepicks
 TOR,True,True,True,scheduled_and_live_prizepicks
+WAS,False,True,False,excluded_not_on_canonical_slate
