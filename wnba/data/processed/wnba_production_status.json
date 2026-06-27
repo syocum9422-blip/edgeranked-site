@@ -9,12 +9,12 @@
     "TOR"
   ],
   "error": "",
-  "excluded_players": 30,
+  "excluded_players": 32,
   "excluded_reasons": {
-    "excluded_not_on_canonical_slate": 30
+    "excluded_not_on_canonical_slate": 32
   },
-  "generated_at": "2026-06-27T14:02:31.014205-04:00",
-  "included_players": 28,
+  "generated_at": "2026-06-27T18:32:29.573595-04:00",
+  "included_players": 18,
   "message": "WNBA refresh passed.",
   "projected_teams": [
     "ATL",
