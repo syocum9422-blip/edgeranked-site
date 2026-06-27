@@ -296,3 +296,124 @@ ea6da5068461,UFC 329: McGregor vs. Holloway 2,2026-07-11,Damian Pinas,Cesar Alme
 7876dd12e775,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ode Osbourne,Cody Durden,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.8266272020132376
 7876dd12e775,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ode Osbourne,Cody Durden,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3273208409274842
 7876dd12e775,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ode Osbourne,Cody Durden,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6726791590725159
+80e2ec70e0e6,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Dricus Du Plessis,Kamaru Usman,simulation,,,moneyline,Dricus Du Plessis win,red,,0.7758108786455962
+80e2ec70e0e6,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Dricus Du Plessis,Kamaru Usman,simulation,,,moneyline,Kamaru Usman win,blue,,0.22418912135440383
+80e2ec70e0e6,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Dricus Du Plessis,Kamaru Usman,simulation,,,inside_distance,Fight ends inside distance,yes,,0.49091317124770756
+80e2ec70e0e6,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Dricus Du Plessis,Kamaru Usman,simulation,,,inside_distance,Fight goes to decision,no,,0.5090868287522925
+80e2ec70e0e6,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Dricus Du Plessis,Kamaru Usman,simulation,,,method,Win by KO/TKO,ko_tko,,0.2707344887935801
+80e2ec70e0e6,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Dricus Du Plessis,Kamaru Usman,simulation,,,method,Win by Submission,submission,,0.22017868245412747
+80e2ec70e0e6,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Dricus Du Plessis,Kamaru Usman,simulation,,,method,Win by Decision,decision,,0.5090868287522925
+80e2ec70e0e6,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Dricus Du Plessis,Kamaru Usman,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.35244613299434
+80e2ec70e0e6,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Dricus Du Plessis,Kamaru Usman,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.64755386700566
+80e2ec70e0e6,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Dricus Du Plessis,Kamaru Usman,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.49149038735107287
+80e2ec70e0e6,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Dricus Du Plessis,Kamaru Usman,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5085096126489271
+e14249b3e73d,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jared Cannonier,Christian Leroy Duncan,simulation,,,moneyline,Jared Cannonier win,red,,0.7403924486038711
+e14249b3e73d,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jared Cannonier,Christian Leroy Duncan,simulation,,,moneyline,Christian Leroy Duncan win,blue,,0.2596075513961289
+e14249b3e73d,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jared Cannonier,Christian Leroy Duncan,simulation,,,inside_distance,Fight ends inside distance,yes,,0.40024018209637635
+e14249b3e73d,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jared Cannonier,Christian Leroy Duncan,simulation,,,inside_distance,Fight goes to decision,no,,0.5997598179036236
+e14249b3e73d,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jared Cannonier,Christian Leroy Duncan,simulation,,,method,Win by KO/TKO,ko_tko,,0.2785568643269698
+e14249b3e73d,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jared Cannonier,Christian Leroy Duncan,simulation,,,method,Win by Submission,submission,,0.12168331776940654
+e14249b3e73d,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jared Cannonier,Christian Leroy Duncan,simulation,,,method,Win by Decision,decision,,0.5997598179036236
+e14249b3e73d,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jared Cannonier,Christian Leroy Duncan,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.24153792824106712
+e14249b3e73d,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jared Cannonier,Christian Leroy Duncan,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7584620717589329
+e14249b3e73d,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jared Cannonier,Christian Leroy Duncan,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.38128944169297546
+e14249b3e73d,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jared Cannonier,Christian Leroy Duncan,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6187105583070245
+9d756fd8bb9b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Kevin Holland,Jacobe Smith,simulation,,,moneyline,Kevin Holland win,red,,0.4100778644506099
+9d756fd8bb9b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Kevin Holland,Jacobe Smith,simulation,,,moneyline,Jacobe Smith win,blue,,0.5899221355493901
+9d756fd8bb9b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Kevin Holland,Jacobe Smith,simulation,,,inside_distance,Fight ends inside distance,yes,,0.557920059213736
+9d756fd8bb9b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Kevin Holland,Jacobe Smith,simulation,,,inside_distance,Fight goes to decision,no,,0.442079940786264
+9d756fd8bb9b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Kevin Holland,Jacobe Smith,simulation,,,method,Win by KO/TKO,ko_tko,,0.3726719075894087
+9d756fd8bb9b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Kevin Holland,Jacobe Smith,simulation,,,method,Win by Submission,submission,,0.1852481516243273
+9d756fd8bb9b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Kevin Holland,Jacobe Smith,simulation,,,method,Win by Decision,decision,,0.442079940786264
+9d756fd8bb9b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Kevin Holland,Jacobe Smith,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.26463372884576053
+9d756fd8bb9b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Kevin Holland,Jacobe Smith,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7353662711542395
+9d756fd8bb9b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Kevin Holland,Jacobe Smith,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.40903932722185704
+9d756fd8bb9b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Kevin Holland,Jacobe Smith,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5909606727781429
+4cb3a8848bb1,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Chase Hooper,Mitch Ramirez,simulation,,,moneyline,Chase Hooper win,red,,0.8175431845189681
+4cb3a8848bb1,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Chase Hooper,Mitch Ramirez,simulation,,,moneyline,Mitch Ramirez win,blue,,0.18245681548103188
+4cb3a8848bb1,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Chase Hooper,Mitch Ramirez,simulation,,,inside_distance,Fight ends inside distance,yes,,0.6672594650313708
+4cb3a8848bb1,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Chase Hooper,Mitch Ramirez,simulation,,,inside_distance,Fight goes to decision,no,,0.3327405349686292
+4cb3a8848bb1,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Chase Hooper,Mitch Ramirez,simulation,,,method,Win by KO/TKO,ko_tko,,0.22187400386250897
+4cb3a8848bb1,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Chase Hooper,Mitch Ramirez,simulation,,,method,Win by Submission,submission,,0.44538546116886185
+4cb3a8848bb1,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Chase Hooper,Mitch Ramirez,simulation,,,method,Win by Decision,decision,,0.3327405349686292
+4cb3a8848bb1,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Chase Hooper,Mitch Ramirez,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.4351677247333904
+4cb3a8848bb1,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Chase Hooper,Mitch Ramirez,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.5648322752666096
+4cb3a8848bb1,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Chase Hooper,Mitch Ramirez,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.6255102620871699
+4cb3a8848bb1,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Chase Hooper,Mitch Ramirez,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.37448973791283013
+3e25b9819117,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tabatha Ricci,Fatima Kline,simulation,,,moneyline,Tabatha Ricci win,red,,0.5224633373494006
+3e25b9819117,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tabatha Ricci,Fatima Kline,simulation,,,moneyline,Fatima Kline win,blue,,0.47753666265059935
+3e25b9819117,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tabatha Ricci,Fatima Kline,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3873680318882121
+3e25b9819117,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tabatha Ricci,Fatima Kline,simulation,,,inside_distance,Fight goes to decision,no,,0.6126319681117879
+3e25b9819117,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tabatha Ricci,Fatima Kline,simulation,,,method,Win by KO/TKO,ko_tko,,0.23524815568225818
+3e25b9819117,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tabatha Ricci,Fatima Kline,simulation,,,method,Win by Submission,submission,,0.15211987620595396
+3e25b9819117,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tabatha Ricci,Fatima Kline,simulation,,,method,Win by Decision,decision,,0.6126319681117879
+3e25b9819117,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tabatha Ricci,Fatima Kline,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.22123575351182623
+3e25b9819117,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tabatha Ricci,Fatima Kline,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7787642464881738
+3e25b9819117,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tabatha Ricci,Fatima Kline,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.35693385506483416
+3e25b9819117,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tabatha Ricci,Fatima Kline,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6430661449351658
+8081d983b1b3,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tommy McMillen,Alberto Montes,simulation,,,moneyline,Tommy McMillen win,red,,0.6538498543705034
+8081d983b1b3,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tommy McMillen,Alberto Montes,simulation,,,moneyline,Alberto Montes win,blue,,0.34615014562949664
+8081d983b1b3,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tommy McMillen,Alberto Montes,simulation,,,inside_distance,Fight ends inside distance,yes,,0.6043183116149935
+8081d983b1b3,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tommy McMillen,Alberto Montes,simulation,,,inside_distance,Fight goes to decision,no,,0.3956816883850065
+8081d983b1b3,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tommy McMillen,Alberto Montes,simulation,,,method,Win by KO/TKO,ko_tko,,0.40222064058575435
+8081d983b1b3,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tommy McMillen,Alberto Montes,simulation,,,method,Win by Submission,submission,,0.2020976710292391
+8081d983b1b3,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tommy McMillen,Alberto Montes,simulation,,,method,Win by Decision,decision,,0.3956816883850065
+8081d983b1b3,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tommy McMillen,Alberto Montes,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.41961003369694666
+8081d983b1b3,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tommy McMillen,Alberto Montes,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.5803899663030534
+8081d983b1b3,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tommy McMillen,Alberto Montes,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.5218507638006852
+8081d983b1b3,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Tommy McMillen,Alberto Montes,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.4781492361993148
+6c4e3585f2d5,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Veronica Hardy,Dione Barbosa,simulation,,,moneyline,Veronica Hardy win,red,,0.6564538894440277
+6c4e3585f2d5,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Veronica Hardy,Dione Barbosa,simulation,,,moneyline,Dione Barbosa win,blue,,0.3435461105559723
+6c4e3585f2d5,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Veronica Hardy,Dione Barbosa,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4238774571287605
+6c4e3585f2d5,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Veronica Hardy,Dione Barbosa,simulation,,,inside_distance,Fight goes to decision,no,,0.5761225428712395
+6c4e3585f2d5,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Veronica Hardy,Dione Barbosa,simulation,,,method,Win by KO/TKO,ko_tko,,0.2513607760214182
+6c4e3585f2d5,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Veronica Hardy,Dione Barbosa,simulation,,,method,Win by Submission,submission,,0.1725166811073423
+6c4e3585f2d5,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Veronica Hardy,Dione Barbosa,simulation,,,method,Win by Decision,decision,,0.5761225428712395
+6c4e3585f2d5,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Veronica Hardy,Dione Barbosa,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.23611404153801274
+6c4e3585f2d5,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Veronica Hardy,Dione Barbosa,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7638859584619873
+6c4e3585f2d5,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Veronica Hardy,Dione Barbosa,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4577130583080374
+6c4e3585f2d5,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Veronica Hardy,Dione Barbosa,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5422869416919627
+f2767c4226de,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Austin Bashi,Jose Delgado,simulation,,,moneyline,Austin Bashi win,red,,0.6609569465329654
+f2767c4226de,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Austin Bashi,Jose Delgado,simulation,,,moneyline,Jose Delgado win,blue,,0.33904305346703456
+f2767c4226de,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Austin Bashi,Jose Delgado,simulation,,,inside_distance,Fight ends inside distance,yes,,0.6096658122093028
+f2767c4226de,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Austin Bashi,Jose Delgado,simulation,,,inside_distance,Fight goes to decision,no,,0.3903341877906972
+f2767c4226de,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Austin Bashi,Jose Delgado,simulation,,,method,Win by KO/TKO,ko_tko,,0.30695814687345374
+f2767c4226de,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Austin Bashi,Jose Delgado,simulation,,,method,Win by Submission,submission,,0.30270766533584914
+f2767c4226de,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Austin Bashi,Jose Delgado,simulation,,,method,Win by Decision,decision,,0.3903341877906972
+f2767c4226de,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Austin Bashi,Jose Delgado,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.497239564822681
+f2767c4226de,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Austin Bashi,Jose Delgado,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.5027604351773189
+f2767c4226de,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Austin Bashi,Jose Delgado,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.497239564822681
+f2767c4226de,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Austin Bashi,Jose Delgado,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5027604351773189
+898772ecfe2f,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Allen Frye Jr.,Alvin Hines,simulation,,,moneyline,Allen Frye Jr. win,red,,0.846280821334955
+898772ecfe2f,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Allen Frye Jr.,Alvin Hines,simulation,,,moneyline,Alvin Hines win,blue,,0.15371917866504503
+898772ecfe2f,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Allen Frye Jr.,Alvin Hines,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4948461587499153
+898772ecfe2f,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Allen Frye Jr.,Alvin Hines,simulation,,,inside_distance,Fight goes to decision,no,,0.5051538412500847
+898772ecfe2f,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Allen Frye Jr.,Alvin Hines,simulation,,,method,Win by KO/TKO,ko_tko,,0.3004909320553455
+898772ecfe2f,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Allen Frye Jr.,Alvin Hines,simulation,,,method,Win by Submission,submission,,0.19435522669456978
+898772ecfe2f,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Allen Frye Jr.,Alvin Hines,simulation,,,method,Win by Decision,decision,,0.5051538412500847
+898772ecfe2f,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Allen Frye Jr.,Alvin Hines,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.31931832859623
+898772ecfe2f,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Allen Frye Jr.,Alvin Hines,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.68068167140377
+898772ecfe2f,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Allen Frye Jr.,Alvin Hines,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3919944214866309
+898772ecfe2f,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Allen Frye Jr.,Alvin Hines,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6080055785133691
+98f33e02d07b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Levi Rodrigues Jr.,Felipe Franco,simulation,,,moneyline,Levi Rodrigues Jr. win,red,,0.6568494711760474
+98f33e02d07b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Levi Rodrigues Jr.,Felipe Franco,simulation,,,moneyline,Felipe Franco win,blue,,0.3431505288239526
+98f33e02d07b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Levi Rodrigues Jr.,Felipe Franco,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4597831587693634
+98f33e02d07b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Levi Rodrigues Jr.,Felipe Franco,simulation,,,inside_distance,Fight goes to decision,no,,0.5402168412306366
+98f33e02d07b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Levi Rodrigues Jr.,Felipe Franco,simulation,,,method,Win by KO/TKO,ko_tko,,0.3573917440092589
+98f33e02d07b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Levi Rodrigues Jr.,Felipe Franco,simulation,,,method,Win by Submission,submission,,0.10239141476010452
+98f33e02d07b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Levi Rodrigues Jr.,Felipe Franco,simulation,,,method,Win by Decision,decision,,0.5402168412306366
+98f33e02d07b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Levi Rodrigues Jr.,Felipe Franco,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.3490828764590873
+98f33e02d07b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Levi Rodrigues Jr.,Felipe Franco,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6509171235409127
+98f33e02d07b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Levi Rodrigues Jr.,Felipe Franco,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.446934278505029
+98f33e02d07b,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Levi Rodrigues Jr.,Felipe Franco,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.553065721494971
+8089a297c249,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Alden Coria,Stewart Nicoll,simulation,,,moneyline,Alden Coria win,red,,0.8964321309427241
+8089a297c249,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Alden Coria,Stewart Nicoll,simulation,,,moneyline,Stewart Nicoll win,blue,,0.10356786905727589
+8089a297c249,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Alden Coria,Stewart Nicoll,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4281017404273441
+8089a297c249,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Alden Coria,Stewart Nicoll,simulation,,,inside_distance,Fight goes to decision,no,,0.5718982595726558
+8089a297c249,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Alden Coria,Stewart Nicoll,simulation,,,method,Win by KO/TKO,ko_tko,,0.3010169617464127
+8089a297c249,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Alden Coria,Stewart Nicoll,simulation,,,method,Win by Submission,submission,,0.12708477868093143
+8089a297c249,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Alden Coria,Stewart Nicoll,simulation,,,method,Win by Decision,decision,,0.5718982595726558
+8089a297c249,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Alden Coria,Stewart Nicoll,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.2773658763168777
+8089a297c249,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Alden Coria,Stewart Nicoll,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7226341236831223
+8089a297c249,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Alden Coria,Stewart Nicoll,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4222904326229916
+8089a297c249,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Alden Coria,Stewart Nicoll,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5777095673770084
