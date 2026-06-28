@@ -1,0 +1,27 @@
+<style>
+.sport{display:block;transition:border-color .15s ease,transform .12s ease}
+.sport:hover{border-color:var(--line2);transform:translateY(-2px)}
+.sport .ico{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;font-size:19px}
+.sport .nm{font-size:14px;font-weight:600;color:var(--tx);margin-top:11px;display:flex;align-items:center;gap:8px}
+.sport .bl{font-size:11.5px;color:var(--mt);margin-top:9px;line-height:1.45}
+.ico-mlb{background:rgba(25,224,138,.12);color:var(--edge)}
+.ico-nba{background:rgba(59,130,246,.12);color:var(--blue)}
+.ico-wnba{background:rgba(232,121,168,.14);color:var(--pink)}
+.ico-pga{background:rgba(151,196,89,.16);color:var(--lime)}
+.ico-ufc{background:rgba(239,159,39,.16);color:var(--amber)}
+</style>
+<section class="sec">
+  <div class="wrap">
+    <span class="eyebrow">What’s live today</span>
+    <h2>Five sports, modeled every slate.</h2>
+    <div class="grid g-sports reveal" style="margin-top:20px">
+      {% for s in live_sports %}
+      <a class="card sport" href="{{ s.href }}"{% if s.key=='mlb' %} style="border-color:rgba(25,224,138,.35)"{% endif %}>
+        <span class="ico ico-{{ s.key }}"><i class="ti {{ s.icon }}" aria-hidden="true"></i></span>
+        <span class="nm">{{ s.name }} <span class="pill {{ 'pill-edge' if s.tag=='Flagship' else 'pill-live' }}">{{ s.tag }}</span></span>
+        <span class="bl">{{ s.blurb }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>

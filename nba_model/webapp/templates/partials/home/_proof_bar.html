@@ -1,0 +1,12 @@
+<style>
+.proof{display:flex;flex-wrap:wrap;gap:26px 40px;padding:26px 0;border-top:1px solid var(--line)}
+.proof .num{font-size:24px;font-weight:700;color:var(--tx);letter-spacing:-.01em}
+.proof .cap{font-size:11.5px;color:var(--mt);margin-top:2px}
+</style>
+<section class="wrap" aria-label="Live platform activity">
+  <div class="proof reveal">
+    {% for m in proof %}
+    <div><div class="num">{{ m.value }}</div><div class="cap">{{ m.label }}</div></div>
+    {% endfor %}
+  </div>
+</section>

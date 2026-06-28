@@ -1,0 +1,30 @@
+<style>
+.next-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:20px}
+@media(min-width:900px){.next-grid{grid-template-columns:1.5fr 1fr}}
+.next-card{display:flex;align-items:center;gap:16px;border-style:dashed}
+.next-card .ico{width:44px;height:44px;border-radius:11px;background:rgba(255,255,255,.05);color:var(--mt);display:grid;place-items:center;font-size:23px;flex:none}
+.next-card .h{display:flex;align-items:center;gap:10px}
+.next-card .h .t{font-size:16px;font-weight:600;color:var(--tx)}
+.next-card .d{font-size:12.5px;color:var(--mt);margin-top:5px}
+.road{font-size:13px;color:var(--mt);line-height:1.6}
+.road b{color:var(--tx);font-weight:600}
+</style>
+<section class="sec">
+  <div class="wrap">
+    <span class="eyebrow">What’s next</span>
+    <h2>Built on one engine. Expanding to every sport.</h2>
+    <div class="next-grid reveal">
+      <div class="card next-card">
+        <span class="ico"><i class="ti ti-ball-american-football" aria-hidden="true"></i></span>
+        <div style="flex:1">
+          <div class="h"><span class="t">NFL</span><span class="pill pill-soon">Coming soon</span></div>
+          <p class="d">The same engine, built for football. Join the waitlist to get first access when it goes live.</p>
+        </div>
+        <a class="btn btn-ghost" href="/waitlist" data-evt="waitlist_submit"><i class="ti ti-bell" aria-hidden="true"></i> Join waitlist</a>
+      </div>
+      <div class="card road">
+        <b>The roadmap</b><br>{{ home_config.whats_next_secondary }}
+      </div>
+    </div>
+  </div>
+</section>

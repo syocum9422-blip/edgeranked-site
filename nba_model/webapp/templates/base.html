@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ page_title|default('EdgeRanked AI — AI sports projections for MLB, NBA & more') }}</title>
+<meta name="description" content="{{ meta_description|default('Daily AI-powered sports projections, simulations, and matchup intelligence. MLB live now with NBA, WNBA, PGA, and UFC coverage.') }}">
+<link rel="canonical" href="{{ canonical_url|default((site_origin|default('https://edgerankedai.com')) ~ '/') }}">
+<meta name="theme-color" content="#0B0E14">
+<meta property="og:title" content="{{ page_title|default('EdgeRanked AI') }}">
+<meta property="og:description" content="{{ meta_description|default('One subscription. Every sport. AI-powered sports intelligence.') }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ canonical_url|default((site_origin|default('https://edgerankedai.com')) ~ '/') }}">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.7.0/dist/tabler-icons.min.css">
+{% block head_extra %}{% endblock %}
+<style>
+:root{
+  --ink:#0B0E14;--surface:#141A26;--card:#1A2233;--card2:#10151f;
+  --line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.16);
+  --tx:#EEF2F8;--mt:#9AA6B8;--dim:#6B7689;
+  --edge:#19E08A;--edge-deep:#06251a;--blue:#3B82F6;--amber:#EF9F27;--pink:#E879A8;--lime:#97C459;
+  --maxw:1120px;--r:14px;--r-sm:10px;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--ink);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+.eyebrow{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--edge);font-weight:600}
+.mt{color:var(--mt)}.dim{color:var(--dim)}
+.sec{padding:46px 0;border-top:1px solid var(--line)}
+.sec h2{font-size:clamp(20px,3.4vw,28px);font-weight:600;line-height:1.15;margin-top:10px;letter-spacing:-.01em}
+.lead{color:var(--mt);font-size:15px;margin-top:8px;max-width:560px}
+/* buttons: GREEN reserved exclusively for the trial CTA */
+.btn{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:13px 20px;border-radius:var(--r-sm);border:1px solid transparent;cursor:pointer;transition:transform .12s ease,background .15s ease,border-color .15s ease;white-space:nowrap}
+.btn:active{transform:scale(.98)}
+.btn-trial{background:var(--edge);color:var(--edge-deep);border-color:var(--edge)}
+.btn-trial:hover{background:#28ed97}
+.btn-ghost{background:transparent;color:var(--tx);border-color:var(--line2)}
+.btn-ghost:hover{border-color:var(--tx)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.pill{display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;padding:3px 10px;border-radius:20px;letter-spacing:.02em}
+.pill-edge{background:rgba(25,224,138,.14);color:var(--edge)}
+.pill-live{background:rgba(255,255,255,.07);color:var(--mt)}
+.pill-soon{background:rgba(239,159,39,.16);color:var(--amber)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--edge);display:inline-block;animation:erpulse 2s infinite}
+@keyframes erpulse{0%{box-shadow:0 0 0 0 rgba(25,224,138,.5)}70%{box-shadow:0 0 0 7px rgba(25,224,138,0)}100%{box-shadow:0 0 0 0 rgba(25,224,138,0)}}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.dot{animation:none}}
+.blur-real{filter:blur(4px);opacity:.55;user-select:none}
+.lock-cap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+/* grids */
+.grid{display:grid;gap:12px}
+.g-today{grid-template-columns:1fr}
+.g-sports{grid-template-columns:repeat(2,1fr)}
+.g-trust{grid-template-columns:repeat(2,1fr)}
+.g-price{grid-template-columns:1fr}
+.hero-grid{display:grid;grid-template-columns:1fr;gap:26px;align-items:center}
+@media(min-width:680px){.g-today{grid-template-columns:repeat(2,1fr)}.g-trust{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:900px){
+  .hero-grid{grid-template-columns:1.05fr .95fr;gap:34px}
+  .g-today{grid-template-columns:repeat(4,1fr)}
+  .g-sports{grid-template-columns:repeat(5,1fr)}
+  .g-trust{grid-template-columns:repeat(5,1fr)}
+  .g-price{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+{% block content %}{% endblock %}
+{% block schema %}{% endblock %}
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+  // lightweight analytics hooks: forward [data-evt] clicks to gtag/dataLayer if present
+  document.addEventListener('click',function(ev){
+    var t=ev.target.closest('[data-evt]');if(!t)return;var name=t.getAttribute('data-evt');
+    try{if(window.gtag){window.gtag('event',name)}}catch(e){}
+    try{(window.dataLayer=window.dataLayer||[]).push({event:name})}catch(e){}
+  });
+})();
+</script>
+</body>
+</html>

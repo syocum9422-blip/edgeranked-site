@@ -14,7 +14,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import pandas as pd
-from flask import Flask, Response, jsonify, request, send_from_directory
+from flask import Flask, Response, jsonify, render_template, request, send_from_directory
 from nba_model.webapp.auth_views import register_auth_routes
 
 from nba_model.common import build_projection_app_view
@@ -8945,6 +8945,354 @@ def _render_premium_visible_rows_html(rows, max_visible=3):
     return "\n".join(parts)
 
 
+# ---------------------------------------------------------------------------
+# Redesigned homepage -- "One subscription. Every sport."
+# Live, server-rendered Jinja homepage (templates/home.html). Pulls real MLB
+# artifacts; falls back safely if files are missing. NFL is intentionally NOT a
+# live sport here -- the template surfaces it only as a Coming soon waitlist card.
+# ---------------------------------------------------------------------------
+
+# Live sports cards. Order matters: MLB is the flagship proof product. NFL is
+# never added to this list -- it is rendered as a Coming soon waitlist card only.
+HOME_LIVE_SPORTS = [
+    {"key": "mlb",  "name": "MLB",  "tag": "Flagship", "href": "/mlb",  "icon": "ti-ball-baseball",          "blurb": "Weather-adjusted hitter & pitcher props, HR boards."},
+    {"key": "nba",  "name": "NBA",  "tag": "Live",     "href": "/nba",  "icon": "ti-ball-basketball",        "blurb": "Matchup intelligence & player simulations."},
+    {"key": "wnba", "name": "WNBA", "tag": "Live",     "href": "/wnba", "icon": "ti-ball-basketball",        "blurb": "Daily projections every slate."},
+    {"key": "pga",  "name": "PGA",  "tag": "Live",     "href": "/pga",  "icon": "ti-golf",                   "blurb": "Tournament-long simulations."},
+    {"key": "ufc",  "name": "UFC",  "tag": "Live",     "href": "/ufc",  "icon": "ti-karate",                 "blurb": "Fight outcome simulations."},
+]
+
+_HOME_CTX_CACHE = {"ts": 0.0, "data": None}
+_HOME_CTX_TTL_SECONDS = 60
+
+# NFL is not a live product. This flag stays False until a real NFL board ships.
+# While False, NFL can never become the homepage flagship -- it only ever renders
+# as a "Coming soon" waitlist card linked to /waitlist (no /nfl route, no NFL
+# live cards or projection samples).
+NFL_HOME_ENABLED = False
+
+# Seasonal homepage personalization. Swaps only the flagship *proof* copy/links
+# -- the H1 ("One subscription. Every sport.") and overall layout never change.
+# NFL is intentionally absent as a flagship; whats_next_primary is always "nfl"
+# (Coming soon waitlist). 'off' is the season-agnostic platform view.
+SEASON_CONFIG = {
+    "mlb": {
+        "flagship_sport": "mlb",
+        "hero_eyebrow": "One subscription · every sport",
+        "hero_subhead": ("Daily AI projections, simulations, and matchup intelligence across "
+                         "multiple sports — rebuilt every morning."),
+        "secondary_cta_label": "Explore today’s MLB board",
+        "secondary_cta_href": "/mlb",
+        "secondary_cta_icon": "ti-ball-baseball",
+        "board_title": "Today’s MLB board",
+        "board_icon": "ti-ball-baseball",
+        "live_strip_subject": "MLB board",
+        "whats_next_primary": "nfl",
+        "whats_next_secondary": ("One platform expanding to every major sport — so your subscription "
+                                 "works all year, not just one season."),
+    },
+    "nba": {
+        "flagship_sport": "nba",
+        "hero_eyebrow": "One subscription · every sport",
+        "hero_subhead": ("Daily AI projections, simulations, and matchup intelligence across multiple "
+                         "sports — with NBA matchup intelligence live every slate this season."),
+        "secondary_cta_label": "Explore today’s NBA board",
+        "secondary_cta_href": "/nba",
+        "secondary_cta_icon": "ti-ball-basketball",
+        "board_title": "Tonight’s NBA board",
+        "board_icon": "ti-ball-basketball",
+        "live_strip_subject": "NBA board",
+        "whats_next_primary": "nfl",
+        "whats_next_secondary": ("MLB returns each spring and more sports are coming — your subscription "
+                                 "keeps working straight through the offseason."),
+    },
+    "off": {
+        "flagship_sport": "platform",
+        "hero_eyebrow": "One subscription · every sport",
+        "hero_subhead": ("Daily AI projections, simulations, and matchup intelligence across every live "
+                         "sport — all year round."),
+        "secondary_cta_label": "Explore live boards",
+        "secondary_cta_href": "/mlb",
+        "secondary_cta_icon": "ti-bolt",
+        "board_title": "Today’s live board",
+        "board_icon": "ti-bolt",
+        "live_strip_subject": "Live boards",
+        "whats_next_primary": "nfl",
+        "whats_next_secondary": ("More sports are coming — your one subscription works across every "
+                                 "season, all year round."),
+    },
+}
+
+
+def _mlb_artifacts_available():
+    """True if today's MLB board artifacts exist on disk (cheap existence check)."""
+    try:
+        return bool(MLB_FILES["best_bets"].exists() or MLB_FILES["pitchers"].exists())
+    except Exception:
+        return False
+
+
+def _nba_artifacts_available():
+    """True if the NBA projections artifact exists *and* is from today (ET).
+    Mirrors the homepage NBA freshness guard so stale players never surface."""
+    try:
+        if not Path(PROJECTIONS_PATH).exists():
+            return False
+        mtime = datetime.fromtimestamp(Path(PROJECTIONS_PATH).stat().st_mtime, ET).date()
+        return mtime == today_et()
+    except Exception:
+        return False
+
+
+def current_season():
+    """Active homepage season: 'mlb' | 'nba' | 'off'. Messaging only -- it never
+    promotes NFL (guarded by NFL_HOME_ENABLED). Month logic: MLB Apr-Sep, NBA
+    Oct-Apr. April overlaps MLB Opening and the NBA stretch, so prefer MLB when
+    its board artifacts are present, otherwise NBA. Deep offseason with no live
+    artifacts anywhere falls back to the season-agnostic 'off' view."""
+    month = now_et().month
+    if month == 4:
+        season = "mlb" if _mlb_artifacts_available() else "nba"
+    elif 5 <= month <= 9:
+        season = "mlb"
+    elif month in (10, 11, 12, 1, 2, 3):
+        season = "nba"
+    else:
+        season = "off"
+
+    # Deep-offseason safety net: if neither sport has live artifacts, show 'off'.
+    if season in ("mlb", "nba") and not _mlb_artifacts_available() and not _nba_artifacts_available():
+        season = "off"
+
+    # NFL guardrail: never let NFL be selected as flagship while disabled.
+    if season == "nfl" and not NFL_HOME_ENABLED:
+        season = "mlb" if _mlb_artifacts_available() else "off"
+    return season
+
+
+def _home_pct(value):
+    """Format a probability-style projection as a percent string, or None."""
+    try:
+        v = float(value)
+    except (TypeError, ValueError):
+        return None
+    if v != v:  # NaN
+        return None
+    if 0 <= v <= 1:
+        v *= 100
+    return f"{v:.1f}%"
+
+
+def _home_mlb_preview_cards():
+    """Up to three real MLB preview cards from today's live board (HR, TB, K).
+    Returns [] if no live board is available -- never fabricates numbers."""
+    try:
+        board = load_mlb_best_bets()
+        records = board.get("records", []) if isinstance(board, dict) else []
+    except Exception:
+        records = []
+
+    def _market(r):
+        return normalize_text(r.get("market")).upper()
+
+    cards = []
+    hr = next((r for r in records if _market(r) == "HITTER_HR"), None)
+    tb = next((r for r in records if "TOTAL BASES" in normalize_text(r.get("stat_type")).upper()
+               or _market(r) in ("HITTER_TB", "HITTER_TOTAL_BASES")), None)
+    k = next((r for r in records if _market(r) == "PITCHER_K"), None)
+
+    if hr and _home_pct(hr.get("projection")):
+        cards.append({"label": "HR probability", "player": hr.get("player"), "team": hr.get("team"),
+                      "value": _home_pct(hr.get("projection")), "suffix": "HR", "accent": "edge", "locked": False})
+    if tb and _home_pct(tb.get("projection")):
+        cards.append({"label": "Total bases", "player": tb.get("player"), "team": tb.get("team"),
+                      "value": _home_pct(tb.get("projection")), "suffix": "TB", "accent": "edge", "locked": False})
+    if k is not None:
+        try:
+            cards.append({"label": "Projected strikeouts", "player": k.get("player"), "team": k.get("team"),
+                          "value": f"{float(k.get('projection')):.1f}", "suffix": "K", "accent": "blue", "locked": False})
+        except (TypeError, ValueError):
+            pass
+    return cards[:3]
+
+
+def _home_nba_preview_cards():
+    """Up to three real NBA preview cards from today's projections, or None if
+    NBA artifacts are missing/stale (so the caller can fall back to MLB)."""
+    if not _nba_artifacts_available():
+        return None
+    try:
+        records = build_nba_projection_records()
+        snapshot = build_nba_projection_snapshot(records) if records else []
+    except Exception:
+        return None
+
+    cards = []
+    accents = ["edge", "blue", "edge"]
+    for snap in snapshot[:3]:
+        leaders = snap.get("leaders") or []
+        if not leaders:
+            continue
+        top = leaders[0]
+        proj = top.get("projection")
+        player = top.get("player")
+        if proj is None or not player:
+            continue
+        cards.append({"label": snap.get("stat_label") or "Projection", "player": player,
+                      "team": top.get("team") or top.get("opponent") or "",
+                      "value": f"{float(proj):.1f}", "suffix": "", "accent": accents[len(cards) % 3],
+                      "locked": False})
+    return cards[:3] or None
+
+
+def _home_preview_cards(flagship="mlb"):
+    """Flagship-aware live preview cards + one blurred-real locked card.
+    Returns (cards, has_real, source) where source is the sport that actually
+    produced the real cards ('mlb' | 'nba' | None). NBA season tries real NBA
+    cards first, then falls back to MLB, then to a generic locked-only board.
+    Never fabricates player-specific numbers."""
+    real, source = [], None
+    if flagship == "nba":
+        nba = _home_nba_preview_cards()
+        if nba:
+            real, source = nba, "nba"
+        else:
+            real = _home_mlb_preview_cards()
+            source = "mlb" if real else None
+    elif flagship == "platform":
+        real = _home_mlb_preview_cards()
+        source = "mlb" if real else None
+        if not real:
+            nba = _home_nba_preview_cards()
+            real, source = (nba, "nba") if nba else ([], None)
+    else:  # mlb
+        real = _home_mlb_preview_cards()
+        source = "mlb" if real else None
+
+    real = (real or [])[:3]
+    has_real = len(real) > 0
+    # Always end with a blurred-real locked card to prove there's more behind Pro.
+    real.append({"label": "Top play", "player": "Locked", "team": "Pro",
+                 "value": "•••", "suffix": "", "accent": "edge", "locked": True})
+    return real, has_real, source
+
+
+def _flagship_live_meta(flagship):
+    """(props_count, board_date, updated_ts) for the seasonal flagship, falling
+    back to MLB so the live strip/proof bar are never empty. No fake numbers."""
+    if flagship == "nba" and _nba_artifacts_available():
+        try:
+            records = build_nba_projection_records()
+        except Exception:
+            records = []
+        if records:
+            ts = file_timestamp(PROJECTIONS_PATH)
+            return len(records), (ts.date() if ts else today_et()), ts
+
+    props_count = 0
+    board_date = None
+    try:
+        board = load_mlb_best_bets()
+        if isinstance(board, dict):
+            props_count = int(board.get("props_scanned") or 0)
+            board_date = board.get("board_date")
+    except Exception:
+        pass
+    if not props_count:
+        try:
+            props_count = int(props_scanned_count() or 0)
+        except Exception:
+            props_count = 0
+    updated_ts = file_timestamp(MLB_FILES["best_bets"]) or file_timestamp(MLB_FILES["pitchers"])
+    return props_count, board_date, updated_ts
+
+
+def build_home_context(season):
+    """Assemble the live, season-aware homepage context. Defensive: every live
+    read is optional and falls back to a generic (non-fake-specific) value.
+    Cached ~60s per season. Never hard-codes a date. The H1 is fixed in the
+    template; only the flagship proof copy/links swap via home_config."""
+    config = dict(SEASON_CONFIG.get(season) or SEASON_CONFIG["mlb"])
+    # NFL guardrail: a flagship of 'nfl' is never allowed while disabled.
+    if config.get("flagship_sport") == "nfl" and not NFL_HOME_ENABLED:
+        config = dict(SEASON_CONFIG["mlb"])
+    flagship = config["flagship_sport"]
+
+    now = datetime.now().timestamp()
+    cached = _HOME_CTX_CACHE.get("data")
+    if (cached is not None and _HOME_CTX_CACHE.get("season") == season
+            and (now - _HOME_CTX_CACHE.get("ts", 0)) < _HOME_CTX_TTL_SECONDS):
+        return dict(cached)
+
+    props_count, board_date, updated_ts = _flagship_live_meta(flagship)
+
+    display_date = board_date or today_et()
+    try:
+        date_label = display_date.strftime("%A, %B %-d")
+    except Exception:
+        date_label = today_et().strftime("%A, %B %-d")
+    updated_label = updated_ts.strftime("%-I:%M %p ET") if updated_ts else "today"
+
+    # Weather/park context is MLB-specific; only surfaced when MLB leads.
+    parks_count = 0
+    if flagship in ("mlb", "platform"):
+        try:
+            weather = load_mlb_weather()
+            parks_count = len(weather.get("games", []) or [])
+        except Exception:
+            parks_count = 0
+
+    props_display = f"{props_count:,}" if props_count else None
+    preview_cards, has_live_board, card_source = _home_preview_cards(flagship)
+
+    # If the flagship's own artifacts were unavailable and we fell back to another
+    # sport's cards, neutralize the board identity so we never show (e.g.) MLB
+    # players under an "NBA board" header. Hero positioning copy is unchanged.
+    sport_of = {"mlb": "mlb", "nba": "nba"}
+    if has_live_board and card_source and sport_of.get(flagship) and card_source != flagship:
+        neutral = SEASON_CONFIG["off"]
+        config["board_title"] = neutral["board_title"]
+        config["board_icon"] = neutral["board_icon"]
+        config["live_strip_subject"] = neutral["live_strip_subject"]
+
+    if has_live_board:
+        config["board_footer"] = f"Real model output for {date_label} · full board is Pro"
+    else:
+        config["board_footer"] = "Live boards rebuilt every morning · start a trial to unlock"
+
+    proof = [
+        {"value": props_display or "—", "label": "props modeled today"},
+        {"value": str(len(HOME_LIVE_SPORTS)), "label": "sports live now"},
+    ]
+    if parks_count:
+        proof.append({"value": str(parks_count), "label": "MLB parks weather-modeled"})
+    proof.append({"value": updated_label, "label": "board last rebuilt"})
+
+    ctx = {
+        "home_config": config,
+        "home_has_live_board": has_live_board,
+        "live": {
+            "date_label": date_label,
+            "props_count": props_display,
+            "updated_label": updated_label,
+            "subject": config["live_strip_subject"],
+        },
+        "preview_cards": preview_cards,
+        "proof": proof,
+        "live_sports": HOME_LIVE_SPORTS,
+        "parks_count": parks_count,
+        "site_origin": SITE_ORIGIN,
+        "page_title": "EdgeRanked AI — AI sports projections for MLB, NBA & more",
+        "meta_description": ("Daily AI-powered sports projections, simulations, and matchup "
+                             "intelligence. MLB live now with NBA, WNBA, PGA, and UFC coverage."),
+        "canonical_url": SITE_ORIGIN + "/",
+    }
+    _HOME_CTX_CACHE["ts"] = now
+    _HOME_CTX_CACHE["season"] = season
+    _HOME_CTX_CACHE["data"] = ctx
+    return dict(ctx)
+
+
 def build_home_page_preview():
     """
     Premium homepage preview for EdgeRankedSportsAI.
@@ -12952,7 +13300,17 @@ def create_app():
 
     @flask_app.get("/")
     def root():
-        return build_home_page_preview()
+        # Redesigned "One subscription. Every sport." homepage. If template
+        # rendering fails for any reason, fall back to the legacy preview so the
+        # homepage can never 500 in production. Legacy page also stays reachable
+        # at /homepage-preview for instant rollback.
+        try:
+            season = current_season()
+            ctx = build_home_context(season)
+            return render_template("home.html", season=season, **ctx)
+        except Exception:
+            LOGGER.exception("home redesign render failed; serving legacy preview")
+            return build_home_page_preview()
 
     @flask_app.get("/sitemap.xml")
     def sitemap_xml():

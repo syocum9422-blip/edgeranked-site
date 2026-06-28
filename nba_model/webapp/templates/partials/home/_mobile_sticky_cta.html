@@ -1,0 +1,14 @@
+<style>
+.msticky{position:fixed;left:0;right:0;bottom:0;z-index:60;background:#0d1420;border-top:1px solid var(--line);padding:10px 16px;display:flex;align-items:center;gap:12px}
+.msticky .copy .t{font-size:12.5px;font-weight:600;color:var(--tx)}
+.msticky .copy .s{font-size:10px;color:var(--mt)}
+.msticky .btn{padding:11px 16px;font-size:12.5px}
+@media(min-width:900px){.msticky{display:none}}
+</style>
+<div class="msticky" role="region" aria-label="Start free trial">
+  <div class="copy" style="flex:1">
+    <div class="t">Start free — every sport</div>
+    <div class="s">$19.99/mo after · cancel anytime</div>
+  </div>
+  <a class="btn btn-trial" href="/pricing" data-evt="trial_start">Free trial</a>
+</div>

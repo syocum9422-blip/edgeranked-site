@@ -1,0 +1,47 @@
+<style>
+.price-card .tier{font-size:15px;font-weight:600;color:var(--tx)}
+.price-card .meta{font-size:12px;color:var(--mt);margin-top:2px}
+.price-card .amt{margin:14px 0;font-weight:700;letter-spacing:-.01em}
+.price-card .amt .big{font-size:28px;color:var(--tx)}
+.price-card .amt .per{font-size:12px;color:var(--mt);font-weight:400}
+.feat{list-style:none;padding:0;margin:0;font-size:12.5px;color:var(--mt)}
+.feat li{display:flex;gap:8px;padding:5px 0}
+.feat li i{color:var(--edge);font-size:15px;flex:none}
+.pro{position:relative;border:2px solid var(--edge)}
+.pro .badge{position:absolute;top:-11px;left:18px}
+.price-card .btn{width:100%;justify-content:center;margin-top:16px}
+</style>
+<section class="sec">
+  <div class="wrap">
+    <span class="eyebrow">Pricing</span>
+    <h2>One membership. Every sport. $19.99/mo.</h2>
+    <div class="grid g-price reveal" style="margin-top:20px">
+      <div class="card price-card">
+        <div class="tier">Free research</div>
+        <div class="meta">No account needed</div>
+        <div class="amt"><span class="big">$0</span></div>
+        <ul class="feat">
+          <li><i class="ti ti-check" aria-hidden="true"></i> Team &amp; player pages</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Daily leaderboards</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Results archive</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Stadium &amp; weather center</li>
+        </ul>
+        <a class="btn btn-ghost" href="/mlb">Browse free pages</a>
+      </div>
+      <div class="card price-card pro">
+        <span class="pill pill-edge badge" style="background:var(--edge);color:var(--edge-deep)">Most popular</span>
+        <div class="tier">Pro membership</div>
+        <div class="meta">Everything, every sport</div>
+        <div class="amt"><span class="big">$19.99</span><span class="per">/mo</span></div>
+        <ul class="feat">
+          <li><i class="ti ti-check" aria-hidden="true"></i> Full projection boards · all sports</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Matchup intelligence + simulations</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Weather &amp; context engine</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Tracking dashboards</li>
+        </ul>
+        <a class="btn btn-trial" href="/pricing" data-evt="pricing_cta_click">Start 3-day free trial</a>
+        <p style="font-size:11px;color:var(--dim);text-align:center;margin-top:10px">Then $19.99/mo · cancel anytime in one click</p>
+      </div>
+    </div>
+  </div>
+</section>

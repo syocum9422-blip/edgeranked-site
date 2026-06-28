@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "partials/home/_nav.html" %}
+{% include "partials/home/_live_strip.html" %}
+<main id="main">
+  {% include "partials/home/_hero.html" %}
+  {% include "partials/home/_proof_bar.html" %}
+  {% include "partials/home/_today.html" %}
+  {% include "partials/home/_whats_live.html" %}
+  {% include "partials/home/_whats_next.html" %}
+  {% include "partials/home/_why_trust.html" %}
+  {% include "partials/home/_social_proof.html" %}
+  {% include "partials/home/_pricing.html" %}
+  {% include "partials/home/_faq.html" %}
+  {% include "partials/home/_final_cta.html" %}
+</main>
+{% include "partials/home/_footer.html" %}
+{% include "partials/home/_mobile_sticky_cta.html" %}
+{% endblock %}
+{% block schema %}
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"What do I get free vs. Pro?","acceptedAnswer":{"@type":"Answer","text":"Free research pages — team and player pages, daily leaderboards, the results archive, and the stadium & weather center — need no account. Pro unlocks the full projection boards across every live sport, matchup intelligence, simulations, the weather engine, and tracking dashboards."}},
+    {"@type":"Question","name":"How current is the data?","acceptedAnswer":{"@type":"Answer","text":"Boards are rebuilt every morning and refreshed through the day. The homepage shows today's date, the number of props modeled, and the time the board was last rebuilt."}},
+    {"@type":"Question","name":"When does NFL go live?","acceptedAnswer":{"@type":"Answer","text":"NFL is in development and is not live yet. Join the waitlist to get first access the moment it launches."}},
+    {"@type":"Question","name":"Do you guarantee wins?","acceptedAnswer":{"@type":"Answer","text":"No. No locks, no guarantees. We publish probabilities from our models and track them honestly. Everything is for research and entertainment."}},
+    {"@type":"Question","name":"How much does it cost and is there a trial?","acceptedAnswer":{"@type":"Answer","text":"Pro is $19.99/month and includes a 3-day free trial. Cancel anytime in one click."}},
+    {"@type":"Question","name":"How do I cancel?","acceptedAnswer":{"@type":"Answer","text":"Cancel anytime from your account in one click. If you cancel during the 3-day trial you are not charged."}}
+  ]
+}
+</script>
+{% endblock %}

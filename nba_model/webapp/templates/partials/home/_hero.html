@@ -1,0 +1,22 @@
+<style>
+.hero{padding:48px 0 14px}
+.hero h1{font-size:clamp(34px,7vw,56px);line-height:1.04;font-weight:700;letter-spacing:-.02em}
+.hero .sub{color:var(--mt);font-size:clamp(15px,2.2vw,18px);margin-top:16px;max-width:480px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.hero-fine{font-size:12px;color:var(--dim);margin-top:14px}
+</style>
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="reveal">
+      <span class="eyebrow">{{ home_config.hero_eyebrow }}</span>
+      <h1>One subscription.<br>Every sport.</h1>
+      <p class="sub">{{ home_config.hero_subhead }}</p>
+      <div class="hero-cta">
+        <a class="btn btn-trial" href="/pricing" data-evt="hero_cta_click">Start 3-day free trial <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+        <a class="btn btn-ghost" href="{{ home_config.secondary_cta_href }}" data-evt="secondary_board_click"><i class="ti {{ home_config.secondary_cta_icon }}" aria-hidden="true"></i> {{ home_config.secondary_cta_label }}</a>
+      </div>
+      <p class="hero-fine">$19.99/mo after trial · cancel anytime · modeled, not guaranteed</p>
+    </div>
+    {% include "partials/home/_board_preview.html" %}
+  </div>
+</section>

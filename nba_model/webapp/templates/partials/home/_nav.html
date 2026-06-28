@@ -1,0 +1,38 @@
+<style>
+.nav{position:sticky;top:0;z-index:50;background:rgba(11,14,20,.82);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:60px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:16px}
+.brand .mark{width:26px;height:26px;border-radius:8px;background:var(--edge);color:var(--edge-deep);display:grid;place-items:center;font-size:16px}
+.brand .ai{color:var(--edge)}
+.nav-links{display:none;align-items:center;gap:26px;font-size:14px;color:var(--mt)}
+.nav-links a:hover{color:var(--tx)}
+.has-menu{position:relative}
+.menu{position:absolute;top:32px;left:-12px;min-width:200px;background:var(--card);border:1px solid var(--line2);border-radius:12px;padding:8px;display:none;flex-direction:column;gap:2px}
+.has-menu:hover .menu,.has-menu:focus-within .menu{display:flex}
+.menu a{display:flex;justify-content:space-between;align-items:center;padding:9px 11px;border-radius:8px;font-size:13.5px;color:var(--tx)}
+.menu a:hover{background:rgba(255,255,255,.05)}
+.nav-trial{padding:9px 16px;font-size:13px}
+.nav-burger{display:inline-flex;font-size:22px;color:var(--tx);background:none;border:0}
+@media(min-width:900px){.nav-links{display:flex}.nav-burger{display:none}}
+</style>
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="/" aria-label="EdgeRanked AI home"><span class="mark"><i class="ti ti-bolt" aria-hidden="true"></i></span>EdgeRanked<span class="ai">AI</span></a>
+    <nav class="nav-links" aria-label="Primary">
+      <span class="has-menu" tabindex="0" role="button" aria-haspopup="true">Sports <i class="ti ti-chevron-down" style="font-size:13px" aria-hidden="true"></i>
+        <span class="menu">
+          <a href="/mlb"><span>MLB</span><span class="pill pill-edge">Flagship</span></a>
+          <a href="/nba"><span>NBA</span><span class="pill pill-live">Live</span></a>
+          <a href="/wnba"><span>WNBA</span><span class="pill pill-live">Live</span></a>
+          <a href="/pga"><span>PGA</span><span class="pill pill-live">Live</span></a>
+          <a href="/ufc"><span>UFC</span><span class="pill pill-live">Live</span></a>
+          <a href="/waitlist"><span>NFL</span><span class="pill pill-soon">Coming soon</span></a>
+        </span>
+      </span>
+      <a href="/accuracy">Accuracy</a>
+      <a href="/about">About</a>
+      <a class="btn btn-trial nav-trial" href="/pricing" data-evt="trial_start">Start free trial</a>
+    </nav>
+    <a class="nav-burger" href="/pricing" aria-label="Start free trial"><i class="ti ti-bolt" aria-hidden="true"></i></a>
+  </div>
+</header>

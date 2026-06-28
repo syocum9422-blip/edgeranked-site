@@ -1,0 +1,33 @@
+<style>
+.today-card{position:relative;overflow:hidden}
+.today-card .lbl{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mt)}
+.today-card .ply{font-size:14px;font-weight:600;color:var(--tx);margin-top:6px}
+.today-card .v{font-size:26px;font-weight:700;margin-top:6px;letter-spacing:-.01em}
+.v-edge{color:var(--edge)}.v-blue{color:var(--blue)}
+</style>
+<section class="sec">
+  <div class="wrap">
+    <span class="eyebrow">Today on EdgeRanked</span>
+    {% if home_has_live_board %}
+    <h2>This is today’s real board — not a demo.</h2>
+    <p class="lead">Live model output for {{ live.date_label }}. Samples shown; the full board is Pro.</p>
+    {% else %}
+    <h2>Rebuilt every day, across every live sport.</h2>
+    <p class="lead">Projections refresh every morning. Start a trial to unlock the full board.</p>
+    {% endif %}
+    <div class="grid g-today reveal" style="margin-top:20px">
+      {% for c in preview_cards %}
+      <div class="card today-card">
+        <div class="{% if c.locked %}blur-real{% endif %}">
+          <div class="lbl">{{ c.label }}</div>
+          <div class="ply">{% if c.locked %}●●●●●● ●●●●{% else %}{{ c.player }}{% endif %}</div>
+          <div class="v {{ 'v-blue' if c.accent=='blue' else 'v-edge' }}">{{ c.value }}</div>
+        </div>
+        {% if c.locked %}
+        <span class="lock-cap"><i class="ti ti-lock" style="color:var(--edge);font-size:18px" aria-hidden="true"></i><span style="font-size:10.5px;color:var(--tx)">Unlock with trial</span></span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
