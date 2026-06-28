@@ -1,6 +1,6 @@
 # WNBA Phase 13 Combo Hybrid Minutes Production Report
 
-Generated: 2026-06-27T22:32:26Z
+Generated: 2026-06-28T11:33:15Z
 
 ## Production Logic
 - Rollback flag: `WNBA_ENABLE_COMBO_HYBRID_MINUTES_PRODUCTION` (default: ON).
@@ -11,9 +11,9 @@ Generated: 2026-06-27T22:32:26Z
 - Points, rebounds, assists, RA, steals, blocks, 3PM, and SB base-market outputs are not rewritten.
 
 ## Before/After Summary
-- PA: rows=84, avg before=9.610, avg after=9.306, avg delta=-0.304, max abs delta=9.348
-- PR: rows=84, avg before=10.948, avg after=10.523, avg delta=-0.425, max abs delta=10.321
-- PRA: rows=84, avg before=12.725, avg after=12.338, avg delta=-0.387, max abs delta=11.616
+- PA: rows=111, avg before=9.174, avg after=9.221, avg delta=0.047, max abs delta=6.941
+- PR: rows=111, avg before=10.420, avg after=10.422, avg delta=0.002, max abs delta=7.725
+- PRA: rows=111, avg before=12.229, avg after=12.275, avg delta=0.046, max abs delta=8.957
 
 ## Report Files
 - CSV comparison: `/home/ubuntu/EdgeRanked/sports/wnba/data/processed/wnba_phase13_combo_hybrid_minutes_projection_comparison.csv`

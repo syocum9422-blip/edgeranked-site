@@ -1,12 +1,12 @@
 {
-  "completed_events_ingested": 82,
-  "end_date": "2026-06-27",
+  "completed_events_ingested": 81,
+  "end_date": "2026-06-28",
   "events_seen": 85,
-  "latest_actual_date": "2026-06-26",
-  "player_rows_fetched": 1986,
-  "player_rows_total": 11122,
+  "latest_actual_date": "2026-06-27",
+  "player_rows_fetched": 1965,
+  "player_rows_total": 11198,
   "source": "api:espn_boxscore",
-  "start_date": "2026-05-29",
-  "team_rows_fetched": 164,
-  "team_rows_total": 370
+  "start_date": "2026-05-30",
+  "team_rows_fetched": 162,
+  "team_rows_total": 376
 }
