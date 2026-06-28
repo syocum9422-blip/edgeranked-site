@@ -1692,6 +1692,29 @@ WNBA_MARKETS = [
 _WNBA_COMPOSITES = {"PRA": ["PTS", "REB", "AST"], "PA": ["PTS", "AST"], "PR": ["PTS", "REB"]}
 _WNBA_BASE_STATS = {"PTS", "REB", "AST", "FG3M", "STL", "BLK"}
 
+# Accept friendly market names (?market=points, ?market=3pm) and the raw keys.
+_WNBA_MARKET_ALIASES = {
+    "PTS": "PTS", "POINTS": "PTS", "PT": "PTS",
+    "REB": "REB", "REBOUNDS": "REB", "REBS": "REB",
+    "AST": "AST", "ASSISTS": "AST", "ASSIST": "AST",
+    "PRA": "PRA", "PA": "PA", "PR": "PR",
+    "FG3M": "FG3M", "3PM": "FG3M", "3PT": "FG3M", "3PTM": "FG3M", "THREES": "FG3M",
+    "STL": "STL", "STEALS": "STL", "STEAL": "STL",
+    "BLK": "BLK", "BLOCKS": "BLK", "BLOCK": "BLK",
+}
+
+
+def _wnba_normalize_market(market):
+    """Map a query value (key OR friendly name) to a canonical market key."""
+    return _WNBA_MARKET_ALIASES.get((market or "PTS").strip().upper(), "PTS")
+
+
+def _wnba_projection_sort_key(row):
+    """Numeric projection for ordering; missing/None sorts to the bottom
+    (paired with reverse=True). Confidence never participates in ordering."""
+    value = row.get("projection")
+    return value if isinstance(value, (int, float)) else float("-inf")
+
 # Free users see this many board rows; the rest are blurred (locked). Pro/active
 # subscribers see the full board. Top cards stay visible as the public proof.
 WNBA_FREE_PREVIEW_ROWS = 6
@@ -1782,9 +1805,7 @@ def _wnba_today_games():
 def build_wnba_premium_context(market="PTS"):
     """Assemble the premium WNBA board context. Reuses build_projection_records
     (no model change). Defensive: missing data degrades to a safe empty state."""
-    market = (market or "PTS").upper()
-    if market not in {m["key"] for m in WNBA_MARKETS}:
-        market = "PTS"
+    market = _wnba_normalize_market(market)
 
     try:
         records = build_projection_records()
@@ -1797,6 +1818,11 @@ def build_wnba_premium_context(market="PTS"):
     else:
         market_rows = [r for r in records if r.get("stat_key") == market]
         stat_label = next((m["label"] for m in WNBA_MARKETS if m["key"] == market), market)
+
+    # Order strictly highest-to-lowest by THIS market's projection value.
+    # Confidence/probability never affect ordering; rows with no projection sink
+    # to the bottom. (stable sort keeps a deterministic tie order.)
+    market_rows.sort(key=_wnba_projection_sort_key, reverse=True)
 
     games, tip_by_team = _wnba_today_games()
 
