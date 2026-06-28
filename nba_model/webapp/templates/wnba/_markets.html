@@ -1,0 +1,8 @@
+<section class="wrap" id="board" style="padding-top:14px">
+  <span class="eyebrow">Markets</span>
+  <div class="mtabs" role="tablist" aria-label="WNBA markets">
+    {% for m in markets %}
+    <a class="mtab{% if m.active %} active{% endif %}" href="/wnba/board?market={{ m.key }}" role="tab" aria-selected="{{ 'true' if m.active else 'false' }}">{{ m.label }}</a>
+    {% endfor %}
+  </div>
+</section>

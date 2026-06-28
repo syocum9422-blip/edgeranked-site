@@ -1,0 +1,30 @@
+<section class="wrap" style="padding-top:18px">
+  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+    <span class="eyebrow">Top {{ active_market_label }} projections</span>
+    <span class="mt" style="font-size:11px">today’s slate</span>
+  </div>
+  {% if top_cards %}
+  <div class="tcards">
+    {% for c in top_cards %}
+    <div class="tcard reveal" style="--tc:{{ c.team.primary }};--tc2:{{ c.team.secondary }};--tc-ink:{{ c.team.ink }}">
+      <div class="head">
+        <span class="avatar">{{ c.initials }}</span>
+        <div style="min-width:0">
+          <div class="nm">{{ c.player }}</div>
+          <div class="sub"><span class="logo-chip" style="width:18px;height:18px;font-size:9px;display:inline-grid;vertical-align:-4px">{{ c.team.abbr }}</span> vs {{ c.opponent.abbr }}{% if c.tip %} · {{ c.tip }}{% endif %}</div>
+        </div>
+      </div>
+      <div class="proj">{{ c.projection }} <small>{{ c.stat_label }}</small></div>
+      <div class="meta">
+        <span>Line <b>{{ c.line }}</b></span>
+        <span>Edge <b class="{{ 'edge-pos' if c.edge_pos else 'edge-neg' }}">{{ c.edge }}</b></span>
+        <span class="conf">Conf <span class="cdot"></span><b>{{ c.confidence }}</b></span>
+        {% if c.minutes %}<span>Min <b>{{ c.minutes }}</b></span>{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="lead" style="margin-top:12px">No games modeled yet today — projections rebuild every slate morning.</p>
+  {% endif %}
+</section>

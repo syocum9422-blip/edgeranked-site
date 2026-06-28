@@ -1,0 +1,30 @@
+<div class="side-card" style="padding:6px 10px 10px">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 2px 4px">
+    <h3 style="margin:0">{{ active_market_label }} board</h3>
+    <span class="mt" style="font-size:11px">{{ table_rows|length }} players</span>
+  </div>
+  <div style="overflow-x:auto">
+  <table class="ptable">
+    <thead><tr>
+      <th>Player</th><th>Team</th><th>Opp</th>
+      <th class="num">Proj</th><th class="num">Line</th><th class="num">Edge</th><th>Conf</th>
+    </tr></thead>
+    <tbody>
+      {% for r in table_rows %}
+      <tr class="{% if r.locked %}row-locked{% endif %}" style="--tc:{{ r.team.primary }};--tc-ink:{{ r.team.ink }}">
+        <td><span class="player"><span class="mini">{{ r.team.abbr }}</span>{% if r.locked %}<span>•••••• ••••</span>{% else %}{{ r.player }}{% endif %}</span></td>
+        <td><span class="tpill" style="--tc:{{ r.team.primary }}">{{ r.team.abbr }}</span></td>
+        <td class="mt">{{ r.opponent.abbr }}</td>
+        <td class="num pv">{{ r.projection }}</td>
+        <td class="num">{{ r.line }}</td>
+        <td class="num"><span class="{{ 'edge-pos' if r.edge_pos else 'edge-neg' }}" style="font-weight:600">{{ r.edge }}</span></td>
+        <td><span class="conf"><span class="cdot"></span>{{ r.confidence }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% if table_rows and not full_access %}
+  <div class="lock-banner"><i class="ti ti-lock" style="color:var(--accent-tx)" aria-hidden="true"></i> Showing {{ active_market_label }} preview — unlock the full board with a free trial — <a href="/pricing" style="color:var(--accent-tx)">start now</a></div>
+  {% endif %}
+</div>

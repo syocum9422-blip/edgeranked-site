@@ -1,0 +1,10 @@
+<div class="side-card">
+  <h3>Team filter</h3>
+  <div class="tfilter">
+    {% for t in team_filter %}
+    <a href="/wnba/board?market={{ active_market }}&team={{ t.abbr }}" style="--tc:{{ t.primary }}" title="{{ t.name }}">{{ t.abbr }}</a>
+    {% else %}
+    <span class="mt" style="font-size:12px">No teams on today’s slate.</span>
+    {% endfor %}
+  </div>
+</div>

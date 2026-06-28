@@ -1,0 +1,44 @@
+<style>
+.wnba-price .g{display:grid;grid-template-columns:1fr;gap:14px;margin-top:18px}
+.wnba-price .pc{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.wnba-price .pc .tier{font-size:15px;font-weight:600;color:var(--tx)}
+.wnba-price .pc .amt{margin:12px 0;font-weight:700}
+.wnba-price .pc .amt .big{font-size:28px;color:var(--tx)}
+.wnba-price .pc .amt .per{font-size:12px;color:var(--mt);font-weight:400}
+.wnba-price .feat{list-style:none;padding:0;margin:0;font-size:12.5px;color:var(--mt)}
+.wnba-price .feat li{display:flex;gap:8px;padding:5px 0}.wnba-price .feat li i{color:var(--live);font-size:15px;flex:none}
+.wnba-price .pro{position:relative;border:2px solid var(--blue);box-shadow:0 0 0 1px rgba(59,130,246,.12),0 18px 44px -22px rgba(59,130,246,.5)}
+.wnba-price .badge{position:absolute;top:-11px;left:18px;background:var(--blue);color:#fff;font-size:10.5px;font-weight:600;padding:3px 10px;border-radius:20px}
+.wnba-price .pc .btn{width:100%;justify-content:center;margin-top:14px}
+@media(min-width:820px){.wnba-price .g{grid-template-columns:1fr 1fr}}
+</style>
+<section class="sec wnba-price"><div class="wrap">
+  <span class="eyebrow">Pricing</span>
+  <h2>One membership. Every sport. $19.99/mo.</h2>
+  <div class="g reveal">
+    <div class="pc">
+      <div class="tier">Free research</div>
+      <div class="amt"><span class="big">$0</span></div>
+      <ul class="feat">
+        <li><i class="ti ti-check" aria-hidden="true"></i> Player &amp; team pages</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Daily top projections</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Results archive</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Today’s games &amp; status</li>
+      </ul>
+      <a class="btn btn-ghost" href="/wnba/board">Browse WNBA board</a>
+    </div>
+    <div class="pc pro">
+      <span class="badge">Most popular</span>
+      <div class="tier">Pro membership</div>
+      <div class="amt"><span class="big">$19.99</span><span class="per">/mo</span></div>
+      <ul class="feat">
+        <li><i class="ti ti-check" aria-hidden="true"></i> Full boards · every market &amp; sport</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Lines, edges &amp; confidence</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Minutes engine &amp; matchup intel</li>
+        <li><i class="ti ti-check" aria-hidden="true"></i> Tracking dashboards</li>
+      </ul>
+      <a class="btn btn-trial" href="/pricing" data-evt="pricing_cta_click">Start 3-day free trial</a>
+      <p style="font-size:11px;color:var(--dim);text-align:center;margin-top:10px">Then $19.99/mo · cancel anytime</p>
+    </div>
+  </div>
+</div></section>

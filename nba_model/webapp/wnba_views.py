@@ -12,7 +12,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import pandas as pd
-from flask import Response, jsonify
+from flask import Response, jsonify, render_template
 
 from nba_model.webapp import seo_tiers
 
@@ -1628,6 +1628,230 @@ def build_dataset_page(spec_key: str, render_layout, render_subnav) -> str:
     return render_layout(spec["title"], spec["description"], body, spec["route"], render_subnav(WNBA_NAV_ITEMS, nav_target), hero_kicker="WNBA")
 
 
+# ===========================================================================
+# Premium WNBA board ("/wnba/board") -- dark, team-branded, matches the new
+# MLB/homepage design language. Display layer only: it reuses the existing
+# projection records (build_projection_records) and never changes model logic.
+# ===========================================================================
+
+# Official-ish team colors keyed by the abbreviations the engine emits
+# (TEAM_ABBREVIATION). `primary` is chosen to stay vivid on the dark theme
+# (teams whose brand primary is black/navy use their accent as `primary` so
+# cards never read as a dead slab). `ink` = text color to place ON a solid
+# `primary` fill. POR/TOR are 2026 expansion clubs with provisional palettes.
+WNBA_TEAM_COLORS = {
+    "ATL": {"name": "Atlanta Dream",          "primary": "#E03A3E", "secondary": "#1D1D1D", "ink": "#ffffff"},
+    "CHI": {"name": "Chicago Sky",            "primary": "#418FDE", "secondary": "#FDD023", "ink": "#0a2a45"},
+    "CON": {"name": "Connecticut Sun",        "primary": "#F05023", "secondary": "#0A2240", "ink": "#ffffff"},
+    "DAL": {"name": "Dallas Wings",           "primary": "#C4D600", "secondary": "#002B5C", "ink": "#1b2400"},
+    "GSV": {"name": "Golden State Valkyries", "primary": "#7E2DA0", "secondary": "#FFC72C", "ink": "#ffffff"},
+    "IND": {"name": "Indiana Fever",          "primary": "#E03A3E", "secondary": "#FDBB30", "ink": "#ffffff"},
+    "LVA": {"name": "Las Vegas Aces",         "primary": "#C8102E", "secondary": "#BC9B6A", "ink": "#ffffff"},
+    "LAS": {"name": "Los Angeles Sparks",     "primary": "#7E57C2", "secondary": "#FDB927", "ink": "#ffffff"},
+    "MIN": {"name": "Minnesota Lynx",         "primary": "#78BE21", "secondary": "#236192", "ink": "#10240a"},
+    "NYL": {"name": "New York Liberty",       "primary": "#6ECEB2", "secondary": "#1D1D1D", "ink": "#06281f"},
+    "PHX": {"name": "Phoenix Mercury",        "primary": "#7C4DBF", "secondary": "#E56020", "ink": "#ffffff"},
+    "SEA": {"name": "Seattle Storm",          "primary": "#2C9F5A", "secondary": "#FEDB00", "ink": "#06250f"},
+    "WAS": {"name": "Washington Mystics",     "primary": "#E03A3E", "secondary": "#002B5C", "ink": "#ffffff"},
+    "POR": {"name": "Portland (2026)",        "primary": "#E0533A", "secondary": "#1D1D1D", "ink": "#ffffff"},
+    "TOR": {"name": "Toronto Tempo (2026)",   "primary": "#C8102E", "secondary": "#B5A642", "ink": "#ffffff"},
+}
+
+# Normalize common abbreviation variants to the canonical keys above.
+WNBA_TEAM_ALIASES = {
+    "LV": "LVA", "LAS": "LAS", "LA": "LAS", "CONN": "CON", "CT": "CON",
+    "GS": "GSV", "GSW": "GSV", "NY": "NYL", "NYK": "NYL", "PHO": "PHX",
+    "WSH": "WAS", "POR": "POR", "TOR": "TOR",
+}
+
+_WNBA_NEUTRAL_TEAM = {"name": "WNBA", "primary": "#6B7689", "secondary": "#3A4150", "ink": "#ffffff"}
+
+
+def wnba_team_meta(abbr):
+    """Branded color/logo metadata for a team abbreviation. Falls back to a
+    neutral slate (never a generic blue) for unknown codes so the UI is safe."""
+    key = normalize_text(abbr).upper()
+    key = WNBA_TEAM_ALIASES.get(key, key)
+    meta = WNBA_TEAM_COLORS.get(key, _WNBA_NEUTRAL_TEAM)
+    return {"abbr": key or "WNBA", **meta}
+
+
+# Markets surfaced as tabs. Base stats come straight from records; PRA/PA/PR are
+# display-only sums of existing per-stat projections (no model change).
+WNBA_MARKETS = [
+    {"key": "PTS", "label": "Points"},
+    {"key": "REB", "label": "Rebounds"},
+    {"key": "AST", "label": "Assists"},
+    {"key": "PRA", "label": "PRA"},
+    {"key": "PA", "label": "PA"},
+    {"key": "PR", "label": "PR"},
+    {"key": "FG3M", "label": "3PM"},
+    {"key": "STL", "label": "Steals"},
+    {"key": "BLK", "label": "Blocks"},
+]
+_WNBA_COMPOSITES = {"PRA": ["PTS", "REB", "AST"], "PA": ["PTS", "AST"], "PR": ["PTS", "REB"]}
+_WNBA_BASE_STATS = {"PTS", "REB", "AST", "FG3M", "STL", "BLK"}
+
+# Free users see this many board rows; the rest are blurred (locked). Pro/active
+# subscribers see the full board. Top cards stay visible as the public proof.
+WNBA_FREE_PREVIEW_ROWS = 6
+
+
+def _wnba_full_access():
+    """Reuse the existing Clerk + subscription gate (no new billing logic).
+    Lazy import avoids the app<->wnba_views circular import; fails OPEN so an
+    auth/DB hiccup never blanks the board (matches allow_full_projection_access)."""
+    try:
+        from nba_model.webapp.app import allow_full_projection_access
+        return bool(allow_full_projection_access())
+    except Exception:
+        return True
+
+
+def _wnba_player_initials(name):
+    parts = [p for p in normalize_text(name).split() if p]
+    if not parts:
+        return "--"
+    if len(parts) == 1:
+        return parts[0][:2].upper()
+    return (parts[0][0] + parts[-1][0]).upper()
+
+
+def _wnba_composite_rows(records, components):
+    """Sum existing per-stat projections into a combined market (PRA/PA/PR).
+    Line/edge only when every component has a book line. Display aggregation
+    only -- the projection engine is untouched."""
+    by_player = {}
+    for r in records:
+        if r["stat_key"] in components:
+            by_player.setdefault(r["player"], {})[r["stat_key"]] = r
+    out = []
+    for player, comp in by_player.items():
+        if not all(c in comp for c in components):
+            continue
+        anchor = comp[components[0]]
+        projection = round(sum(comp[c]["projection"] for c in components), 1)
+        lines = [comp[c].get("sportsbook_line") for c in components]
+        line = round(sum(lines), 1) if all(v is not None for v in lines) else None
+        edge = round(projection - line, 2) if line is not None else None
+        row = dict(anchor)
+        row.update({"projection": projection, "sportsbook_line": line,
+                    "sportsbook_delta": edge, "sort_projection": projection})
+        out.append(row)
+    out.sort(key=lambda x: x["sort_projection"], reverse=True)
+    return out
+
+
+def _wnba_decorate_row(r, locked=False):
+    """Attach branded team metadata + display fields to a projection record."""
+    team = wnba_team_meta(r.get("team"))
+    opp = wnba_team_meta(r.get("opponent"))
+    edge = r.get("sportsbook_delta")
+    return {
+        "player": r.get("player"),
+        "initials": _wnba_player_initials(r.get("player")),
+        "team": team, "opponent": opp,
+        "matchup": r.get("matchup"),
+        "stat_label": r.get("stat_label"),
+        "projection": metric_label(r.get("projection")),
+        "line": metric_label(r.get("sportsbook_line")) if r.get("sportsbook_line") is not None else "—",
+        "edge": (("+" if (edge or 0) >= 0 else "") + metric_label(edge)) if edge is not None else "—",
+        "edge_pos": (edge is not None and edge >= 0),
+        "confidence": r.get("confidence") or "Medium",
+        "minutes": metric_label(r.get("expected_minutes")) if r.get("expected_minutes") is not None else None,
+        "locked": locked,
+    }
+
+
+def _wnba_today_games():
+    df = read_csv_df(WNBA_SCHEDULE_PATH)
+    games, tip_by_team = [], {}
+    if df.empty:
+        return games, tip_by_team
+    for _, raw in df.iterrows():
+        home = wnba_team_meta(first_value(raw, ["home_team", "HOME_TEAM"]))
+        away = wnba_team_meta(first_value(raw, ["away_team", "AWAY_TEAM"]))
+        tip = normalize_text(first_value(raw, ["start_time", "START_TIME"]), "")
+        games.append({"home": home, "away": away, "tip": tip or "TBD"})
+        if tip:
+            tip_by_team[home["abbr"]] = tip
+            tip_by_team[away["abbr"]] = tip
+    return games, tip_by_team
+
+
+def build_wnba_premium_context(market="PTS"):
+    """Assemble the premium WNBA board context. Reuses build_projection_records
+    (no model change). Defensive: missing data degrades to a safe empty state."""
+    market = (market or "PTS").upper()
+    if market not in {m["key"] for m in WNBA_MARKETS}:
+        market = "PTS"
+
+    try:
+        records = build_projection_records()
+    except Exception:
+        records = []
+
+    if market in _WNBA_COMPOSITES:
+        market_rows = _wnba_composite_rows(records, _WNBA_COMPOSITES[market])
+        stat_label = market
+    else:
+        market_rows = [r for r in records if r.get("stat_key") == market]
+        stat_label = next((m["label"] for m in WNBA_MARKETS if m["key"] == market), market)
+
+    games, tip_by_team = _wnba_today_games()
+
+    # Active subscribers get the full board; free users get a preview with the
+    # rest blurred. Uses the SAME gate as /wnba/projections (no new billing).
+    full_access = _wnba_full_access()
+
+    # Top cards = highest projections in the active market (public proof, unlocked).
+    top_cards = []
+    for r in market_rows[:6]:
+        card = _wnba_decorate_row(r, locked=False)
+        card["tip"] = tip_by_team.get(card["team"]["abbr"], "")
+        top_cards.append(card)
+
+    # Table: full board for subscribers; free users see WNBA_FREE_PREVIEW_ROWS
+    # then blurred (locked, not hidden) rows.
+    table_rows = [
+        _wnba_decorate_row(r, locked=(not full_access and i >= WNBA_FREE_PREVIEW_ROWS))
+        for i, r in enumerate(market_rows)
+    ]
+
+    teams = sorted({r["team"]["abbr"] for r in table_rows})
+    team_filter = [wnba_team_meta(a) for a in teams]
+
+    updated_ts = file_timestamp(WNBA_PROJECTIONS_PATH) or file_timestamp(WNBA_APP_VIEW_PATH)
+    players_modeled = len({r.get("player") for r in records if r.get("player")})
+    try:
+        slate_date = datetime.now(ET).strftime("%A, %B %-d")
+    except Exception:
+        slate_date = ""
+
+    return {
+        "page_title": "WNBA AI Projections — EdgeRanked AI",
+        "meta_description": ("Daily WNBA AI projections, market lines, edges, and confidence across "
+                             "points, rebounds, assists, PRA and more. Updated every slate."),
+        "site_origin": "https://edgerankedai.com",
+        "canonical_url": "https://edgerankedai.com/wnba/board",
+        "live": {
+            "date_label": slate_date,
+            "slate_status": "Slate live" if market_rows else "No games modeled yet",
+            "projections_modeled": players_modeled,
+            "updated_label": updated_ts.strftime("%-I:%M %p ET") if updated_ts else "today",
+        },
+        "markets": [{**m, "active": m["key"] == market} for m in WNBA_MARKETS],
+        "active_market": market,
+        "active_market_label": stat_label,
+        "top_cards": top_cards,
+        "table_rows": table_rows,
+        "has_rows": bool(table_rows),
+        "full_access": full_access,
+        "games": games,
+        "team_filter": team_filter,
+    }
+
+
 def register_wnba_routes(flask_app, render_layout, render_subnav) -> None:
     @flask_app.get("/wnba")
     def wnba_home():
@@ -1644,6 +1868,20 @@ def register_wnba_routes(flask_app, render_layout, render_subnav) -> None:
     @flask_app.get("/api/wnba/player-projections")
     def wnba_player_projections_api():
         return jsonify(json_ready(seo_tiers.public_profiles_payload(build_player_projection_profiles())))
+
+    @flask_app.get("/wnba/board")
+    def wnba_premium_board():
+        # New premium, team-branded board. Parallel to /wnba and
+        # /wnba/projections (both untouched). Falls back to the existing
+        # preview page if template rendering ever fails, so it cannot 500.
+        from flask import request as _request
+        try:
+            ctx = build_wnba_premium_context(_request.args.get("market", "PTS"))
+            return render_template("wnba/board.html", **ctx)
+        except Exception:
+            import logging
+            logging.getLogger(__name__).exception("wnba premium board render failed")
+            return build_dataset_page("projections", render_layout, render_subnav)
 
     for key, spec in WNBA_PAGE_SPECS.items():
         def wnba_page(spec_key=key):

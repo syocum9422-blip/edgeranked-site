@@ -1,0 +1,25 @@
+<div class="side-card">
+  <h3>Today’s games</h3>
+  {% for g in games %}
+  <div class="game-row">
+    <span class="game-teams"><span class="logo-chip" style="--tc:{{ g.away.primary }};--tc-ink:{{ g.away.ink }};width:24px;height:24px;font-size:9px">{{ g.away.abbr }}</span> @ <span class="logo-chip" style="--tc:{{ g.home.primary }};--tc-ink:{{ g.home.ink }};width:24px;height:24px;font-size:9px">{{ g.home.abbr }}</span></span>
+    <span class="mt" style="font-size:11px">{{ g.tip }}</span>
+  </div>
+  {% else %}
+  <p class="mt" style="font-size:12px;margin:0">No games scheduled today.</p>
+  {% endfor %}
+</div>
+
+{% include "wnba/_team_filter.html" %}
+
+<div class="side-card">
+  <h3>Model transparency</h3>
+  <p class="mt" style="font-size:12px;line-height:1.6;margin:0">Every number is a probability from our minutes-aware simulation — published and tracked, never a “lock.” Lines and edges shown where a book line exists.</p>
+</div>
+
+<div class="side-card" style="border:2px solid var(--blue);box-shadow:0 0 0 1px rgba(59,130,246,.12),0 18px 44px -22px rgba(59,130,246,.5)">
+  <h3>Start free</h3>
+  <p class="mt" style="font-size:12px;margin:0 0 12px">Unlock every market, full boards, and tracking across all sports.</p>
+  <a class="btn btn-trial" href="/pricing" data-evt="pricing_cta_click" style="width:100%;justify-content:center">Start 3-day free trial</a>
+  <p style="font-size:10.5px;color:var(--dim);text-align:center;margin-top:9px">$19.99/mo after · cancel anytime</p>
+</div>

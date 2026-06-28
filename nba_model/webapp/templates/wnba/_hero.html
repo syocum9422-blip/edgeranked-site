@@ -1,0 +1,31 @@
+<style>
+.wnba-hero{padding:34px 0 6px}
+.wnba-hero-grid{display:grid;grid-template-columns:1fr;gap:22px;align-items:center}
+.wnba-hero h1{font-size:clamp(30px,6vw,46px);line-height:1.05;font-weight:700;letter-spacing:-.02em}
+.wnba-hero .sub{color:var(--mt);font-size:15px;margin-top:12px;max-width:440px}
+.wnba-hero .cta{display:flex;flex-wrap:wrap;gap:11px;margin-top:20px}
+.livecard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.livecard .lh{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:4px}
+.livecard .lr{display:flex;align-items:center;justify-content:space-between;padding:9px 0;font-size:13px}
+.livecard .lr+.lr{border-top:1px solid var(--line)}
+.livecard .lr .k{color:var(--mt)}.livecard .lr .v{color:var(--tx);font-weight:600}
+@media(min-width:980px){.wnba-hero-grid{grid-template-columns:1.05fr .95fr;gap:34px}}
+</style>
+<section class="wnba-hero"><div class="wrap wnba-hero-grid">
+  <div class="reveal">
+    <span class="eyebrow"><i class="ti ti-ball-basketball" aria-hidden="true"></i> WNBA · AI projections</span>
+    <h1>WNBA AI Projections</h1>
+    <p class="sub">Team-branded projections, market lines, edges, and confidence — rebuilt every slate.</p>
+    <div class="cta">
+      <a class="btn btn-trial" href="/pricing" data-evt="trial_start">Start 3-day free trial <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+      <a class="btn btn-ghost" href="#board" data-evt="secondary_board_click">View today’s projections</a>
+    </div>
+  </div>
+  <div class="livecard reveal">
+    <div class="lh"><span class="tx" style="font-size:12.5px;font-weight:600"><span class="dot"></span> {{ live.slate_status }}</span><span class="mt" style="font-size:11px">WNBA</span></div>
+    <div class="lr"><span class="k">Today</span><span class="v">{{ live.date_label }}</span></div>
+    <div class="lr"><span class="k">Projections modeled</span><span class="v">{{ live.projections_modeled }}</span></div>
+    <div class="lr"><span class="k">Active market</span><span class="v">{{ active_market_label }}</span></div>
+    <div class="lr"><span class="k">Last updated</span><span class="v">{{ live.updated_label }}</span></div>
+  </div>
+</div></section>

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block head_extra %}{% include "wnba/_styles.html" %}{% endblock %}
+{% block content %}
+{% include "partials/home/_nav.html" %}
+<main id="main" class="wnba">
+  {% include "wnba/_hero.html" %}
+  {% include "wnba/_markets.html" %}
+  {% include "wnba/_top_cards.html" %}
+  <section class="sec"><div class="wrap wnba-grid">
+    <div class="wnba-main">{% include "wnba/_projection_table.html" %}</div>
+    <aside class="wnba-aside">{% include "wnba/_sidebar.html" %}</aside>
+  </div></section>
+  {% include "wnba/_why.html" %}
+  {% include "wnba/_pricing.html" %}
+</main>
+{% include "partials/home/_footer.html" %}
+{% include "wnba/_mobile_nav.html" %}
+{% endblock %}

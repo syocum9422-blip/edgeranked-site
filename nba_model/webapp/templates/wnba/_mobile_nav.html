@@ -1,0 +1,21 @@
+<style>
+.wnba-dock{position:fixed;left:0;right:0;bottom:0;z-index:56}
+.wnba-dock .cta-strip{display:flex;align-items:center;gap:10px;background:#0d1420;border-top:1px solid var(--line);padding:9px 14px}
+.wnba-dock .cta-strip .c{flex:1}
+.wnba-dock .cta-strip .c .t{font-size:12.5px;font-weight:600;color:var(--tx)}
+.wnba-dock .cta-strip .c .s{font-size:10px;color:var(--mt)}
+.wnba-dock .cta-strip .btn{padding:10px 15px;font-size:12.5px}
+@media(min-width:980px){.wnba-dock{display:none}}
+</style>
+<div class="wnba-dock">
+  <div class="cta-strip">
+    <div class="c"><div class="t">Unlock every WNBA market</div><div class="s">$19.99/mo after · cancel anytime</div></div>
+    <a class="btn btn-trial" href="/pricing" data-evt="trial_start">Start free trial</a>
+  </div>
+  <nav class="wnba-mnav" aria-label="WNBA sections">
+    <a href="#board" class="active"><i class="ti ti-layout-grid" aria-hidden="true"></i>Markets</a>
+    <a href="#board"><i class="ti ti-ball-basketball" aria-hidden="true"></i>Games</a>
+    <a href="/dashboard"><i class="ti ti-chart-bar" aria-hidden="true"></i>Dashboard</a>
+    <a href="/account"><i class="ti ti-user" aria-hidden="true"></i>Account</a>
+  </nav>
+</div>
