@@ -304,11 +304,16 @@ def _player_tier(bucket):
     return band
 
 
-def render_projection_explorer(rows, *, sport_label, namespace):
+def render_projection_explorer(rows, *, sport_label, namespace, group_by_tier=True):
     """Render the premium projection explorer HTML for `sport_label` (NBA/WNBA).
 
     `namespace` is a short id-safe slug like "nba" or "wnba" so multiple
     instances on a page (if ever) and the JS selectors stay isolated.
+
+    `group_by_tier` controls layout:
+      * True  (default, NBA): cards grouped into Elite/Strong/Standard sections.
+      * False (WNBA): ONE continuous list ranked by projection descending, no
+        confidence sections. Confidence stays as a per-card badge only.
     """
     ns = namespace
     sport_display = escape(sport_label)
@@ -467,8 +472,12 @@ def render_projection_explorer(rows, *, sport_label, namespace):
             "</div>"
         )
 
-    def render_card(bucket):
+    def render_card(bucket, rank=None):
         band, band_label = _confidence_band(bucket.get("confidence_rank", 0))
+        rank_html = (
+            f"<span class='pe-rank' style='font-weight:700;opacity:.6;margin-right:8px'>#{int(rank)}</span>"
+            if rank else ""
+        )
         matchup = bucket.get("matchup") or (
             f"{bucket.get('team','')} vs {bucket.get('opponent','')}".strip(" vs")
         )
@@ -499,7 +508,7 @@ def render_projection_explorer(rows, *, sport_label, namespace):
             f"<article class='pe-card pe-card-band-{escape(band)}' {data_attrs}>"
             "  <header class='pe-card-head'>"
             f"   <div class='pe-card-headline'>"
-            f"     <div class='pe-card-player'>{_player_name_html(bucket.get('player') or '', ns)}</div>"
+            f"     <div class='pe-card-player'>{rank_html}{_player_name_html(bucket.get('player') or '', ns)}</div>"
             f"     <div class='pe-card-matchup'>{escape(matchup)}</div>"
             "    </div>"
             f"    <div class='pe-card-conf pe-card-conf-{escape(band)}'>"
@@ -511,27 +520,44 @@ def render_projection_explorer(rows, *, sport_label, namespace):
             "</article>"
         )
 
-    # Tier the player cards.
-    by_tier = {"elite": [], "strong": [], "standard": []}
-    for bucket in players:
-        by_tier[_player_tier(bucket)].append(bucket)
+    if group_by_tier:
+        # NBA (default): tier the player cards into Elite / Strong / Standard.
+        by_tier = {"elite": [], "strong": [], "standard": []}
+        for bucket in players:
+            by_tier[_player_tier(bucket)].append(bucket)
 
-    sections_html = []
-    for tier_key, tier_title, tier_desc in _TIER_DEFS:
-        bucket_list = by_tier.get(tier_key, [])
-        if not bucket_list:
-            continue
-        cards_html = "".join(render_card(b) for b in bucket_list)
-        sections_html.append(
-            f"<section class='pe-section pe-section-{escape(tier_key)}' data-pe-tier='{escape(tier_key)}'>"
-            f"  <header class='pe-section-head'>"
-            f"    <h3>{escape(tier_title)}</h3>"
-            f"    <p>{escape(tier_desc)}</p>"
-            "  </header>"
+        sections_html = []
+        for tier_key, tier_title, tier_desc in _TIER_DEFS:
+            bucket_list = by_tier.get(tier_key, [])
+            if not bucket_list:
+                continue
+            cards_html = "".join(render_card(b) for b in bucket_list)
+            sections_html.append(
+                f"<section class='pe-section pe-section-{escape(tier_key)}' data-pe-tier='{escape(tier_key)}'>"
+                f"  <header class='pe-section-head'>"
+                f"    <h3>{escape(tier_title)}</h3>"
+                f"    <p>{escape(tier_desc)}</p>"
+                "  </header>"
+                f"  <div class='pe-grid'>{cards_html}</div>"
+                "</section>"
+            )
+        cards_block = "".join(sections_html)
+    else:
+        # WNBA: ONE continuous list ranked by projection descending. No confidence
+        # tiers/sections; rows with no projection sink to the bottom. Confidence
+        # remains as the per-card badge. JS sort/filter still operate on the grid.
+        def _bucket_projection(bucket):
+            vals = [t.get("projection") for t in bucket.get("tiles", [])
+                    if isinstance(t.get("projection"), (int, float))]
+            return max(vals) if vals else float("-inf")
+
+        ordered = sorted(players, key=_bucket_projection, reverse=True)
+        cards_html = "".join(render_card(b, rank=i + 1) for i, b in enumerate(ordered))
+        cards_block = (
+            "<section class='pe-section pe-section-all' data-pe-tier='all'>"
             f"  <div class='pe-grid'>{cards_html}</div>"
             "</section>"
         )
-    cards_block = "".join(sections_html)
 
     # JS — namespace embedded as a literal string for selector scoping.
     ns_js = escape(ns)

@@ -1078,7 +1078,9 @@ def render_projection_table(rows: list[dict]) -> str:
     # row-per-stat table is preserved below as render_projection_table_legacy
     # for fallback only — the public route now serves the redesigned view.
     from nba_model.webapp.projection_explorer import render_projection_explorer
-    return render_projection_explorer(rows, sport_label="WNBA", namespace="wnba")
+    # WNBA renders one continuous projection-ranked list (no confidence tiers).
+    # NBA keeps its tiered view (group_by_tier defaults to True).
+    return render_projection_explorer(rows, sport_label="WNBA", namespace="wnba", group_by_tier=False)
 
 
 def render_projection_table_legacy(rows: list[dict]) -> str:
