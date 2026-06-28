@@ -1,9 +1,9 @@
 team,source_schedule,source_prizepicks,included,reason
-CHI,True,True,True,scheduled_and_live_prizepicks
-DAL,True,True,True,scheduled_and_live_prizepicks
+CHI,True,False,True,scheduled
+DAL,True,False,True,scheduled
 GSV,True,True,True,scheduled_and_live_prizepicks
-LVA,True,True,True,scheduled_and_live_prizepicks
-MIN,True,True,True,scheduled_and_live_prizepicks
+LVA,True,False,True,scheduled
+MIN,True,False,True,scheduled
 NYL,True,True,True,scheduled_and_live_prizepicks
-POR,True,True,True,scheduled_and_live_prizepicks
-WAS,True,True,True,scheduled_and_live_prizepicks
+POR,True,False,True,scheduled
+WAS,True,False,True,scheduled
