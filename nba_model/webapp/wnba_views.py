@@ -1765,12 +1765,14 @@ def _wnba_composite_rows(records, components):
     return out
 
 
-def _wnba_decorate_row(r, locked=False):
-    """Attach branded team metadata + display fields to a projection record."""
+def _wnba_decorate_row(r, locked=False, rank=None):
+    """Attach branded team metadata + display fields to a projection record.
+    `rank` is the row's position in the single projection-descending list."""
     team = wnba_team_meta(r.get("team"))
     opp = wnba_team_meta(r.get("opponent"))
     edge = r.get("sportsbook_delta")
     return {
+        "rank": rank,
         "player": r.get("player"),
         "initials": _wnba_player_initials(r.get("player")),
         "team": team, "opponent": opp,
@@ -1802,6 +1804,26 @@ def _wnba_today_games():
     return games, tip_by_team
 
 
+def _wnba_empty_context(market="PTS"):
+    """A valid, ungrouped board context with no rows -- used as the only render
+    fallback so the board never shows the confidence-grouped legacy page."""
+    market = _wnba_normalize_market(market)
+    label = next((m["label"] for m in WNBA_MARKETS if m["key"] == market), market)
+    return {
+        "page_title": "WNBA AI Projections — EdgeRanked AI",
+        "meta_description": ("Daily WNBA AI projections, market lines, edges, and confidence across "
+                             "points, rebounds, assists, PRA and more. Updated every slate."),
+        "site_origin": "https://edgerankedai.com",
+        "canonical_url": "https://edgerankedai.com/wnba/board",
+        "live": {"date_label": "", "slate_status": "No games modeled yet",
+                 "projections_modeled": 0, "updated_label": "today"},
+        "markets": [{**m, "active": m["key"] == market} for m in WNBA_MARKETS],
+        "active_market": market, "active_market_label": label,
+        "top_cards": [], "table_rows": [], "has_rows": False,
+        "full_access": True, "games": [], "team_filter": [],
+    }
+
+
 def build_wnba_premium_context(market="PTS"):
     """Assemble the premium WNBA board context. Reuses build_projection_records
     (no model change). Defensive: missing data degrades to a safe empty state."""
@@ -1830,17 +1852,18 @@ def build_wnba_premium_context(market="PTS"):
     # rest blurred. Uses the SAME gate as /wnba/projections (no new billing).
     full_access = _wnba_full_access()
 
-    # Top cards = highest projections in the active market (public proof, unlocked).
+    # One continuous ranked list (already sorted highest->lowest by projection).
+    # Top cards are simply the first N of that same list -- NOT a confidence tier.
     top_cards = []
-    for r in market_rows[:6]:
-        card = _wnba_decorate_row(r, locked=False)
+    for i, r in enumerate(market_rows[:6]):
+        card = _wnba_decorate_row(r, locked=False, rank=i + 1)
         card["tip"] = tip_by_team.get(card["team"]["abbr"], "")
         top_cards.append(card)
 
-    # Table: full board for subscribers; free users see WNBA_FREE_PREVIEW_ROWS
-    # then blurred (locked, not hidden) rows.
+    # Table: same single ranked order. Full board for subscribers; free users see
+    # WNBA_FREE_PREVIEW_ROWS then blurred (locked, not hidden) -- order preserved.
     table_rows = [
-        _wnba_decorate_row(r, locked=(not full_access and i >= WNBA_FREE_PREVIEW_ROWS))
+        _wnba_decorate_row(r, locked=(not full_access and i >= WNBA_FREE_PREVIEW_ROWS), rank=i + 1)
         for i, r in enumerate(market_rows)
     ]
 
@@ -1897,17 +1920,31 @@ def register_wnba_routes(flask_app, render_layout, render_subnav) -> None:
 
     @flask_app.get("/wnba/board")
     def wnba_premium_board():
-        # New premium, team-branded board. Parallel to /wnba and
-        # /wnba/projections (both untouched). Falls back to the existing
-        # preview page if template rendering ever fails, so it cannot 500.
+        # New premium, team-branded board. Parallel to /wnba and /wnba/projections
+        # (both untouched). On any failure it renders the SAME ungrouped board with
+        # a safe empty context -- it never falls back to the confidence-grouped
+        # legacy projection explorer (no Elite/Strong sections, ever).
+        import logging
         from flask import request as _request
+        market = _request.args.get("market", "PTS")
         try:
-            ctx = build_wnba_premium_context(_request.args.get("market", "PTS"))
+            ctx = build_wnba_premium_context(market)
+        except Exception:
+            logging.getLogger(__name__).exception("wnba premium context failed")
+            ctx = _wnba_empty_context(market)
+        try:
             return render_template("wnba/board.html", **ctx)
         except Exception:
-            import logging
             logging.getLogger(__name__).exception("wnba premium board render failed")
-            return build_dataset_page("projections", render_layout, render_subnav)
+            try:
+                return render_template("wnba/board.html", **_wnba_empty_context(market))
+            except Exception:
+                return (
+                    "<main style=\"padding:48px 20px;text-align:center;background:#0B0E14;"
+                    "color:#9AA6B8;font-family:-apple-system,sans-serif\">"
+                    "<h1 style=\"color:#EEF2F8\">WNBA AI Projections</h1>"
+                    "<p>Today’s board is briefly unavailable — please refresh shortly.</p></main>"
+                ), 200
 
     for key, spec in WNBA_PAGE_SPECS.items():
         def wnba_page(spec_key=key):

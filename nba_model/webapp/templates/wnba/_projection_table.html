@@ -6,12 +6,13 @@
   <div style="overflow-x:auto">
   <table class="ptable">
     <thead><tr>
-      <th>Player</th><th>Team</th><th>Opp</th>
+      <th class="num">#</th><th>Player</th><th>Team</th><th>Opp</th>
       <th class="num">Proj</th><th class="num">Line</th><th class="num">Edge</th><th>Conf</th>
     </tr></thead>
     <tbody>
       {% for r in table_rows %}
       <tr class="{% if r.locked %}row-locked{% endif %}" style="--tc:{{ r.team.primary }};--tc-ink:{{ r.team.ink }}">
+        <td class="num rk">{{ r.rank }}</td>
         <td><span class="player"><span class="mini">{{ r.team.abbr }}</span>{% if r.locked %}<span>•••••• ••••</span>{% else %}{{ r.player }}{% endif %}</span></td>
         <td><span class="tpill" style="--tc:{{ r.team.primary }}">{{ r.team.abbr }}</span></td>
         <td class="mt">{{ r.opponent.abbr }}</td>

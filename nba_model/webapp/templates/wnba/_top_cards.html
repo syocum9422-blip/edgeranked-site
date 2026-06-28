@@ -7,6 +7,7 @@
   <div class="tcards">
     {% for c in top_cards %}
     <div class="tcard reveal" style="--tc:{{ c.team.primary }};--tc2:{{ c.team.secondary }};--tc-ink:{{ c.team.ink }}">
+      <span class="rk">#{{ c.rank }}</span>
       <div class="head">
         <span class="avatar">{{ c.initials }}</span>
         <div style="min-width:0">
