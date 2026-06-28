@@ -7,12 +7,12 @@
 .board-row .nm{font-size:13px;color:var(--tx)}
 .board-row .nm small{color:var(--mt);font-size:10.5px}
 .board-row .val{font-size:13px;font-weight:600}
-.val-edge{color:var(--edge)}.val-blue{color:var(--blue)}
+.val-edge{color:var(--accent-tx)}.val-blue{color:var(--teal)}
 .board-foot{font-size:11px;color:var(--dim);text-align:center;padding:10px}
 </style>
 <div class="card board reveal" aria-label="Today's live MLB board preview">
   <div class="board-head">
-    <span class="t"><i class="ti {{ home_config.board_icon }}" style="color:var(--edge)" aria-hidden="true"></i> {{ home_config.board_title }}</span>
+    <span class="t"><i class="ti {{ home_config.board_icon }}" style="color:var(--accent-tx)" aria-hidden="true"></i> {{ home_config.board_title }}</span>
     <span class="mt" style="font-size:10.5px"><span class="dot" style="width:6px;height:6px"></span> live</span>
   </div>
   {% for c in preview_cards %}

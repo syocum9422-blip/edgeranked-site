@@ -3,7 +3,7 @@
 .today-card .lbl{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mt)}
 .today-card .ply{font-size:14px;font-weight:600;color:var(--tx);margin-top:6px}
 .today-card .v{font-size:26px;font-weight:700;margin-top:6px;letter-spacing:-.01em}
-.v-edge{color:var(--edge)}.v-blue{color:var(--blue)}
+.v-edge{color:var(--accent-tx)}.v-blue{color:var(--teal)}
 </style>
 <section class="sec">
   <div class="wrap">
@@ -24,7 +24,7 @@
           <div class="v {{ 'v-blue' if c.accent=='blue' else 'v-edge' }}">{{ c.value }}</div>
         </div>
         {% if c.locked %}
-        <span class="lock-cap"><i class="ti ti-lock" style="color:var(--edge);font-size:18px" aria-hidden="true"></i><span style="font-size:10.5px;color:var(--tx)">Unlock with trial</span></span>
+        <span class="lock-cap"><i class="ti ti-lock" style="color:var(--accent-tx);font-size:18px" aria-hidden="true"></i><span style="font-size:10.5px;color:var(--tx)">Unlock with trial</span></span>
         {% endif %}
       </div>
       {% endfor %}

@@ -2,8 +2,10 @@
 .nav{position:sticky;top:0;z-index:50;background:rgba(11,14,20,.82);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line)}
 .nav-in{display:flex;align-items:center;justify-content:space-between;height:60px}
 .brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:16px}
-.brand .mark{width:26px;height:26px;border-radius:8px;background:var(--edge);color:var(--edge-deep);display:grid;place-items:center;font-size:16px}
-.brand .ai{color:var(--edge)}
+.brand .mark{width:30px;height:30px;border-radius:8px;background:#fff;display:grid;place-items:center;overflow:hidden;padding:3px;flex:none}
+.brand .mark img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.brand .ai{color:var(--accent-tx)}
+@media(max-width:899px){.brand .mark{width:26px;height:26px;padding:2px}}
 .nav-links{display:none;align-items:center;gap:26px;font-size:14px;color:var(--mt)}
 .nav-links a:hover{color:var(--tx)}
 .has-menu{position:relative}
@@ -17,7 +19,7 @@
 </style>
 <header class="nav">
   <div class="wrap nav-in">
-    <a class="brand" href="/" aria-label="EdgeRanked AI home"><span class="mark"><i class="ti ti-bolt" aria-hidden="true"></i></span>EdgeRanked<span class="ai">AI</span></a>
+    <a class="brand" href="/" aria-label="EdgeRanked AI home"><span class="mark"><img src="/brand/logo.png" alt="EdgeRanked AI shield logo" width="30" height="30"></span>EdgeRanked<span class="ai">AI</span></a>
     <nav class="nav-links" aria-label="Primary">
       <span class="has-menu" tabindex="0" role="button" aria-haspopup="true">Sports <i class="ti ti-chevron-down" style="font-size:13px" aria-hidden="true"></i>
         <span class="menu">
