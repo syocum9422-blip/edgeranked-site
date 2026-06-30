@@ -1,24 +1,24 @@
 {
-  "accuracy": 0.5422418553285477,
+  "accuracy": 0.5383378016085791,
   "brier": null,
   "calibration_by_confidence_bucket": {
-    "low": 0.5133779264214047,
-    "medium": 0.5564715581203628
+    "low": 0.5098684210526315,
+    "medium": 0.5521081941129674
   },
   "files_updated": [
     "/home/ubuntu/EdgeRanked/sports/wnba/Best_Bets/graded_bets.csv",
     "/home/ubuntu/EdgeRanked/sports/wnba/Best_Bets/wnba_bets_history.csv",
     "/home/ubuntu/EdgeRanked/sports/wnba/learning/errors/projection_errors.csv"
   ],
-  "games_graded": 47,
-  "generated_at": "2026-06-28T18:32:28.715595-04:00",
-  "history_rows": 2145,
-  "last_graded_date": "2026-06-27",
+  "games_graded": 48,
+  "generated_at": "2026-06-30T07:33:18.196231-04:00",
+  "history_rows": 2165,
+  "last_graded_date": "2026-06-28",
   "log_loss": null,
-  "minutes_error_rows": 1813,
+  "minutes_error_rows": 1894,
   "no_new_completed_games": false,
-  "predictions_graded": 1811,
-  "projection_error_rows": 10878,
-  "projection_mae": 1.7060691303548445,
-  "projection_rmse": 2.932617768401974
+  "predictions_graded": 1865,
+  "projection_error_rows": 11364,
+  "projection_mae": 1.7028343892995426,
+  "projection_rmse": 2.9311954621589473
 }

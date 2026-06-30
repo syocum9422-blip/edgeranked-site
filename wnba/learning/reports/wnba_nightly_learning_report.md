@@ -1,23 +1,23 @@
 # WNBA Nightly Learning Report
 
-Generated: 2026-06-28T04:25:05Z
-Graded predictions in ledger: 1808
+Generated: 2026-06-30T04:25:05Z
+Graded predictions in ledger: 1909
 
 ## Best-Performing Markets
      market  sample_size  win_pct      mae  calibration
 threes_made           12 0.666667 0.890610    -0.035264
-   rebounds          152 0.664286 2.135392    -0.078322
-     points          413 0.575682 5.828331    -0.187223
-         ra           94 0.544444 3.422432    -0.184781
-        pra          396 0.540609 8.218100    -0.269270
+   rebounds          157 0.655172 2.138333    -0.084837
+     points          434 0.577830 5.780601    -0.179776
+     steals           18 0.555556 0.810709    -0.197820
+         ra          100 0.541667 3.455733    -0.182209
 
 ## Worst-Performing Markets
  market  sample_size  win_pct      mae  calibration
-     pa          239 0.468354 7.542343    -0.303292
-assists           78 0.478873 2.232285    -0.306118
-     pr          407 0.522500 7.287323    -0.261547
- steals           17 0.529412 0.806245    -0.228958
-    pra          396 0.540609 8.218100    -0.269270
+assists           80 0.465753 2.268873    -0.316296
+     pa          254 0.476190 7.375156    -0.289704
+     pr          433 0.507042 7.437316    -0.268629
+    pra          421 0.534606 8.242735    -0.267790
+     ra          100 0.541667 3.455733    -0.182209
 
 ## Biggest Misses
       date            player market  side  projection  sportsbook_line  actual_result  absolute_error
@@ -29,8 +29,8 @@ assists           78 0.478873 2.232285    -0.306118
 2026-06-13    Kahleah Copper    pra under   21.068592             22.5           52.0       30.931408
 2026-05-23    Natasha Howard    pra under   16.977403             25.5           45.0       28.022597
 2026-06-22 Dominique Malonga     pr under   21.219461             24.5           49.0       27.780539
+2026-06-28       Carla Leite    pra under   20.613664             22.5           47.0       26.386336
 2026-05-08      Lauren Betts    pra  over   32.269204             19.5            6.0       26.269204
-2026-06-13    Kahleah Copper points under   15.676144             18.5           41.0       25.323856
 
 ## Biggest Hits
       date          player   market  side  projection  sportsbook_line  actual_result  absolute_error
@@ -38,8 +38,8 @@ assists           78 0.478873 2.232285    -0.306118
 2026-05-13 Kelsey Mitchell   steals  over    1.003325              0.5            1.0        0.003325
 2026-05-09  Kahleah Copper      pra under   15.004984             23.5           15.0        0.004984
 2026-06-01 Stefanie Dolson rebounds under    2.021912              4.0            2.0        0.021912
-2026-06-16   Marina Mabrey       pr under   18.977948             20.5           19.0        0.022052
 2026-06-16   Marina Mabrey       pr under   18.977948             21.5           19.0        0.022052
+2026-06-16   Marina Mabrey       pr under   18.977948             20.5           19.0        0.022052
 2026-06-04     Angel Reese  assists under    3.023038              3.5            3.0        0.023038
 2026-06-17  Kayla Thornton   points under    7.972123              9.5            8.0        0.027877
 2026-05-08  Julie Allemand rebounds under    2.971458              5.0            3.0        0.028542
@@ -47,52 +47,52 @@ assists           78 0.478873 2.232285    -0.306118
 
 ## Team Accuracy
 team  sample_size  accuracy      mae
- POR          134  0.658915 6.002234
- DAL          113  0.618182 5.239828
- GSV          117  0.586207 5.472606
- NYL          178  0.577143 6.492795
- PHX          155  0.555556 7.036363
- ATL          113  0.554545 5.491035
- IND          119  0.547009 5.601529
- LVA          146  0.546763 6.066061
- SEA          118  0.530435 5.741411
- MIN          111  0.528302 5.441543
- WAS           72  0.492958 9.053814
- LAS          128  0.488000 6.049691
+ POR          144  0.611511 6.657401
+ DAL          116  0.601770 5.267710
+ NYL          192  0.592593 6.299092
+ GSV          128  0.582677 5.228105
+ IND          133  0.564885 5.441636
+ ATL          119  0.560345 5.322274
+ LVA          148  0.539007 6.052206
+ PHX          162  0.537500 7.295842
+ MIN          115  0.518182 5.455173
+ SEA          123  0.516667 5.910997
+ LAS          138  0.511111 5.909692
+ WAS           77  0.500000 9.073645
 
 ## Player Outliers
          player  sample_size  accuracy       mae
    Lauren Betts            7  0.285714 15.532526
- Georgia Amoore           20  0.150000 15.083864
+ Georgia Amoore           22  0.227273 14.081145
  Rickea Jackson            9  0.222222 11.036991
   Natasha Cloud           13  0.461538 10.696878
 Chennedy Carter           11  0.363636 10.643571
-Sabrina Ionescu           22  0.333333  9.851326
+    Carla Leite           37  0.567568 10.075768
+   Kiki Iriafen            6  0.000000  9.789887
 Hailey Van Lith            7  0.428571  9.607210
  Brittney Sykes           36  0.400000  9.360317
-    Carla Leite           35  0.600000  9.293576
- Kahleah Copper           38  0.638889  9.079638
+ Kahleah Copper           39  0.621622  9.075854
+Sabrina Ionescu           26  0.440000  8.721321
   Marina Mabrey           44  0.558140  8.686572
- Janelle Salaun            8  0.375000  8.547896
 
 ## Confidence Calibration
 confidence_bucket  sample_size  realized_accuracy  avg_predicted_hit_rate  calibration_gap
-           55-60%          104           0.588235                0.581322         0.006914
-           60-65%          457           0.506757                0.623825        -0.117068
-           65-70%          213           0.529126                0.670879        -0.141752
-             70%+         1034           0.557312                0.884766        -0.327454
+           55-60%          110           0.583333                0.581376         0.001957
+           60-65%          502           0.503067                0.624297        -0.121229
+           65-70%          241           0.525641                0.670891        -0.145249
+             70%+         1056           0.553191                0.881720        -0.328529
 
 ## Challenger Summary
 segment      market  sample_size  production_mae  challenger_mae  production_brier  challenger_brier
-    all         all         1808        6.236078        6.083919          0.315900          0.283828
- market     assists           78        2.232285        2.277540          0.338025          0.303115
- market          pa          239        7.542343        7.335417          0.345986          0.304486
- market      points          413        5.828331        5.865117          0.306987          0.277479
- market          pr          407        7.287323        6.993898          0.326559          0.293066
- market         pra          396        8.218100        7.796611          0.327766          0.287613
- market          ra           94        3.422432        3.510436          0.299239          0.286360
- market    rebounds          152        2.135392        2.182277          0.241748          0.227194
- market      steals           17        0.806245        1.895972          0.262236          0.260398
+    all         all         1909        6.265427        6.083710          0.314884          0.284292
+ market     assists           80        2.268873        2.305023          0.341024          0.306173
+ market          pa          254        7.375156        7.184736          0.340088          0.301157
+ market      points          434        5.780601        5.807416          0.303987          0.275830
+ market          pr          433        7.437316        7.041007          0.327353          0.295373
+ market         pra          421        8.242735        7.797675          0.327375          0.289350
+ market          ra          100        3.455733        3.539561          0.298837          0.286880
+ market    rebounds          157        2.138333        2.184626          0.243831          0.229447
+ market      steals           18        0.810709        2.045181          0.253773          0.251150
  market threes_made           12        0.890610        1.560485          0.211376          0.217728
 
 Promotion recommendation: do_not_promote (shadow_improved_mae_and_brier_but_promotion_is_advisory_only)

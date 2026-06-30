@@ -1,6 +1,6 @@
 # WNBA Phase 10 Selective Feature Canary
 
-Generated: 2026-06-28T04:30:07Z
+Generated: 2026-06-30T04:30:06Z
 
 New rows processed this run: 15
 
@@ -14,8 +14,8 @@ This is a shadow-only canary for upgraded points/rebounds feature models. It app
 - Promotion JSON: `/home/ubuntu/EdgeRanked/sports/wnba/data/processed/wnba_selective_feature_canary_promotion_recommendation.json`
 
 ## Current Aggregate
-- production: n=93, win rate 69.3%, MAE 3.863, RMSE 6.047, calibration error 0.046
-- selective: n=93, win rate 70.5%, MAE 3.735, RMSE 5.780, calibration error 0.037
+- production: n=119, win rate 66.7%, MAE 3.967, RMSE 6.028, calibration error 0.017
+- selective: n=119, win rate 69.3%, MAE 3.905, RMSE 5.905, calibration error 0.018
 
 ## Promotion Recommendation
 - Decision: **do_not_promote**
