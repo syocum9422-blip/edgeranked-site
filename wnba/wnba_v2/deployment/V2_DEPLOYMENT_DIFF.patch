@@ -1,0 +1,356 @@
+--- a/wnba_model/pipeline/service.py
++++ b/wnba_model/pipeline/service.py
+@@ -12,6 +12,7 @@
+ 
+ import pandas as pd
+ 
++from wnba_v2.deployment.feature_flags import load_flags, require_v2_deploy_allowed
+ from wnba_model.settings import (
+     APP_VIEW_PROJECTIONS_PATH,
+     BASE_DIR,
+@@ -135,10 +136,14 @@
+     published: str = "no",
+     stale_output_blocked: str = "yes",
+ ) -> dict:
++    flags = load_flags()
+     included_players, excluded_players, excluded_reasons = player_audit_summary()
+     payload = {
+         "WNBA_PRODUCTION_STATUS": status,
+         "status": status.lower(),
++        "serving_mode": "production" if flags.rollback_force_production else flags.serving_mode,
++        "v2_traffic_percent": 0 if flags.rollback_force_production else flags.traffic_percent,
++        "v2_rollback_force_production": flags.rollback_force_production,
+         "generated_at": pd.Timestamp.now(tz="America/New_York").isoformat(),
+         "slate_date": str(selected_slate_date() or today_et_date()),
+         "canonical_teams": slate_audit_teams(),
+@@ -820,6 +825,15 @@
+ 
+ 
+ def main() -> None:
++    flags = load_flags()
++    phase6_status = require_v2_deploy_allowed(flags)
++    print(
++        "\n===== WNBA Serving Flags =====\n"
++        f"serving_mode={flags.serving_mode}\n"
++        f"v2_traffic_percent={flags.traffic_percent}\n"
++        f"rollback_force_production={flags.rollback_force_production}\n"
++        f"phase6_gate={phase6_status.get('decision')}"
++    )
+     refresh_last_good_snapshot()
+ 
+     try:
+--- a/wnba_v2/deployment/__init__.py
++++ b/wnba_v2/deployment/__init__.py
+@@ -0,0 +1 @@
++"""Deployment helpers for WNBA V2."""
+--- a/wnba_v2/deployment/feature_flags.py
++++ b/wnba_v2/deployment/feature_flags.py
+@@ -0,0 +1,99 @@
++"""Production feature flags for WNBA V2 deployment.
++
++The default is unchanged production serving. V2 can only be selected explicitly,
++and by default the Phase 6 promotion gate must already be PROMOTE.
++"""
++from __future__ import annotations
++
++import json
++import os
++from dataclasses import dataclass
++from pathlib import Path
++
++from wnba_v2 import config as C
++
++PROMOTION_STATUS_PATH = C.OUTPUTS / "tracker" / "promotion_status.json"
++
++
++def _truthy(name: str, default: bool = False) -> bool:
++    raw = os.environ.get(name)
++    if raw is None:
++        return default
++    return raw.strip().lower() in {"1", "true", "yes", "y", "on"}
++
++
++def _mode() -> str:
++    return os.environ.get("EDGERANKED_WNBA_SERVING_MODE", "production").strip().lower()
++
++
++def _traffic_percent() -> int:
++    raw = os.environ.get("EDGERANKED_WNBA_V2_TRAFFIC_PERCENT", "0").strip()
++    try:
++        value = int(raw)
++    except ValueError as exc:
++        raise ValueError(f"EDGERANKED_WNBA_V2_TRAFFIC_PERCENT must be an integer, got {raw!r}") from exc
++    if value < 0 or value > 100:
++        raise ValueError("EDGERANKED_WNBA_V2_TRAFFIC_PERCENT must be between 0 and 100")
++    return value
++
++
++@dataclass(frozen=True)
++class WnbaV2Flags:
++    serving_mode: str
++    traffic_percent: int
++    require_promote_signal: bool
++    rollback_force_production: bool
++    promotion_status_path: Path = PROMOTION_STATUS_PATH
++
++    @property
++    def v2_requested(self) -> bool:
++        return self.serving_mode in {"v2", "staged_v2"} or self.traffic_percent > 0
++
++    @property
++    def production_only(self) -> bool:
++        return self.rollback_force_production or not self.v2_requested
++
++
++def load_flags() -> WnbaV2Flags:
++    mode = _mode()
++    valid_modes = {"production", "staged_v2", "v2"}
++    if mode not in valid_modes:
++        raise ValueError(f"EDGERANKED_WNBA_SERVING_MODE must be one of {sorted(valid_modes)}, got {mode!r}")
++    traffic = _traffic_percent()
++    if mode == "production" and traffic:
++        raise ValueError("EDGERANKED_WNBA_V2_TRAFFIC_PERCENT must be 0 when serving mode is production")
++    if mode == "v2" and traffic not in {0, 100}:
++        raise ValueError("Full V2 mode requires EDGERANKED_WNBA_V2_TRAFFIC_PERCENT=0 or 100")
++    if mode == "staged_v2" and traffic <= 0:
++        raise ValueError("staged_v2 mode requires EDGERANKED_WNBA_V2_TRAFFIC_PERCENT > 0")
++    return WnbaV2Flags(
++        serving_mode=mode,
++        traffic_percent=100 if mode == "v2" and traffic == 0 else traffic,
++        require_promote_signal=_truthy("EDGERANKED_WNBA_V2_REQUIRE_PROMOTE_SIGNAL", True),
++        rollback_force_production=_truthy("EDGERANKED_WNBA_V2_ROLLBACK_FORCE_PRODUCTION", False),
++    )
++
++
++def promotion_status(path: Path = PROMOTION_STATUS_PATH) -> dict:
++    if not path.exists():
++        return {"decision": "MISSING", "path": str(path)}
++    try:
++        payload = json.loads(path.read_text())
++    except json.JSONDecodeError as exc:
++        return {"decision": "INVALID", "path": str(path), "error": str(exc)}
++    payload.setdefault("path", str(path))
++    return payload
++
++
++def require_v2_deploy_allowed(flags: WnbaV2Flags | None = None) -> dict:
++    flags = flags or load_flags()
++    status = promotion_status(flags.promotion_status_path)
++    if flags.rollback_force_production:
++        return status
++    if flags.v2_requested and flags.require_promote_signal and status.get("decision") != "PROMOTE":
++        raise RuntimeError(
++            "WNBA V2 serving was requested, but the Phase 6 promotion gate is "
++            f"{status.get('decision')!r}; set EDGERANKED_WNBA_SERVING_MODE=production "
++            "or keep collecting evidence before promotion."
++        )
++    return status
+--- a/wnba_v2/deployment/DEPLOYMENT_PLAN.md
++++ b/wnba_v2/deployment/DEPLOYMENT_PLAN.md
+@@ -0,0 +1,94 @@
++# WNBA V2 Deployment Plan
++
++## Recommendation
++
++Current recommendation: **hold**.
++
++Measured evidence from `wnba_v2/outputs/tracker/dashboard.json` generated on 2026-06-30:
++
++- Graded V2 recommendations: 863
++- V2 hit rate: 50.64% with 95% CI [47.31%, 53.96%]
++- Production hit rate on the same ledger: 52.38% with 95% CI [49.04%, 55.69%]
++- V2 Brier: 0.2594 vs production 0.3170
++- Combo-market Brier: V2 0.2632 vs production 0.3324 over 554 graded combo rows
++- High-conviction tier >= 0.25: 77 rows, 64.94% hit rate, 95% CI [53.80%, 74.65%], mean CLV 0.062
++- Phase 6 gate: `COLLECTING`; remaining criteria are `min_sample`, `hit_significance`, and `positive_clv`
++
++V2 has better calibration and combo calibration, but it does not yet meet the Phase 6 promotion gate because no high-conviction tier has the required 300 graded samples.
++
++## Promotion Gates
++
++Do not promote unless `wnba_v2/outputs/tracker/promotion_status.json` has:
++
++```json
++{
++  "decision": "PROMOTE"
++}
++```
++
++The production runner enforces this by default when V2 serving is requested.
++
++## Feature Flags
++
++Default production behavior:
++
++```bash
++EDGERANKED_WNBA_SERVING_MODE=production
++EDGERANKED_WNBA_V2_TRAFFIC_PERCENT=0
++EDGERANKED_WNBA_V2_REQUIRE_PROMOTE_SIGNAL=1
++EDGERANKED_WNBA_V2_ROLLBACK_FORCE_PRODUCTION=0
++```
++
++Staged V2 promotion after the gate reaches `PROMOTE`:
++
++```bash
++EDGERANKED_WNBA_SERVING_MODE=staged_v2
++EDGERANKED_WNBA_V2_TRAFFIC_PERCENT=10
++EDGERANKED_WNBA_V2_REQUIRE_PROMOTE_SIGNAL=1
++EDGERANKED_WNBA_V2_ROLLBACK_FORCE_PRODUCTION=0
++```
++
++Full V2 promotion after staged metrics remain acceptable:
++
++```bash
++EDGERANKED_WNBA_SERVING_MODE=v2
++EDGERANKED_WNBA_V2_TRAFFIC_PERCENT=100
++EDGERANKED_WNBA_V2_REQUIRE_PROMOTE_SIGNAL=1
++EDGERANKED_WNBA_V2_ROLLBACK_FORCE_PRODUCTION=0
++```
++
++Emergency rollback:
++
++```bash
++EDGERANKED_WNBA_SERVING_MODE=production
++EDGERANKED_WNBA_V2_TRAFFIC_PERCENT=0
++EDGERANKED_WNBA_V2_ROLLBACK_FORCE_PRODUCTION=1
++```
++
++## Deployment Steps
++
++1. Run the production pipeline in current mode:
++
++```bash
++python run_wnba_model.py
++```
++
++2. Run Phase 6 tracking after nightly data refresh:
++
++```bash
++bash wnba_v2/pipeline/run_wnba_v2_data.sh all
++bash wnba_v2/pipeline/run_wnba_v2_tracker.sh
++```
++
++3. Inspect:
++
++```bash
++cat wnba_v2/outputs/tracker/promotion_status.json
++cat wnba_v2/outputs/tracker/DASHBOARD.md
++```
++
++4. If the gate is still `COLLECTING` or `ROLLBACK_CANDIDATE`, keep production mode.
++
++5. If the gate is `PROMOTE`, start staged mode at 10% and rerun the production pipeline.
++
++6. Promote to 100% only after staged mode has no rollback signal and the same Phase 6 gate remains `PROMOTE`.
+--- a/wnba_v2/deployment/ROLLBACK_PLAN.md
++++ b/wnba_v2/deployment/ROLLBACK_PLAN.md
+@@ -0,0 +1,47 @@
++# WNBA V2 Rollback Plan
++
++## Rollback Trigger
++
++Rollback immediately if any of these are true:
++
++- `wnba_v2/outputs/tracker/promotion_status.json` decision is `ROLLBACK_CANDIDATE`
++- production pipeline fails while V2 serving is requested
++- V2 high-conviction CLV turns materially negative
++- V2 Brier regresses above production Brier in Phase 6 tracking
++
++## Rollback Steps
++
++1. Force production serving:
++
++```bash
++export EDGERANKED_WNBA_SERVING_MODE=production
++export EDGERANKED_WNBA_V2_TRAFFIC_PERCENT=0
++export EDGERANKED_WNBA_V2_ROLLBACK_FORCE_PRODUCTION=1
++```
++
++2. Rerun production:
++
++```bash
++python run_wnba_model.py
++```
++
++3. Confirm production status:
++
++```bash
++cat data/processed/wnba_production_status.json
++```
++
++Expected fields:
++
++```json
++{
++  "WNBA_PRODUCTION_STATUS": "PASS",
++  "serving_mode": "production",
++  "v2_traffic_percent": 0,
++  "v2_rollback_force_production": true
++}
++```
++
++4. If the pipeline failed before producing fresh outputs, the existing production runner restores the last-good snapshot from `outputs/wnba_last_good`.
++
++5. Keep Phase 6 tracking running in production mode so the rollback reason remains visible in `wnba_v2/outputs/tracker/DASHBOARD.md`.
+--- a/wnba_v2/deployment/MIGRATION_STEPS.md
++++ b/wnba_v2/deployment/MIGRATION_STEPS.md
+@@ -0,0 +1,59 @@
++# WNBA V2 Migration Steps
++
++## Files Added
++
++- `wnba_v2/deployment/feature_flags.py`
++- `wnba_v2/deployment/DEPLOYMENT_PLAN.md`
++- `wnba_v2/deployment/ROLLBACK_PLAN.md`
++- `wnba_v2/deployment/MIGRATION_STEPS.md`
++
++## Files Updated
++
++- `wnba_model/pipeline/service.py`
++
++## Migration
++
++1. Deploy the code with defaults unchanged:
++
++```bash
++EDGERANKED_WNBA_SERVING_MODE=production
++EDGERANKED_WNBA_V2_TRAFFIC_PERCENT=0
++EDGERANKED_WNBA_V2_REQUIRE_PROMOTE_SIGNAL=1
++EDGERANKED_WNBA_V2_ROLLBACK_FORCE_PRODUCTION=0
++```
++
++2. Run Phase 6 tracking daily:
++
++```bash
++bash wnba_v2/pipeline/run_wnba_v2_data.sh all
++bash wnba_v2/pipeline/run_wnba_v2_tracker.sh
++```
++
++3. Do not change serving mode until:
++
++```bash
++cat wnba_v2/outputs/tracker/promotion_status.json
++```
++
++reports:
++
++```json
++{"decision": "PROMOTE"}
++```
++
++4. If `PROMOTE`, migrate with a staged flag change:
++
++```bash
++EDGERANKED_WNBA_SERVING_MODE=staged_v2
++EDGERANKED_WNBA_V2_TRAFFIC_PERCENT=10
++```
++
++5. Continue Phase 6 tracking. Move to `v2`/100 only after the staged window keeps the gate at `PROMOTE`.
++
++6. Roll back with:
++
++```bash
++EDGERANKED_WNBA_SERVING_MODE=production
++EDGERANKED_WNBA_V2_TRAFFIC_PERCENT=0
++EDGERANKED_WNBA_V2_ROLLBACK_FORCE_PRODUCTION=1
++```

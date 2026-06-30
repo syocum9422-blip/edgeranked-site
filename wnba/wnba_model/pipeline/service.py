@@ -12,6 +12,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from wnba_v2.deployment.feature_flags import load_flags, require_v2_deploy_allowed
 from wnba_model.settings import (
     APP_VIEW_PROJECTIONS_PATH,
     BASE_DIR,
@@ -135,10 +136,14 @@ def write_production_status(
     published: str = "no",
     stale_output_blocked: str = "yes",
 ) -> dict:
+    flags = load_flags()
     included_players, excluded_players, excluded_reasons = player_audit_summary()
     payload = {
         "WNBA_PRODUCTION_STATUS": status,
         "status": status.lower(),
+        "serving_mode": "production" if flags.rollback_force_production else flags.serving_mode,
+        "v2_traffic_percent": 0 if flags.rollback_force_production else flags.traffic_percent,
+        "v2_rollback_force_production": flags.rollback_force_production,
         "generated_at": pd.Timestamp.now(tz="America/New_York").isoformat(),
         "slate_date": str(selected_slate_date() or today_et_date()),
         "canonical_teams": slate_audit_teams(),
@@ -820,6 +825,17 @@ def require_live_data_check() -> None:
 
 
 def main() -> None:
+    flags = load_flags()
+    phase6_status = require_v2_deploy_allowed(flags)
+    emergency_policy = phase6_status.get("emergency_policy", {})
+    print(
+        "\n===== WNBA Serving Flags =====\n"
+        f"serving_mode={flags.serving_mode}\n"
+        f"v2_traffic_percent={flags.traffic_percent}\n"
+        f"rollback_force_production={flags.rollback_force_production}\n"
+        f"phase6_gate={phase6_status.get('decision')}\n"
+        f"emergency_policy={emergency_policy.get('decision', 'not_applicable')}"
+    )
     refresh_last_good_snapshot()
 
     try:
