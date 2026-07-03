@@ -252,7 +252,8 @@ def _fallback(msg: str) -> str:
 # --- summary text -------------------------------------------------------------
 
 def _summary_sentence(wind_read: dict | None, wind: float, gust: float, temp: float,
-                      hr_boost: bool, pitcher_friendly: bool, compass_txt: str) -> str:
+                      hr_boost: bool, pitcher_friendly: bool, compass_txt: str,
+                      has_bearing: bool = True) -> str:
     if temp is None:
         temp_part = ""
     elif temp >= 85:
@@ -264,19 +265,23 @@ def _summary_sentence(wind_read: dict | None, wind: float, gust: float, temp: fl
     else:
         temp_part = ""
 
-    if wind_read is None:
-        lead = (f"Winds are {compass_txt} at {wind:.0f} mph{temp_part}. "
-                "Field-relative wind direction is not published for this park, "
-                "so no out/in read is claimed.")
-        return lead
-
     if wind < 3:
         lead = f"Winds are calm{temp_part}."
-    else:
-        lead = f"{wind_read['text']} at {wind:.0f} mph"
-        if gust and gust >= wind + 6:
-            lead += f" (gusts {gust:.0f})"
-        lead += f"{temp_part}."
+        if hr_boost:
+            lead += " Overall, this is a positive home-run environment today."
+        return lead
+
+    if wind_read is None:
+        if not has_bearing:
+            return (f"Winds are {compass_txt} at {wind:.0f} mph{temp_part}. "
+                    "Field-relative wind direction is not published for this park, "
+                    "so no out/in read is claimed.")
+        return f"Winds are {compass_txt} at {wind:.0f} mph{temp_part}."
+
+    lead = f"{wind_read['text']} at {wind:.0f} mph"
+    if gust and gust >= wind + 6:
+        lead += f" (gusts {gust:.0f})"
+    lead += f"{temp_part}."
 
     comp = wind_read["components"]
     if wind >= 5 and max(comp.values()) * wind >= 5:
@@ -422,7 +427,8 @@ def build_weather_impact_card(s: dict) -> str:
                         f"color:var(--muted,#94a3b8);margin-top:10px'>{escape(' · '.join(bits))}</div>")
 
         summary = _summary_sentence(wind_read, wind, gust, temp, hr_boost,
-                                    pitcher_friendly, compass_txt)
+                                    pitcher_friendly, compass_txt,
+                                    has_bearing=bearing is not None)
         if fixed_roof:
             summary = ("The roof is fixed, so today's outside weather has no effect on "
                        "carry or run scoring here. Environment reads as neutral.")
