@@ -697,8 +697,17 @@ def render_stadium_body(site_origin: str, s: dict) -> str:
                       "<a href='/mlb'>MLB</a><a href='/mlb/stadiums'>Stadiums</a>"
                       f"<span style='color:#94a3b8;padding:8px 4px'>{escape(s['name'])}</span></div>")
 
+    # Today's Weather Impact card (presentation-only; fail-safe — returns ""
+    # on any problem so this page renders exactly as before). See
+    # mlb_stadium_weather_card.py; disable with MLB_STADIUM_WEATHER_CARD=0.
+    try:
+        from nba_model.webapp.mlb_stadium_weather_card import build_weather_impact_card
+        weather_card = build_weather_impact_card(s)
+    except Exception:
+        weather_card = ""
+
     return (_STADIUM_STYLES + json_ld + "<div class='stadiums'>" + breadcrumb_nav
-            + sec1 + sec2 + sec3 + sec4 + sec5 + sec6 + sec7 + sec8 + "</div>")
+            + weather_card + sec1 + sec2 + sec3 + sec4 + sec5 + sec6 + sec7 + sec8 + "</div>")
 
 
 def render_index_body(site_origin: str) -> str:
