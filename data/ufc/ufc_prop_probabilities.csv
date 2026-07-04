@@ -142,17 +142,17 @@ ea6da5068461,UFC 329: McGregor vs. Holloway 2,2026-07-11,Damian Pinas,Cesar Alme
 72973500fca2,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ryan Gandra,Zach Reese,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.4502017537634131
 72973500fca2,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ryan Gandra,Zach Reese,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.6119961279721761
 72973500fca2,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ryan Gandra,Zach Reese,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.38800387202782394
-7876dd12e775,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ode Osbourne,Cody Durden,simulation,,,moneyline,Ode Osbourne win,red,,0.6058489352679325
-7876dd12e775,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ode Osbourne,Cody Durden,simulation,,,moneyline,Cody Durden win,blue,,0.3941510647320675
-7876dd12e775,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ode Osbourne,Cody Durden,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3431417599329043
-7876dd12e775,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ode Osbourne,Cody Durden,simulation,,,inside_distance,Fight goes to decision,no,,0.6568582400670957
-7876dd12e775,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ode Osbourne,Cody Durden,simulation,,,method,Win by KO/TKO,ko_tko,,0.2348835920721072
-7876dd12e775,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ode Osbourne,Cody Durden,simulation,,,method,Win by Submission,submission,,0.10825816786079709
-7876dd12e775,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ode Osbourne,Cody Durden,simulation,,,method,Win by Decision,decision,,0.6568582400670957
-7876dd12e775,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ode Osbourne,Cody Durden,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.17337279798676244
-7876dd12e775,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ode Osbourne,Cody Durden,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.8266272020132376
-7876dd12e775,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ode Osbourne,Cody Durden,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3273208409274842
-7876dd12e775,UFC 329: McGregor vs. Holloway 2,2026-07-11,Ode Osbourne,Cody Durden,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6726791590725159
+a0aaeaf66269,UFC 329: McGregor vs. Holloway 2,2026-07-11,Alessandro Costa,Cody Durden,simulation,,,moneyline,Alessandro Costa win,red,,0.6304149843961218
+a0aaeaf66269,UFC 329: McGregor vs. Holloway 2,2026-07-11,Alessandro Costa,Cody Durden,simulation,,,moneyline,Cody Durden win,blue,,0.36958501560387824
+a0aaeaf66269,UFC 329: McGregor vs. Holloway 2,2026-07-11,Alessandro Costa,Cody Durden,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3850914781304224
+a0aaeaf66269,UFC 329: McGregor vs. Holloway 2,2026-07-11,Alessandro Costa,Cody Durden,simulation,,,inside_distance,Fight goes to decision,no,,0.6149085218695776
+a0aaeaf66269,UFC 329: McGregor vs. Holloway 2,2026-07-11,Alessandro Costa,Cody Durden,simulation,,,method,Win by KO/TKO,ko_tko,,0.22064690202695844
+a0aaeaf66269,UFC 329: McGregor vs. Holloway 2,2026-07-11,Alessandro Costa,Cody Durden,simulation,,,method,Win by Submission,submission,,0.16444457610346394
+a0aaeaf66269,UFC 329: McGregor vs. Holloway 2,2026-07-11,Alessandro Costa,Cody Durden,simulation,,,method,Win by Decision,decision,,0.6149085218695776
+a0aaeaf66269,UFC 329: McGregor vs. Holloway 2,2026-07-11,Alessandro Costa,Cody Durden,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.17144463450614988
+a0aaeaf66269,UFC 329: McGregor vs. Holloway 2,2026-07-11,Alessandro Costa,Cody Durden,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.8285553654938501
+a0aaeaf66269,UFC 329: McGregor vs. Holloway 2,2026-07-11,Alessandro Costa,Cody Durden,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3527914527702302
+a0aaeaf66269,UFC 329: McGregor vs. Holloway 2,2026-07-11,Alessandro Costa,Cody Durden,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6472085472297697
 80e2ec70e0e6,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Dricus Du Plessis,Kamaru Usman,simulation,,,moneyline,Dricus Du Plessis win,red,,0.7758108786455962
 80e2ec70e0e6,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Dricus Du Plessis,Kamaru Usman,simulation,,,moneyline,Kamaru Usman win,blue,,0.22418912135440383
 80e2ec70e0e6,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Dricus Du Plessis,Kamaru Usman,simulation,,,inside_distance,Fight ends inside distance,yes,,0.49091317124770756
@@ -274,3 +274,135 @@ f2767c4226de,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Austin Bashi,Jose 
 8089a297c249,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Alden Coria,Stewart Nicoll,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7226341236831223
 8089a297c249,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Alden Coria,Stewart Nicoll,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4222904326229916
 8089a297c249,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Alden Coria,Stewart Nicoll,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5777095673770084
+61f434839d9a,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jean-Paul Lebosnoyani,Seokhyeon Ko,simulation,,,moneyline,Jean-Paul Lebosnoyani win,red,,0.5600430325903628
+61f434839d9a,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jean-Paul Lebosnoyani,Seokhyeon Ko,simulation,,,moneyline,Seokhyeon Ko win,blue,,0.4399569674096372
+61f434839d9a,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jean-Paul Lebosnoyani,Seokhyeon Ko,simulation,,,inside_distance,Fight ends inside distance,yes,,0.6010478983323669
+61f434839d9a,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jean-Paul Lebosnoyani,Seokhyeon Ko,simulation,,,inside_distance,Fight goes to decision,no,,0.39895210166763306
+61f434839d9a,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jean-Paul Lebosnoyani,Seokhyeon Ko,simulation,,,method,Win by KO/TKO,ko_tko,,0.29658916018591563
+61f434839d9a,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jean-Paul Lebosnoyani,Seokhyeon Ko,simulation,,,method,Win by Submission,submission,,0.3044587381464513
+61f434839d9a,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jean-Paul Lebosnoyani,Seokhyeon Ko,simulation,,,method,Win by Decision,decision,,0.39895210166763306
+61f434839d9a,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jean-Paul Lebosnoyani,Seokhyeon Ko,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.38804954971572514
+61f434839d9a,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jean-Paul Lebosnoyani,Seokhyeon Ko,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6119504502842749
+61f434839d9a,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jean-Paul Lebosnoyani,Seokhyeon Ko,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.6105021636514507
+61f434839d9a,UFC Fight Night: Du Plessis vs. Usman,2026-07-18,Jean-Paul Lebosnoyani,Seokhyeon Ko,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.3894978363485493
+e1eb6bc26027,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Ankalaev,Khalil Rountree Jr.,simulation,,,moneyline,Magomed Ankalaev win,red,,0.8794245585997764
+e1eb6bc26027,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Ankalaev,Khalil Rountree Jr.,simulation,,,moneyline,Khalil Rountree Jr. win,blue,,0.12057544140022358
+e1eb6bc26027,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Ankalaev,Khalil Rountree Jr.,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3931373398264979
+e1eb6bc26027,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Ankalaev,Khalil Rountree Jr.,simulation,,,inside_distance,Fight goes to decision,no,,0.6068626601735021
+e1eb6bc26027,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Ankalaev,Khalil Rountree Jr.,simulation,,,method,Win by KO/TKO,ko_tko,,0.2344895235035487
+e1eb6bc26027,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Ankalaev,Khalil Rountree Jr.,simulation,,,method,Win by Submission,submission,,0.15864781632294922
+e1eb6bc26027,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Ankalaev,Khalil Rountree Jr.,simulation,,,method,Win by Decision,decision,,0.6068626601735021
+e1eb6bc26027,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Ankalaev,Khalil Rountree Jr.,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.20339562935056377
+e1eb6bc26027,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Ankalaev,Khalil Rountree Jr.,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7966043706494362
+e1eb6bc26027,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Ankalaev,Khalil Rountree Jr.,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3156597068995047
+e1eb6bc26027,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Ankalaev,Khalil Rountree Jr.,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6843402931004954
+5f7402983418,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Steve Erceg,Ramazan Temirov,simulation,,,moneyline,Steve Erceg win,red,,0.7537825661000377
+5f7402983418,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Steve Erceg,Ramazan Temirov,simulation,,,moneyline,Ramazan Temirov win,blue,,0.2462174338999623
+5f7402983418,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Steve Erceg,Ramazan Temirov,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4577587952996523
+5f7402983418,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Steve Erceg,Ramazan Temirov,simulation,,,inside_distance,Fight goes to decision,no,,0.5422412047003478
+5f7402983418,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Steve Erceg,Ramazan Temirov,simulation,,,method,Win by KO/TKO,ko_tko,,0.32804992596517624
+5f7402983418,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Steve Erceg,Ramazan Temirov,simulation,,,method,Win by Submission,submission,,0.12970886933447606
+5f7402983418,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Steve Erceg,Ramazan Temirov,simulation,,,method,Win by Decision,decision,,0.5422412047003478
+5f7402983418,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Steve Erceg,Ramazan Temirov,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.1681029779485704
+5f7402983418,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Steve Erceg,Ramazan Temirov,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.8318970220514296
+5f7402983418,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Steve Erceg,Ramazan Temirov,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3457067220026127
+5f7402983418,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Steve Erceg,Ramazan Temirov,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6542932779973873
+45504b282cd2,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Rizvan Kuniev,Tyrell Fortune,simulation,,,moneyline,Rizvan Kuniev win,red,,0.7857943001098823
+45504b282cd2,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Rizvan Kuniev,Tyrell Fortune,simulation,,,moneyline,Tyrell Fortune win,blue,,0.21420569989011773
+45504b282cd2,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Rizvan Kuniev,Tyrell Fortune,simulation,,,inside_distance,Fight ends inside distance,yes,,0.39586451360751085
+45504b282cd2,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Rizvan Kuniev,Tyrell Fortune,simulation,,,inside_distance,Fight goes to decision,no,,0.6041354863924892
+45504b282cd2,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Rizvan Kuniev,Tyrell Fortune,simulation,,,method,Win by KO/TKO,ko_tko,,0.28579554143960906
+45504b282cd2,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Rizvan Kuniev,Tyrell Fortune,simulation,,,method,Win by Submission,submission,,0.1100689721679018
+45504b282cd2,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Rizvan Kuniev,Tyrell Fortune,simulation,,,method,Win by Decision,decision,,0.6041354863924892
+45504b282cd2,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Rizvan Kuniev,Tyrell Fortune,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.19964286250845117
+45504b282cd2,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Rizvan Kuniev,Tyrell Fortune,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.8003571374915488
+45504b282cd2,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Rizvan Kuniev,Tyrell Fortune,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.3473100847176621
+45504b282cd2,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Rizvan Kuniev,Tyrell Fortune,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6526899152823379
+eeea7a299701,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Islam Dulatov,Wellington Turman,simulation,,,moneyline,Islam Dulatov win,red,,0.8257197713403981
+eeea7a299701,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Islam Dulatov,Wellington Turman,simulation,,,moneyline,Wellington Turman win,blue,,0.1742802286596019
+eeea7a299701,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Islam Dulatov,Wellington Turman,simulation,,,inside_distance,Fight ends inside distance,yes,,0.5461657956376035
+eeea7a299701,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Islam Dulatov,Wellington Turman,simulation,,,inside_distance,Fight goes to decision,no,,0.4538342043623965
+eeea7a299701,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Islam Dulatov,Wellington Turman,simulation,,,method,Win by KO/TKO,ko_tko,,0.4148077481300635
+eeea7a299701,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Islam Dulatov,Wellington Turman,simulation,,,method,Win by Submission,submission,,0.13135804750753996
+eeea7a299701,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Islam Dulatov,Wellington Turman,simulation,,,method,Win by Decision,decision,,0.4538342043623965
+eeea7a299701,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Islam Dulatov,Wellington Turman,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.35688185200145145
+eeea7a299701,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Islam Dulatov,Wellington Turman,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6431181479985486
+eeea7a299701,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Islam Dulatov,Wellington Turman,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.45291857018627807
+eeea7a299701,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Islam Dulatov,Wellington Turman,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5470814298137219
+4cdc65b1f602,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Ismael Bonfim,Axel Sola,simulation,,,moneyline,Ismael Bonfim win,red,,0.8783984679052543
+4cdc65b1f602,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Ismael Bonfim,Axel Sola,simulation,,,moneyline,Axel Sola win,blue,,0.12160153209474567
+4cdc65b1f602,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Ismael Bonfim,Axel Sola,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4244126924074405
+4cdc65b1f602,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Ismael Bonfim,Axel Sola,simulation,,,inside_distance,Fight goes to decision,no,,0.5755873075925595
+4cdc65b1f602,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Ismael Bonfim,Axel Sola,simulation,,,method,Win by KO/TKO,ko_tko,,0.2448057607770648
+4cdc65b1f602,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Ismael Bonfim,Axel Sola,simulation,,,method,Win by Submission,submission,,0.1796069316303757
+4cdc65b1f602,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Ismael Bonfim,Axel Sola,simulation,,,method,Win by Decision,decision,,0.5755873075925595
+4cdc65b1f602,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Ismael Bonfim,Axel Sola,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.22503789020120388
+4cdc65b1f602,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Ismael Bonfim,Axel Sola,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7749621097987961
+4cdc65b1f602,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Ismael Bonfim,Axel Sola,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.40634949226086753
+4cdc65b1f602,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Ismael Bonfim,Axel Sola,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5936505077391325
+912754c42421,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Valter Walker,Thomas Petersen,simulation,,,moneyline,Valter Walker win,red,,0.6803645621637745
+912754c42421,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Valter Walker,Thomas Petersen,simulation,,,moneyline,Thomas Petersen win,blue,,0.3196354378362255
+912754c42421,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Valter Walker,Thomas Petersen,simulation,,,inside_distance,Fight ends inside distance,yes,,0.7738915850619504
+912754c42421,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Valter Walker,Thomas Petersen,simulation,,,inside_distance,Fight goes to decision,no,,0.22610841493804956
+912754c42421,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Valter Walker,Thomas Petersen,simulation,,,method,Win by KO/TKO,ko_tko,,0.329280781030175
+912754c42421,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Valter Walker,Thomas Petersen,simulation,,,method,Win by Submission,submission,,0.44461080403177544
+912754c42421,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Valter Walker,Thomas Petersen,simulation,,,method,Win by Decision,decision,,0.22610841493804956
+912754c42421,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Valter Walker,Thomas Petersen,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.48659219742890514
+912754c42421,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Valter Walker,Thomas Petersen,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.5134078025710949
+912754c42421,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Valter Walker,Thomas Petersen,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.7520807057488349
+912754c42421,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Valter Walker,Thomas Petersen,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.2479192942511651
+10bf43cbc11e,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Uran Satybaldiev,Dustin Jacoby,simulation,,,moneyline,Uran Satybaldiev win,red,,0.4550025905461116
+10bf43cbc11e,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Uran Satybaldiev,Dustin Jacoby,simulation,,,moneyline,Dustin Jacoby win,blue,,0.5449974094538884
+10bf43cbc11e,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Uran Satybaldiev,Dustin Jacoby,simulation,,,inside_distance,Fight ends inside distance,yes,,0.6054870930578395
+10bf43cbc11e,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Uran Satybaldiev,Dustin Jacoby,simulation,,,inside_distance,Fight goes to decision,no,,0.39451290694216046
+10bf43cbc11e,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Uran Satybaldiev,Dustin Jacoby,simulation,,,method,Win by KO/TKO,ko_tko,,0.29400871581833926
+10bf43cbc11e,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Uran Satybaldiev,Dustin Jacoby,simulation,,,method,Win by Submission,submission,,0.31147837723950034
+10bf43cbc11e,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Uran Satybaldiev,Dustin Jacoby,simulation,,,method,Win by Decision,decision,,0.39451290694216046
+10bf43cbc11e,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Uran Satybaldiev,Dustin Jacoby,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.3624132558786752
+10bf43cbc11e,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Uran Satybaldiev,Dustin Jacoby,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6375867441213248
+10bf43cbc11e,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Uran Satybaldiev,Dustin Jacoby,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.5937624345957886
+10bf43cbc11e,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Uran Satybaldiev,Dustin Jacoby,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.4062375654042114
+2610fa1a98d5,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Tuchalov,Brendson Ribeiro,simulation,,,moneyline,Magomed Tuchalov win,red,,0.6566962441765787
+2610fa1a98d5,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Tuchalov,Brendson Ribeiro,simulation,,,moneyline,Brendson Ribeiro win,blue,,0.3433037558234213
+2610fa1a98d5,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Tuchalov,Brendson Ribeiro,simulation,,,inside_distance,Fight ends inside distance,yes,,0.49081633357242777
+2610fa1a98d5,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Tuchalov,Brendson Ribeiro,simulation,,,inside_distance,Fight goes to decision,no,,0.5091836664275722
+2610fa1a98d5,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Tuchalov,Brendson Ribeiro,simulation,,,method,Win by KO/TKO,ko_tko,,0.2362274073103363
+2610fa1a98d5,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Tuchalov,Brendson Ribeiro,simulation,,,method,Win by Submission,submission,,0.25458892626209145
+2610fa1a98d5,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Tuchalov,Brendson Ribeiro,simulation,,,method,Win by Decision,decision,,0.5091836664275722
+2610fa1a98d5,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Tuchalov,Brendson Ribeiro,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.30730107582542093
+2610fa1a98d5,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Tuchalov,Brendson Ribeiro,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.6926989241745791
+2610fa1a98d5,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Tuchalov,Brendson Ribeiro,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4133834485070362
+2610fa1a98d5,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Tuchalov,Brendson Ribeiro,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5866165514929638
+db95d2f8aa64,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Umar Nurmagomedov,David Martinez,simulation,,,moneyline,Umar Nurmagomedov win,red,,0.7457167420896553
+db95d2f8aa64,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Umar Nurmagomedov,David Martinez,simulation,,,moneyline,David Martinez win,blue,,0.2542832579103447
+db95d2f8aa64,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Umar Nurmagomedov,David Martinez,simulation,,,inside_distance,Fight ends inside distance,yes,,0.3496280728736084
+db95d2f8aa64,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Umar Nurmagomedov,David Martinez,simulation,,,inside_distance,Fight goes to decision,no,,0.6503719271263916
+db95d2f8aa64,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Umar Nurmagomedov,David Martinez,simulation,,,method,Win by KO/TKO,ko_tko,,0.2347918192740478
+db95d2f8aa64,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Umar Nurmagomedov,David Martinez,simulation,,,method,Win by Submission,submission,,0.1148362535995606
+db95d2f8aa64,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Umar Nurmagomedov,David Martinez,simulation,,,method,Win by Decision,decision,,0.6503719271263916
+db95d2f8aa64,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Umar Nurmagomedov,David Martinez,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.20948761726488777
+db95d2f8aa64,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Umar Nurmagomedov,David Martinez,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7905123827351123
+db95d2f8aa64,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Umar Nurmagomedov,David Martinez,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.37024319422056207
+db95d2f8aa64,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Umar Nurmagomedov,David Martinez,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6297568057794379
+c9d352a83306,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Zaynukov,Damian Rzepecki,simulation,,,moneyline,Magomed Zaynukov win,red,,0.7290062152162007
+c9d352a83306,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Zaynukov,Damian Rzepecki,simulation,,,moneyline,Damian Rzepecki win,blue,,0.2709937847837993
+c9d352a83306,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Zaynukov,Damian Rzepecki,simulation,,,inside_distance,Fight ends inside distance,yes,,0.36663677750188917
+c9d352a83306,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Zaynukov,Damian Rzepecki,simulation,,,inside_distance,Fight goes to decision,no,,0.6333632224981108
+c9d352a83306,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Zaynukov,Damian Rzepecki,simulation,,,method,Win by KO/TKO,ko_tko,,0.25184728513914245
+c9d352a83306,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Zaynukov,Damian Rzepecki,simulation,,,method,Win by Submission,submission,,0.11478949236274673
+c9d352a83306,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Zaynukov,Damian Rzepecki,simulation,,,method,Win by Decision,decision,,0.6333632224981108
+c9d352a83306,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Zaynukov,Damian Rzepecki,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.21050034496056697
+c9d352a83306,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Zaynukov,Damian Rzepecki,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7894996550394331
+c9d352a83306,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Zaynukov,Damian Rzepecki,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.32519599176306163
+c9d352a83306,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Magomed Zaynukov,Damian Rzepecki,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.6748040082369384
+2c024795ade4,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Mike Davis,Nurullo Aliev,simulation,,,moneyline,Mike Davis win,red,,0.8492997320367907
+2c024795ade4,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Mike Davis,Nurullo Aliev,simulation,,,moneyline,Nurullo Aliev win,blue,,0.15070026796320934
+2c024795ade4,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Mike Davis,Nurullo Aliev,simulation,,,inside_distance,Fight ends inside distance,yes,,0.4706930856699545
+2c024795ade4,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Mike Davis,Nurullo Aliev,simulation,,,inside_distance,Fight goes to decision,no,,0.5293069143300455
+2c024795ade4,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Mike Davis,Nurullo Aliev,simulation,,,method,Win by KO/TKO,ko_tko,,0.26377181603729033
+2c024795ade4,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Mike Davis,Nurullo Aliev,simulation,,,method,Win by Submission,submission,,0.20692126963266413
+2c024795ade4,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Mike Davis,Nurullo Aliev,simulation,,,method,Win by Decision,decision,,0.5293069143300455
+2c024795ade4,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Mike Davis,Nurullo Aliev,simulation,,,total_rounds,Under 1.5 rounds,under,1.5,0.2217398653367573
+2c024795ade4,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Mike Davis,Nurullo Aliev,simulation,,,total_rounds,Over 1.5 rounds,over,1.5,0.7782601346632427
+2c024795ade4,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Mike Davis,Nurullo Aliev,simulation,,,total_rounds,Under 2.5 rounds,under,2.5,0.4150570798870156
+2c024795ade4,UFC Fight Night: Ankalaev vs. Rountree Jr,2026-07-25,Mike Davis,Nurullo Aliev,simulation,,,total_rounds,Over 2.5 rounds,over,2.5,0.5849429201129843
