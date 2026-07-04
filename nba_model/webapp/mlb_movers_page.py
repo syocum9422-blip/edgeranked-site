@@ -127,20 +127,66 @@ def _abbrev(team: str) -> str:
     return "".join(w[0] for w in t.split()[:3]).upper() or "?"
 
 
-def _hue(text: str) -> int:
-    h = 0
-    for ch in str(text):
-        h = (h * 31 + ord(ch)) % 360
-    return h
+# Official MLB team branding, keyed by the abbreviation _abbrev() produces.
+# primary = monogram fill, secondary = border/glow accent, text = glyph color
+# (white or black, chosen for contrast on the primary fill). Sourced from each
+# club's published brand palette; text flipped to black only where a light-ish
+# primary needs it (BAL orange). Marlins/Giants use their dark cap color as the
+# primary with the bright accent as the ring — both more recognizable and higher
+# contrast than the reverse.
+_DEFAULT_COLORS = {"primary": "#334155", "secondary": "#64748b", "text": "#ffffff"}
+TEAM_COLORS = {
+    "ARI": {"primary": "#A71930", "secondary": "#E3D4AD", "text": "#ffffff"},
+    "ATH": {"primary": "#003831", "secondary": "#EFB21E", "text": "#ffffff"},
+    "ATL": {"primary": "#CE1141", "secondary": "#13274F", "text": "#ffffff"},
+    "BAL": {"primary": "#DF4601", "secondary": "#000000", "text": "#000000"},
+    "BOS": {"primary": "#BD3039", "secondary": "#0C2340", "text": "#ffffff"},
+    "CHC": {"primary": "#0E3386", "secondary": "#CC3433", "text": "#ffffff"},
+    "CWS": {"primary": "#27251F", "secondary": "#C4CED4", "text": "#ffffff"},
+    "CIN": {"primary": "#C6011F", "secondary": "#000000", "text": "#ffffff"},
+    "CLE": {"primary": "#0C2340", "secondary": "#E31937", "text": "#ffffff"},
+    "COL": {"primary": "#33006F", "secondary": "#C4CED4", "text": "#ffffff"},
+    "DET": {"primary": "#0C2340", "secondary": "#FA4616", "text": "#ffffff"},
+    "HOU": {"primary": "#002D62", "secondary": "#EB6E1F", "text": "#ffffff"},
+    "KC":  {"primary": "#004687", "secondary": "#BD9B60", "text": "#ffffff"},
+    "LAA": {"primary": "#BA0021", "secondary": "#003263", "text": "#ffffff"},
+    "LAD": {"primary": "#005A9C", "secondary": "#FFFFFF", "text": "#ffffff"},
+    "MIA": {"primary": "#000000", "secondary": "#00A3E0", "text": "#ffffff"},
+    "MIL": {"primary": "#12284B", "secondary": "#FFC52F", "text": "#ffffff"},
+    "MIN": {"primary": "#002B5C", "secondary": "#D31145", "text": "#ffffff"},
+    "NYM": {"primary": "#002D72", "secondary": "#FF5910", "text": "#ffffff"},
+    "NYY": {"primary": "#132448", "secondary": "#C4CED4", "text": "#ffffff"},
+    "PHI": {"primary": "#E81828", "secondary": "#002D72", "text": "#ffffff"},
+    "PIT": {"primary": "#27251F", "secondary": "#FDB827", "text": "#ffffff"},
+    "SD":  {"primary": "#2F241D", "secondary": "#FFC425", "text": "#ffffff"},
+    "SF":  {"primary": "#27251F", "secondary": "#FD5A1E", "text": "#ffffff"},
+    "SEA": {"primary": "#0C2C56", "secondary": "#005C5C", "text": "#ffffff"},
+    "STL": {"primary": "#C41E3A", "secondary": "#0C2340", "text": "#ffffff"},
+    "TB":  {"primary": "#092C5C", "secondary": "#8FBCE6", "text": "#ffffff"},
+    "TEX": {"primary": "#003278", "secondary": "#C0111F", "text": "#ffffff"},
+    "TOR": {"primary": "#134A8E", "secondary": "#1D2D5C", "text": "#ffffff"},
+    "WSH": {"primary": "#AB0003", "secondary": "#14225A", "text": "#ffffff"},
+}
+
+
+def _hex_rgba(hex_color: str, alpha: float) -> str:
+    """'#RRGGBB' -> 'rgba(r,g,b,a)'; falls back to a neutral tint on bad input."""
+    try:
+        h = str(hex_color).lstrip("#")
+        r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+        return f"rgba({r},{g},{b},{alpha})"
+    except Exception:
+        return f"rgba(100,116,139,{alpha})"
 
 
 def _monogram(team: str, size: int = 34) -> str:
     ab = _abbrev(team)
-    hue = _hue(ab)
+    c = TEAM_COLORS.get(ab, _DEFAULT_COLORS)
     fs = 11 if len(ab) > 2 else 12
+    glow = _hex_rgba(c["secondary"], 0.45)
     return (f"<span class='mv-mono' style='width:{size}px;height:{size}px;font-size:{fs}px;"
-            f"background:hsl({hue} 45% 22%);border-color:hsl({hue} 55% 38%);"
-            f"color:hsl({hue} 80% 78%)'>{escape(ab)}</span>")
+            f"background:{c['primary']};border-color:{c['secondary']};color:{c['text']};"
+            f"box-shadow:0 1px 7px -1px {glow}'>{escape(ab)}</span>")
 
 
 def _matchup(m: dict) -> str:
@@ -315,7 +361,8 @@ _STYLE = """
 .mv-hero-vals{margin-top:7px;font-size:14px;color:#cbd5e1;font-weight:600}
 .mv-hero-empty{margin-top:12px;color:#64748b;font-size:13px}
 .mv-mono{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
-  border-radius:50%;border:1px solid;font-weight:900;letter-spacing:.02em}
+  border-radius:50%;border:1.5px solid;font-weight:900;letter-spacing:.02em;
+  text-shadow:0 1px 1px rgba(0,0,0,.35)}
 .mv-mix{background:var(--surface,#121929);border:1px solid var(--line,#1e293b);
   border-radius:14px;padding:12px 14px;margin:0 0 14px}
 .mv-mix-title{font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#93c5fd}
