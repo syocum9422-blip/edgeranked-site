@@ -1,17 +1,26 @@
-"""MLB Biggest Movers — Phase 2 ADMIN-GATED preview page.
+"""MLB Biggest Movers — Phase 2 ADMIN-GATED preview page (premium dashboard UI).
 
-Renders /mlb/movers from the precomputed ``mlb_movers_today.json`` artifact
-ONLY. Hard constraints (by design, do not relax without a decision):
+Renders /mlb/movers (+ /admin/mlb/movers alias) from the precomputed
+``mlb_movers_today.json`` artifact ONLY. Hard constraints (by design, do not
+relax without a decision):
 
-  * reads one JSON file — no model access, no pandas, no recalculation,
-    no network, no writes;
+  * reads one JSON file with an mtime cache — no model access, no pandas,
+    no recalculation, no network, no writes;
   * the route is registered admin-gated (same ``_internal_is_admin`` gate as
     /admin/qa/mlb/board) and ``noindex, nofollow`` until several slates of
     reason-tag output have been reviewed;
   * missing/absent JSON renders a friendly empty state, never an error.
 
-Filters (All / HR / Hits / Pitchers + reason tags) are pure client-side
-show/hide over data attributes — the server renders one static document.
+Layout (2026-07-04 redesign — UI only, zero data/schema changes):
+compact summary strip -> "Today's Biggest Moves" hero -> "Today's Changes"
+reason summary -> STICKY filters -> HR/Hit/PitcherK mover cards (monogram,
+abbreviated matchup, sparkline, ET timestamps) -> collapsible New/Dropped.
+Sparklines draw whatever points exist: an optional per-mover ``history``
+list if a future builder provides one, else the two guaranteed points
+(morning_value, current_value) — graceful by construction.
+
+Filters are pure client-side show/hide over data attributes — the server
+renders one static document.
 """
 from __future__ import annotations
 
@@ -28,18 +37,36 @@ MOVERS_JSON_PATHS = [
 _cache: dict = {}
 
 _SECTION_DEFS = [
-    ("hr_prob", "hr", "Top HR Movers", "Home-run probability, percentage points since the morning baseline."),
-    ("hit_prob", "hit", "Top Hit Movers", "Hit probability, percentage points since the morning baseline."),
-    ("proj_pitcher_k", "pitcher", "Top Pitcher K Movers", "Projected strikeouts since the morning baseline."),
+    ("hr_prob", "Top HR Movers", "HR probability, points since the morning baseline."),
+    ("hit_prob", "Top Hit Movers", "Hit probability, points since the morning baseline."),
+    ("proj_pitcher_k", "Top Pitcher K Movers", "Projected strikeouts since the morning baseline."),
 ]
 
+# consistent tag palette (spec: green / purple / blue / orange / gray)
 _TAG_COLORS = {
-    "Lineup Confirmed": ("rgba(34,197,94,.14)", "#4ade80"),
-    "Starting Pitcher Change": ("rgba(245,158,11,.16)", "#fbbf24"),
-    "Weather Change": ("rgba(56,189,248,.14)", "#7dd3fc"),
-    "Model Refresh": ("rgba(168,85,247,.14)", "#c4b5fd"),
+    "Lineup Confirmed": ("rgba(34,197,94,.15)", "#4ade80"),
+    "Starting Pitcher Change": ("rgba(168,85,247,.16)", "#c4b5fd"),
+    "Weather Change": ("rgba(56,189,248,.15)", "#7dd3fc"),
+    "Model Refresh": ("rgba(249,115,22,.16)", "#fdba74"),
     "Unknown": ("rgba(148,163,184,.12)", "#94a3b8"),
 }
+# display names only — the underlying tag value in data attrs stays honest
+_TAG_DISPLAY = {"Unknown": "Unattributed"}
+
+_ABBREV = {
+    "Arizona Diamondbacks": "ARI", "Athletics": "ATH", "Atlanta Braves": "ATL",
+    "Baltimore Orioles": "BAL", "Boston Red Sox": "BOS", "Chicago Cubs": "CHC",
+    "Chicago White Sox": "CWS", "Cincinnati Reds": "CIN", "Cleveland Guardians": "CLE",
+    "Colorado Rockies": "COL", "Detroit Tigers": "DET", "Houston Astros": "HOU",
+    "Kansas City Royals": "KC", "Los Angeles Angels": "LAA", "Los Angeles Dodgers": "LAD",
+    "Miami Marlins": "MIA", "Milwaukee Brewers": "MIL", "Minnesota Twins": "MIN",
+    "New York Mets": "NYM", "New York Yankees": "NYY", "Philadelphia Phillies": "PHI",
+    "Pittsburgh Pirates": "PIT", "San Diego Padres": "SD", "San Francisco Giants": "SF",
+    "Seattle Mariners": "SEA", "St. Louis Cardinals": "STL", "Tampa Bay Rays": "TB",
+    "Texas Rangers": "TEX", "Toronto Blue Jays": "TOR", "Washington Nationals": "WSH",
+}
+
+_UP, _DOWN = "#4ade80", "#f87171"
 
 
 def _load_payload() -> dict | None:
@@ -59,20 +86,30 @@ def _load_payload() -> dict | None:
     return None
 
 
-def _fmt_ts(iso: str) -> str:
-    """'2026-07-04T13:39:36Z' -> '2026-07-04 13:39 UTC (9:39 AM ET)'."""
+def _parse_ts(iso: str):
     try:
-        dt = datetime.fromisoformat(str(iso).replace("Z", "+00:00"))
-        try:
-            from zoneinfo import ZoneInfo
-            et = dt.astimezone(ZoneInfo("America/New_York"))
-            et_txt = et.strftime("%-I:%M %p ET")
-        except Exception:
-            et_txt = ""
-        utc_txt = dt.astimezone(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-        return f"{utc_txt} ({et_txt})" if et_txt else utc_txt
+        return datetime.fromisoformat(str(iso).replace("Z", "+00:00"))
     except Exception:
+        return None
+
+
+def _fmt_et_short(iso: str) -> str:
+    """'2026-07-04T13:39:36Z' -> '9:39 AM ET' (falls back to UTC text)."""
+    dt = _parse_ts(iso)
+    if dt is None:
         return str(iso)
+    try:
+        from zoneinfo import ZoneInfo
+        return dt.astimezone(ZoneInfo("America/New_York")).strftime("%-I:%M %p ET")
+    except Exception:
+        return dt.astimezone(timezone.utc).strftime("%H:%M UTC")
+
+
+def _fmt_ts_full(iso: str) -> str:
+    dt = _parse_ts(iso)
+    if dt is None:
+        return str(iso)
+    return dt.astimezone(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
 
 def _fmt_val(value, kind: str) -> str:
@@ -83,99 +120,256 @@ def _fmt_val(value, kind: str) -> str:
     return f"{v:.1f}%" if kind == "probability" else f"{v:.2f}"
 
 
-def _tag_pill(tag: str) -> str:
+def _abbrev(team: str) -> str:
+    t = str(team or "")
+    if t in _ABBREV:
+        return _ABBREV[t]
+    return "".join(w[0] for w in t.split()[:3]).upper() or "?"
+
+
+def _hue(text: str) -> int:
+    h = 0
+    for ch in str(text):
+        h = (h * 31 + ord(ch)) % 360
+    return h
+
+
+def _monogram(team: str, size: int = 34) -> str:
+    ab = _abbrev(team)
+    hue = _hue(ab)
+    fs = 11 if len(ab) > 2 else 12
+    return (f"<span class='mv-mono' style='width:{size}px;height:{size}px;font-size:{fs}px;"
+            f"background:hsl({hue} 45% 22%);border-color:hsl({hue} 55% 38%);"
+            f"color:hsl({hue} 80% 78%)'>{escape(ab)}</span>")
+
+
+def _matchup(m: dict) -> str:
+    return f"{_abbrev(m.get('team'))} vs {_abbrev(m.get('opponent'))}"
+
+
+def _tag_pill(tag: str, small: bool = False) -> str:
     bg, fg = _TAG_COLORS.get(tag, _TAG_COLORS["Unknown"])
-    return (f"<span style='display:inline-block;padding:3px 10px;border-radius:999px;"
+    pad = "2px 9px" if small else "4px 11px"
+    return (f"<span style='display:inline-block;padding:{pad};border-radius:999px;"
             f"background:{bg};color:{fg};font-size:11px;font-weight:800;letter-spacing:.03em;"
-            f"white-space:nowrap'>{escape(tag)}</span>")
+            f"white-space:nowrap'>{escape(_TAG_DISPLAY.get(tag, tag))}</span>")
 
 
-def _mover_card(m: dict, market_key: str, latest_ts: str, k8_by_pid: dict) -> str:
+def _spark_points(m: dict) -> list:
+    """Points for the sparkline: optional future ``history`` list, else the
+    two guaranteed endpoints. Never raises, never fewer than 2 points."""
+    pts = []
+    hist = m.get("history")
+    if isinstance(hist, list):
+        for v in hist:
+            try:
+                pts.append(float(v))
+            except (TypeError, ValueError):
+                continue
+    if len(pts) < 2:
+        try:
+            pts = [float(m.get("morning_value")), float(m.get("current_value"))]
+        except (TypeError, ValueError):
+            return []
+    return pts
+
+
+def _sparkline(m: dict) -> str:
+    pts = _spark_points(m)
+    if len(pts) < 2:
+        return ""
+    w, h, pad = 76, 26, 4
+    lo, hi = min(pts), max(pts)
+    rng = (hi - lo) or 1.0
+    step = (w - 2 * pad) / (len(pts) - 1)
+    xy = [(pad + i * step, h - pad - (v - lo) / rng * (h - 2 * pad)) for i, v in enumerate(pts)]
+    poly = " ".join(f"{x:.1f},{y:.1f}" for x, y in xy)
+    color = _UP if m.get("direction") == "up" else _DOWN
+    dots = "".join(f"<circle cx='{x:.1f}' cy='{y:.1f}' r='1.6' fill='#475569'/>" for x, y in xy[:-1])
+    ex, ey = xy[-1]
+    return (f"<svg class='mv-spark' viewBox='0 0 {w} {h}' width='{w}' height='{h}' aria-hidden='true'>"
+            f"<polyline points='{poly}' fill='none' stroke='{color}' stroke-width='2'"
+            " stroke-linecap='round' stroke-linejoin='round' opacity='.85'/>"
+            f"{dots}<circle cx='{ex:.1f}' cy='{ey:.1f}' r='2.6' fill='{color}'/></svg>")
+
+
+def _delta_chip(m: dict) -> str:
     up = m.get("direction") == "up"
-    color = "#4ade80" if up else "#f87171"
+    color = _UP if up else _DOWN
     arrow = "▲" if up else "▼"
     kind = m.get("kind", "probability")
-    delta = m.get("abs_change")
     try:
-        delta_txt = f"{float(delta):+.1f}{'pp' if kind == 'probability' else ''}"
+        txt = f"{float(m.get('abs_change')):+.1f}{'pp' if kind == 'probability' else ''}"
     except (TypeError, ValueError):
-        delta_txt = "—"
+        txt = "—"
+    return (f"<span style='color:{color};font-weight:900;font-size:15px;white-space:nowrap'>"
+            f"{arrow} {escape(txt)}</span>")
+
+
+def _mover_card(m: dict, market_key: str, updated_short: str, k8_by_pid: dict) -> str:
+    up = m.get("direction") == "up"
+    color = _UP if up else _DOWN
+    kind = m.get("kind", "probability")
     tag = str(m.get("reason_tag") or "Unknown")
     detail = str(m.get("reason_detail") or "")
-    detail_html = (f"<div style='font-size:12px;color:#94a3b8;margin-top:5px'>↳ {escape(detail)}</div>"
-                   if detail else "")
+    detail_html = (f"<div class='mv-detail'>↳ {escape(detail)}</div>" if detail else "")
     k8_html = ""
     if market_key == "proj_pitcher_k":
         k8 = k8_by_pid.get(str(m.get("player_id") or ""))
         if k8:
-            k8_html = (f"<div style='font-size:12px;color:#94a3b8;margin-top:5px'>8+ K prob: "
+            k8_html = (f"<div class='mv-detail'>8+ K prob: "
                        f"{_fmt_val(k8.get('morning_value'), 'probability')} → "
                        f"{_fmt_val(k8.get('current_value'), 'probability')}</div>")
     return (
         f"<div class='mv-card' data-market='{escape(market_key)}' data-reason='{escape(tag)}'"
-        " style='background:var(--surface,#121929);border:1px solid var(--line,#1e293b);"
-        f"border-left:3px solid {color};border-radius:12px;padding:12px 14px'>"
-        "<div style='display:flex;justify-content:space-between;align-items:flex-start;gap:10px'>"
-        "<div style='min-width:0'>"
-        f"<div style='font-weight:800;color:var(--ink,#f8fafc);font-size:15px'>{escape(str(m.get('player_name', '')))}</div>"
-        f"<div style='font-size:12px;color:#94a3b8;margin-top:2px'>{escape(str(m.get('team', '')))} vs {escape(str(m.get('opponent', '')))}</div>"
+        f" style='border-left:3px solid {color}'>"
+        "<div class='mv-card-top'>"
+        f"{_monogram(m.get('team'))}"
+        "<div class='mv-id'>"
+        f"<div class='mv-name'>{escape(str(m.get('player_name', '')))}</div>"
+        f"<div class='mv-match'>{escape(_matchup(m))}</div>"
         "</div>"
-        f"<div style='flex:0 0 auto;text-align:right;color:{color};font-weight:900;font-size:16px;white-space:nowrap'>{arrow} {escape(delta_txt)}</div>"
+        f"{_delta_chip(m)}"
         "</div>"
-        f"<div style='margin-top:8px;font-size:15px;color:#e2e8f0;font-weight:700'>"
-        f"{_fmt_val(m.get('morning_value'), kind)} <span style='color:#64748b'>→</span> "
+        "<div class='mv-vals'>"
+        f"<div class='mv-nums'>{_fmt_val(m.get('morning_value'), kind)}"
+        f"<span class='mv-arrow'>→</span>"
         f"<span style='color:{color}'>{_fmt_val(m.get('current_value'), kind)}</span></div>"
-        f"<div style='margin-top:7px'>{_tag_pill(tag)}</div>"
+        f"{_sparkline(m)}"
+        "</div>"
+        f"<div class='mv-tags'>{_tag_pill(tag)}</div>"
         + detail_html + k8_html +
-        f"<div style='font-size:10px;color:#64748b;margin-top:7px'>refresh {escape(_fmt_ts(latest_ts))}</div>"
+        f"<div class='mv-ts'>Updated {escape(updated_short)}</div>"
         "</div>"
     )
 
 
-def _section(sec_id: str, title: str, sub: str, inner: str, market_attr: str = "") -> str:
-    attr = f" data-market-section='{escape(market_attr)}'" if market_attr else ""
-    return (f"<section class='panel mv-section' id='{escape(sec_id)}'{attr}>"
-            "<div class='panel-head'><div>"
-            f"<div class='eyebrow'>Biggest Movers</div><h2>{escape(title)}</h2></div>"
-            f"<p class='muted' style='margin:0;font-size:12px'>{escape(sub)}</p></div>"
-            + inner + "</section>")
-
-
-def _names_list(names: list, empty_msg: str) -> str:
-    if not names:
-        return f"<p class='muted' style='margin-top:10px'>{escape(empty_msg)}</p>"
-    pills = "".join(
-        f"<span style='display:inline-block;margin:3px;padding:5px 11px;border-radius:999px;"
-        f"background:rgba(148,163,184,.10);border:1px solid var(--line,#1e293b);"
-        f"color:#cbd5e1;font-size:12px'>{escape(str(n))}</span>"
-        for n in names
-    )
-    return f"<div style='margin-top:10px'>{pills}</div>"
-
-
-def _filter_bar(tags_present: list) -> str:
-    def btn(label, group, value, active=False):
-        cls = "mv-fbtn active" if active else "mv-fbtn"
-        return (f"<button class='{cls}' data-fgroup='{group}' data-fval='{escape(value)}'"
-                " style='padding:7px 14px;border-radius:999px;border:1px solid var(--line,#1e293b);"
-                "background:var(--surface,#121929);color:#cbd5e1;font-size:13px;font-weight:700;"
-                "cursor:pointer'>"
-                f"{escape(label)}</button>")
-    market_btns = (btn("All", "market", "all", True) + btn("HR", "market", "hr_prob")
-                   + btn("Hits", "market", "hit_prob") + btn("Pitchers", "market", "proj_pitcher_k"))
-    tag_btns = btn("All reasons", "reason", "all", True) + "".join(
-        btn(t, "reason", t) for t in tags_present)
+def _hero_card(emoji: str, label: str, m: dict | None, kind: str) -> str:
+    if not m:
+        return (f"<div class='mv-hero-card'><div class='mv-hero-label'>{escape(emoji + ' ' + label)}</div>"
+                "<div class='mv-hero-empty'>No qualifying move yet</div></div>")
+    up = m.get("direction") == "up"
+    color = _UP if up else _DOWN
+    tag = str(m.get("reason_tag") or "Unknown")
     return (
-        "<div style='display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 6px'>"
-        "<span style='font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;font-weight:800'>Market</span>"
-        + market_btns +
+        f"<div class='mv-hero-card' style='border-top:3px solid {color}'>"
+        f"<div class='mv-hero-label'>{escape(emoji + ' ' + label)}</div>"
+        "<div class='mv-hero-row'>"
+        f"{_monogram(m.get('team'), 30)}"
+        f"<div class='mv-hero-name'>{escape(str(m.get('player_name', '')))}</div>"
+        f"{_delta_chip(m)}"
         "</div>"
-        "<div style='display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 14px'>"
-        "<span style='font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;font-weight:800'>Reason</span>"
-        + tag_btns +
+        f"<div class='mv-hero-vals'>{_fmt_val(m.get('morning_value'), kind)}"
+        f"<span class='mv-arrow'>→</span>"
+        f"<span style='color:{color};font-weight:800'>{_fmt_val(m.get('current_value'), kind)}</span>"
+        f"&nbsp;&nbsp;{_tag_pill(tag, small=True)}</div>"
         "</div>"
     )
 
+
+def _reason_summary(reason_mix: dict) -> str:
+    if not reason_mix:
+        return ""
+    total = sum(reason_mix.values()) or 1
+    order = sorted(reason_mix, key=lambda t: -reason_mix[t])
+    segs = "".join(
+        f"<span style='display:block;height:100%;float:left;width:{reason_mix[t] / total * 100:.2f}%;"
+        f"background:{_TAG_COLORS.get(t, _TAG_COLORS['Unknown'])[1]}'></span>"
+        for t in order)
+    chips = "".join(
+        f"<span class='mv-mixchip'>"
+        f"<span class='mv-dot' style='background:{_TAG_COLORS.get(t, _TAG_COLORS['Unknown'])[1]}'></span>"
+        f"<strong>{reason_mix[t]}</strong>&nbsp;{escape(_TAG_DISPLAY.get(t, t))}</span>"
+        for t in order)
+    return ("<div class='mv-mix'>"
+            "<div class='mv-mix-title'>Today's Changes</div>"
+            f"<div class='mv-mixbar'>{segs}</div>"
+            f"<div class='mv-mixchips'>{chips}</div>"
+            "</div>")
+
+
+def _names_details(title: str, count: int, names: list, empty_msg: str, note: str = "") -> str:
+    pills = "".join(f"<span class='mv-pill'>{escape(str(n))}</span>" for n in names)
+    inner = (f"<div style='margin-top:10px'>{pills}</div>" if names
+             else f"<p class='muted' style='margin:10px 0 0'>{escape(empty_msg)}</p>")
+    note_html = f"<p class='muted' style='font-size:12px;margin:8px 0 0'>{escape(note)}</p>" if note else ""
+    return (f"<details class='mv-details'><summary>{escape(title)}"
+            f"<span class='mv-count'>{count}</span></summary>{inner}{note_html}</details>")
+
+
+_STYLE = """
+<style>
+.mv-wrap{max-width:1100px;margin:0 auto}
+.mv-wrap .panel{padding:16px;margin-bottom:14px}
+.mv-strip{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin-top:10px;
+  font-size:13px;color:#cbd5e1}
+.mv-strip b{color:#f8fafc;font-weight:800}
+.mv-copy{color:#94a3b8;font-size:13px;line-height:1.5;margin:8px 0 0}
+.mv-hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:0 0 14px}
+.mv-hero-card{background:linear-gradient(160deg,rgba(30,41,59,.55),rgba(15,23,42,.92));
+  border:1px solid var(--line,#1e293b);border-radius:14px;padding:12px 14px;min-width:0}
+.mv-hero-label{font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#93c5fd}
+.mv-hero-row{display:flex;align-items:center;gap:9px;margin-top:9px}
+.mv-hero-name{flex:1;min-width:0;font-weight:800;font-size:15px;color:#f8fafc;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mv-hero-vals{margin-top:7px;font-size:14px;color:#cbd5e1;font-weight:600}
+.mv-hero-empty{margin-top:12px;color:#64748b;font-size:13px}
+.mv-mono{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+  border-radius:50%;border:1px solid;font-weight:900;letter-spacing:.02em}
+.mv-mix{background:var(--surface,#121929);border:1px solid var(--line,#1e293b);
+  border-radius:14px;padding:12px 14px;margin:0 0 14px}
+.mv-mix-title{font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#93c5fd}
+.mv-mixbar{height:10px;border-radius:999px;overflow:hidden;background:rgba(148,163,184,.12);margin-top:9px}
+.mv-mixchips{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:9px}
+.mv-mixchip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#cbd5e1}
+.mv-mixchip strong{color:#f8fafc}
+.mv-dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+.mv-sticky{position:sticky;top:0;z-index:40;background:rgba(9,14,26,.94);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  margin:0 -6px 14px;padding:9px 6px;border-bottom:1px solid var(--line,#1e293b)}
+.mv-frow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.mv-frow+.mv-frow{margin-top:6px}
+.mv-flabel{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;
+  font-weight:900;flex:0 0 52px}
+.mv-fbtn{padding:9px 15px;min-height:40px;border-radius:999px;border:1px solid var(--line,#1e293b);
+  background:var(--surface,#121929);color:#cbd5e1;font-size:13px;font-weight:700;cursor:pointer}
+.mv-fbtn.active{border-color:#3b82f6;color:#fff;background:rgba(59,130,246,.16)}
+.mv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:10px;margin-top:12px}
+.mv-card{background:var(--surface,#121929);border:1px solid var(--line,#1e293b);
+  border-radius:14px;padding:13px 14px;min-width:0}
+.mv-card-top{display:flex;align-items:center;gap:10px}
+.mv-id{flex:1;min-width:0}
+.mv-name{font-weight:800;color:var(--ink,#f8fafc);font-size:15px;line-height:1.25;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mv-match{font-size:12px;color:#94a3b8;margin-top:1px;font-weight:600;letter-spacing:.02em}
+.mv-vals{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}
+.mv-nums{font-size:16px;color:#e2e8f0;font-weight:800}
+.mv-arrow{color:#64748b;margin:0 6px;font-weight:400}
+.mv-spark{flex:0 0 auto}
+.mv-tags{margin-top:9px}
+.mv-detail{font-size:12px;color:#94a3b8;margin-top:6px;line-height:1.45}
+.mv-ts{font-size:10.5px;color:#64748b;margin-top:8px}
+.mv-pill{display:inline-block;margin:3px;padding:6px 12px;border-radius:999px;
+  background:rgba(148,163,184,.10);border:1px solid var(--line,#1e293b);color:#cbd5e1;font-size:12px}
+.mv-details{background:var(--surface,#121929);border:1px solid var(--line,#1e293b);
+  border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.mv-details summary{cursor:pointer;font-weight:800;color:var(--ink,#f8fafc);font-size:14px;
+  min-height:28px;display:flex;align-items:center;gap:8px;list-style:none}
+.mv-details summary::-webkit-details-marker{display:none}
+.mv-details summary::before{content:'▸';color:#64748b;transition:transform .15s}
+.mv-details[open] summary::before{transform:rotate(90deg)}
+.mv-count{background:rgba(59,130,246,.16);color:#93c5fd;border-radius:999px;
+  padding:2px 9px;font-size:12px;font-weight:800}
+.mv-warn{color:#fca5a5;font-weight:700;margin:10px 0 0;font-size:13px}
+.mv-collapsed .mv-more{display:none !important}
+.mv-toggle{width:100%;text-align:center}
+@media(max-width:640px){
+  .mv-wrap .panel{padding:13px}
+  .mv-flabel{flex:0 0 100%}
+  .mv-nums{font-size:15px}
+}
+</style>
+"""
 
 _FILTER_JS = """
 <script>
@@ -189,34 +383,36 @@ _FILTER_JS = """
     });
     document.querySelectorAll(".mv-section[data-market-section]").forEach(function (s) {
       var okM = state.market === "all" || s.dataset.marketSection === state.market;
-      var anyVisible = Array.prototype.some.call(
+      s.style.display = okM ? "" : "none";
+      var any = Array.prototype.some.call(
         s.querySelectorAll(".mv-card"), function (c) { return c.style.display !== "none"; });
-      s.style.display = (okM && (anyVisible || state.reason === "all")) ? "" : "none";
-      if (okM && !anyVisible) {
-        var e = s.querySelector(".mv-noneleft");
-        if (e) e.style.display = "";
-      } else {
-        var e2 = s.querySelector(".mv-noneleft");
-        if (e2) e2.style.display = "none";
-      }
+      var e = s.querySelector(".mv-noneleft");
+      if (e) e.style.display = any ? "none" : "";
     });
   }
-  document.querySelectorAll(".mv-fbtn").forEach(function (b) {
+  document.querySelectorAll(".mv-fbtn[data-fgroup]").forEach(function (b) {
     b.addEventListener("click", function () {
       state[b.dataset.fgroup] = b.dataset.fval;
-      document.querySelectorAll(".mv-fbtn[data-fgroup='" + b.dataset.fgroup + "']").forEach(function (x) {
-        x.classList.remove("active");
-        x.style.borderColor = "";
-        x.style.color = "#cbd5e1";
-      });
+      document.querySelectorAll(".mv-fbtn[data-fgroup='" + b.dataset.fgroup + "']")
+        .forEach(function (x) { x.classList.remove("active"); });
       b.classList.add("active");
-      b.style.borderColor = "#3b82f6";
-      b.style.color = "#fff";
+      if (state.market !== "all" || state.reason !== "all") {
+        // filters operate on the full set — auto-expand collapsed sections
+        document.querySelectorAll(".mv-section.mv-collapsed").forEach(function (s) {
+          s.classList.remove("mv-collapsed");
+          var t = s.querySelector(".mv-toggle");
+          if (t) t.textContent = t.dataset.less;
+        });
+      }
       apply();
     });
   });
-  document.querySelectorAll(".mv-fbtn.active").forEach(function (b) {
-    b.style.borderColor = "#3b82f6"; b.style.color = "#fff";
+  document.querySelectorAll(".mv-toggle").forEach(function (t) {
+    t.addEventListener("click", function () {
+      var s = t.closest(".mv-section");
+      var collapsed = s.classList.toggle("mv-collapsed");
+      t.textContent = collapsed ? t.dataset.more : t.dataset.less;
+    });
   });
   apply();
 })();
@@ -240,81 +436,108 @@ def build_body() -> str:
         sections = payload.get("sections") or {}
         reason_mix = payload.get("reason_mix") or {}
         latest_ts = str(meta.get("latest_ts") or "")
+        updated_short = _fmt_et_short(latest_ts)
+        refresh_label = str(meta.get("latest_refresh_type") or "—").replace("_", " ").title()
 
-        # header / status strip
-        facts = [
-            ("Slate", str(meta.get("slate_date") or "—")),
-            ("Last updated", _fmt_ts(latest_ts)),
-            ("Baseline", f"{_fmt_ts(str(meta.get('baseline_ts') or ''))} ({meta.get('baseline_type', '—')})"),
-            ("Snapshots today", str(meta.get("snapshot_count") or "—")),
-            ("Latest refresh type", str(meta.get("latest_refresh_type") or "—")),
-        ]
-        facts_html = "".join(
-            "<div style='background:var(--surface,#121929);border:1px solid var(--line,#1e293b);"
-            "border-radius:12px;padding:10px 14px'>"
-            f"<div style='font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.04em'>{escape(k)}</div>"
-            f"<div style='font-size:13px;color:var(--ink,#f8fafc);font-weight:700;margin-top:3px'>{escape(v)}</div></div>"
-            for k, v in facts
+        # 1) compact summary strip + explanatory copy
+        baseline_ts = str(meta.get("baseline_ts") or "")
+        baseline_title = f"{_fmt_ts_full(baseline_ts)} ({meta.get('baseline_type') or ''})"
+        strip = (
+            "<div class='mv-strip'>"
+            f"<span title='{escape(_fmt_ts_full(latest_ts))}'>🕒 Updated: <b>{escape(updated_short)}</b></span>"
+            f"<span>📸 Snapshots: <b>{escape(str(meta.get('snapshot_count') or '—'))}</b></span>"
+            f"<span>🔄 Refresh: <b>{escape(refresh_label)}</b></span>"
+            f"<span title='{escape(baseline_title)}'>"
+            f"📅 Baseline: <b>{escape(_fmt_et_short(baseline_ts))}</b></span>"
+            f"<span>📆 Slate: <b>{escape(str(meta.get('slate_date') or '—'))}</b></span>"
+            "</div>"
         )
-        integrity = diagnostics.get("frozen_changed_rows", 0)
-        integrity_html = ""
-        if integrity:
-            integrity_html = ("<p style='color:#fca5a5;font-weight:700;margin:10px 0 0'>⚠ frozen-game "
-                              f"integrity: {int(integrity)} started-game rows changed — investigate before trusting deltas.</p>")
+        integrity = int(diagnostics.get("frozen_changed_rows") or 0)
+        integrity_html = (f"<p class='mv-warn'>⚠ Frozen-game integrity: {integrity} started-game rows "
+                          "changed — investigate before trusting deltas.</p>") if integrity else ""
         header = ("<section class='panel'><div class='panel-head'><div>"
-                  "<div class='eyebrow'>Internal Preview</div><h2>MLB Biggest Movers</h2></div>"
-                  "<p class='muted' style='margin:0;font-size:12px'>Reads the published movers artifact only — "
-                  "no model access, no recalculation.</p></div>"
-                  "<div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:6px'>"
-                  + facts_html + "</div>" + integrity_html + "</section>")
+                  "<div class='eyebrow'>Internal Preview</div><h2>MLB Biggest Movers</h2></div></div>"
+                  "<p class='mv-copy'>Probabilities move throughout the day as lineups, weather, and "
+                  "starting pitchers change. Everything below reads the published movers artifact — "
+                  "no model access, no recalculation.</p>"
+                  + strip + integrity_html + "</section>")
 
-        # mover sections
-        k8_by_pid = {str(m.get("player_id") or ""): m for m in sections.get("pitcher_k_8plus") or []}
+        # 2) hero — today's biggest moves
+        def top1(key):
+            lst = sections.get(key) or []
+            return lst[0] if lst else None
+        hero = ("<div class='mv-hero'>"
+                + _hero_card("🔥", "Biggest HR Move", top1("hr_prob"), "probability")
+                + _hero_card("⚾", "Biggest Hit Move", top1("hit_prob"), "probability")
+                + _hero_card("🎯", "Biggest Pitcher Move", top1("proj_pitcher_k"), "projection")
+                + "</div>")
+
+        # 3) reason summary near the top
+        mix_html = _reason_summary(reason_mix)
+
+        # 4) sticky filters
         tags_present = sorted(reason_mix.keys(), key=lambda t: -reason_mix[t])
+
+        def btn(label, group, value, active=False):
+            cls = "mv-fbtn active" if active else "mv-fbtn"
+            return (f"<button class='{cls}' data-fgroup='{group}' data-fval='{escape(value)}'>"
+                    f"{escape(label)}</button>")
+        filters = (
+            "<div class='mv-sticky'>"
+            "<div class='mv-frow'><span class='mv-flabel'>Market</span>"
+            + btn("All", "market", "all", True) + btn("HR", "market", "hr_prob")
+            + btn("Hits", "market", "hit_prob") + btn("Pitchers", "market", "proj_pitcher_k")
+            + "</div>"
+            "<div class='mv-frow'><span class='mv-flabel'>Reason</span>"
+            + btn("All reasons", "reason", "all", True)
+            + "".join(btn(_TAG_DISPLAY.get(t, t), "reason", t) for t in tags_present)
+            + "</div></div>"
+        )
+
+        # 5) mover sections
+        k8_by_pid = {str(m.get("player_id") or ""): m for m in sections.get("pitcher_k_8plus") or []}
         body_sections = []
-        for market_key, _fkey, title, sub in _SECTION_DEFS:
+        for market_key, title, sub in _SECTION_DEFS:
             movers = sections.get(market_key) or []
+            collapsed = len(movers) > 5
             if movers:
-                cards = "".join(_mover_card(m, market_key, latest_ts, k8_by_pid) for m in movers)
-                inner = ("<div style='display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));"
-                         "gap:10px;margin-top:12px'>" + cards + "</div>"
-                         "<p class='mv-noneleft muted' style='display:none;margin-top:10px'>No movers match the current filters.</p>")
+                cards = "".join(
+                    _mover_card(m, market_key, updated_short, k8_by_pid)
+                    .replace("class='mv-card'", "class='mv-card mv-more'" if i >= 5 else "class='mv-card'", 1)
+                    for i, m in enumerate(movers))
+                toggle = (f"<button class='mv-fbtn mv-toggle' data-more='Show all {len(movers)} ▾'"
+                          f" data-less='Show top 5 ▴' style='margin-top:10px'>Show all {len(movers)} ▾</button>"
+                          if collapsed else "")
+                inner = (f"<div class='mv-grid'>{cards}</div>" + toggle +
+                         "<p class='mv-noneleft muted' style='display:none;margin-top:10px'>"
+                         "No movers match the current filters.</p>")
             else:
                 inner = "<p class='muted' style='margin-top:10px'>No qualifying movers in this market yet.</p>"
-            body_sections.append(_section(f"mv-{market_key}", title, sub, inner, market_attr=market_key))
+            cls = "panel mv-section mv-collapsed" if collapsed else "panel mv-section"
+            body_sections.append(
+                f"<section class='{cls}' data-market-section='{escape(market_key)}'>"
+                "<div class='panel-head'><div>"
+                f"<div class='eyebrow'>Biggest Movers</div><h2>{escape(title)}</h2></div>"
+                f"<p class='muted' style='margin:0;font-size:12px'>{escape(sub)}</p></div>"
+                + inner + "</section>")
 
-        # new / dropped / reasons
+        # 6) collapsible new / dropped
         new_names = diagnostics.get("new_players") or []
         dropped_names = diagnostics.get("dropped_players") or []
-        body_sections.append(_section(
-            "mv-new", "New Players",
-            f"On the board now but not in the morning baseline ({int(diagnostics.get('new_player_count') or 0)}).",
-            _names_list(new_names, "No players added since the morning baseline.")))
-        body_sections.append(_section(
-            "mv-dropped", "Dropped Players",
-            f"In the morning baseline but off the board now ({int(diagnostics.get('dropped_player_count') or 0)}) — "
-            "usually bench players removed when lineups confirm.",
-            _names_list(dropped_names, "No players dropped since the morning baseline.")))
-
-        total = sum(reason_mix.values()) or 1
-        mix_rows = "".join(
-            "<div style='display:flex;align-items:center;gap:10px;margin-top:8px'>"
-            f"<div style='flex:0 0 190px'>{_tag_pill(t)}</div>"
-            f"<div style='flex:1;height:8px;border-radius:999px;background:rgba(148,163,184,.14);overflow:hidden'>"
-            f"<span style='display:block;height:100%;width:{reason_mix[t] / total * 100:.1f}%;"
-            f"background:{_TAG_COLORS.get(t, _TAG_COLORS['Unknown'])[1]}'></span></div>"
-            f"<div style='flex:0 0 60px;text-align:right;color:#cbd5e1;font-size:13px;font-weight:700'>{reason_mix[t]}</div>"
-            "</div>"
-            for t in tags_present
+        extras = (
+            _names_details("New Players", int(diagnostics.get("new_player_count") or 0), new_names,
+                           "No players added since the morning baseline.")
+            + _names_details("Dropped Players", int(diagnostics.get("dropped_player_count") or 0),
+                             dropped_names, "No players dropped since the morning baseline.",
+                             note="Usually bench players removed when lineups confirm.")
         )
-        body_sections.append(_section(
-            "mv-reasons", "Reason Summary",
-            "Attribution across ALL movers this slate (not just the top lists).",
-            mix_rows or "<p class='muted' style='margin-top:10px'>No movers to attribute yet.</p>"))
 
-        note = ("<p class='muted' style='font-size:12px;margin-top:4px'>Internal preview — admin-only, noindex. "
-                "Values are the published board's own numbers; \"Unknown\" means no rule matched, never a guess.</p>")
-        return (header + _filter_bar(tags_present) + "".join(body_sections) + note + _FILTER_JS)
+        note = ("<p class='muted' style='font-size:12px;margin-top:8px'>Internal preview — admin-only, "
+                "noindex. Values are the published board's own numbers; \"Unattributed\" means no "
+                "attribution rule matched, never a guess.</p>")
+
+        return ("<div class='mv-wrap'>" + _STYLE + header + hero + mix_html + filters
+                + "".join(body_sections) + extras + note + "</div>" + _FILTER_JS)
     except Exception:
         return ("<section class='panel'><div class='panel-head'><div>"
                 "<div class='eyebrow'>Biggest Movers</div><h2>Temporarily unavailable</h2></div></div>"
