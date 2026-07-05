@@ -80,10 +80,14 @@ def main() -> int:
         warnings.append("zero_predictions_graded")
     if backtest.get("brier") is None or backtest.get("log_loss") is None:
         warnings.append("missing_backtest_calibration_metrics")
-    if production.get("WNBA_PRODUCTION_STATUS") != "PASS":
+    production_status = production.get("WNBA_PRODUCTION_STATUS")
+    stale_output_blocked = production.get("stale_output_blocked")
+    if production_status != "PASS":
         warnings.append("production_status_not_pass")
-    if production.get("stale_output_blocked") != "yes":
-        warnings.append("stale_output_guard_not_confirmed")
+        if stale_output_blocked != "yes":
+            warnings.append("stale_output_guard_not_confirmed")
+    elif stale_output_blocked != "no":
+        warnings.append("fresh_publish_stale_output_block_unexpected")
 
     summary = {
         "generated_at_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
