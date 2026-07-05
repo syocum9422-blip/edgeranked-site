@@ -43,7 +43,7 @@
       ],
       "exists": true,
       "latest_date": "2026-07-04",
-      "modified_at_et": "2026-07-05T13:09:56.122234106-04:00",
+      "modified_at_et": "2026-07-05T13:12:15.299275637-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_player_games.csv",
       "rows": 18443
     },
@@ -62,7 +62,7 @@
       ],
       "exists": true,
       "latest_date": null,
-      "modified_at_et": "2026-07-05T13:09:57.045241117-04:00",
+      "modified_at_et": "2026-07-05T13:12:16.234282732-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_player_status.csv",
       "rows": 37
     },
@@ -80,7 +80,7 @@
       ],
       "exists": true,
       "latest_date": "2026-07-05",
-      "modified_at_et": "2026-07-05T13:09:57.594245195-04:00",
+      "modified_at_et": "2026-07-05T13:12:16.775286674-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_schedule_today.csv",
       "rows": 2
     },
@@ -103,7 +103,7 @@
       ],
       "exists": true,
       "latest_date": null,
-      "modified_at_et": "2026-07-05T13:09:56.908240080-04:00",
+      "modified_at_et": "2026-07-05T13:12:16.031281233-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_sportsbook_lines.csv",
       "rows": 182
     },
@@ -129,7 +129,7 @@
       ],
       "exists": true,
       "latest_date": "2026-07-04",
-      "modified_at_et": "2026-07-05T13:09:56.493237019-04:00",
+      "modified_at_et": "2026-07-05T13:12:15.655278444-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_team_context.csv",
       "rows": 1596
     },
@@ -283,10 +283,10 @@
       ],
       "exists": true,
       "latest_date": "2026-07-05",
-      "modified_at_et": "2026-07-05T13:10:40.603567839-04:00",
+      "modified_at_et": "2026-07-05T13:12:56.248580933-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/processed/wnba_today_features.csv",
       "rows": 47
     }
   },
-  "generated_at": "2026-07-05T13:10:49.818256-04:00"
+  "generated_at": "2026-07-05T13:13:06.812834-04:00"
 }
