@@ -168,7 +168,13 @@ def main() -> None:
 
     dataset = games.copy()
     dataset = add_schedule_features(dataset)
-    dataset = dataset.merge(positions[["player_key", "position"]], on="player_key", how="left")
+    if "position" not in dataset.columns:
+        dataset = dataset.merge(positions[["player_key", "position"]], on="player_key", how="left")
+    elif not positions.empty and "position" in positions.columns:
+        position_lookup = positions[["player_key", "position"]].drop_duplicates("player_key")
+        dataset = dataset.merge(position_lookup, on="player_key", how="left", suffixes=("", "_manual"))
+        dataset["position"] = dataset["position"].fillna(dataset.get("position_manual"))
+        dataset = dataset.drop(columns=[c for c in ["position_manual"] if c in dataset.columns])
     dataset["position"] = dataset["position"].fillna("UNK")
 
     team_game = build_team_game_aggregates(dataset)

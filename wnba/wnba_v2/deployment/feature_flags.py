@@ -14,7 +14,10 @@ from wnba_v2 import config as C
 
 PROMOTION_STATUS_PATH = C.OUTPUTS / "tracker" / "promotion_status.json"
 DASHBOARD_PATH = C.OUTPUTS / "tracker" / "dashboard.json"
+LEARNED_CALIBRATION_PATH = C.OUTPUTS / "phase53" / "phase53_learned_calibration.json"
+REALISM_SUMMARY_PATH = C.OUTPUTS / "phase53" / "phase53_validation_summary.json"
 
+REQUIRED_SIMULATION_VERSION = "sim-5.4-conserved"
 EMERGENCY_MODE = "staged_v2_emergency"
 DEFAULT_EMERGENCY_MAX_TRAFFIC_PERCENT = 10
 DEFAULT_MIN_GRADED_RECOMMENDATIONS = 500
@@ -134,6 +137,32 @@ def dashboard_status(path: Path = DASHBOARD_PATH) -> dict:
     return _json_file(path, "MISSING_DASHBOARD")
 
 
+def learned_calibration_status(path: Path = LEARNED_CALIBRATION_PATH) -> dict:
+    payload = _json_file(path, "MISSING_CALIBRATION")
+    return {
+        "path": str(path),
+        "exists": path.exists(),
+        "accepted": bool(payload.get("accepted")),
+        "phase": payload.get("phase"),
+        "decision": "ACCEPTED" if payload.get("accepted") else payload.get("decision", "MISSING_CALIBRATION"),
+    }
+
+
+def realism_status(path: Path = REALISM_SUMMARY_PATH) -> dict:
+    payload = _json_file(path, "MISSING_REALISM_SUMMARY")
+    checks = payload.get("acceptance_checks", {}) or {}
+    accepted = bool(payload.get("accepted") and checks.get("all_pass"))
+    return {
+        "path": str(path),
+        "exists": path.exists(),
+        "accepted": accepted,
+        "phase53_accepted": bool(payload.get("accepted")),
+        "all_pass": bool(checks.get("all_pass")),
+        "decision": "PASS" if accepted else payload.get("decision", "MISSING_REALISM_SUMMARY"),
+        "acceptance_checks": checks,
+    }
+
+
 def emergency_policy_status(dashboard: dict | None = None, promotion: dict | None = None) -> dict:
     dashboard = dashboard or dashboard_status()
     promotion = promotion or promotion_status()
@@ -150,6 +179,10 @@ def emergency_policy_status(dashboard: dict | None = None, promotion: dict | Non
     prod = dashboard.get("production_overall", {})
     combos = dashboard.get("combos", {})
     gate = dashboard.get("gate", {})
+    versions = dashboard.get("versions", {}) or {}
+    simulation_version = versions.get("simulation_version")
+    calibration = learned_calibration_status()
+    realism = realism_status()
     graded = int(dashboard.get("graded_recommendations") or 0)
 
     brier_delta = None if v2.get("brier") is None or prod.get("brier") is None else prod["brier"] - v2["brier"]
@@ -167,6 +200,10 @@ def emergency_policy_status(dashboard: dict | None = None, promotion: dict | Non
         rollback_reasons.append("v2_ece_worse_than_production")
 
     checks = {
+        "simulation_version_conserved": simulation_version == REQUIRED_SIMULATION_VERSION,
+        "learned_calibration_available": bool(calibration["exists"] and calibration["accepted"]),
+        "realism_gates_passing": bool(realism["accepted"]),
+        "old_independent_simulator_disabled": simulation_version == REQUIRED_SIMULATION_VERSION,
         "phase6_not_rollback_candidate": "phase6_rollback_candidate" not in rollback_reasons,
         "min_graded_recommendations": graded >= min_graded,
         "brier_materially_better": brier_delta is not None and brier_delta >= min_brier,
@@ -193,7 +230,11 @@ def emergency_policy_status(dashboard: dict | None = None, promotion: dict | Non
             "production_ece": prod.get("ece"),
             "ece_delta": ece_delta,
             "phase6_gate": gate.get("decision") or promotion.get("decision"),
+            "simulation_version": simulation_version,
+            "required_simulation_version": REQUIRED_SIMULATION_VERSION,
         },
+        "calibration": calibration,
+        "realism": realism,
         "thresholds": {
             "min_graded_recommendations": min_graded,
             "min_brier_improvement": min_brier,

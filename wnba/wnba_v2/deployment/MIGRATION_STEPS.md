@@ -1,63 +1,53 @@
-# WNBA V2 Migration Steps
+# WNBA V2 Conserved Simulator Migration Steps
 
-## Files Added
+## Files Updated
 
 - `wnba_v2/deployment/feature_flags.py`
 - `wnba_v2/deployment/DEPLOYMENT_PLAN.md`
 - `wnba_v2/deployment/ROLLBACK_PLAN.md`
 - `wnba_v2/deployment/MIGRATION_STEPS.md`
+- `wnba_v2/tracker/dashboard.py`
 
-## Files Updated
+## Migration
 
-- `wnba_model/pipeline/service.py`
-
-## Emergency Staged Migration
-
-1. Deploy with defaults unchanged:
+1. Refresh tracker/dashboard evidence:
 
 ```bash
-EDGERANKED_WNBA_SERVING_MODE=production
-EDGERANKED_WNBA_V2_TRAFFIC_PERCENT=0
-EDGERANKED_WNBA_V2_REQUIRE_PROMOTE_SIGNAL=1
-EDGERANKED_WNBA_V2_ROLLBACK_FORCE_PRODUCTION=0
+python3 -m wnba_v2.tracker.dashboard
+python3 -m wnba_v2.tracker.daily_run
 ```
 
-2. Refresh Phase 6 tracking:
+2. Confirm emergency policy:
 
 ```bash
-bash wnba_v2/pipeline/run_wnba_v2_data.sh all
-bash wnba_v2/pipeline/run_wnba_v2_tracker.sh
-```
-
-3. If Phase 6 is still `COLLECTING` but emergency checks pass, migrate to 5% emergency staged serving:
-
-```bash
-EDGERANKED_WNBA_SERVING_MODE=staged_v2_emergency
-EDGERANKED_WNBA_V2_TRAFFIC_PERCENT=5
-EDGERANKED_WNBA_V2_REQUIRE_PROMOTE_SIGNAL=1
-EDGERANKED_WNBA_V2_ROLLBACK_FORCE_PRODUCTION=0
-EDGERANKED_WNBA_V2_EMERGENCY_MAX_TRAFFIC_PERCENT=10
-EDGERANKED_WNBA_V2_EMERGENCY_MIN_GRADED=500
-EDGERANKED_WNBA_V2_EMERGENCY_MIN_BRIER_IMPROVEMENT=0.02
-EDGERANKED_WNBA_V2_EMERGENCY_MIN_COMBO_BRIER_IMPROVEMENT=0.02
-EDGERANKED_WNBA_V2_EMERGENCY_MIN_ECE_IMPROVEMENT=0.05
-```
-
-4. Check dashboard daily:
-
-```bash
-python -m wnba_v2.tracker.dashboard
 cat wnba_v2/outputs/tracker/dashboard.json
 cat wnba_v2/outputs/tracker/promotion_status.json
 ```
 
+Required:
+
+- `simulation_version = sim-5.4-conserved`
+- `emergency_policy.allowed = true`
+- `realism_gates_passing = true`
+- `learned_calibration_available = true`
+- `old_independent_simulator_disabled = true`
+
+3. Enable emergency staged serving at 5%:
+
+```bash
+export EDGERANKED_WNBA_SERVING_MODE=staged_v2_emergency
+export EDGERANKED_WNBA_V2_TRAFFIC_PERCENT=5
+export EDGERANKED_WNBA_V2_EMERGENCY_MAX_TRAFFIC_PERCENT=10
+python3 run_wnba_model.py
+```
+
+4. Do not exceed 10% emergency traffic until additional live evidence accumulates.
+
 5. Roll back with:
 
 ```bash
-EDGERANKED_WNBA_SERVING_MODE=production \
-EDGERANKED_WNBA_V2_TRAFFIC_PERCENT=0 \
-EDGERANKED_WNBA_V2_ROLLBACK_FORCE_PRODUCTION=1 \
-python run_wnba_model.py
+export EDGERANKED_WNBA_SERVING_MODE=production
+export EDGERANKED_WNBA_V2_TRAFFIC_PERCENT=0
+export EDGERANKED_WNBA_V2_ROLLBACK_FORCE_PRODUCTION=1
+python3 run_wnba_model.py
 ```
-
-6. Move from emergency mode to normal staged/full V2 only when the standard Phase 6 gate reaches `PROMOTE`.

@@ -60,7 +60,15 @@ SLATE_VALIDATION_MANIFEST_PATH = BASE_DIR / "data" / "processed" / "wnba_slate_v
 INGESTION_MANIFEST_PATH = BASE_DIR / "data" / "processed" / "wnba_ingestion_manifest.json"
 LEARNING_MANIFEST_PATH = BASE_DIR / "data" / "processed" / "wnba_learning_manifest.json"
 BACKTEST_REPORT_PATH = BASE_DIR / "data" / "processed" / "wnba_backtest_report.csv"
+V2_PHASE54_DIR = BASE_DIR / "wnba_v2" / "outputs" / "phase54"
+V2_CONSERVED_PROJECTIONS_PATH = V2_PHASE54_DIR / "v2_conserved_projections.csv"
+V2_CONSERVED_APP_VIEW_PATH = V2_PHASE54_DIR / "v2_conserved_app_view.csv"
 WNBA_TEAM_ALIASES = {"GS": "GSV", "LV": "LVA", "NY": "NYL", "WSH": "WAS", "LA": "LAS"}
+EMERGENCY_V2_STATUS: dict[str, object] = {
+    "applied": False,
+    "skipped_reason": "",
+    "skip_details": "",
+}
 
 
 def env_flag(name: str) -> bool:
@@ -116,17 +124,37 @@ def slate_audit_teams() -> list[str]:
     return sorted(set(audit["team"].dropna().astype(str).str.upper()))
 
 
+def projected_player_count() -> int:
+    try:
+        projections = pd.read_csv(PROJECTIONS_PATH)
+    except Exception:
+        return 0
+    if projections.empty:
+        return 0
+    key_col = next((c for c in ["PLAYER_KEY", "player_key", "PLAYER_NAME", "player_name"] if c in projections.columns), None)
+    if not key_col:
+        return int(len(projections))
+    return int(projections[key_col].dropna().astype(str).nunique())
+
+
 def player_audit_summary() -> tuple[int, int, dict[str, int]]:
     try:
         audit = pd.read_csv(PLAYER_COVERAGE_AUDIT_PATH)
     except Exception:
-        return 0, 0, {}
+        projected = projected_player_count()
+        return projected, 0, {"projection_board_no_player_audit": projected} if projected else {}
     if audit.empty or "included" not in audit.columns:
-        return 0, 0, {}
+        projected = projected_player_count()
+        return projected, 0, {"projection_board_empty_player_audit": projected} if projected else {}
     included = audit["included"].astype(bool)
     excluded = audit[~included].copy()
     reasons = Counter(excluded["reason"].fillna("unknown").astype(str)) if "reason" in excluded.columns else Counter()
-    return int(included.sum()), int((~included).sum()), dict(sorted(reasons.items()))
+    included_count = int(included.sum())
+    if included_count == 0 and projected_player_count() > 0:
+        projected = projected_player_count()
+        reasons["projection_board_without_slate_live_lines"] = projected
+        return projected, int((~included).sum()), dict(sorted(reasons.items()))
+    return included_count, int((~included).sum()), dict(sorted(reasons.items()))
 
 
 def write_production_status(
@@ -138,12 +166,17 @@ def write_production_status(
 ) -> dict:
     flags = load_flags()
     included_players, excluded_players, excluded_reasons = player_audit_summary()
+    emergency_v2_skipped = bool(EMERGENCY_V2_STATUS.get("skipped_reason"))
     payload = {
         "WNBA_PRODUCTION_STATUS": status,
         "status": status.lower(),
-        "serving_mode": "production" if flags.rollback_force_production else flags.serving_mode,
-        "v2_traffic_percent": 0 if flags.rollback_force_production else flags.traffic_percent,
+        "serving_mode": "production" if flags.rollback_force_production or emergency_v2_skipped else flags.serving_mode,
+        "configured_serving_mode": flags.serving_mode,
+        "v2_traffic_percent": 0 if flags.rollback_force_production or emergency_v2_skipped else flags.traffic_percent,
         "v2_rollback_force_production": flags.rollback_force_production,
+        "emergency_v2_applied": bool(EMERGENCY_V2_STATUS.get("applied")),
+        "emergency_v2_skipped_reason": str(EMERGENCY_V2_STATUS.get("skipped_reason") or ""),
+        "emergency_v2_skip_details": str(EMERGENCY_V2_STATUS.get("skip_details") or ""),
         "generated_at": pd.Timestamp.now(tz="America/New_York").isoformat(),
         "slate_date": str(selected_slate_date() or today_et_date()),
         "canonical_teams": slate_audit_teams(),
@@ -174,6 +207,9 @@ def print_production_summary(payload: dict) -> None:
         "included_players",
         "excluded_players",
         "excluded_reasons",
+        "serving_mode",
+        "emergency_v2_applied",
+        "emergency_v2_skipped_reason",
         "published",
         "stale_output_blocked",
     ]:
@@ -604,6 +640,65 @@ def ensure_projection_outputs() -> None:
     validate_csv(SIMULATION_DETAIL_PATH, "wnba_simulation_detail.csv", allow_empty=True)
 
 
+def _normalize_v2_projection_columns(df: pd.DataFrame) -> pd.DataFrame:
+    out = df.copy()
+    rename = {"TEAM": "TEAM_ABBREVIATION", "OPPONENT": "OPPONENT_ABBREVIATION"}
+    out = out.rename(columns={k: v for k, v in rename.items() if k in out.columns and v not in out.columns})
+    if "OPPONENT_ABBREVIATION" in out.columns and "OPPONENT" not in out.columns:
+        out["OPPONENT"] = out["OPPONENT_ABBREVIATION"]
+    if "MATCHUP" not in out.columns and {"TEAM_ABBREVIATION", "OPPONENT_ABBREVIATION"}.issubset(out.columns):
+        out["MATCHUP"] = out["TEAM_ABBREVIATION"].astype(str) + " vs " + out["OPPONENT_ABBREVIATION"].astype(str)
+    if "CONFIDENCE_LABEL" not in out.columns:
+        out["CONFIDENCE_LABEL"] = "V2 Conserved"
+    if "MODEL_CONFIDENCE" not in out.columns:
+        out["MODEL_CONFIDENCE"] = "V2_CONSERVED"
+    if "confidence" not in out.columns:
+        out["confidence"] = "v2_conserved"
+    return out
+
+
+def _skip_emergency_v2(reason: str, details: str) -> bool:
+    EMERGENCY_V2_STATUS.update({"applied": False, "skipped_reason": reason, "skip_details": details})
+    print(f"Skipping emergency conserved V2 outputs: reason={reason}; {details}")
+    print("Continuing with freshly generated production projections; publish safety checks still apply.")
+    return False
+
+
+def apply_emergency_conserved_v2_outputs(flags) -> bool:
+    if not flags.emergency_staged or flags.rollback_force_production:
+        return False
+    EMERGENCY_V2_STATUS.update({"applied": False, "skipped_reason": "", "skip_details": ""})
+    for path in [V2_CONSERVED_PROJECTIONS_PATH, V2_CONSERVED_APP_VIEW_PATH]:
+        if not path.exists():
+            raise FileNotFoundError(f"Missing conserved V2 publish artifact: {path}")
+    v2_proj = _normalize_v2_projection_columns(pd.read_csv(V2_CONSERVED_PROJECTIONS_PATH))
+    v2_app = pd.read_csv(V2_CONSERVED_APP_VIEW_PATH)
+    if v2_proj.empty or v2_app.empty:
+        raise ValueError("Conserved V2 publish artifacts are empty.")
+    expected_date = selected_slate_date() or today_et_date()
+    for label, frame in [("conserved projections", v2_proj), ("conserved app view", v2_app)]:
+        latest = latest_date_from_columns(frame, ["GAME_DATE", "game_date", "DATE"])
+        if latest != expected_date:
+            return _skip_emergency_v2(
+                "stale_conserved_outputs",
+                f"{label} latest_date={latest} expected_date={expected_date}",
+            )
+    slate_teams = set(slate_audit_teams())
+    v2_projection_teams = teams_from_column(v2_proj, "TEAM_ABBREVIATION", "team", "TEAM")
+    v2_app_teams = teams_from_column(v2_app, "TEAM", "TEAM_ABBREVIATION", "team")
+    if v2_projection_teams != slate_teams or v2_app_teams != slate_teams:
+        return _skip_emergency_v2(
+            "slate_mismatch",
+            "conserved V2 teams do not match canonical slate: "
+            f"slate={sorted(slate_teams)} projections={sorted(v2_projection_teams)} app_view={sorted(v2_app_teams)}",
+        )
+    v2_proj.to_csv(PROJECTIONS_PATH, index=False)
+    v2_app.to_csv(APP_VIEW_PROJECTIONS_PATH, index=False)
+    EMERGENCY_V2_STATUS.update({"applied": True, "skipped_reason": "", "skip_details": ""})
+    print(f"Applied emergency conserved V2 outputs to publish path: projections={len(v2_proj)} app_rows={len(v2_app)}")
+    return True
+
+
 def ensure_best_bet_outputs() -> None:
     allow_empty = env_flag("EDGERANKED_WNBA_ALLOW_EMPTY_BEST_BETS")
     validate_current_file(BEST_BETS_PATH, "wnba_best_bets_today.csv", ["DATE", "bet_date"], allow_empty=allow_empty)
@@ -865,6 +960,7 @@ def main() -> None:
 
         run_step(*PIPELINE_STEPS[4])
         run_step(*PIPELINE_STEPS[5])
+        apply_emergency_conserved_v2_outputs(flags)
         ensure_projection_outputs()
 
         run_step(*PIPELINE_STEPS[6])
@@ -884,7 +980,7 @@ def main() -> None:
         raise
 
     refresh_last_good_snapshot()
-    payload = write_production_status("PASS", published="no", stale_output_blocked="yes")
+    payload = write_production_status("PASS", published="yes", stale_output_blocked="no")
     print_production_summary(payload)
     print("\nWNBA pipeline completed successfully.")
 

@@ -16,6 +16,7 @@ import pandas as pd
 from wnba_v2 import config as C
 from wnba_v2.tracker import versions as V
 from wnba_v2.tracker.ledger import load_ledger
+from wnba_v2.deployment.feature_flags import emergency_policy_status
 
 DASH_JSON = C.OUTPUTS / "tracker" / "dashboard.json"
 DASH_MD = C.OUTPUTS / "tracker" / "DASHBOARD.md"
@@ -145,11 +146,13 @@ def run() -> dict:
         "combos": {"v2_brier": combos_v2_b, "prod_brier": combos_prod_b, "n": int(len(cb))},
         "high_conviction": hi, "by_market": by_market, "phase55_comparison": phase55, "gate": gate,
     }
+    dash["emergency_policy"] = emergency_policy_status(dashboard=dash, promotion={"decision": gate["decision"]})
     DASH_JSON.parent.mkdir(parents=True, exist_ok=True)
     DASH_JSON.write_text(json.dumps(dash, indent=2, default=str))
     PROMO_STATUS.write_text(json.dumps({"decision": gate["decision"], "versions": V.current(),
                                         "updated": dash["generated"],
-                                        "criteria_remaining": gate["criteria_remaining"]}, indent=2))
+                                        "criteria_remaining": gate["criteria_remaining"],
+                                        "emergency_policy": dash["emergency_policy"]}, indent=2))
     _write_md(dash)
     return dash
 
@@ -219,6 +222,13 @@ Conserved V2 Brier {d['combos']['v2_brier']} vs Production {d['combos']['prod_br
 """ + "".join(
         f"| ≥{t['tier']} | {t.get('n')} | {t.get('hit_rate')} | {t.get('ci95')} | {t.get('mean_clv')} | {t.get('ci_above_breakeven')} |\n"
         for t in d["high_conviction"]) + phase55_section + f"""
+## Emergency Serving Policy
+Decision: **{d.get('emergency_policy', {}).get('decision')}**
+
+```json
+{json.dumps(d.get('emergency_policy', {}), indent=2, default=str)}
+```
+
 ## Promotion gate: **{g['decision']}**
 - min sample met: {g['min_sample_met']} | hit significant > breakeven: {g['hit_significant_above_breakeven']}
 - CLV positive: {g['clv_positive']} | calibration superior: {g['calibration_superior_to_prod']} | combos superior: {g['combos_superior_to_prod']}

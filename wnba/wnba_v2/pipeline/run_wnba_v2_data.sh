@@ -3,8 +3,9 @@
 # EdgeRanked WNBA V2 — daily data-prep jobs (fail-closed, last-good protected).
 #
 #   1. Incremental ESPN team box-score refresh (current season; cache preserved)
-#   2. Game spread/total capture via The Odds API (no-ops safely if no key)
-#   3. PrizePicks prop open/close consolidation (keeps CLV history current)
+#   2. ESPN-first canonical production history validation/write
+#   3. Game spread/total capture via The Odds API (no-ops safely if no key)
+#   4. PrizePicks prop open/close consolidation (keeps CLV history current)
 #
 # Each job is isolated: a failure in one is logged and does NOT abort the others,
 # and no job overwrites last-good data unless its validation passes (enforced in
@@ -43,6 +44,8 @@ run_job() {
 if [ "$MODE" = "all" ] || [ "$MODE" = "boxscores" ]; then
   run_job "team_boxscores(incremental $SEASON)" \
     "$WNBA_PY" -m wnba_v2.data.team_boxscores incremental "$SEASON"
+  run_job "espn_canonical_phase62" \
+    "$WNBA_PY" -m wnba_v2.data.espn_canonical
 fi
 
 if [ "$MODE" = "all" ] || [ "$MODE" = "lines" ]; then

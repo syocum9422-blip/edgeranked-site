@@ -40,6 +40,7 @@ from wnba_model_utils import (
     setup_logging,
     today_timestamp,
 )
+from wnba_v2.data.espn_canonical import build as build_espn_canonical
 
 
 EASTERN = ZoneInfo("America/New_York")
@@ -50,6 +51,7 @@ EASTERN = ZoneInfo("America/New_York")
 # - api: only use official WNBA stats endpoints
 # - csv: only use local CSVs / remote CSV URLs below
 SOURCE_MODE = os.getenv("WNBA_SOURCE_MODE", "auto").strip().lower()
+HISTORICAL_SOURCE_MODE = os.getenv("WNBA_HISTORICAL_SOURCE_MODE", "espn_first").strip().lower()
 
 # Historical seasons to pull before the 2026 season begins.
 # Practical default: use the most recent three completed seasons.
@@ -64,6 +66,24 @@ SCHEDULE_TODAY_URL: Optional[str] = None
 SPORTSBOOK_LINES_URL: Optional[str] = None
 PLAYER_POSITIONS_URL: Optional[str] = None
 PLAYER_STATUS_URL: Optional[str] = None
+
+_ESPN_CANONICAL_BUNDLE = None
+
+
+def _load_espn_canonical_bundle(logger):
+    global _ESPN_CANONICAL_BUNDLE
+    if _ESPN_CANONICAL_BUNDLE is not None:
+        return _ESPN_CANONICAL_BUNDLE
+    logger.info("Building ESPN-first canonical WNBA historical datasets")
+    _ESPN_CANONICAL_BUNDLE = build_espn_canonical(write_outputs=False)
+    report = _ESPN_CANONICAL_BUNDLE.validation
+    logger.info(
+        "ESPN canonical validation passed: %s player rows, %s team rows, missing minutes %.4f%%",
+        report["player_game_rows"],
+        report["team_game_rows"],
+        report["missing_minute_pct_played"],
+    )
+    return _ESPN_CANONICAL_BUNDLE
 
 API_BASE = "https://stats.wnba.com/stats"
 API_HEADERS = {
@@ -463,24 +483,42 @@ def write_template_if_missing(path: Path, columns: list[str], logger) -> None:
 
 
 def resolve_player_games(logger) -> tuple[pd.DataFrame, str]:
-    """Returns (DataFrame, source_label) where source_label is 'api' or 'csv'."""
+    """Return ESPN-first canonical player games; stats.wnba is optional fallback only."""
+    if SOURCE_MODE in {"auto", "api"} and HISTORICAL_SOURCE_MODE in {"espn_first", "espn"}:
+        try:
+            bundle = _load_espn_canonical_bundle(logger)
+            if not bundle.player_games.empty:
+                logger.info("Player games: loaded %d rows from ESPN canonical bundle", len(bundle.player_games))
+                return bundle.player_games.copy(), "espn"
+        except Exception as exc:
+            logger.error("ESPN canonical player-game ingestion failed: %s", exc)
+
+            fallback = Path("/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_player_games.csv")
+            if fallback.exists() and fallback.stat().st_size > 0:
+                frame = pd.read_csv(fallback, parse_dates=["game_date"])
+                if not frame.empty:
+                    logger.warning(
+                        "Using last-good canonical player-game history after ESPN regression: %s rows from %s",
+                        len(frame),
+                        fallback,
+                    )
+                    return frame, "last_good_canonical"
+
+            raise RuntimeError("ESPN canonical player-game ingestion failed and no last-good canonical fallback exists") from exc
+
     if SOURCE_MODE in {"auto", "api"}:
         if not _check_api_reachable(logger):
-            logger.warning("stats.wnba.com is not reachable; skipping API fetch for player games")
-            if SOURCE_MODE == "api":
-                raise ConnectionError(
-                    "WNBA_SOURCE_MODE=api but stats.wnba.com is not reachable. "
-                    "Check network connectivity or use WNBA_SOURCE_MODE=csv for offline mode."
-                )
-        try:
-            frame = fetch_api_player_games(logger)
-            if not frame.empty:
-                logger.info("Player games: fetched %d rows from stats.wnba.com API", len(frame))
-                return frame, "api"
-        except Exception as exc:
-            logger.warning("Official API player log fetch failed: %s", exc)
-            if SOURCE_MODE == "api":
-                raise
+            logger.warning("stats.wnba.com is not reachable; skipping optional player-game enrichment")
+        else:
+            try:
+                frame = fetch_api_player_games(logger)
+                if not frame.empty:
+                    logger.info("Player games: fetched %d rows from optional stats.wnba.com API", len(frame))
+                    return frame, "stats_wnba"
+            except Exception as exc:
+                logger.warning("Optional stats.wnba.com player log fetch failed: %s", exc)
+                if SOURCE_MODE == "api":
+                    raise
     frame = load_csv_or_url(RAW_PLAYER_GAMES_PATH, PLAYER_GAMES_URL, logger)
     source = "csv"
     if not frame.empty and RAW_PLAYER_GAMES_PATH.exists():
@@ -497,24 +535,42 @@ def resolve_player_games(logger) -> tuple[pd.DataFrame, str]:
 
 
 def resolve_team_context(logger) -> tuple[pd.DataFrame, str]:
-    """Returns (DataFrame, source_label) where source_label is 'api' or 'csv'."""
+    """Return ESPN-first canonical team context; stats.wnba is optional fallback only."""
+    if SOURCE_MODE in {"auto", "api"} and HISTORICAL_SOURCE_MODE in {"espn_first", "espn"}:
+        try:
+            bundle = _load_espn_canonical_bundle(logger)
+            if not bundle.team_context.empty:
+                logger.info("Team context: loaded %d rows from ESPN canonical bundle", len(bundle.team_context))
+                return bundle.team_context.copy(), "espn"
+        except Exception as exc:
+            logger.error("ESPN canonical team-context ingestion failed: %s", exc)
+
+            fallback = Path("/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_team_context.csv")
+            if fallback.exists() and fallback.stat().st_size > 0:
+                frame = pd.read_csv(fallback, parse_dates=["game_date"])
+                if not frame.empty:
+                    logger.warning(
+                        "Using last-good canonical team-context history after ESPN regression: %s rows from %s",
+                        len(frame),
+                        fallback,
+                    )
+                    return frame, "last_good_canonical"
+
+            raise RuntimeError("ESPN canonical team-context ingestion failed and no last-good canonical fallback exists") from exc
+
     if SOURCE_MODE in {"auto", "api"}:
         if not _check_api_reachable(logger):
-            logger.warning("stats.wnba.com is not reachable; skipping API fetch for team context")
-            if SOURCE_MODE == "api":
-                raise ConnectionError(
-                    "WNBA_SOURCE_MODE=api but stats.wnba.com is not reachable. "
-                    "Check network connectivity or use WNBA_SOURCE_MODE=csv for offline mode."
-                )
-        try:
-            frame = fetch_api_team_context(logger)
-            if not frame.empty:
-                logger.info("Team context: fetched %d rows from stats.wnba.com API", len(frame))
-                return frame, "api"
-        except Exception as exc:
-            logger.warning("Official API team log fetch failed: %s", exc)
-            if SOURCE_MODE == "api":
-                raise
+            logger.warning("stats.wnba.com is not reachable; skipping optional team-context enrichment")
+        else:
+            try:
+                frame = fetch_api_team_context(logger)
+                if not frame.empty:
+                    logger.info("Team context: fetched %d rows from optional stats.wnba.com API", len(frame))
+                    return frame, "stats_wnba"
+            except Exception as exc:
+                logger.warning("Optional stats.wnba.com team log fetch failed: %s", exc)
+                if SOURCE_MODE == "api":
+                    raise
     frame = load_csv_or_url(RAW_TEAM_CONTEXT_PATH, TEAM_CONTEXT_URL, logger)
     source = "csv"
     logger.info("Team context: loaded %d rows from CSV (%s)", len(frame), source)
@@ -522,36 +578,33 @@ def resolve_team_context(logger) -> tuple[pd.DataFrame, str]:
 
 
 def resolve_schedule_today(logger) -> tuple[pd.DataFrame, str]:
-    """Returns (DataFrame, source_label) where source_label is 'api:stats_wnba', 'api:espn', or 'csv:*'."""
+    """Return ESPN-first schedule; stats.wnba.com is optional fallback only."""
     if SOURCE_MODE in {"auto", "api"}:
-        stats_api_reachable = _check_api_reachable(logger)
-
-        if stats_api_reachable:
-            try:
-                frame = fetch_api_schedule_today(logger)
-                if not frame.empty:
-                    logger.info("Schedule today: fetched %d rows from stats.wnba.com API", len(frame))
-                    return frame, "api:stats_wnba"
-            except Exception as exc:
-                logger.warning("Official API schedule fetch failed: %s", exc)
-                if SOURCE_MODE == "api":
-                    raise
-        else:
-            logger.warning("stats.wnba.com is not reachable; trying ESPN as fallback for schedule")
-
-        # Try ESPN as fallback (both auto and api modes)
         try:
             frame = fetch_espn_schedule(logger)
             if not frame.empty:
                 logger.info("Schedule today: fetched %d rows from ESPN API", len(frame))
                 return frame, "api:espn"
         except Exception as exc:
-            logger.warning("ESPN schedule fetch also failed: %s", exc)
+            logger.warning("ESPN schedule fetch failed: %s", exc)
             if SOURCE_MODE == "api":
                 raise ConnectionError(
-                    "WNBA_SOURCE_MODE=api but both stats.wnba.com and ESPN failed. "
+                    f"WNBA_SOURCE_MODE=api but ESPN schedule fetch failed: {exc}. "
                     "Check network connectivity or use WNBA_SOURCE_MODE=csv for offline mode."
                 )
+
+        if _check_api_reachable(logger):
+            try:
+                frame = fetch_api_schedule_today(logger)
+                if not frame.empty:
+                    logger.info("Schedule today: fetched %d rows from optional stats.wnba.com API", len(frame))
+                    return frame, "api:stats_wnba"
+            except Exception as exc:
+                logger.warning("Optional stats.wnba.com schedule fetch failed: %s", exc)
+                if SOURCE_MODE == "api":
+                    raise
+        else:
+            logger.warning("stats.wnba.com is not reachable; skipping optional schedule fallback")
 
     frame = load_csv_or_url(RAW_SCHEDULE_TODAY_PATH, SCHEDULE_TODAY_URL, logger)
     source = "csv"
@@ -651,8 +704,8 @@ def main() -> None:
     player_games_raw, pg_source = resolve_player_games(logger)
     if player_games_raw.empty:
         raise FileNotFoundError(
-            "No WNBA player game log source found. Either leave SOURCE_MODE as 'auto' and allow the official "
-            "WNBA stats endpoint to work, or place a file at "
+            "No WNBA player game log source found. Either leave SOURCE_MODE as 'auto' and allow the ESPN "
+            "canonical ingestion to pass validation, or place a file at "
             f"{RAW_PLAYER_GAMES_PATH}."
         )
     player_games = normalize_player_games(player_games_raw)

@@ -1,15 +1,6 @@
-# WNBA V2 Rollback Plan
+# WNBA V2 Conserved Simulator Rollback Plan
 
-## Rollback Trigger
-
-Rollback immediately if any of these are true:
-
-- `wnba_v2/outputs/tracker/promotion_status.json` decision is `ROLLBACK_CANDIDATE`
-- `wnba_v2/outputs/tracker/dashboard.json` has V2 Brier greater than production Brier
-- combo-market V2 Brier is greater than production combo Brier
-- V2 ECE is greater than production ECE
-- production pipeline fails while any V2 serving mode is requested
-- V2 high-conviction CLV turns materially negative during staged exposure
+Rollback protection remains intact. Force production immediately if emergency policy blocks, production health fails, or live metrics regress.
 
 ## Rollback Command
 
@@ -17,26 +8,33 @@ Rollback immediately if any of these are true:
 export EDGERANKED_WNBA_SERVING_MODE=production
 export EDGERANKED_WNBA_V2_TRAFFIC_PERCENT=0
 export EDGERANKED_WNBA_V2_ROLLBACK_FORCE_PRODUCTION=1
-python run_wnba_model.py
+python3 run_wnba_model.py
 ```
 
-## Confirm Rollback
+## Rollback Triggers
+
+- `emergency_policy.allowed == false` while V2 serving is requested
+- dashboard or promotion status decision is `ROLLBACK_CANDIDATE`
+- dashboard `versions.simulation_version != "sim-5.4-conserved"`
+- realism gates fail or learned calibration is missing/not accepted
+- V2 Brier, combo Brier, or ECE regresses worse than production
+- production pipeline health fails
+- emergency traffic is above 10%
+
+## Confirmation
 
 ```bash
 cat data/processed/wnba_production_status.json
 ```
 
-Expected fields:
+Expected:
 
 ```json
 {
-  "WNBA_PRODUCTION_STATUS": "PASS",
   "serving_mode": "production",
   "v2_traffic_percent": 0,
   "v2_rollback_force_production": true
 }
 ```
 
-If the pipeline fails before producing fresh outputs, the existing production runner restores the last-good snapshot from `outputs/wnba_last_good`.
-
-Keep Phase 6 tracking running after rollback so the reason remains visible in `wnba_v2/outputs/tracker/DASHBOARD.md`.
+Keep Phase 6 tracking running after rollback so the dashboard records the reason.

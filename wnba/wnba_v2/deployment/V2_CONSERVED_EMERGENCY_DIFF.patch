@@ -1,0 +1,109 @@
+--- a/wnba_v2/deployment/feature_flags.py
++++ b/wnba_v2/deployment/feature_flags.py
+@@
+ PROMOTION_STATUS_PATH = C.OUTPUTS / "tracker" / "promotion_status.json"
+ DASHBOARD_PATH = C.OUTPUTS / "tracker" / "dashboard.json"
++LEARNED_CALIBRATION_PATH = C.OUTPUTS / "phase53" / "phase53_learned_calibration.json"
++REALISM_SUMMARY_PATH = C.OUTPUTS / "phase53" / "phase53_validation_summary.json"
+ 
++REQUIRED_SIMULATION_VERSION = "sim-5.4-conserved"
+ EMERGENCY_MODE = "staged_v2_emergency"
+@@
+ def dashboard_status(path: Path = DASHBOARD_PATH) -> dict:
+     return _json_file(path, "MISSING_DASHBOARD")
++
++
++def learned_calibration_status(path: Path = LEARNED_CALIBRATION_PATH) -> dict:
++    payload = _json_file(path, "MISSING_CALIBRATION")
++    return {
++        "path": str(path),
++        "exists": path.exists(),
++        "accepted": bool(payload.get("accepted")),
++        "phase": payload.get("phase"),
++        "decision": "ACCEPTED" if payload.get("accepted") else payload.get("decision", "MISSING_CALIBRATION"),
++    }
++
++
++def realism_status(path: Path = REALISM_SUMMARY_PATH) -> dict:
++    payload = _json_file(path, "MISSING_REALISM_SUMMARY")
++    checks = payload.get("acceptance_checks", {}) or {}
++    accepted = bool(payload.get("accepted") and checks.get("all_pass"))
++    return {
++        "path": str(path),
++        "exists": path.exists(),
++        "accepted": accepted,
++        "phase53_accepted": bool(payload.get("accepted")),
++        "all_pass": bool(checks.get("all_pass")),
++        "decision": "PASS" if accepted else payload.get("decision", "MISSING_REALISM_SUMMARY"),
++        "acceptance_checks": checks,
++    }
+@@
+     combos = dashboard.get("combos", {})
+     gate = dashboard.get("gate", {})
++    versions = dashboard.get("versions", {}) or {}
++    simulation_version = versions.get("simulation_version")
++    calibration = learned_calibration_status()
++    realism = realism_status()
+     graded = int(dashboard.get("graded_recommendations") or 0)
+@@
+     checks = {
++        "simulation_version_conserved": simulation_version == REQUIRED_SIMULATION_VERSION,
++        "learned_calibration_available": bool(calibration["exists"] and calibration["accepted"]),
++        "realism_gates_passing": bool(realism["accepted"]),
++        "old_independent_simulator_disabled": simulation_version == REQUIRED_SIMULATION_VERSION,
+         "phase6_not_rollback_candidate": "phase6_rollback_candidate" not in rollback_reasons,
+@@
+             "phase6_gate": gate.get("decision") or promotion.get("decision"),
++            "simulation_version": simulation_version,
++            "required_simulation_version": REQUIRED_SIMULATION_VERSION,
+         },
++        "calibration": calibration,
++        "realism": realism,
+         "thresholds": {
+--- a/wnba_v2/tracker/dashboard.py
++++ b/wnba_v2/tracker/dashboard.py
+@@
+ from wnba_v2.tracker import versions as V
+ from wnba_v2.tracker.ledger import load_ledger
++from wnba_v2.deployment.feature_flags import emergency_policy_status
+@@
+     dash = {
+@@
+         "high_conviction": hi, "by_market": by_market, "phase55_comparison": phase55, "gate": gate,
+     }
++    dash["emergency_policy"] = emergency_policy_status(dashboard=dash, promotion={"decision": gate["decision"]})
+@@
+     PROMO_STATUS.write_text(json.dumps({"decision": gate["decision"], "versions": V.current(),
+                                         "updated": dash["generated"],
+-                                        "criteria_remaining": gate["criteria_remaining"]}, indent=2))
++                                        "criteria_remaining": gate["criteria_remaining"],
++                                        "emergency_policy": dash["emergency_policy"]}, indent=2))
+@@
++## Emergency Serving Policy
++Decision: **{d.get('emergency_policy', {}).get('decision')}**
++
++```json
++{json.dumps(d.get('emergency_policy', {}), indent=2, default=str)}
++```
++
+ ## Promotion gate: **{g['decision']}**
+--- a/wnba_v2/deployment/DEPLOYMENT_PLAN.md
++++ b/wnba_v2/deployment/DEPLOYMENT_PLAN.md
+@@
++Current recommendation: controlled emergency staged serving of conserved V2 only.
++The old independent simulator is retired.
++Emergency serving requires simulation_version == "sim-5.4-conserved".
++Start at 5% traffic and cap emergency traffic at 10%.
+--- a/wnba_v2/deployment/ROLLBACK_PLAN.md
++++ b/wnba_v2/deployment/ROLLBACK_PLAN.md
+@@
++Rollback immediately if emergency_policy.allowed is false, simulation_version is not
++"sim-5.4-conserved", realism gates fail, learned calibration is missing, or V2
++Brier/combo Brier/ECE regresses worse than production.
+--- a/wnba_v2/deployment/MIGRATION_STEPS.md
++++ b/wnba_v2/deployment/MIGRATION_STEPS.md
+@@
++Enable emergency staged serving only with:
++export EDGERANKED_WNBA_SERVING_MODE=staged_v2_emergency
++export EDGERANKED_WNBA_V2_TRAFFIC_PERCENT=5
++export EDGERANKED_WNBA_V2_EMERGENCY_MAX_TRAFFIC_PERCENT=10

@@ -33,13 +33,19 @@
         "plus_minus",
         "player_key",
         "is_home",
-        "_data_source"
+        "_data_source",
+        "game_id",
+        "player_id",
+        "position",
+        "starter",
+        "played",
+        "source"
       ],
       "exists": true,
-      "latest_date": "2026-06-28",
-      "modified_at_et": "2026-06-30T18:30:43.740932703-04:00",
+      "latest_date": "2026-07-04",
+      "modified_at_et": "2026-07-05T13:09:56.122234106-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_player_games.csv",
-      "rows": 11290
+      "rows": 18443
     },
     "player_status": {
       "columns": [
@@ -56,9 +62,9 @@
       ],
       "exists": true,
       "latest_date": null,
-      "modified_at_et": "2026-06-30T18:31:24.665266991-04:00",
+      "modified_at_et": "2026-07-05T13:09:57.045241117-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_player_status.csv",
-      "rows": 6
+      "rows": 37
     },
     "schedule": {
       "columns": [
@@ -73,10 +79,10 @@
         "_data_source"
       ],
       "exists": true,
-      "latest_date": "2026-06-30",
-      "modified_at_et": "2026-06-30T18:31:25.143271208-04:00",
+      "latest_date": "2026-07-05",
+      "modified_at_et": "2026-07-05T13:09:57.594245195-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_schedule_today.csv",
-      "rows": 1
+      "rows": 2
     },
     "sportsbook_lines": {
       "columns": [
@@ -97,9 +103,9 @@
       ],
       "exists": true,
       "latest_date": null,
-      "modified_at_et": "2026-06-30T18:31:24.481265545-04:00",
+      "modified_at_et": "2026-07-05T13:09:56.908240080-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_sportsbook_lines.csv",
-      "rows": 219
+      "rows": 182
     },
     "team_context": {
       "columns": [
@@ -114,13 +120,18 @@
         "team_rebounds",
         "team_assists",
         "team_threes_made",
-        "_data_source"
+        "_data_source",
+        "season",
+        "game_id",
+        "team_steals",
+        "team_blocks",
+        "source"
       ],
       "exists": true,
-      "latest_date": "2026-06-28",
-      "modified_at_et": "2026-06-30T18:31:18.928218126-04:00",
+      "latest_date": "2026-07-04",
+      "modified_at_et": "2026-07-05T13:09:56.493237019-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_team_context.csv",
-      "rows": 384
+      "rows": 1596
     },
     "today_features": {
       "columns": [
@@ -148,11 +159,16 @@
         "player_key",
         "is_home",
         "_data_source",
+        "game_id",
+        "player_id",
+        "position",
+        "starter",
+        "played",
+        "source",
         "prev_game_date",
         "rest_days",
         "is_back_to_back",
         "games_played_season",
-        "position",
         "team_points",
         "team_rebounds",
         "team_assists",
@@ -257,7 +273,6 @@
         "pos_blocks_allowed_last_10_x",
         "opp_points_allowed_last_10",
         "last_game_date",
-        "game_id",
         "days_since_last_game",
         "pos_points_allowed_last_10_y",
         "pos_rebounds_allowed_last_10_y",
@@ -267,11 +282,11 @@
         "pos_blocks_allowed_last_10_y"
       ],
       "exists": true,
-      "latest_date": "2026-06-30",
-      "modified_at_et": "2026-06-30T18:32:19.381741762-04:00",
+      "latest_date": "2026-07-05",
+      "modified_at_et": "2026-07-05T13:10:40.603567839-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/processed/wnba_today_features.csv",
-      "rows": 26
+      "rows": 47
     }
   },
-  "generated_at": "2026-06-30T18:32:27.132492-04:00"
+  "generated_at": "2026-07-05T13:10:49.818256-04:00"
 }
