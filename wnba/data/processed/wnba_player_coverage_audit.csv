@@ -2,10 +2,6 @@ player_name,team,opponent,has_live_line,has_history,history_source,included,reas
 Brittney Griner,CON,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Leila Lacan,CON,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Olivia Nelson-Ododa,CON,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
-Arike Ogunbowale,DAL,TOR,True,True,last_good_canonical,True,included
-Azzi Fudd,DAL,TOR,True,True,last_good_canonical,True,included
-Jessica Shepard,DAL,TOR,True,True,last_good_canonical,True,included
-Paige Bueckers,DAL,TOR,True,True,last_good_canonical,True,included
 Cecilia Zandalasini,GSV,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Gabby Williams,GSV,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Janelle Salaün,GSV,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
@@ -37,12 +33,6 @@ Awa Fam,SEA,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Dominique Malonga,SEA,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Flau'jae Johnson,SEA,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Natisha Hiedeman,SEA,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
-Isabelle Harrison,TOR,DAL,True,True,last_good_canonical,True,included
-Julie Allemand,TOR,DAL,True,True,last_good_canonical,True,included
-Maria Conde,TOR,DAL,True,True,last_good_canonical,True,included
-Marina Mabrey,TOR,DAL,True,True,last_good_canonical,True,included
-Nyara Sabally,TOR,DAL,True,True,last_good_canonical,True,included
-Temi Fágbénlé,TOR,DAL,True,True,last_good_canonical,False,excluded_by_status_or_filter
 Kiki Iriafen,WAS,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Michaela Onyenwere,WAS,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Shakira Austin,WAS,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
