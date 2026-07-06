@@ -1,32 +1,36 @@
 {
   "WNBA_PRODUCTION_STATUS": "PASS",
   "canonical_teams": [
-    "DAL",
-    "IND",
-    "LVA",
-    "TOR"
+    "CON",
+    "GSV",
+    "LAS",
+    "MIN",
+    "SEA",
+    "WAS"
   ],
   "configured_serving_mode": "staged_v2_emergency",
   "emergency_v2_applied": false,
-  "emergency_v2_skip_details": "conserved projections latest_date=2026-06-30 expected_date=2026-07-05",
+  "emergency_v2_skip_details": "conserved projections latest_date=2026-07-05 expected_date=2026-07-06",
   "emergency_v2_skipped_reason": "stale_conserved_outputs",
   "error": "",
-  "excluded_players": 25,
+  "excluded_players": 16,
   "excluded_reasons": {
-    "excluded_not_on_canonical_slate": 25
+    "excluded_not_on_canonical_slate": 16
   },
-  "generated_at": "2026-07-05T18:30:56.822967-04:00",
-  "included_players": 13,
+  "generated_at": "2026-07-06T07:31:58.647669-04:00",
+  "included_players": 25,
   "message": "WNBA refresh passed.",
   "projected_teams": [
-    "DAL",
-    "IND",
-    "LVA",
-    "TOR"
+    "CON",
+    "GSV",
+    "LAS",
+    "MIN",
+    "SEA",
+    "WAS"
   ],
   "published": "yes",
   "serving_mode": "production",
-  "slate_date": "2026-07-05",
+  "slate_date": "2026-07-06",
   "stale_output_blocked": "no",
   "status": "pass",
   "v2_rollback_force_production": false,
