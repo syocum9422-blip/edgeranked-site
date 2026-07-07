@@ -1283,6 +1283,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-05-28,2026,Laura Juskaite,TOR,CHI,A,22.0,7.0,2.0,2.0,1.0,0.0,1.0,1.0,4.0,3.0,0.0,0.0,0.0,2.0,,laura juskaite,0,last_good_canonical,401856939.0,5345444.0,F,1.0,1.0,espn,laura juskaite,no_projection_for_player_team_date
 2026-05-30,2026,Laura Juskaite,TOR,SEA,H,25.0,14.0,5.0,1.0,4.0,2.0,0.0,1.0,8.0,5.0,0.0,0.0,0.0,5.0,,laura juskaite,1,last_good_canonical,401856949.0,5345444.0,F,1.0,1.0,espn,laura juskaite,no_projection_for_player_team_date
 2026-06-03,2026,Laura Juskaite,TOR,NYL,A,20.0,8.0,5.0,2.0,1.0,2.0,0.0,0.0,9.0,3.0,2.0,1.0,2.0,3.0,-21.0,laura juskaite,0,last_good_canonical,,,,,,,laura juskaite,no_projection_for_player_team_date
+2026-06-07,2026,Laura Ziegler,LAS,POR,H,,,,,,,,,,,,,,,,laura ziegler,1,last_good_canonical,,,,,,,laura ziegler,no_projection_for_player_team_date
 2026-06-18,2026,Laura Ziegler,LAS,MIN,A,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,laura ziegler,0,last_good_canonical,401856999.0,5107515.0,F,0.0,0.0,espn,laura ziegler,no_projection_for_player_team_date
 2026-06-22,2026,Laura Ziegler,LAS,NYL,A,10.0,4.0,1.0,1.0,0.0,0.0,0.0,0.0,2.0,2.0,1.0,0.0,0.0,1.0,,laura ziegler,0,last_good_canonical,401857011.0,5107515.0,F,0.0,1.0,espn,laura ziegler,no_projection_for_player_team_date
 2026-06-28,2026,Laura Ziegler,LAS,IND,A,8.0,4.0,1.0,0.0,0.0,1.0,0.0,0.0,2.0,1.0,2.0,2.0,0.0,1.0,,laura ziegler,0,last_good_canonical,401857028.0,5107515.0,F,0.0,1.0,espn,laura ziegler,no_projection_for_player_team_date
@@ -2254,7 +2255,6 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-23,2026,Zia Cooke,SEA,DAL,H,30.0,18.0,2.0,2.0,2.0,0.0,0.0,1.0,12.0,6.0,4.0,4.0,1.0,1.0,,zia cooke,1,last_good_canonical,401857015.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
 2026-06-26,2026,Zia Cooke,SEA,NYL,H,13.0,3.0,4.0,0.0,1.0,1.0,0.0,1.0,6.0,1.0,0.0,0.0,1.0,3.0,,zia cooke,1,last_good_canonical,401857023.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
 2026-06-28,2026,Zia Cooke,SEA,ATL,H,11.0,6.0,1.0,2.0,1.0,0.0,0.0,1.0,2.0,2.0,3.0,1.0,0.0,1.0,,zia cooke,1,last_good_canonical,401857029.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
-2026-06-07,2026,Laura Ziegler,LAS,POR,H,,,,,,,,,,,,,,,,laura ziegler,1,api:espn_boxscore,,,,,,,laura ziegler,no_projection_for_player_team_date
 2026-06-08,2026,Alicia Florez,WAS,IND,H,9.0,0.0,1.0,1.0,0.0,0.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0,1.0,-4.0,alicia florez,1,api:espn_boxscore,,,,,,,alicia florez,no_projection_for_player_team_date
 2026-06-09,2026,Nadia Fingall,GSV,PHX,H,,,,,,,,,,,,,,,,nadia fingall,1,api:espn_boxscore,,,,,,,nadia fingall,no_projection_for_player_team_date
 2026-06-14,2026,Darianna Littlepage-Buggs,WAS,NYL,A,,,,,,,,,,,,,,,,darianna littlepage-buggs,0,api:espn_boxscore,,,,,,,darianna littlepage-buggs,no_projection_for_player_team_date
@@ -2269,3 +2269,9 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-07-05,2026,Brittney Sykes,TOR,DAL,H,,,,,,,,,,,,,,,,brittney sykes,1,api:espn_boxscore,,,,,,,brittney sykes,no_projection_for_player_team_date
 2026-07-05,2026,Julie Allemand,TOR,DAL,H,,,,,,,,,,,,,,,,julie allemand,1,api:espn_boxscore,,,,,,,julie allemand,no_projection_for_player_team_date
 2026-07-05,2026,Kiki Rice,TOR,DAL,H,,,,,,,,,,,,,,,,kiki rice,1,api:espn_boxscore,,,,,,,kiki rice,no_projection_for_player_team_date
+2026-07-06,2026,Aneesah Morrow,CON,MIN,A,,,,,,,,,,,,,,,,aneesah morrow,0,api:espn_boxscore,,,,,,,aneesah morrow,no_projection_for_player_team_date
+2026-07-06,2026,Dorka Juhasz,MIN,CON,H,25.0,3.0,4.0,3.0,1.0,0.0,1.0,1.0,7.0,1.0,0.0,0.0,0.0,4.0,-5.0,dorka juhasz,1,api:espn_boxscore,,,,,,,dorka juhasz,no_projection_for_player_team_date
+2026-07-06,2026,Napheesa Collier,MIN,CON,H,,,,,,,,,,,,,,,,napheesa collier,1,api:espn_boxscore,,,,,,,napheesa collier,no_projection_for_player_team_date
+2026-07-06,2026,Emma Cechova,MIN,CON,H,,,,,,,,,,,,,,,,emma cechova,1,api:espn_boxscore,,,,,,,emma cechova,no_projection_for_player_team_date
+2026-07-06,2026,Olivia Miles,MIN,CON,H,,,,,,,,,,,,,,,,olivia miles,1,api:espn_boxscore,,,,,,,olivia miles,no_projection_for_player_team_date
+2026-07-06,2026,Alissa Pili,LAS,SEA,H,,,,,,,,,,,,,,,,alissa pili,1,api:espn_boxscore,,,,,,,alissa pili,no_projection_for_player_team_date
