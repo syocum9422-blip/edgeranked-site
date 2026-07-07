@@ -3,6 +3,8 @@ CHI,True,True,True,scheduled_and_live_prizepicks
 DAL,True,True,True,scheduled_and_live_prizepicks
 GSV,False,True,False,excluded_not_on_canonical_slate
 IND,False,True,False,excluded_not_on_canonical_slate
+LAS,False,True,False,excluded_not_on_canonical_slate
+MIN,False,True,False,excluded_not_on_canonical_slate
 NYL,True,True,True,scheduled_and_live_prizepicks
 PHX,True,True,True,scheduled_and_live_prizepicks
 TOR,False,True,False,excluded_not_on_canonical_slate
