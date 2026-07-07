@@ -1,5 +1,6 @@
 team,source_schedule,source_prizepicks,included,reason
 CHI,True,True,True,scheduled_and_live_prizepicks
+CON,False,True,False,excluded_not_on_canonical_slate
 DAL,True,True,True,scheduled_and_live_prizepicks
 GSV,False,True,False,excluded_not_on_canonical_slate
 IND,False,True,False,excluded_not_on_canonical_slate

@@ -4,6 +4,9 @@ Courtney Vandersloot,CHI,PHX,True,True,last_good_canonical,True,included
 Kamilla Cardoso,CHI,PHX,True,True,last_good_canonical,True,included
 Skylar Diggins,CHI,PHX,True,True,last_good_canonical,True,included
 Sydney Taylor,CHI,PHX,True,True,last_good_canonical,True,included
+Brittney Griner,CON,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
+Leila Lacan,CON,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
+Olivia Nelson-Ododa,CON,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Arike Ogunbowale,DAL,NYL,True,True,last_good_canonical,True,included
 Azzi Fudd,DAL,NYL,True,True,last_good_canonical,True,included
 Jessica Shepard,DAL,NYL,True,True,last_good_canonical,True,included
@@ -19,7 +22,10 @@ Dearica Hamby,LAS,,True,True,last_good_canonical,False,excluded_not_on_canonical
 Erica Wheeler,LAS,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Nneka Ogwumike,LAS,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Rae Burrell,LAS,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
-Olivia Miles,MIN,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
+Courtney Williams,MIN,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
+Kayla McBride,MIN,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
+Natasha Howard,MIN,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
+Nia Coffey,MIN,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Breanna Stewart,NYL,DAL,True,True,last_good_canonical,True,included
 Jonquel Jones,NYL,DAL,True,True,last_good_canonical,True,included
 Marine Johannes,NYL,DAL,True,True,last_good_canonical,True,included
@@ -29,6 +35,7 @@ Alyssa Thomas,PHX,CHI,True,True,last_good_canonical,True,included
 DeWanna Bonner,PHX,CHI,True,True,last_good_canonical,True,included
 Kahleah Copper,PHX,CHI,True,True,last_good_canonical,True,included
 Lexi Held,PHX,CHI,True,True,last_good_canonical,True,included
+Noemie Brochant,PHX,CHI,True,True,last_good_canonical,False,excluded_by_status_or_filter
 Valeriane Ayayi,PHX,CHI,True,True,last_good_canonical,True,included
 Isabelle Harrison,TOR,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Marina Mabrey,TOR,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
