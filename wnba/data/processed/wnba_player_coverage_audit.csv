@@ -1,5 +1,10 @@
 player_name,team,opponent,has_live_line,has_history,history_source,included,reason
+Allisha Gray,ATL,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
+Angel Reese,ATL,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
+Jordin Canada,ATL,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
+Rhyne Howard,ATL,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Brittney Griner,CON,MIN,True,True,last_good_canonical,True,included
+Kennedy Burke,CON,MIN,True,True,last_good_canonical,True,included
 Leila Lacan,CON,MIN,True,True,last_good_canonical,True,included
 Olivia Nelson-Ododa,CON,MIN,True,True,last_good_canonical,True,included
 Cecilia Zandalasini,GSV,TOR,True,True,last_good_canonical,True,included
@@ -9,6 +14,8 @@ Veronica Burton,GSV,TOR,True,True,last_good_canonical,True,included
 Aliyah Boston,IND,LAS,True,True,last_good_canonical,True,included
 Caitlin Clark,IND,LAS,True,True,last_good_canonical,False,excluded_by_status_or_filter
 Kelsey Mitchell,IND,LAS,True,True,last_good_canonical,True,included
+Monique Billings,IND,LAS,True,True,last_good_canonical,True,included
+Sophie Cunningham,IND,LAS,True,True,last_good_canonical,True,included
 Ariel Atkins,LAS,IND,True,True,last_good_canonical,True,included
 Dearica Hamby,LAS,IND,True,True,last_good_canonical,True,included
 Erica Wheeler,LAS,IND,True,True,last_good_canonical,True,included
@@ -18,6 +25,8 @@ Courtney Williams,MIN,CON,True,True,last_good_canonical,True,included
 Kayla McBride,MIN,CON,True,True,last_good_canonical,True,included
 Natasha Howard,MIN,CON,True,True,last_good_canonical,True,included
 Nia Coffey,MIN,CON,True,True,last_good_canonical,True,included
+Dominique Malonga,SEA,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
+Natisha Hiedeman,SEA,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Isabelle Harrison,TOR,GSV,True,True,last_good_canonical,True,included
 Maria Conde,TOR,GSV,True,True,last_good_canonical,True,included
 Marina Mabrey,TOR,GSV,True,True,last_good_canonical,True,included
