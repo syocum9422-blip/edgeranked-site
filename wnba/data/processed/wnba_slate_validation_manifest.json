@@ -1,49 +1,49 @@
 {
   "duplicate_games": [],
   "expected_game_count": 3,
-  "generated_at": "2026-07-08T18:30:12.522627-04:00",
+  "generated_at": "2026-07-09T07:31:08.362746-04:00",
   "generated_game_count": 3,
   "generated_games": [
     {
-      "away_team": "GSV",
-      "game_id": "401857048",
-      "home_team": "TOR",
-      "start_time_utc": "2026-07-08T23:00Z"
-    },
-    {
-      "away_team": "MIN",
-      "game_id": "401857049",
-      "home_team": "CON",
-      "start_time_utc": "2026-07-08T23:30Z"
+      "away_team": "SEA",
+      "game_id": "401857051",
+      "home_team": "ATL",
+      "start_time_utc": "2026-07-10T00:00Z"
     },
     {
       "away_team": "IND",
-      "game_id": "401857050",
-      "home_team": "LAS",
-      "start_time_utc": "2026-07-09T02:00Z"
+      "game_id": "401857052",
+      "home_team": "PHX",
+      "start_time_utc": "2026-07-10T02:00Z"
+    },
+    {
+      "away_team": "LVA",
+      "game_id": "401857053",
+      "home_team": "POR",
+      "start_time_utc": "2026-07-10T02:00Z"
     }
   ],
   "missing_games": [],
-  "slate_date": "2026-07-08",
+  "slate_date": "2026-07-09",
   "status": "PASS",
   "trusted_games": [
     {
-      "away_team": "GSV",
-      "game_id": "401857048",
-      "home_team": "TOR",
-      "start_time_utc": "2026-07-08T23:00Z"
-    },
-    {
-      "away_team": "MIN",
-      "game_id": "401857049",
-      "home_team": "CON",
-      "start_time_utc": "2026-07-08T23:30Z"
+      "away_team": "SEA",
+      "game_id": "401857051",
+      "home_team": "ATL",
+      "start_time_utc": "2026-07-10T00:00Z"
     },
     {
       "away_team": "IND",
-      "game_id": "401857050",
-      "home_team": "LAS",
-      "start_time_utc": "2026-07-09T02:00Z"
+      "game_id": "401857052",
+      "home_team": "PHX",
+      "start_time_utc": "2026-07-10T02:00Z"
+    },
+    {
+      "away_team": "LVA",
+      "game_id": "401857053",
+      "home_team": "POR",
+      "start_time_utc": "2026-07-10T02:00Z"
     }
   ],
   "trusted_source": "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard",

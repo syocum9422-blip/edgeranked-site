@@ -1560,6 +1560,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-07,2026,Myisha Hines-Allen,IND,NYL,A,13.0,3.0,1.0,0.0,1.0,1.0,0.0,0.0,4.0,1.0,0.0,0.0,0.0,1.0,,myisha hines-allen,0,last_good_canonical,401856969.0,3142055.0,F,0.0,1.0,espn,myisha hines-allen,no_projection_for_player_team_date
 2026-06-23,2026,Myisha Hines-Allen,IND,PHX,H,14.0,3.0,1.0,1.0,1.0,0.0,0.0,1.0,1.0,1.0,0.0,0.0,0.0,1.0,,myisha hines-allen,1,last_good_canonical,401857014.0,3142055.0,F,0.0,1.0,espn,myisha hines-allen,no_projection_for_player_team_date
 2026-06-28,2026,Myisha Hines-Allen,IND,LAS,H,9.0,7.0,3.0,3.0,0.0,1.0,1.0,1.0,6.0,3.0,2.0,1.0,1.0,2.0,,myisha hines-allen,1,last_good_canonical,401857028.0,3142055.0,F,0.0,1.0,espn,myisha hines-allen,no_projection_for_player_team_date
+2026-06-09,2026,Nadia Fingall,GSV,PHX,H,,,,,,,,,,,,,,,,nadia fingall,1,last_good_canonical,,,,,,,nadia fingall,no_projection_for_player_team_date
 2026-06-10,2026,Nadia Fingall,GSV,PHX,A,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,nadia fingall,0,last_good_canonical,401856977.0,4066546.0,C,0.0,0.0,espn,nadia fingall,no_projection_for_player_team_date
 2026-06-13,2026,Nadia Fingall,GSV,SEA,A,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,nadia fingall,0,last_good_canonical,401856985.0,4066546.0,C,0.0,0.0,espn,nadia fingall,no_projection_for_player_team_date
 2026-06-16,2026,Nadia Fingall,GSV,LAS,A,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,nadia fingall,0,last_good_canonical,401856994.0,4066546.0,C,0.0,0.0,espn,nadia fingall,no_projection_for_player_team_date
@@ -2256,7 +2257,6 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-23,2026,Zia Cooke,SEA,DAL,H,30.0,18.0,2.0,2.0,2.0,0.0,0.0,1.0,12.0,6.0,4.0,4.0,1.0,1.0,,zia cooke,1,last_good_canonical,401857015.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
 2026-06-26,2026,Zia Cooke,SEA,NYL,H,13.0,3.0,4.0,0.0,1.0,1.0,0.0,1.0,6.0,1.0,0.0,0.0,1.0,3.0,,zia cooke,1,last_good_canonical,401857023.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
 2026-06-28,2026,Zia Cooke,SEA,ATL,H,11.0,6.0,1.0,2.0,1.0,0.0,0.0,1.0,2.0,2.0,3.0,1.0,0.0,1.0,,zia cooke,1,last_good_canonical,401857029.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
-2026-06-09,2026,Nadia Fingall,GSV,PHX,H,,,,,,,,,,,,,,,,nadia fingall,1,api:espn_boxscore,,,,,,,nadia fingall,no_projection_for_player_team_date
 2026-06-14,2026,Darianna Littlepage-Buggs,WAS,NYL,A,,,,,,,,,,,,,,,,darianna littlepage-buggs,0,api:espn_boxscore,,,,,,,darianna littlepage-buggs,no_projection_for_player_team_date
 2026-06-15,2026,Sug Sutton,DAL,LVA,H,21.0,4.0,2.0,4.0,0.0,1.0,1.0,0.0,5.0,2.0,0.0,0.0,0.0,2.0,8.0,sug sutton,1,api:espn_boxscore,,,,,,,sug sutton,no_projection_for_player_team_date
 2026-06-20,2026,Maddy Westbeld,CHI,DAL,A,10.0,0.0,1.0,1.0,0.0,0.0,0.0,1.0,1.0,0.0,0.0,0.0,1.0,0.0,3.0,maddy westbeld,0,api:espn_boxscore,,,,,,,maddy westbeld,no_projection_for_player_team_date
@@ -2279,3 +2279,10 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-07-07,2026,Noemie Brochant,PHX,CHI,H,17.0,0.0,3.0,0.0,0.0,2.0,0.0,0.0,2.0,0.0,0.0,0.0,0.0,3.0,-6.0,noemie brochant,1,api:espn_boxscore,,,,,,,noemie brochant,no_projection_for_player_team_date
 2026-07-07,2026,Natasha Mack,PHX,CHI,H,,,,,,,,,,,,,,,,natasha mack,1,api:espn_boxscore,,,,,,,natasha mack,no_projection_for_player_team_date
 2026-07-07,2026,Sami Whitcomb,PHX,CHI,H,,,,,,,,,,,,,,,,sami whitcomb,1,api:espn_boxscore,,,,,,,sami whitcomb,no_projection_for_player_team_date
+2026-07-08,2026,Temi Fagbenle,TOR,GSV,H,,,,,,,,,,,,,,,,temi fagbenle,1,api:espn_boxscore,,,,,,,temi fagbenle,no_projection_for_player_team_date
+2026-07-08,2026,Brittney Sykes,TOR,GSV,H,,,,,,,,,,,,,,,,brittney sykes,1,api:espn_boxscore,,,,,,,brittney sykes,no_projection_for_player_team_date
+2026-07-08,2026,Kiki Rice,TOR,GSV,H,,,,,,,,,,,,,,,,kiki rice,1,api:espn_boxscore,,,,,,,kiki rice,no_projection_for_player_team_date
+2026-07-08,2026,Napheesa Collier,MIN,CON,A,,,,,,,,,,,,,,,,napheesa collier,0,api:espn_boxscore,,,,,,,napheesa collier,no_projection_for_player_team_date
+2026-07-08,2026,Emma Cechova,MIN,CON,A,,,,,,,,,,,,,,,,emma cechova,0,api:espn_boxscore,,,,,,,emma cechova,no_projection_for_player_team_date
+2026-07-08,2026,Olivia Miles,MIN,CON,A,,,,,,,,,,,,,,,,olivia miles,0,api:espn_boxscore,,,,,,,olivia miles,no_projection_for_player_team_date
+2026-07-08,2026,Aneesah Morrow,CON,MIN,H,,,,,,,,,,,,,,,,aneesah morrow,1,api:espn_boxscore,,,,,,,aneesah morrow,no_projection_for_player_team_date
