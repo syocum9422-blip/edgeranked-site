@@ -965,6 +965,7 @@ def rank_bets(simulation_detail: pd.DataFrame, logger) -> pd.DataFrame:
             logger.info("Calibration sample | %s", message)
     if ranked.empty:
         return pd.DataFrame(columns=BEST_BET_COLUMNS)
+    recovery_candidates = ranked.copy()  # pre-threshold pool for accuracy-recovery layer
     ranked = ranked[(ranked["edge"] >= MIN_EDGE) & (ranked["hit_rate"] >= MIN_HIT_RATE)].copy()
     if ranked.empty:
         return pd.DataFrame(columns=BEST_BET_COLUMNS)
@@ -987,6 +988,22 @@ def rank_bets(simulation_detail: pd.DataFrame, logger) -> pd.DataFrame:
     ranked = ranked.groupby("player_name", group_keys=False).head(MAX_BETS_PER_PLAYER)
     ranked = ranked.groupby("stat", group_keys=False).head(MAX_BETS_PER_STAT)
     ranked = ranked.head(MAX_BETS_TOTAL).reset_index(drop=True)
+    try:
+        from accuracy_recovery.recovery_selection import maybe_apply_accuracy_recovery
+
+        ranked = maybe_apply_accuracy_recovery(
+            recovery_candidates,
+            ranked,
+            min_edge=MIN_EDGE,
+            min_hit_rate=MIN_HIT_RATE,
+            max_bets_total=MAX_BETS_TOTAL,
+            max_bets_per_player=MAX_BETS_PER_PLAYER,
+            max_bets_per_stat=MAX_BETS_PER_STAT,
+            bet_date=resolved_bet_date(),
+            logger=logger,
+        )
+    except Exception:
+        logger.exception("accuracy-recovery hook unavailable; production board unchanged")
     return ranked
 
 

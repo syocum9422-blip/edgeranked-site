@@ -1,0 +1,105 @@
+
+=== BASELINE (raw sim probs, production-like) ===
+              mean  count
+stat                     
+assists      0.439     66
+pa           0.437    151
+points       0.505    194
+pr           0.449    198
+pra          0.486    216
+ra           0.494     81
+rebounds     0.571    112
+steals       0.615     13
+threes_made  0.571     14
+
+=== C1 variance-honesty ===
+              mean  count
+stat                     
+assists      0.506     77
+pa           0.445    164
+points       0.513    158
+pr           0.453    117
+pra          0.480    196
+ra           0.471     87
+rebounds     0.557    106
+steals       0.636     22
+threes_made  0.611     18
+
+=== C2 singles-only (raw) ===
+              mean  count
+stat                     
+assists      0.508    130
+points       0.511    397
+rebounds     0.495    212
+steals       0.643     28
+threes_made  0.615     39
+
+=== C3 tail-cap 0.70 (raw) ===
+              mean  count
+stat                     
+assists      0.507     71
+pa           0.457    127
+points       0.529    223
+pr           0.453    150
+pra          0.438    169
+ra           0.609     92
+rebounds     0.500    122
+steals       0.591     22
+threes_made  0.619     21
+
+=== C6 role-guard (raw) ===
+              mean  count
+stat                     
+assists      0.459     61
+pa           0.443    149
+points       0.513    193
+pr           0.446    195
+pra          0.479    211
+ra           0.494     83
+rebounds     0.574    108
+steals       0.615     13
+threes_made  0.571     14
+
+=== C1+C3 ===
+              mean  count
+stat                     
+assists      0.519     77
+pa           0.437    142
+points       0.512    172
+pr           0.439    114
+pra          0.455    176
+ra           0.533     92
+rebounds     0.550    109
+steals       0.636     22
+threes_made  0.571     21
+
+=== C1+C2 ===
+              mean  count
+stat                     
+assists      0.500    102
+points       0.530    264
+rebounds     0.523    149
+steals       0.640     25
+threes_made  0.594     32
+
+=== C1+C2+C6 ===
+              mean  count
+stat                     
+assists      0.510     96
+points       0.531    260
+rebounds     0.524    143
+steals       0.640     25
+threes_made  0.594     32
+
+=== C1+C3+C6 ===
+              mean  count
+stat                     
+assists      0.548     73
+pa           0.439    139
+points       0.514    175
+pr           0.446    112
+pra          0.445    173
+ra           0.516     93
+rebounds     0.551    107
+steals       0.636     22
+threes_made  0.571     21
