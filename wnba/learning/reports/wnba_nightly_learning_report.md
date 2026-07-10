@@ -1,36 +1,36 @@
 # WNBA Nightly Learning Report
 
-Generated: 2026-07-09T04:25:07Z
-Graded predictions in ledger: 2093
+Generated: 2026-07-10T04:25:06Z
+Graded predictions in ledger: 2135
 
 ## Best-Performing Markets
      market  sample_size  win_pct      mae  calibration
-   rebounds          181 0.632530 2.168769    -0.097091
+   rebounds          184 0.633136 2.192624    -0.095073
 threes_made           15 0.600000 0.966594    -0.080387
-     points          482 0.569915 5.787125    -0.179561
-        pra          461 0.543668 8.255580    -0.246033
+     points          494 0.564050 5.799274    -0.182918
+        pra          472 0.535181 8.363724    -0.252230
      steals           19 0.526316 0.837699    -0.234446
 
 ## Worst-Performing Markets
  market  sample_size  win_pct      mae  calibration
  blocks            1 0.000000 0.895640    -0.806900
-assists           84 0.480519 2.255718    -0.293433
-     pa          276 0.492701 7.249164    -0.263639
-     pr          462 0.498901 7.438962    -0.267388
-     ra          112 0.500000 3.498282    -0.214624
+assists           85 0.474359 2.247392    -0.298005
+     pa          281 0.487455 7.350686    -0.267562
+     pr          471 0.493534 7.493986    -0.270345
+     ra          113 0.495413 3.499279    -0.218374
 
 ## Biggest Misses
       date          player market  side  projection  sportsbook_line  actual_result  absolute_error
 2026-05-20   Caitlin Clark    pra  over   38.941917             35.5            0.0       38.941917
+2026-07-08   Caitlin Clark     pa  over   50.325903             23.5           12.0       38.325903
 2026-06-25   Marina Mabrey     pr under   21.108558             25.5           59.0       37.891442
 2026-06-25   Marina Mabrey    pra under   25.554953             30.5           61.0       35.445047
+2026-07-08   Caitlin Clark    pra  over   51.373318             27.0           16.0       35.373318
 2026-06-25   Marina Mabrey points under   18.243148             22.5           53.0       34.756852
-2026-05-28 Jessica Shepard    pra under   18.114103             26.5           52.0       33.885897
 2026-05-28 Jessica Shepard    pra under   18.114103             25.5           52.0       33.885897
+2026-05-28 Jessica Shepard    pra under   18.114103             26.5           52.0       33.885897
 2026-05-20   Caitlin Clark     pa  over   33.316423             30.5            0.0       33.316423
 2026-06-13  Kahleah Copper    pra under   21.068592             22.5           52.0       30.931408
-2026-05-20   Caitlin Clark     pr  over   30.336815             27.5            0.0       30.336815
-2026-05-23  Natasha Howard    pra under   16.977403             25.5           45.0       28.022597
 
 ## Biggest Hits
       date          player   market  side  projection  sportsbook_line  actual_result  absolute_error
@@ -49,50 +49,50 @@ assists           84 0.480519 2.255718    -0.293433
 team  sample_size  accuracy      mae
  POR          144  0.611511 6.657401
  DAL          131  0.601562 5.080850
- GSV          134  0.593985 5.118283
  NYL          227  0.566964 6.449234
+ GSV          144  0.566434 5.481897
  ATL          119  0.560345 5.322274
  PHX          171  0.547619 7.053012
  LVA          190  0.546448 5.729684
- IND          154  0.536424 5.686823
- LAS          152  0.523490 6.006336
+ IND          158  0.522581 6.112581
+ MIN          140  0.503704 6.006031
+ LAS          159  0.500000 5.983520
  SEA          132  0.500000 5.916537
  WAS           79  0.493506 9.045986
- MIN          129  0.491935 5.908272
 
 ## Player Outliers
-             player  sample_size  accuracy       mae
-       Lauren Betts            7  0.285714 15.532526
-     Georgia Amoore           22  0.227273 14.081145
-     Rickea Jackson            9  0.222222 11.036991
-      Natasha Cloud           13  0.461538 10.696878
-        Carla Leite           37  0.567568 10.075768
-Olivia Nelson-Ododa            5  0.000000  9.901729
-    Hailey Van Lith            7  0.428571  9.607210
-    Sabrina Ionescu           36  0.428571  9.573670
-      Caitlin Clark           41  0.414634  9.493842
-     Brittney Sykes           36  0.400000  9.360317
-      Marina Mabrey           44  0.558140  8.686572
-       Kiki Iriafen            7  0.000000  8.657472
+         player  sample_size  accuracy       mae
+   Lauren Betts            7  0.285714 15.532526
+ Georgia Amoore           22  0.227273 14.081145
+ Rickea Jackson            9  0.222222 11.036991
+  Caitlin Clark           43  0.395349 10.766204
+  Natasha Cloud           13  0.461538 10.696878
+    Carla Leite           37  0.567568 10.075768
+Hailey Van Lith            7  0.428571  9.607210
+Sabrina Ionescu           36  0.428571  9.573670
+ Brittney Sykes           36  0.400000  9.360317
+  Marina Mabrey           44  0.558140  8.686572
+   Kiki Iriafen            7  0.000000  8.657472
+  Cameron Brink           20  0.333333  8.589116
 
 ## Confidence Calibration
 confidence_bucket  sample_size  realized_accuracy  avg_predicted_hit_rate  calibration_gap
            55-60%          144           0.577465                0.582097        -0.004632
-           60-65%          578           0.512456                0.623974        -0.111518
-           65-70%          274           0.513109                0.670833        -0.157724
-             70%+         1097           0.547486                0.877271        -0.329785
+           60-65%          605           0.497453                0.624097        -0.126644
+           65-70%          281           0.507299                0.670641        -0.163341
+             70%+         1105           0.547135                0.876491        -0.329356
 
 ## Challenger Summary
 segment      market  sample_size  production_mae  challenger_mae  production_brier  challenger_brier
-    all         all         2093        6.229304        6.051689          0.312429          0.283760
- market     assists           84        2.255718        2.297689          0.335290          0.303193
+    all         all         2135        6.289897        6.108970          0.312997          0.284879
+ market     assists           85        2.247392        2.285790          0.336224          0.304127
  market      blocks            1        0.895640        0.895640          0.651088          0.435600
- market          pa          276        7.249164        7.121282          0.332368          0.295122
- market      points          482        5.787125        5.833687          0.304383          0.278570
- market          pr          462        7.438962        6.963200          0.325602          0.295723
- market         pra          461        8.255580        7.830514          0.319734          0.284592
- market          ra          112        3.498282        3.551937          0.306273          0.294288
- market    rebounds          181        2.168769        2.199283          0.248297          0.234406
+ market          pa          281        7.350686        7.199885          0.332949          0.296384
+ market      points          494        5.799274        5.839856          0.304859          0.279354
+ market          pr          471        7.493986        7.021510          0.325587          0.296643
+ market         pra          472        8.363724        7.946079          0.321134          0.286848
+ market          ra          113        3.499279        3.545615          0.306990          0.294759
+ market    rebounds          184        2.192624        2.222030          0.248095          0.234414
  market      steals           19        0.837699        2.000540          0.282453          0.260858
  market threes_made           15        0.966594        2.280581          0.230844          0.240759
 
