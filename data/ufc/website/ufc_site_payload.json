@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-07-08T07:00:17.687510+00:00",
+  "generated_at": "2026-07-11T06:00:17.505397+00:00",
   "sport": "ufc",
   "event": {
     "name": "UFC 329: McGregor vs. Holloway 2",
     "date": "2026-07-11",
-    "fight_count": 36
+    "fight_count": 46
   },
   "fights": [
     {
@@ -2296,152 +2296,9 @@
       }
     },
     {
-      "fight_id": "9d756fd8bb9b",
+      "fight_id": "4cb3a8848bb1",
       "card_position": 17,
       "card_label": "Card Position 17",
-      "fight_title": "Kevin Holland vs Jacobe Smith",
-      "weight_class": "Welterweight",
-      "scheduled_rounds": 3,
-      "fighter_red": "Kevin Holland",
-      "fighter_blue": "Jacobe Smith",
-      "predicted_winner": "Jacobe Smith",
-      "predicted_winner_pct": 59.0,
-      "confidence_tier": "competitive",
-      "win_probabilities": {
-        "red_pct": 41.0,
-        "blue_pct": 59.0
-      },
-      "method_probabilities": {
-        "ko_tko_pct": 37.3,
-        "submission_pct": 18.5,
-        "decision_pct": 44.2,
-        "inside_distance_pct": 55.8
-      },
-      "totals": {
-        "over_1_5_pct": 73.5,
-        "under_1_5_pct": 26.5,
-        "over_2_5_pct": 59.1,
-        "under_2_5_pct": 40.9
-      },
-      "expectations": {
-        "fight_time_mins": 10.3407,
-        "red_takedowns": 0.4513,
-        "blue_takedowns": 4.8912
-      },
-      "prop_probabilities": {
-        "inside_distance": [
-          {
-            "label": "Fight goes to decision",
-            "selection": "no",
-            "line": null,
-            "probability_pct": 44.2,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Fight ends inside distance",
-            "selection": "yes",
-            "line": null,
-            "probability_pct": 55.8,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ],
-        "method": [
-          {
-            "label": "Win by Decision",
-            "selection": "decision",
-            "line": null,
-            "probability_pct": 44.2,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Win by KO/TKO",
-            "selection": "ko_tko",
-            "line": null,
-            "probability_pct": 37.3,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Win by Submission",
-            "selection": "submission",
-            "line": null,
-            "probability_pct": 18.5,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ],
-        "moneyline": [
-          {
-            "label": "Jacobe Smith win",
-            "selection": "blue",
-            "line": null,
-            "probability_pct": 59.0,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Kevin Holland win",
-            "selection": "red",
-            "line": null,
-            "probability_pct": 41.0,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ],
-        "total_rounds": [
-          {
-            "label": "Over 1.5 rounds",
-            "selection": "over",
-            "line": 1.5,
-            "probability_pct": 73.5,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Under 1.5 rounds",
-            "selection": "under",
-            "line": 1.5,
-            "probability_pct": 26.5,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Over 2.5 rounds",
-            "selection": "over",
-            "line": 2.5,
-            "probability_pct": 59.1,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Under 2.5 rounds",
-            "selection": "under",
-            "line": 2.5,
-            "probability_pct": 40.9,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ]
-      }
-    },
-    {
-      "fight_id": "4cb3a8848bb1",
-      "card_position": 18,
-      "card_label": "Card Position 18",
       "fight_title": "Chase Hooper vs Mitch Ramirez",
       "weight_class": "Lightweight",
       "scheduled_rounds": 3,
@@ -2583,8 +2440,8 @@
     },
     {
       "fight_id": "3e25b9819117",
-      "card_position": 19,
-      "card_label": "Card Position 19",
+      "card_position": 18,
+      "card_label": "Card Position 18",
       "fight_title": "Tabatha Ricci vs Fatima Kline",
       "weight_class": "Women's Strawweight",
       "scheduled_rounds": 3,
@@ -2726,8 +2583,8 @@
     },
     {
       "fight_id": "8081d983b1b3",
-      "card_position": 20,
-      "card_label": "Card Position 20",
+      "card_position": 19,
+      "card_label": "Card Position 19",
       "fight_title": "Tommy McMillen vs Alberto Montes",
       "weight_class": "Featherweight",
       "scheduled_rounds": 3,
@@ -2868,152 +2725,9 @@
       }
     },
     {
-      "fight_id": "6c4e3585f2d5",
-      "card_position": 21,
-      "card_label": "Card Position 21",
-      "fight_title": "Veronica Hardy vs Dione Barbosa",
-      "weight_class": "Women's Flyweight",
-      "scheduled_rounds": 3,
-      "fighter_red": "Veronica Hardy",
-      "fighter_blue": "Dione Barbosa",
-      "predicted_winner": "Veronica Hardy",
-      "predicted_winner_pct": 65.6,
-      "confidence_tier": "medium",
-      "win_probabilities": {
-        "red_pct": 65.6,
-        "blue_pct": 34.4
-      },
-      "method_probabilities": {
-        "ko_tko_pct": 25.1,
-        "submission_pct": 17.3,
-        "decision_pct": 57.6,
-        "inside_distance_pct": 42.4
-      },
-      "totals": {
-        "over_1_5_pct": 76.4,
-        "under_1_5_pct": 23.6,
-        "over_2_5_pct": 54.2,
-        "under_2_5_pct": 45.8
-      },
-      "expectations": {
-        "fight_time_mins": 11.8207,
-        "red_takedowns": 0.2681,
-        "blue_takedowns": 2.5622
-      },
-      "prop_probabilities": {
-        "inside_distance": [
-          {
-            "label": "Fight goes to decision",
-            "selection": "no",
-            "line": null,
-            "probability_pct": 57.6,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Fight ends inside distance",
-            "selection": "yes",
-            "line": null,
-            "probability_pct": 42.4,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ],
-        "method": [
-          {
-            "label": "Win by Decision",
-            "selection": "decision",
-            "line": null,
-            "probability_pct": 57.6,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Win by KO/TKO",
-            "selection": "ko_tko",
-            "line": null,
-            "probability_pct": 25.1,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Win by Submission",
-            "selection": "submission",
-            "line": null,
-            "probability_pct": 17.3,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ],
-        "moneyline": [
-          {
-            "label": "Dione Barbosa win",
-            "selection": "blue",
-            "line": null,
-            "probability_pct": 34.4,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Veronica Hardy win",
-            "selection": "red",
-            "line": null,
-            "probability_pct": 65.6,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ],
-        "total_rounds": [
-          {
-            "label": "Over 1.5 rounds",
-            "selection": "over",
-            "line": 1.5,
-            "probability_pct": 76.4,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Under 1.5 rounds",
-            "selection": "under",
-            "line": 1.5,
-            "probability_pct": 23.6,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Over 2.5 rounds",
-            "selection": "over",
-            "line": 2.5,
-            "probability_pct": 54.2,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Under 2.5 rounds",
-            "selection": "under",
-            "line": 2.5,
-            "probability_pct": 45.8,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ]
-      }
-    },
-    {
       "fight_id": "f2767c4226de",
-      "card_position": 22,
-      "card_label": "Card Position 22",
+      "card_position": 20,
+      "card_label": "Card Position 20",
       "fight_title": "Austin Bashi vs Jose Delgado",
       "weight_class": "Featherweight",
       "scheduled_rounds": 3,
@@ -3155,8 +2869,8 @@
     },
     {
       "fight_id": "61f434839d9a",
-      "card_position": 23,
-      "card_label": "Card Position 23",
+      "card_position": 21,
+      "card_label": "Card Position 21",
       "fight_title": "Jean-Paul Lebosnoyani vs Seokhyeon Ko",
       "weight_class": "Welterweight",
       "scheduled_rounds": 3,
@@ -3297,152 +3011,9 @@
       }
     },
     {
-      "fight_id": "898772ecfe2f",
-      "card_position": 24,
-      "card_label": "Card Position 24",
-      "fight_title": "Allen Frye Jr. vs Alvin Hines",
-      "weight_class": "Heavyweight",
-      "scheduled_rounds": 3,
-      "fighter_red": "Allen Frye Jr.",
-      "fighter_blue": "Alvin Hines",
-      "predicted_winner": "Allen Frye Jr.",
-      "predicted_winner_pct": 84.6,
-      "confidence_tier": "high",
-      "win_probabilities": {
-        "red_pct": 84.6,
-        "blue_pct": 15.4
-      },
-      "method_probabilities": {
-        "ko_tko_pct": 30.0,
-        "submission_pct": 19.4,
-        "decision_pct": 50.5,
-        "inside_distance_pct": 49.5
-      },
-      "totals": {
-        "over_1_5_pct": 68.1,
-        "under_1_5_pct": 31.9,
-        "over_2_5_pct": 60.8,
-        "under_2_5_pct": 39.2
-      },
-      "expectations": {
-        "fight_time_mins": 10.9165,
-        "red_takedowns": 0.8846,
-        "blue_takedowns": 0.4435
-      },
-      "prop_probabilities": {
-        "inside_distance": [
-          {
-            "label": "Fight goes to decision",
-            "selection": "no",
-            "line": null,
-            "probability_pct": 50.5,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Fight ends inside distance",
-            "selection": "yes",
-            "line": null,
-            "probability_pct": 49.5,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ],
-        "method": [
-          {
-            "label": "Win by Decision",
-            "selection": "decision",
-            "line": null,
-            "probability_pct": 50.5,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Win by KO/TKO",
-            "selection": "ko_tko",
-            "line": null,
-            "probability_pct": 30.0,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Win by Submission",
-            "selection": "submission",
-            "line": null,
-            "probability_pct": 19.4,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ],
-        "moneyline": [
-          {
-            "label": "Alvin Hines win",
-            "selection": "blue",
-            "line": null,
-            "probability_pct": 15.4,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Allen Frye Jr. win",
-            "selection": "red",
-            "line": null,
-            "probability_pct": 84.6,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ],
-        "total_rounds": [
-          {
-            "label": "Over 1.5 rounds",
-            "selection": "over",
-            "line": 1.5,
-            "probability_pct": 68.1,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Under 1.5 rounds",
-            "selection": "under",
-            "line": 1.5,
-            "probability_pct": 31.9,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Over 2.5 rounds",
-            "selection": "over",
-            "line": 2.5,
-            "probability_pct": 60.8,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          },
-          {
-            "label": "Under 2.5 rounds",
-            "selection": "under",
-            "line": 2.5,
-            "probability_pct": 39.2,
-            "source": "simulation",
-            "projection_player": null,
-            "projection_opponent": null
-          }
-        ]
-      }
-    },
-    {
       "fight_id": "98f33e02d07b",
-      "card_position": 25,
-      "card_label": "Card Position 25",
+      "card_position": 22,
+      "card_label": "Card Position 22",
       "fight_title": "Levi Rodrigues Jr. vs Felipe Franco",
       "weight_class": "Light Heavyweight",
       "scheduled_rounds": 3,
@@ -3584,8 +3155,8 @@
     },
     {
       "fight_id": "8089a297c249",
-      "card_position": 26,
-      "card_label": "Card Position 26",
+      "card_position": 23,
+      "card_label": "Card Position 23",
       "fight_title": "Alden Coria vs Stewart Nicoll",
       "weight_class": "Flyweight",
       "scheduled_rounds": 3,
@@ -3726,9 +3297,295 @@
       }
     },
     {
+      "fight_id": "c03583bdef53",
+      "card_position": 24,
+      "card_label": "Card Position 24",
+      "fight_title": "RJ Harris vs Alvin Hines",
+      "weight_class": "Heavyweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "RJ Harris",
+      "fighter_blue": "Alvin Hines",
+      "predicted_winner": "RJ Harris",
+      "predicted_winner_pct": 84.6,
+      "confidence_tier": "high",
+      "win_probabilities": {
+        "red_pct": 84.6,
+        "blue_pct": 15.4
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 30.0,
+        "submission_pct": 19.4,
+        "decision_pct": 50.5,
+        "inside_distance_pct": 49.5
+      },
+      "totals": {
+        "over_1_5_pct": 68.1,
+        "under_1_5_pct": 31.9,
+        "over_2_5_pct": 60.8,
+        "under_2_5_pct": 39.2
+      },
+      "expectations": {
+        "fight_time_mins": 10.9165,
+        "red_takedowns": 0.8846,
+        "blue_takedowns": 0.4435
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 50.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 49.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 50.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 30.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 19.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Alvin Hines win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 15.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "RJ Harris win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 84.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 68.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 31.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 60.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 39.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "df7dbde6b97a",
+      "card_position": 25,
+      "card_label": "Card Position 25",
+      "fight_title": "Anna Melisano vs Dione Barbosa",
+      "weight_class": "Women's Flyweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Anna Melisano",
+      "fighter_blue": "Dione Barbosa",
+      "predicted_winner": "Anna Melisano",
+      "predicted_winner_pct": 63.1,
+      "confidence_tier": "competitive",
+      "win_probabilities": {
+        "red_pct": 63.1,
+        "blue_pct": 36.9
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 30.7,
+        "submission_pct": 13.2,
+        "decision_pct": 56.1,
+        "inside_distance_pct": 43.9
+      },
+      "totals": {
+        "over_1_5_pct": 79.9,
+        "under_1_5_pct": 20.1,
+        "over_2_5_pct": 58.5,
+        "under_2_5_pct": 41.5
+      },
+      "expectations": {
+        "fight_time_mins": 11.9524,
+        "red_takedowns": 0.2605,
+        "blue_takedowns": 1.9445
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 56.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 43.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 56.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 30.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 13.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Dione Barbosa win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 36.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Anna Melisano win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 63.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 79.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 20.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 58.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 41.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
       "fight_id": "e1eb6bc26027",
-      "card_position": 27,
-      "card_label": "Card Position 27",
+      "card_position": 26,
+      "card_label": "Card Position 26",
       "fight_title": "Magomed Ankalaev vs Khalil Rountree Jr.",
       "weight_class": "Light Heavyweight",
       "scheduled_rounds": 3,
@@ -3870,8 +3727,8 @@
     },
     {
       "fight_id": "5f7402983418",
-      "card_position": 28,
-      "card_label": "Card Position 28",
+      "card_position": 27,
+      "card_label": "Card Position 27",
       "fight_title": "Steve Erceg vs Ramazan Temirov",
       "weight_class": "Flyweight",
       "scheduled_rounds": 3,
@@ -4013,8 +3870,8 @@
     },
     {
       "fight_id": "eeea7a299701",
-      "card_position": 29,
-      "card_label": "Card Position 29",
+      "card_position": 28,
+      "card_label": "Card Position 28",
       "fight_title": "Islam Dulatov vs Wellington Turman",
       "weight_class": "Welterweight",
       "scheduled_rounds": 3,
@@ -4156,8 +4013,8 @@
     },
     {
       "fight_id": "c9d352a83306",
-      "card_position": 30,
-      "card_label": "Card Position 30",
+      "card_position": 29,
+      "card_label": "Card Position 29",
       "fight_title": "Magomed Zaynukov vs Damian Rzepecki",
       "weight_class": "Lightweight",
       "scheduled_rounds": 3,
@@ -4299,8 +4156,8 @@
     },
     {
       "fight_id": "45504b282cd2",
-      "card_position": 31,
-      "card_label": "Card Position 31",
+      "card_position": 30,
+      "card_label": "Card Position 30",
       "fight_title": "Rizvan Kuniev vs Tyrell Fortune",
       "weight_class": "Heavyweight",
       "scheduled_rounds": 3,
@@ -4442,8 +4299,8 @@
     },
     {
       "fight_id": "912754c42421",
-      "card_position": 32,
-      "card_label": "Card Position 32",
+      "card_position": 31,
+      "card_label": "Card Position 31",
       "fight_title": "Valter Walker vs Thomas Petersen",
       "weight_class": "Heavyweight",
       "scheduled_rounds": 3,
@@ -4585,8 +4442,8 @@
     },
     {
       "fight_id": "10bf43cbc11e",
-      "card_position": 33,
-      "card_label": "Card Position 33",
+      "card_position": 32,
+      "card_label": "Card Position 32",
       "fight_title": "Uran Satybaldiev vs Dustin Jacoby",
       "weight_class": "Light Heavyweight",
       "scheduled_rounds": 3,
@@ -4728,8 +4585,8 @@
     },
     {
       "fight_id": "4cdc65b1f602",
-      "card_position": 34,
-      "card_label": "Card Position 34",
+      "card_position": 33,
+      "card_label": "Card Position 33",
       "fight_title": "Ismael Bonfim vs Axel Sola",
       "weight_class": "Lightweight",
       "scheduled_rounds": 3,
@@ -4871,8 +4728,8 @@
     },
     {
       "fight_id": "2610fa1a98d5",
-      "card_position": 35,
-      "card_label": "Card Position 35",
+      "card_position": 34,
+      "card_label": "Card Position 34",
       "fight_title": "Magomed Tuchalov vs Brendson Ribeiro",
       "weight_class": "Light Heavyweight",
       "scheduled_rounds": 3,
@@ -5014,8 +4871,8 @@
     },
     {
       "fight_id": "2a60fac89af3",
-      "card_position": 36,
-      "card_label": "Opening Fight",
+      "card_position": 35,
+      "card_label": "Card Position 35",
       "fight_title": "Nurullo Aliev vs Mike Davis",
       "weight_class": "Lightweight",
       "scheduled_rounds": 3,
@@ -5148,6 +5005,1579 @@
             "selection": "under",
             "line": 2.5,
             "probability_pct": 36.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "6919cd30a072",
+      "card_position": 36,
+      "card_label": "Card Position 36",
+      "fight_title": "Uros Medic vs Daniel Rodriguez",
+      "weight_class": "Welterweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Uros Medic",
+      "fighter_blue": "Daniel Rodriguez",
+      "predicted_winner": "Uros Medic",
+      "predicted_winner_pct": 73.5,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 73.5,
+        "blue_pct": 26.5
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 24.0,
+        "submission_pct": 12.0,
+        "decision_pct": 63.9,
+        "inside_distance_pct": 36.1
+      },
+      "totals": {
+        "over_1_5_pct": 79.8,
+        "under_1_5_pct": 20.2,
+        "over_2_5_pct": 67.3,
+        "under_2_5_pct": 32.7
+      },
+      "expectations": {
+        "fight_time_mins": 12.2456,
+        "red_takedowns": 0.4029,
+        "blue_takedowns": 0.9434
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 63.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 36.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 63.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 24.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 12.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Daniel Rodriguez win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 26.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Uros Medic win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 73.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 79.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 20.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 67.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 32.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "9c6be272b43d",
+      "card_position": 37,
+      "card_label": "Card Position 37",
+      "fight_title": "Jan Blachowicz vs Bogdan Guskov",
+      "weight_class": "Light Heavyweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Jan Blachowicz",
+      "fighter_blue": "Bogdan Guskov",
+      "predicted_winner": "Jan Blachowicz",
+      "predicted_winner_pct": 69.9,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 69.9,
+        "blue_pct": 30.1
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 33.1,
+        "submission_pct": 11.3,
+        "decision_pct": 55.6,
+        "inside_distance_pct": 44.4
+      },
+      "totals": {
+        "over_1_5_pct": 74.9,
+        "under_1_5_pct": 25.1,
+        "over_2_5_pct": 62.0,
+        "under_2_5_pct": 38.0
+      },
+      "expectations": {
+        "fight_time_mins": 11.9957,
+        "red_takedowns": 1.1762,
+        "blue_takedowns": 0.2121
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 55.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 44.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 55.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 33.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 11.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Bogdan Guskov win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 30.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Jan Blachowicz win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 69.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 74.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 25.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 62.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 38.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "2c017bf54959",
+      "card_position": 38,
+      "card_label": "Card Position 38",
+      "fight_title": "Aleksandar Rakic vs Marcin Tybura",
+      "weight_class": "Heavyweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Aleksandar Rakic",
+      "fighter_blue": "Marcin Tybura",
+      "predicted_winner": "Aleksandar Rakic",
+      "predicted_winner_pct": 70.4,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 70.4,
+        "blue_pct": 29.6
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 22.9,
+        "submission_pct": 11.5,
+        "decision_pct": 65.6,
+        "inside_distance_pct": 34.4
+      },
+      "totals": {
+        "over_1_5_pct": 81.4,
+        "under_1_5_pct": 18.6,
+        "over_2_5_pct": 66.8,
+        "under_2_5_pct": 33.2
+      },
+      "expectations": {
+        "fight_time_mins": 12.7325,
+        "red_takedowns": 0.6473,
+        "blue_takedowns": 0.7336
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 65.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 34.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 65.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 22.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 11.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Marcin Tybura win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 29.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Aleksandar Rakic win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 70.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 81.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 18.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 66.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 33.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "2b7be558f96d",
+      "card_position": 39,
+      "card_label": "Card Position 39",
+      "fight_title": "Dusko Todorovic vs Robert Valentin",
+      "weight_class": "Middleweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Dusko Todorovic",
+      "fighter_blue": "Robert Valentin",
+      "predicted_winner": "Dusko Todorovic",
+      "predicted_winner_pct": 67.8,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 67.8,
+        "blue_pct": 32.2
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 34.1,
+        "submission_pct": 14.2,
+        "decision_pct": 51.7,
+        "inside_distance_pct": 48.3
+      },
+      "totals": {
+        "over_1_5_pct": 65.2,
+        "under_1_5_pct": 34.8,
+        "over_2_5_pct": 56.6,
+        "under_2_5_pct": 43.4
+      },
+      "expectations": {
+        "fight_time_mins": 8.4323,
+        "red_takedowns": 1.643,
+        "blue_takedowns": 0.9049
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 51.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 48.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 51.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 34.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 14.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Robert Valentin win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 32.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Dusko Todorovic win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 67.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 65.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 34.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 56.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 43.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "af059470bc12",
+      "card_position": 40,
+      "card_label": "Card Position 40",
+      "fight_title": "Vlasto Cepo vs Gilbert Urbina",
+      "weight_class": "Middleweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Vlasto Cepo",
+      "fighter_blue": "Gilbert Urbina",
+      "predicted_winner": "Vlasto Cepo",
+      "predicted_winner_pct": 62.4,
+      "confidence_tier": "competitive",
+      "win_probabilities": {
+        "red_pct": 62.4,
+        "blue_pct": 37.6
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 27.3,
+        "submission_pct": 18.1,
+        "decision_pct": 54.6,
+        "inside_distance_pct": 45.4
+      },
+      "totals": {
+        "over_1_5_pct": 72.9,
+        "under_1_5_pct": 27.1,
+        "over_2_5_pct": 57.0,
+        "under_2_5_pct": 43.0
+      },
+      "expectations": {
+        "fight_time_mins": 10.7178,
+        "red_takedowns": 0.303,
+        "blue_takedowns": 1.4526
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 54.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 45.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 54.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 27.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 18.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Gilbert Urbina win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 37.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Vlasto Cepo win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 62.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 72.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 27.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 57.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 43.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "41d94ba160b2",
+      "card_position": 41,
+      "card_label": "Card Position 41",
+      "fight_title": "Ludovit Klein vs Tofiq Musayev",
+      "weight_class": "Lightweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Ludovit Klein",
+      "fighter_blue": "Tofiq Musayev",
+      "predicted_winner": "Ludovit Klein",
+      "predicted_winner_pct": 83.3,
+      "confidence_tier": "high",
+      "win_probabilities": {
+        "red_pct": 83.3,
+        "blue_pct": 16.7
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 25.0,
+        "submission_pct": 11.2,
+        "decision_pct": 63.8,
+        "inside_distance_pct": 36.2
+      },
+      "totals": {
+        "over_1_5_pct": 80.8,
+        "under_1_5_pct": 19.2,
+        "over_2_5_pct": 66.0,
+        "under_2_5_pct": 34.0
+      },
+      "expectations": {
+        "fight_time_mins": 12.3645,
+        "red_takedowns": 0.7771,
+        "blue_takedowns": 1.0782
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 63.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 36.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 63.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 25.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 11.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Tofiq Musayev win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 16.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Ludovit Klein win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 83.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 80.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 19.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 66.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 34.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "004cf9d7268c",
+      "card_position": 42,
+      "card_label": "Card Position 42",
+      "fight_title": "Oban Elliott vs Michael Oliveira",
+      "weight_class": "Welterweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Oban Elliott",
+      "fighter_blue": "Michael Oliveira",
+      "predicted_winner": "Oban Elliott",
+      "predicted_winner_pct": 75.7,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 75.7,
+        "blue_pct": 24.3
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 27.1,
+        "submission_pct": 10.4,
+        "decision_pct": 62.6,
+        "inside_distance_pct": 37.4
+      },
+      "totals": {
+        "over_1_5_pct": 80.0,
+        "under_1_5_pct": 20.0,
+        "over_2_5_pct": 68.0,
+        "under_2_5_pct": 32.0
+      },
+      "expectations": {
+        "fight_time_mins": 12.5734,
+        "red_takedowns": 1.2745,
+        "blue_takedowns": 0.3782
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 62.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 37.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 62.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 27.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 10.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Michael Oliveira win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 24.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Oban Elliott win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 75.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 80.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 20.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 68.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 32.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "13525df38628",
+      "card_position": 43,
+      "card_label": "Card Position 43",
+      "fight_title": "Mark Vologdin vs Josias Musasa",
+      "weight_class": "Bantamweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Mark Vologdin",
+      "fighter_blue": "Josias Musasa",
+      "predicted_winner": "Mark Vologdin",
+      "predicted_winner_pct": 55.1,
+      "confidence_tier": "competitive",
+      "win_probabilities": {
+        "red_pct": 55.1,
+        "blue_pct": 44.9
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 26.3,
+        "submission_pct": 17.6,
+        "decision_pct": 56.0,
+        "inside_distance_pct": 44.0
+      },
+      "totals": {
+        "over_1_5_pct": 67.0,
+        "under_1_5_pct": 33.0,
+        "over_2_5_pct": 62.8,
+        "under_2_5_pct": 37.2
+      },
+      "expectations": {
+        "fight_time_mins": 11.1472,
+        "red_takedowns": 0.6824,
+        "blue_takedowns": 1.0968
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 56.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 44.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 56.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 26.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 17.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Josias Musasa win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 44.9,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Mark Vologdin win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 55.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 67.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 33.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 62.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 37.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "3ad539a0a06d",
+      "card_position": 44,
+      "card_label": "Card Position 44",
+      "fight_title": "Dennis Buzukja vs Bogdan Grad",
+      "weight_class": "Featherweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Dennis Buzukja",
+      "fighter_blue": "Bogdan Grad",
+      "predicted_winner": "Dennis Buzukja",
+      "predicted_winner_pct": 61.5,
+      "confidence_tier": "competitive",
+      "win_probabilities": {
+        "red_pct": 61.5,
+        "blue_pct": 38.5
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 25.7,
+        "submission_pct": 11.0,
+        "decision_pct": 63.2,
+        "inside_distance_pct": 36.8
+      },
+      "totals": {
+        "over_1_5_pct": 80.2,
+        "under_1_5_pct": 19.8,
+        "over_2_5_pct": 63.3,
+        "under_2_5_pct": 36.7
+      },
+      "expectations": {
+        "fight_time_mins": 12.6898,
+        "red_takedowns": 0.1941,
+        "blue_takedowns": 2.1222
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 63.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 36.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 63.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 25.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 11.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Bogdan Grad win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 38.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Dennis Buzukja win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 61.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 80.2,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 19.8,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 63.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 36.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "831168cf8ea5",
+      "card_position": 45,
+      "card_label": "Card Position 45",
+      "fight_title": "Nina Milosevic vs Hailey Cowan",
+      "weight_class": "Women's Bantamweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Nina Milosevic",
+      "fighter_blue": "Hailey Cowan",
+      "predicted_winner": "Nina Milosevic",
+      "predicted_winner_pct": 74.3,
+      "confidence_tier": "medium",
+      "win_probabilities": {
+        "red_pct": 74.3,
+        "blue_pct": 25.7
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 30.6,
+        "submission_pct": 9.1,
+        "decision_pct": 60.3,
+        "inside_distance_pct": 39.7
+      },
+      "totals": {
+        "over_1_5_pct": 78.7,
+        "under_1_5_pct": 21.3,
+        "over_2_5_pct": 64.7,
+        "under_2_5_pct": 35.3
+      },
+      "expectations": {
+        "fight_time_mins": 11.84,
+        "red_takedowns": 0.5368,
+        "blue_takedowns": 0.9862
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 60.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 39.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 60.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 30.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 9.1,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Hailey Cowan win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 25.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Nina Milosevic win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 74.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 78.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 21.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 64.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 35.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ]
+      }
+    },
+    {
+      "fight_id": "ae08728e76de",
+      "card_position": 46,
+      "card_label": "Opening Fight",
+      "fight_title": "Jovan Leka vs Max Gimenis",
+      "weight_class": "Heavyweight",
+      "scheduled_rounds": 3,
+      "fighter_red": "Jovan Leka",
+      "fighter_blue": "Max Gimenis",
+      "predicted_winner": "Jovan Leka",
+      "predicted_winner_pct": 80.3,
+      "confidence_tier": "high",
+      "win_probabilities": {
+        "red_pct": 80.3,
+        "blue_pct": 19.7
+      },
+      "method_probabilities": {
+        "ko_tko_pct": 24.0,
+        "submission_pct": 25.5,
+        "decision_pct": 50.4,
+        "inside_distance_pct": 49.6
+      },
+      "totals": {
+        "over_1_5_pct": 71.3,
+        "under_1_5_pct": 28.7,
+        "over_2_5_pct": 58.3,
+        "under_2_5_pct": 41.7
+      },
+      "expectations": {
+        "fight_time_mins": 10.813,
+        "red_takedowns": 1.7454,
+        "blue_takedowns": 0.474
+      },
+      "prop_probabilities": {
+        "inside_distance": [
+          {
+            "label": "Fight goes to decision",
+            "selection": "no",
+            "line": null,
+            "probability_pct": 50.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Fight ends inside distance",
+            "selection": "yes",
+            "line": null,
+            "probability_pct": 49.6,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "method": [
+          {
+            "label": "Win by Decision",
+            "selection": "decision",
+            "line": null,
+            "probability_pct": 50.4,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by KO/TKO",
+            "selection": "ko_tko",
+            "line": null,
+            "probability_pct": 24.0,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Win by Submission",
+            "selection": "submission",
+            "line": null,
+            "probability_pct": 25.5,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "moneyline": [
+          {
+            "label": "Max Gimenis win",
+            "selection": "blue",
+            "line": null,
+            "probability_pct": 19.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Jovan Leka win",
+            "selection": "red",
+            "line": null,
+            "probability_pct": 80.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          }
+        ],
+        "total_rounds": [
+          {
+            "label": "Over 1.5 rounds",
+            "selection": "over",
+            "line": 1.5,
+            "probability_pct": 71.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 1.5 rounds",
+            "selection": "under",
+            "line": 1.5,
+            "probability_pct": 28.7,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Over 2.5 rounds",
+            "selection": "over",
+            "line": 2.5,
+            "probability_pct": 58.3,
+            "source": "simulation",
+            "projection_player": null,
+            "projection_opponent": null
+          },
+          {
+            "label": "Under 2.5 rounds",
+            "selection": "under",
+            "line": 2.5,
+            "probability_pct": 41.7,
             "source": "simulation",
             "projection_player": null,
             "projection_opponent": null
