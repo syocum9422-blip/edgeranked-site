@@ -1,6 +1,6 @@
 player_name,team,opponent,has_live_line,has_history,history_source,included,reason
 Allisha Gray,ATL,POR,True,True,last_good_canonical,True,included
-Angel Reese,ATL,POR,True,True,last_good_canonical,True,included
+Angel Reese,ATL,POR,True,True,last_good_canonical,False,excluded_by_status_or_filter
 Jordin Canada,ATL,POR,True,True,last_good_canonical,True,included
 Naz Hillmon,ATL,POR,True,True,last_good_canonical,True,included
 Rhyne Howard,ATL,POR,True,True,last_good_canonical,True,included
