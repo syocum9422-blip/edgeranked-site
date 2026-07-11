@@ -1,7 +1,7 @@
 team,source_schedule,source_prizepicks,included,reason
 ATL,True,True,True,scheduled_and_live_prizepicks
 LVA,True,True,True,scheduled_and_live_prizepicks
-MIN,True,True,True,scheduled_and_live_prizepicks
-NYL,True,True,True,scheduled_and_live_prizepicks
+MIN,True,False,True,scheduled
+NYL,True,False,True,scheduled
 PHX,True,True,True,scheduled_and_live_prizepicks
 POR,True,True,True,scheduled_and_live_prizepicks
