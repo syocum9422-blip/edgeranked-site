@@ -1,44 +1,43 @@
 player_name,team,position,est_return_date,status,status_text,comment,fetched_at,_data_source,player_key
-Angel Reese,ATLANTA DREAM,F,Jul 13,day-to-day,Day-To-Day,,2026-07-12T11:31:05.736160+00:00,api:espn_injuries,angel reese
-Jaylyn Sherrod,ATLANTA DREAM,G,Jul 13,out,Out,Jul 11: Sherrod (coach's decision) has been ruled out for Saturday's game against Portland.,2026-07-12T11:31:05.736276+00:00,api:espn_injuries,jaylyn sherrod
-Brionna Jones,ATLANTA DREAM,F,Jul 13,out,Out,Jul 11: Jones (knee) is listed as out for Saturday's game versus Portland.,2026-07-12T11:31:05.736358+00:00,api:espn_injuries,brionna jones
-Skylar Diggins,CHICAGO SKY,G,Jul 15,out,Out,Jul 11: Diggins (knee) has been ruled out for Sunday's game against Dallas.,2026-07-12T11:31:05.736536+00:00,api:espn_injuries,skylar diggins
-DiJonai Carrington,CHICAGO SKY,G,Jul 15,out,Out,Jun 27: Carrington (foot) will remain on the inactive list for Sunday's game against the Aces.,2026-07-12T11:31:05.736608+00:00,api:espn_injuries,dijonai carrington
-Rickea Jackson,CHICAGO SKY,F,May 1,out,Out,May 19: The Sky announced Tuesday that Jackson will miss the remainder of the season after suffering a torn ACL in her left knee during Sunday's 86-79 win over the Lynx.,2026-07-12T11:31:05.736677+00:00,api:espn_injuries,rickea jackson
-Saniya Rivers,CONNECTICUT SUN,G,Jul 14,out,Out,"Jul 10: Rivers (ankle) is expected to return to game action by the end of next week, Maggie Vanoni of Hearst reports.",2026-07-12T11:31:05.736831+00:00,api:espn_injuries,saniya rivers
-Ashlon Jackson,CONNECTICUT SUN,G,Jul 14,out,Out,Jul 10: Jackson (coach's decision) has been ruled out for Friday's game against Golden State.,2026-07-12T11:31:05.736900+00:00,api:espn_injuries,ashlon jackson
-Aneesah Morrow,CONNECTICUT SUN,F,Jul 14,out,Out,Jul 9: Morrow (reconditioning) is out for Friday's game against Golden State.,2026-07-12T11:31:05.736965+00:00,api:espn_injuries,aneesah morrow
-Brittney Griner,CONNECTICUT SUN,C,Jul 14,out,Out,Jul 9: Griner (quadriceps) is out for Friday's game against the Valkyries.,2026-07-12T11:31:05.737030+00:00,api:espn_injuries,brittney griner
-Gabby Williams,GOLDEN STATE VALKYRIES,F,Jul 15,out,Out,Jul 10: Williams (back) is listed as out for Friday's game versus Connecticut.,2026-07-12T11:31:05.737169+00:00,api:espn_injuries,gabby williams
-Ashten Prechtel,GOLDEN STATE VALKYRIES,F,Jul 15,out,Out,Jul 10: Prechtel (coach's decision) has been ruled out for Friday's game in Connecticut.,2026-07-12T11:31:05.737234+00:00,api:espn_injuries,ashten prechtel
-Miela Sowah,GOLDEN STATE VALKYRIES,G,Jul 15,out,Out,Jul 10: Sowah (coach's decision) has been ruled out for Friday's game against the Sun.,2026-07-12T11:31:05.737300+00:00,api:espn_injuries,miela sowah
-Iliana Rupert,GOLDEN STATE VALKYRIES,C,May 1,out,Out,"May 7: Rupert is pregnant, and the Valkyries have filed for a replacement contract ahead of the 2026 season, Alexa Philippou of ESPN.com reports Thursday.",2026-07-12T11:31:05.737365+00:00,api:espn_injuries,iliana rupert
-Caitlin Clark,INDIANA FEVER,G,Jul 12,day-to-day,Day-To-Day,Jul 11: Clark (back) is listed as probable for Sunday's game against the Aces.,2026-07-12T11:31:05.737517+00:00,api:espn_injuries,caitlin clark
-Ta'Niya Latson,LAS VEGAS ACES,G,Jul 12,day-to-day,Day-To-Day,,2026-07-12T11:31:05.737655+00:00,api:espn_injuries,ta'niya latson
-Dana Evans,LAS VEGAS ACES,G,Jul 12,out,Out,Jul 11: Evans (leg) is listed as out for Saturday's game versus the Mercury.,2026-07-12T11:31:05.737726+00:00,api:espn_injuries,dana evans
-Janiah Barker,LAS VEGAS ACES,F,Jul 28,out,Out,"Jul 11: Head coach Becky Hammon said Saturday that she expects a long-term absence for Barker, Nekias Duncan of Yahoo Sports reports.",2026-07-12T11:31:05.738008+00:00,api:espn_injuries,janiah barker
-Cameron Brink,LOS ANGELES SPARKS,F,Jul 13,out,Out,"Jun 25: Brink (ankle) will be re-evaluated in two weeks, John W. Davis of Long Beach Press-Telegram reports.",2026-07-12T11:31:05.738156+00:00,api:espn_injuries,cameron brink
-Kelsey Plum,LOS ANGELES SPARKS,G,Jul 28,out,Out,"Jun 24: Plum has suffered a lower left leg injury and will be re-evaluated in four weeks, Mitchell Hansen of CanisHoopus.com reports.",2026-07-12T11:31:05.738223+00:00,api:espn_injuries,kelsey plum
-Liatu King,MINNESOTA LYNX,F,Jul 13,day-to-day,Day-To-Day,,2026-07-12T11:31:05.738360+00:00,api:espn_injuries,liatu king
-Maya Caldwell,MINNESOTA LYNX,G,Jul 13,day-to-day,Day-To-Day,,2026-07-12T11:31:05.738424+00:00,api:espn_injuries,maya caldwell
-Napheesa Collier,MINNESOTA LYNX,F,Jul 20,out,Out,"Jul 1: Collier (ankle) has been cleared to resume practices with the Lynx, the team announced Wednesday.",2026-07-12T11:31:05.738506+00:00,api:espn_injuries,napheesa collier
-Emma Cechova,MINNESOTA LYNX,F,May 1,out,Out,"May 15: Cechova (knee) was diagnosed with a torn ACL in her right knee and will undergo surgery, Meghan L. Hall of USA Today reports. She will miss the remainder of the season.",2026-07-12T11:31:05.738572+00:00,api:espn_injuries,emma cechova
-Satou Sabally,NEW YORK LIBERTY,F,Jul 12,out,Out,,2026-07-12T11:31:05.738720+00:00,api:espn_injuries,satou sabally
-Leonie Fiebich,NEW YORK LIBERTY,F,Jul 12,day-to-day,Day-To-Day,,2026-07-12T11:31:05.738785+00:00,api:espn_injuries,leonie fiebich
-Marine Fauthoux,NEW YORK LIBERTY,G,Jul 12,out,Out,Jul 11: Fauthoux (coach's decision) is listed as out for Saturday's game against Minnesota.,2026-07-12T11:31:05.738852+00:00,api:espn_injuries,marine fauthoux
-Anneli Maley,NEW YORK LIBERTY,F,Jul 12,out,Out,Jul 11: Maley (coach's decision) is listed as out for Saturday's game against Minnesota.,2026-07-12T11:31:05.738926+00:00,api:espn_injuries,anneli maley
-Quionche Carter,PHOENIX MERCURY,G,Jul 13,day-to-day,Day-To-Day,,2026-07-12T11:31:05.739066+00:00,api:espn_injuries,quionche carter
-Shay Ciezki,PHOENIX MERCURY,G,Jul 13,out,Out,Jul 11: Ciezki (coach's decision) is listed as out for Saturday's game against the Aces.,2026-07-12T11:31:05.739131+00:00,api:espn_injuries,shay ciezki
-Natasha Mack,PHOENIX MERCURY,F,Jul 19,out,Out,,2026-07-12T11:31:05.739193+00:00,api:espn_injuries,natasha mack
-Jovana Nogic,PHOENIX MERCURY,G,May 1,out,Out,"Jun 27: Nogic (not injury related) intends to play professionally in Russia and won't return to Phoenix this season, Aya Abdeen of TheIXSports.com reports.",2026-07-12T11:31:05.739259+00:00,api:espn_injuries,jovana nogic
-Sarah Ashlee Barker,PORTLAND FIRE,G,Jul 14,day-to-day,Day-To-Day,,2026-07-12T11:31:05.739393+00:00,api:espn_injuries,sarah ashlee barker
-Jordan Harrison,PORTLAND FIRE,G,Jul 14,out,Out,Jul 11: Harrison (coach's decision) has been ruled out for Saturday's game against Atlanta.,2026-07-12T11:31:05.739470+00:00,api:espn_injuries,jordan harrison
-Sania Feagin,PORTLAND FIRE,F,May 1,out,Out,"Jul 9: Feagin (knee) was diagnosed with a torn left ACL on Thursday and will miss the rest of the 2026 campaign, WNBA reporter Kareem Copeland reports.",2026-07-12T11:31:05.739538+00:00,api:espn_injuries,sania feagin
-Taina Mair,SEATTLE STORM,G,Jul 15,out,Out,Jul 11: Mair (coach's decision) has been ruled out for Sunday's game against the Mystics.,2026-07-12T11:31:05.739676+00:00,api:espn_injuries,taina mair
-Ezi Magbegor,SEATTLE STORM,F,Jul 15,out,Out,Jul 11: Magbegor (face) has been ruled out for Sunday's game against the Mystics.,2026-07-12T11:31:05.739741+00:00,api:espn_injuries,ezi magbegor
-Temi Fagbenle,TORONTO TEMPO,C,Jul 14,out,Out,Jul 11: Fagbenle (concussion) has been ruled out for Sunday's game against the Liberty.,2026-07-12T11:31:05.739880+00:00,api:espn_injuries,temi fagbenle
-Nyara Sabally,TORONTO TEMPO,F,Jul 12,day-to-day,Day-To-Day,Jul 11: Sabally (knee) is listed as questionable for Sunday's game against New York.,2026-07-12T11:31:05.739945+00:00,api:espn_injuries,nyara sabally
-Brittney Sykes,TORONTO TEMPO,G,Jul 14,out,Out,"Jun 19: Sykes (foot) will be re-evaluated in the coming weeks, according to WNBA reporter Kareem Copeland.",2026-07-12T11:31:05.740009+00:00,api:espn_injuries,brittney sykes
-Kiki Rice,TORONTO TEMPO,G,Jul 14,out,Out,"Jun 19: Rice (ankle) remains sidelined by a Grade 3 left ankle sprain, according to WNBA reporter Kareem Copeland.",2026-07-12T11:31:05.740072+00:00,api:espn_injuries,kiki rice
-Sonia Citron,WASHINGTON MYSTICS,G,Jul 12,out,Out,Jul 11: Citron (knee) is listed as probable for Sunday's game against the Storm.,2026-07-12T11:31:05.740209+00:00,api:espn_injuries,sonia citron
-Alicia Florez,WASHINGTON MYSTICS,G,Jul 12,day-to-day,Day-To-Day,Jul 11: Florez (neck) is listed as questionable for Sunday's game against the Storm.,2026-07-12T11:31:05.740275+00:00,api:espn_injuries,alicia florez
+Angel Reese,ATLANTA DREAM,F,Jul 13,day-to-day,Day-To-Day,,2026-07-12T18:00:12.477966+00:00,api:espn_injuries,angel reese
+Jaylyn Sherrod,ATLANTA DREAM,G,Jul 13,out,Out,Jul 11: Sherrod (coach's decision) has been ruled out for Saturday's game against Portland.,2026-07-12T18:00:12.478080+00:00,api:espn_injuries,jaylyn sherrod
+Brionna Jones,ATLANTA DREAM,F,Jul 13,out,Out,Jul 11: Jones (knee) is listed as out for Saturday's game versus Portland.,2026-07-12T18:00:12.478163+00:00,api:espn_injuries,brionna jones
+Skylar Diggins,CHICAGO SKY,G,Jul 15,out,Out,Jul 11: Diggins (knee) has been ruled out for Sunday's game against Dallas.,2026-07-12T18:00:12.478321+00:00,api:espn_injuries,skylar diggins
+DiJonai Carrington,CHICAGO SKY,G,Jul 15,out,Out,Jun 27: Carrington (foot) will remain on the inactive list for Sunday's game against the Aces.,2026-07-12T18:00:12.478399+00:00,api:espn_injuries,dijonai carrington
+Rickea Jackson,CHICAGO SKY,F,May 1,out,Out,May 19: The Sky announced Tuesday that Jackson will miss the remainder of the season after suffering a torn ACL in her left knee during Sunday's 86-79 win over the Lynx.,2026-07-12T18:00:12.478487+00:00,api:espn_injuries,rickea jackson
+Saniya Rivers,CONNECTICUT SUN,G,Jul 14,out,Out,"Jul 10: Rivers (ankle) is expected to return to game action by the end of next week, Maggie Vanoni of Hearst reports.",2026-07-12T18:00:12.478634+00:00,api:espn_injuries,saniya rivers
+Ashlon Jackson,CONNECTICUT SUN,G,Jul 14,out,Out,Jul 10: Jackson (coach's decision) has been ruled out for Friday's game against Golden State.,2026-07-12T18:00:12.478700+00:00,api:espn_injuries,ashlon jackson
+Aneesah Morrow,CONNECTICUT SUN,F,Jul 14,out,Out,Jul 9: Morrow (reconditioning) is out for Friday's game against Golden State.,2026-07-12T18:00:12.478766+00:00,api:espn_injuries,aneesah morrow
+Brittney Griner,CONNECTICUT SUN,C,Jul 14,out,Out,Jul 9: Griner (quadriceps) is out for Friday's game against the Valkyries.,2026-07-12T18:00:12.478832+00:00,api:espn_injuries,brittney griner
+Gabby Williams,GOLDEN STATE VALKYRIES,F,Jul 15,out,Out,Jul 10: Williams (back) is listed as out for Friday's game versus Connecticut.,2026-07-12T18:00:12.479015+00:00,api:espn_injuries,gabby williams
+Ashten Prechtel,GOLDEN STATE VALKYRIES,F,Jul 15,out,Out,Jul 10: Prechtel (coach's decision) has been ruled out for Friday's game in Connecticut.,2026-07-12T18:00:12.479088+00:00,api:espn_injuries,ashten prechtel
+Miela Sowah,GOLDEN STATE VALKYRIES,G,Jul 15,out,Out,Jul 10: Sowah (coach's decision) has been ruled out for Friday's game against the Sun.,2026-07-12T18:00:12.479153+00:00,api:espn_injuries,miela sowah
+Iliana Rupert,GOLDEN STATE VALKYRIES,C,May 1,out,Out,"May 7: Rupert is pregnant, and the Valkyries have filed for a replacement contract ahead of the 2026 season, Alexa Philippou of ESPN.com reports Thursday.",2026-07-12T18:00:12.479218+00:00,api:espn_injuries,iliana rupert
+Caitlin Clark,INDIANA FEVER,G,Jul 12,day-to-day,Day-To-Day,Jul 11: Clark (back) is listed as probable for Sunday's game against the Aces.,2026-07-12T18:00:12.479358+00:00,api:espn_injuries,caitlin clark
+Ta'Niya Latson,LAS VEGAS ACES,G,Jul 12,day-to-day,Day-To-Day,,2026-07-12T18:00:12.479601+00:00,api:espn_injuries,ta'niya latson
+Dana Evans,LAS VEGAS ACES,G,Jul 12,out,Out,Jul 11: Evans (leg) is listed as out for Saturday's game versus the Mercury.,2026-07-12T18:00:12.479710+00:00,api:espn_injuries,dana evans
+Janiah Barker,LAS VEGAS ACES,F,Jul 28,out,Out,"Jul 11: Head coach Becky Hammon said Saturday that she expects a long-term absence for Barker, Nekias Duncan of Yahoo Sports reports.",2026-07-12T18:00:12.479787+00:00,api:espn_injuries,janiah barker
+Cameron Brink,LOS ANGELES SPARKS,F,Jul 13,out,Out,"Jun 25: Brink (ankle) will be re-evaluated in two weeks, John W. Davis of Long Beach Press-Telegram reports.",2026-07-12T18:00:12.479933+00:00,api:espn_injuries,cameron brink
+Kelsey Plum,LOS ANGELES SPARKS,G,Jul 28,out,Out,"Jun 24: Plum has suffered a lower left leg injury and will be re-evaluated in four weeks, Mitchell Hansen of CanisHoopus.com reports.",2026-07-12T18:00:12.480000+00:00,api:espn_injuries,kelsey plum
+Liatu King,MINNESOTA LYNX,F,Jul 13,day-to-day,Day-To-Day,,2026-07-12T18:00:12.480144+00:00,api:espn_injuries,liatu king
+Maya Caldwell,MINNESOTA LYNX,G,Jul 13,day-to-day,Day-To-Day,,2026-07-12T18:00:12.480211+00:00,api:espn_injuries,maya caldwell
+Napheesa Collier,MINNESOTA LYNX,F,Jul 20,out,Out,"Jul 1: Collier (ankle) has been cleared to resume practices with the Lynx, the team announced Wednesday.",2026-07-12T18:00:12.480278+00:00,api:espn_injuries,napheesa collier
+Emma Cechova,MINNESOTA LYNX,F,May 1,out,Out,"May 15: Cechova (knee) was diagnosed with a torn ACL in her right knee and will undergo surgery, Meghan L. Hall of USA Today reports. She will miss the remainder of the season.",2026-07-12T18:00:12.480344+00:00,api:espn_injuries,emma cechova
+Satou Sabally,NEW YORK LIBERTY,F,Jul 16,out,Out,,2026-07-12T18:00:12.480528+00:00,api:espn_injuries,satou sabally
+Leonie Fiebich,NEW YORK LIBERTY,F,Jul 12,day-to-day,Day-To-Day,,2026-07-12T18:00:12.480604+00:00,api:espn_injuries,leonie fiebich
+Marine Fauthoux,NEW YORK LIBERTY,G,Jul 12,out,Out,Jul 11: Fauthoux (coach's decision) is listed as out for Saturday's game against Minnesota.,2026-07-12T18:00:12.480672+00:00,api:espn_injuries,marine fauthoux
+Anneli Maley,NEW YORK LIBERTY,F,Jul 12,out,Out,Jul 11: Maley (coach's decision) is listed as out for Saturday's game against Minnesota.,2026-07-12T18:00:12.480738+00:00,api:espn_injuries,anneli maley
+Quionche Carter,PHOENIX MERCURY,G,Jul 13,day-to-day,Day-To-Day,,2026-07-12T18:00:12.480880+00:00,api:espn_injuries,quionche carter
+Shay Ciezki,PHOENIX MERCURY,G,Jul 13,out,Out,Jul 11: Ciezki (coach's decision) is listed as out for Saturday's game against the Aces.,2026-07-12T18:00:12.480945+00:00,api:espn_injuries,shay ciezki
+Natasha Mack,PHOENIX MERCURY,F,Jul 19,out,Out,,2026-07-12T18:00:12.481008+00:00,api:espn_injuries,natasha mack
+Jovana Nogic,PHOENIX MERCURY,G,May 1,out,Out,"Jun 27: Nogic (not injury related) intends to play professionally in Russia and won't return to Phoenix this season, Aya Abdeen of TheIXSports.com reports.",2026-07-12T18:00:12.481071+00:00,api:espn_injuries,jovana nogic
+Sarah Ashlee Barker,PORTLAND FIRE,G,Jul 14,day-to-day,Day-To-Day,,2026-07-12T18:00:12.481205+00:00,api:espn_injuries,sarah ashlee barker
+Jordan Harrison,PORTLAND FIRE,G,Jul 14,out,Out,Jul 11: Harrison (coach's decision) has been ruled out for Saturday's game against Atlanta.,2026-07-12T18:00:12.481270+00:00,api:espn_injuries,jordan harrison
+Sania Feagin,PORTLAND FIRE,F,May 1,out,Out,"Jul 9: Feagin (knee) was diagnosed with a torn left ACL on Thursday and will miss the rest of the 2026 campaign, WNBA reporter Kareem Copeland reports.",2026-07-12T18:00:12.481334+00:00,api:espn_injuries,sania feagin
+Taina Mair,SEATTLE STORM,G,Jul 15,out,Out,Jul 11: Mair (coach's decision) has been ruled out for Sunday's game against the Mystics.,2026-07-12T18:00:12.481482+00:00,api:espn_injuries,taina mair
+Ezi Magbegor,SEATTLE STORM,F,Jul 15,out,Out,Jul 11: Magbegor (face) has been ruled out for Sunday's game against the Mystics.,2026-07-12T18:00:12.481548+00:00,api:espn_injuries,ezi magbegor
+Temi Fagbenle,TORONTO TEMPO,C,Jul 14,out,Out,Jul 11: Fagbenle (concussion) has been ruled out for Sunday's game against the Liberty.,2026-07-12T18:00:12.481684+00:00,api:espn_injuries,temi fagbenle
+Brittney Sykes,TORONTO TEMPO,G,Jul 14,out,Out,"Jun 19: Sykes (foot) will be re-evaluated in the coming weeks, according to WNBA reporter Kareem Copeland.",2026-07-12T18:00:12.481749+00:00,api:espn_injuries,brittney sykes
+Kiki Rice,TORONTO TEMPO,G,Jul 20,out,Out,"Jun 19: Rice (ankle) remains sidelined by a Grade 3 left ankle sprain, according to WNBA reporter Kareem Copeland.",2026-07-12T18:00:12.481813+00:00,api:espn_injuries,kiki rice
+Sonia Citron,WASHINGTON MYSTICS,G,Jul 12,out,Out,Jul 11: Citron (knee) is listed as probable for Sunday's game against the Storm.,2026-07-12T18:00:12.481945+00:00,api:espn_injuries,sonia citron
+Alicia Florez,WASHINGTON MYSTICS,G,Jul 12,day-to-day,Day-To-Day,Jul 11: Florez (neck) is listed as questionable for Sunday's game against the Storm.,2026-07-12T18:00:12.482010+00:00,api:espn_injuries,alicia florez
