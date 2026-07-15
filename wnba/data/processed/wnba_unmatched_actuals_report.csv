@@ -2081,6 +2081,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-05-15,2026,Sug Sutton,POR,NYL,H,20.0,8.0,3.0,8.0,1.0,0.0,0.0,1.0,13.0,3.0,4.0,1.0,0.0,3.0,,sug sutton,1,last_good_canonical,401856909.0,4068159.0,G,0.0,1.0,espn,sug sutton,no_projection_for_player_team_date
 2026-05-19,2026,Sug Sutton,POR,CON,H,25.0,12.0,1.0,5.0,1.0,1.0,0.0,2.0,10.0,4.0,4.0,3.0,1.0,0.0,,sug sutton,1,last_good_canonical,401856919.0,4068159.0,G,1.0,1.0,espn,sug sutton,no_projection_for_player_team_date
 2026-05-20,2026,Sug Sutton,POR,IND,A,24.0,14.0,1.0,4.0,0.0,1.0,0.0,3.0,8.0,6.0,2.0,2.0,0.0,1.0,,sug sutton,0,last_good_canonical,401856921.0,4068159.0,G,1.0,1.0,espn,sug sutton,no_projection_for_player_team_date
+2026-06-15,2026,Sug Sutton,DAL,LVA,H,21.0,4.0,2.0,4.0,0.0,1.0,1.0,0.0,5.0,2.0,0.0,0.0,0.0,2.0,8.0,sug sutton,1,last_good_canonical,,,,,,,sug sutton,no_projection_for_player_team_date
 2026-06-16,2026,Sug Sutton,DAL,LVA,H,21.0,4.0,2.0,4.0,0.0,1.0,1.0,0.0,5.0,2.0,0.0,0.0,0.0,2.0,,sug sutton,1,last_good_canonical,401856992.0,4068159.0,G,0.0,1.0,espn,sug sutton,no_projection_for_player_team_date
 2026-06-18,2026,Sug Sutton,DAL,GSV,A,13.0,9.0,0.0,2.0,2.0,0.0,0.0,1.0,4.0,3.0,2.0,1.0,0.0,0.0,,sug sutton,0,last_good_canonical,401856998.0,4068159.0,G,0.0,1.0,espn,sug sutton,no_projection_for_player_team_date
 2026-06-21,2026,Sug Sutton,DAL,CHI,H,13.0,4.0,0.0,1.0,0.0,0.0,1.0,0.0,3.0,2.0,0.0,0.0,0.0,0.0,,sug sutton,1,last_good_canonical,401857008.0,4068159.0,G,0.0,1.0,espn,sug sutton,no_projection_for_player_team_date
@@ -2258,7 +2259,6 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-23,2026,Zia Cooke,SEA,DAL,H,30.0,18.0,2.0,2.0,2.0,0.0,0.0,1.0,12.0,6.0,4.0,4.0,1.0,1.0,,zia cooke,1,last_good_canonical,401857015.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
 2026-06-26,2026,Zia Cooke,SEA,NYL,H,13.0,3.0,4.0,0.0,1.0,1.0,0.0,1.0,6.0,1.0,0.0,0.0,1.0,3.0,,zia cooke,1,last_good_canonical,401857023.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
 2026-06-28,2026,Zia Cooke,SEA,ATL,H,11.0,6.0,1.0,2.0,1.0,0.0,0.0,1.0,2.0,2.0,3.0,1.0,0.0,1.0,,zia cooke,1,last_good_canonical,401857029.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
-2026-06-15,2026,Sug Sutton,DAL,LVA,H,21.0,4.0,2.0,4.0,0.0,1.0,1.0,0.0,5.0,2.0,0.0,0.0,0.0,2.0,8.0,sug sutton,1,api:espn_boxscore,,,,,,,sug sutton,no_projection_for_player_team_date
 2026-06-20,2026,Maddy Westbeld,CHI,DAL,A,10.0,0.0,1.0,1.0,0.0,0.0,0.0,1.0,1.0,0.0,0.0,0.0,1.0,0.0,3.0,maddy westbeld,0,api:espn_boxscore,,,,,,,maddy westbeld,no_projection_for_player_team_date
 2026-06-21,2026,Kiana Williams,LAS,NYL,H,7.0,2.0,0.0,1.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,0.0,0.0,0.0,-6.0,kiana williams,1,api:espn_boxscore,,,,,,,kiana williams,no_projection_for_player_team_date
 2026-06-22,2026,Amy Okonkwo,ATL,TOR,H,,,,,,,,,,,,,,,,amy okonkwo,1,api:espn_boxscore,,,,,,,amy okonkwo,no_projection_for_player_team_date
@@ -2324,3 +2324,11 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-07-13,2026,Natasha Mack,PHX,MIN,A,,,,,,,,,,,,,,,,natasha mack,0,api:espn_boxscore,,,,,,,natasha mack,no_projection_for_player_team_date
 2026-07-13,2026,Napheesa Collier,MIN,PHX,H,,,,,,,,,,,,,,,,napheesa collier,1,api:espn_boxscore,,,,,,,napheesa collier,no_projection_for_player_team_date
 2026-07-13,2026,Emma Cechova,MIN,PHX,H,,,,,,,,,,,,,,,,emma cechova,1,api:espn_boxscore,,,,,,,emma cechova,no_projection_for_player_team_date
+2026-07-14,2026,Sania Feagin,POR,CON,A,,,,,,,,,,,,,,,,sania feagin,0,api:espn_boxscore,,,,,,,sania feagin,no_projection_for_player_team_date
+2026-07-14,2026,Jordan Harrison,POR,CON,A,,,,,,,,,,,,,,,,jordan harrison,0,api:espn_boxscore,,,,,,,jordan harrison,no_projection_for_player_team_date
+2026-07-14,2026,Aneesah Morrow,CON,POR,H,,,,,,,,,,,,,,,,aneesah morrow,1,api:espn_boxscore,,,,,,,aneesah morrow,no_projection_for_player_team_date
+2026-07-14,2026,Saniya Rivers,CON,POR,H,,,,,,,,,,,,,,,,saniya rivers,1,api:espn_boxscore,,,,,,,saniya rivers,no_projection_for_player_team_date
+2026-07-14,2026,Ashlon Jackson,CON,POR,H,,,,,,,,,,,,,,,,ashlon jackson,1,api:espn_boxscore,,,,,,,ashlon jackson,no_projection_for_player_team_date
+2026-07-14,2026,Temi Fagbenle,TOR,WAS,H,,,,,,,,,,,,,,,,temi fagbenle,1,api:espn_boxscore,,,,,,,temi fagbenle,no_projection_for_player_team_date
+2026-07-14,2026,Brittney Sykes,TOR,WAS,H,,,,,,,,,,,,,,,,brittney sykes,1,api:espn_boxscore,,,,,,,brittney sykes,no_projection_for_player_team_date
+2026-07-14,2026,Kiki Rice,TOR,WAS,H,,,,,,,,,,,,,,,,kiki rice,1,api:espn_boxscore,,,,,,,kiki rice,no_projection_for_player_team_date
