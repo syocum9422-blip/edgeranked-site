@@ -1,9 +1,4 @@
 player_name,team,opponent,has_live_line,has_history,history_source,included,reason
-Azurá Stevens,CHI,SEA,True,True,last_good_canonical,True,included
-Courtney Vandersloot,CHI,SEA,True,True,last_good_canonical,True,included
-Kamilla Cardoso,CHI,SEA,True,True,last_good_canonical,True,included
-Natasha Cloud,CHI,SEA,True,True,last_good_canonical,True,included
-Sydney Taylor,CHI,SEA,True,True,last_good_canonical,True,included
 Azzi Fudd,DAL,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Jessica Shepard,DAL,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Paige Bueckers,DAL,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
@@ -17,26 +12,11 @@ Caitlin Clark,IND,GSV,True,True,last_good_canonical,True,included
 Kelsey Mitchell,IND,GSV,True,True,last_good_canonical,True,included
 Monique Billings,IND,GSV,True,True,last_good_canonical,True,included
 Sophie Cunningham,IND,GSV,True,True,last_good_canonical,True,included
-Ariel Atkins,LAS,MIN,True,True,last_good_canonical,True,included
-Dearica Hamby,LAS,MIN,True,True,last_good_canonical,True,included
-Erica Wheeler,LAS,MIN,True,True,last_good_canonical,True,included
-Nneka Ogwumike,LAS,MIN,True,True,last_good_canonical,True,included
-Rae Burrell,LAS,MIN,True,True,last_good_canonical,True,included
-Courtney Williams,MIN,LAS,True,True,last_good_canonical,True,included
-Kayla McBride,MIN,LAS,True,True,last_good_canonical,True,included
-Natasha Howard,MIN,LAS,True,True,last_good_canonical,True,included
-Nia Coffey,MIN,LAS,True,True,last_good_canonical,True,included
-Olivia Miles,MIN,LAS,True,True,last_good_canonical,True,included
 Breanna Stewart,NYL,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Jonquel Jones,NYL,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Sabrina Ionescu,NYL,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Bridget Carleton,POR,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Carla Leite,POR,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
-Awa Fam,SEA,CHI,True,True,last_good_canonical,True,included
-Dominique Malonga,SEA,CHI,True,True,last_good_canonical,True,included
-Flau'jae Johnson,SEA,CHI,True,True,last_good_canonical,True,included
-Jade Melbourne,SEA,CHI,True,True,last_good_canonical,True,included
-Natisha Hiedeman,SEA,CHI,True,True,last_good_canonical,True,included
 Kiki Iriafen,WAS,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Shakira Austin,WAS,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Sonia Citron,WAS,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate

@@ -6,51 +6,51 @@
     "source": "api:espn_boxscore",
     "team_rows_total": 1650
   },
-  "generated_at_utc": "2026-07-15T11:31:07+00:00",
+  "generated_at_utc": "2026-07-15T11:32:36+00:00",
   "healthy": true,
   "learning": {
-    "accuracy": 0.5301310043668123,
+    "accuracy": 0.5272883541039965,
     "backtest_window_days": 30,
-    "brier": 0.2770510395390538,
-    "games_graded": 59,
-    "last_graded_date": "2026-07-13",
-    "log_loss": 0.7516864923482626,
-    "minutes_error_rows": 2141,
-    "predictions_graded": 2290,
-    "projection_error_rows": 12846
+    "brier": 0.2774000158256409,
+    "games_graded": 60,
+    "last_graded_date": "2026-07-14",
+    "log_loss": 0.7523208257581656,
+    "minutes_error_rows": 2182,
+    "predictions_graded": 2327,
+    "projection_error_rows": 13092
   },
   "published": {
     "published_flag": "yes",
-    "source_output_modified_at_utc": "2026-07-14T22:31:08.578006+00:00",
+    "source_output_modified_at_utc": "2026-07-15T11:32:04.008998+00:00",
     "stale_output_blocked": "no"
   },
   "slate_status": {
     "duplicate_games": [],
-    "expected_game_count": 2,
-    "generated_game_count": 2,
+    "expected_game_count": 3,
+    "generated_game_count": 3,
     "missing_games": [],
-    "slate_date": "2026-07-14",
+    "slate_date": "2026-07-15",
     "status": "PASS"
   },
   "source_freshness": {
     "app_view": {
       "exists": true,
-      "modified_at_utc": "2026-07-14T22:31:06.156987+00:00",
+      "modified_at_utc": "2026-07-15T11:31:59.367966+00:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/Projections_app_view.csv",
-      "size": 64292
+      "size": 100998
     },
     "best_bets": {
       "exists": true,
-      "modified_at_utc": "2026-07-14T22:31:08.578006+00:00",
+      "modified_at_utc": "2026-07-15T11:32:04.008998+00:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/wnba_best_bets_today.csv",
-      "size": 8256
+      "size": 10786
     },
     "production_status": "PASS",
     "projections": {
       "exists": true,
-      "modified_at_utc": "2026-07-14T22:31:06.105986+00:00",
+      "modified_at_utc": "2026-07-15T11:31:59.301966+00:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/projections.csv",
-      "size": 24676
+      "size": 38049
     },
     "promotion_scope": "confidence_calibration_only",
     "public_schema_changes": false
