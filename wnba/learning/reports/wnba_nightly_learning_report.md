@@ -1,23 +1,23 @@
 # WNBA Nightly Learning Report
 
-Generated: 2026-07-15T04:25:08Z
-Graded predictions in ledger: 2341
+Generated: 2026-07-16T04:25:08Z
+Graded predictions in ledger: 2380
 
 ## Best-Performing Markets
      market  sample_size  win_pct      mae  calibration
-   rebounds          206 0.640212 2.118070    -0.077199
-threes_made           15 0.600000 0.966594    -0.080387
+   rebounds          213 0.628866 2.122398    -0.084861
+threes_made           16 0.625000 0.985476    -0.051613
      steals           21 0.571429 0.781642    -0.178761
-     points          533 0.567878 5.743585    -0.170702
-        pra          520 0.529981 8.318874    -0.244768
+     points          541 0.564972 5.726744    -0.171819
+        pra          530 0.523719 8.305436    -0.248155
 
 ## Worst-Performing Markets
  market  sample_size  win_pct      mae  calibration
  blocks            1 0.000000 0.895640    -0.806900
 assists           89 0.475610 2.212418    -0.290619
-     pa          306 0.476974 7.264693    -0.269060
-     ra          130 0.496000 3.440645    -0.206777
-     pr          520 0.497076 7.424015    -0.255551
+     pa          309 0.478827 7.257444    -0.266080
+     ra          131 0.492063 3.430398    -0.209873
+     pr          529 0.496169 7.420024    -0.253742
 
 ## Biggest Misses
       date          player market  side  projection  sportsbook_line  actual_result  absolute_error
@@ -41,13 +41,13 @@ assists           89 0.475610 2.212418    -0.290619
 2026-07-07       Azzi Fudd   points under   12.008479             14.0           12.0        0.008479
 2026-07-11 Breanna Stewart       ra under    9.990441             11.5           10.0        0.009559
 2026-06-01 Stefanie Dolson rebounds under    2.021912              4.0            2.0        0.021912
-2026-06-16   Marina Mabrey       pr under   18.977948             20.5           19.0        0.022052
 2026-06-16   Marina Mabrey       pr under   18.977948             21.5           19.0        0.022052
+2026-06-16   Marina Mabrey       pr under   18.977948             20.5           19.0        0.022052
 2026-06-04     Angel Reese  assists under    3.023038              3.5            3.0        0.023038
 
 ## Team Accuracy
 team  sample_size  accuracy      mae
- POR          159  0.616883 6.532023
+ POR          161  0.612903 6.461782
  DAL          148  0.586207 5.164690
  GSV          150  0.570470 5.401881
  ATL          144  0.564286 5.252896
@@ -61,40 +61,40 @@ team  sample_size  accuracy      mae
  LAS          182  0.486034 6.014835
 
 ## Player Outliers
-            player  sample_size  accuracy       mae
-      Lauren Betts            7  0.285714 15.532526
-    Georgia Amoore           22  0.227273 14.081145
-    Rickea Jackson            9  0.222222 11.036991
-   Sabrina Ionescu           42  0.365854 10.794885
-     Caitlin Clark           46  0.413043 10.242299
-       Carla Leite           44  0.522727  9.722699
-   Hailey Van Lith            7  0.428571  9.607210
-    Brittney Sykes           36  0.400000  9.360317
-Michaela Onyenwere           11  0.454545  8.812463
-     Natasha Cloud           17  0.529412  8.738499
-     Marina Mabrey           44  0.558140  8.686572
-        Awak Kuier            5  0.600000  8.677498
+         player  sample_size  accuracy       mae
+   Lauren Betts            7  0.285714 15.532526
+ Georgia Amoore           25  0.280000 12.512035
+ Rickea Jackson            9  0.222222 11.036991
+Sabrina Ionescu           42  0.365854 10.794885
+  Caitlin Clark           46  0.413043 10.242299
+    Carla Leite           44  0.522727  9.722699
+Hailey Van Lith            7  0.428571  9.607210
+   Kiki Iriafen           10  0.000000  9.506479
+ Brittney Sykes           36  0.400000  9.360317
+  Marina Mabrey           47  0.586957  9.089472
+  Natasha Cloud           17  0.529412  8.738499
+     Awak Kuier            5  0.600000  8.677498
 
 ## Confidence Calibration
 confidence_bucket  sample_size  realized_accuracy  avg_predicted_hit_rate  calibration_gap
-           55-60%          155           0.581699                0.582864        -0.001164
-           60-65%          736           0.502786                0.623763        -0.120978
-           65-70%          332           0.509259                0.670845        -0.161586
+           55-60%          172           0.552941                0.582918        -0.029976
+           60-65%          753           0.499318                0.623699        -0.124382
+           65-70%          337           0.510638                0.670886        -0.160247
              70%+         1118           0.547032                0.874901        -0.327869
 
 ## Challenger Summary
 segment      market  sample_size  production_mae  challenger_mae  production_brier  challenger_brier
-    all         all         2341        6.229368        6.055277          0.308392          0.282750
+    all         all         2380        6.218163        6.052227          0.308104          0.282960
  market     assists           89        2.212418        2.242668          0.333729          0.302702
  market      blocks            1        0.895640        0.895640          0.651088          0.435600
- market          pa          306        7.264693        7.086578          0.331921          0.297309
- market      points          533        5.743585        5.791616          0.299517          0.276210
- market          pr          520        7.424015        6.992848          0.319235          0.293523
- market         pra          520        8.318874        7.916916          0.317114          0.285799
- market          ra          130        3.440645        3.471079          0.301147          0.289867
- market    rebounds          206        2.118070        2.145344          0.244504          0.232710
+ market          pa          309        7.257444        7.094623          0.330763          0.296806
+ market      points          541        5.726744        5.770089          0.299198          0.276062
+ market          pr          529        7.420024        7.018674          0.318421          0.293292
+ market         pra          530        8.305436        7.903440          0.317485          0.286899
+ market          ra          131        3.430398        3.464225          0.301545          0.290625
+ market    rebounds          213        2.122398        2.151216          0.246263          0.234935
  market      steals           21        0.781642        1.858060          0.267476          0.249417
- market threes_made           15        0.966594        2.280581          0.230844          0.240759
+ market threes_made           16        0.985476        2.325452          0.225441          0.234656
 
 Promotion recommendation: do_not_promote (shadow_improved_mae_and_brier_but_promotion_is_advisory_only)
 
