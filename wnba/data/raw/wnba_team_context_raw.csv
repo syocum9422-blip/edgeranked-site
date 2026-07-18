@@ -106,6 +106,7 @@ game_date,team,opponent,pace,off_rating,def_rating,team_points,opp_points,team_r
 2026-06-09,ATL,CHI,,,,82.0,75.0,36.0,18.0,5.0,last_good_canonical,,,,,
 2026-06-11,ATL,NYL,,,,90.0,104.0,24.0,22.0,9.0,last_good_canonical,,,,,
 2026-06-14,ATL,TOR,,,,102.0,77.0,44.0,22.0,14.0,last_good_canonical,,,,,
+2026-06-18,ATL,IND,,,,108.0,101.0,29.0,21.0,7.0,last_good_canonical,,,,,
 2026-06-25,ATL,GSV,71.98,90.8090258668134,108.02469135802468,66.0,77.0,34.0,16.0,4.0,last_good_canonical,2026.0,401857020.0,6.0,3.0,espn
 2026-06-27,ATL,GSV,85.44,87.33115975780159,91.76470588235294,75.0,78.0,27.0,10.0,6.0,last_good_canonical,2026.0,401857026.0,14.0,4.0,espn
 2026-06-28,ATL,SEA,84.62,101.763907734057,129.95049504950495,90.0,105.0,26.0,22.0,7.0,last_good_canonical,2026.0,401857029.0,7.0,0.0,espn
@@ -630,6 +631,7 @@ game_date,team,opponent,pace,off_rating,def_rating,team_points,opp_points,team_r
 2026-06-11,IND,CHI,,,,114.0,106.0,46.0,22.0,7.0,last_good_canonical,,,,,
 2026-06-13,IND,CON,,,,85.0,75.0,38.0,19.0,12.0,last_good_canonical,,,,,
 2026-06-16,IND,TOR,,,,113.0,91.0,43.0,25.0,13.0,last_good_canonical,,,,,
+2026-06-18,IND,ATL,,,,101.0,108.0,26.0,16.0,8.0,last_good_canonical,,,,,
 2026-06-23,IND,PHX,80.0,109.19248349415946,94.7808961102905,86.0,77.0,39.0,15.0,10.0,last_good_canonical,2026.0,401857014.0,6.0,2.0,espn
 2026-06-28,IND,LAS,87.38,131.32986275437767,96.40957446808513,111.0,87.0,41.0,23.0,10.0,last_good_canonical,2026.0,401857028.0,6.0,6.0,espn
 2024-05-05,LAS,SEA,82.14,101.44927536231884,96.95630829651448,84.0,79.0,42.0,16.0,8.0,last_good_canonical,2024.0,401647556.0,10.0,2.0,espn
@@ -1515,8 +1517,6 @@ game_date,team,opponent,pace,off_rating,def_rating,team_points,opp_points,team_r
 2026-06-14,WAS,NYL,,,,64.0,86.0,32.0,17.0,7.0,last_good_canonical,,,,,
 2026-06-17,WAS,CON,,,,88.0,81.0,33.0,18.0,7.0,last_good_canonical,,,,,
 2024-07-21,WNBASTARS,USA,94.42,122.1294363256785,117.15391229578675,117.0,109.0,38.0,31.0,12.0,last_good_canonical,2024.0,401620458.0,14.0,3.0,espn
-2026-06-18,ATL,IND,,,,108.0,101.0,29.0,21.0,7.0,api:espn_boxscore,,,,,
-2026-06-18,IND,ATL,,,,101.0,108.0,26.0,16.0,8.0,api:espn_boxscore,,,,,
 2026-06-19,CON,TOR,,,,97.0,101.0,35.0,21.0,6.0,api:espn_boxscore,,,,,
 2026-06-19,TOR,CON,,,,101.0,97.0,33.0,27.0,19.0,api:espn_boxscore,,,,,
 2026-06-19,NYL,WAS,,,,83.0,86.0,30.0,20.0,10.0,api:espn_boxscore,,,,,
@@ -1657,3 +1657,11 @@ game_date,team,opponent,pace,off_rating,def_rating,team_points,opp_points,team_r
 2026-07-15,IND,GSV,,,,75.0,88.0,26.0,14.0,9.0,api:espn_boxscore,,,,,
 2026-07-16,POR,WAS,,,,75.0,56.0,30.0,20.0,10.0,api:espn_boxscore,,,,,
 2026-07-16,WAS,POR,,,,56.0,75.0,45.0,11.0,2.0,api:espn_boxscore,,,,,
+2026-07-17,IND,SEA,,,,110.0,107.0,26.0,21.0,10.0,api:espn_boxscore,,,,,
+2026-07-17,SEA,IND,,,,107.0,110.0,35.0,27.0,8.0,api:espn_boxscore,,,,,
+2026-07-17,ATL,TOR,,,,111.0,92.0,28.0,28.0,9.0,api:espn_boxscore,,,,,
+2026-07-17,TOR,ATL,,,,92.0,111.0,22.0,19.0,10.0,api:espn_boxscore,,,,,
+2026-07-17,CHI,LAS,,,,96.0,82.0,34.0,27.0,11.0,api:espn_boxscore,,,,,
+2026-07-17,LAS,CHI,,,,82.0,96.0,34.0,20.0,6.0,api:espn_boxscore,,,,,
+2026-07-17,CON,PHX,,,,96.0,83.0,34.0,24.0,6.0,api:espn_boxscore,,,,,
+2026-07-17,PHX,CON,,,,83.0,96.0,27.0,18.0,4.0,api:espn_boxscore,,,,,
