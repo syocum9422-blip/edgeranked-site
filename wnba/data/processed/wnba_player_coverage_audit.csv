@@ -1,19 +1,9 @@
 player_name,team,opponent,has_live_line,has_history,history_source,included,reason
-Allisha Gray,ATL,CHI,True,True,last_good_canonical,True,included
-Angel Reese,ATL,CHI,True,True,last_good_canonical,True,included
-Brionna Jones,ATL,CHI,True,True,last_good_canonical,True,included
-Jordin Canada,ATL,CHI,True,True,last_good_canonical,True,included
-Naz Hillmon,ATL,CHI,True,True,last_good_canonical,True,included
-Rhyne Howard,ATL,CHI,True,True,last_good_canonical,True,included
-Azurá Stevens,CHI,ATL,True,True,last_good_canonical,True,included
-Courtney Vandersloot,CHI,ATL,True,True,last_good_canonical,True,included
-Gabriela Jaquez,CHI,ATL,True,True,last_good_canonical,True,included
-Kamilla Cardoso,CHI,ATL,True,True,last_good_canonical,True,included
-Natasha Cloud,CHI,ATL,True,True,last_good_canonical,True,included
-Sydney Taylor,CHI,ATL,True,True,last_good_canonical,True,included
+Aaliyah Edwards,CON,PHX,True,True,last_good_canonical,True,included
 Brittney Griner,CON,PHX,True,True,last_good_canonical,True,included
 Charlisse Leger-Walker,CON,PHX,True,True,last_good_canonical,True,included
 Diamond Miller,CON,PHX,True,True,last_good_canonical,True,included
+Kennedy Burke,CON,PHX,True,True,last_good_canonical,True,included
 Leila Lacan,CON,PHX,True,True,last_good_canonical,True,included
 Olivia Nelson-Ododa,CON,PHX,True,True,last_good_canonical,True,included
 Gabby Williams,GSV,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
