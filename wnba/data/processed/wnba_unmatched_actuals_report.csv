@@ -1431,6 +1431,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-21,2026,Maddy Siegrist,DAL,CHI,H,12.0,9.0,3.0,0.0,2.0,0.0,0.0,0.0,6.0,3.0,2.0,1.0,1.0,2.0,,maddy siegrist,1,last_good_canonical,401857008.0,4399415.0,F,0.0,1.0,espn,maddy siegrist,no_projection_for_player_team_date
 2026-06-23,2026,Maddy Siegrist,DAL,SEA,A,13.0,7.0,0.0,1.0,1.0,0.0,0.0,0.0,5.0,3.0,0.0,0.0,0.0,0.0,,maddy siegrist,0,last_good_canonical,401857015.0,4399415.0,F,0.0,1.0,espn,maddy siegrist,no_projection_for_player_team_date
 2026-06-26,2026,Maddy Siegrist,DAL,LVA,A,12.0,2.0,1.0,0.0,0.0,0.0,1.0,0.0,3.0,1.0,0.0,0.0,0.0,1.0,,maddy siegrist,0,last_good_canonical,401857022.0,4399415.0,F,0.0,1.0,espn,maddy siegrist,no_projection_for_player_team_date
+2026-06-20,2026,Maddy Westbeld,CHI,DAL,A,10.0,0.0,1.0,1.0,0.0,0.0,0.0,1.0,1.0,0.0,0.0,0.0,1.0,0.0,3.0,maddy westbeld,0,last_good_canonical,,,,,,,maddy westbeld,no_projection_for_player_team_date
 2026-06-21,2026,Maddy Westbeld,CHI,DAL,A,10.0,0.0,1.0,1.0,0.0,0.0,0.0,1.0,1.0,0.0,0.0,0.0,1.0,0.0,,maddy westbeld,0,last_good_canonical,401857008.0,4433424.0,F,0.0,1.0,espn,maddy westbeld,no_projection_for_player_team_date
 2026-05-10,2026,Madina Okot,ATL,MIN,A,10.0,8.0,4.0,0.0,0.0,1.0,0.0,1.0,6.0,3.0,2.0,2.0,2.0,2.0,,madina okot,0,last_good_canonical,401856899.0,5108587.0,C,0.0,1.0,espn,madina okot,no_projection_for_player_team_date
 2026-05-13,2026,Madina Okot,ATL,DAL,A,9.0,0.0,5.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,0.0,0.0,0.0,5.0,,madina okot,0,last_good_canonical,401856901.0,5108587.0,C,0.0,1.0,espn,madina okot,no_projection_for_player_team_date
@@ -2259,7 +2260,6 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-23,2026,Zia Cooke,SEA,DAL,H,30.0,18.0,2.0,2.0,2.0,0.0,0.0,1.0,12.0,6.0,4.0,4.0,1.0,1.0,,zia cooke,1,last_good_canonical,401857015.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
 2026-06-26,2026,Zia Cooke,SEA,NYL,H,13.0,3.0,4.0,0.0,1.0,1.0,0.0,1.0,6.0,1.0,0.0,0.0,1.0,3.0,,zia cooke,1,last_good_canonical,401857023.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
 2026-06-28,2026,Zia Cooke,SEA,ATL,H,11.0,6.0,1.0,2.0,1.0,0.0,0.0,1.0,2.0,2.0,3.0,1.0,0.0,1.0,,zia cooke,1,last_good_canonical,401857029.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
-2026-06-20,2026,Maddy Westbeld,CHI,DAL,A,10.0,0.0,1.0,1.0,0.0,0.0,0.0,1.0,1.0,0.0,0.0,0.0,1.0,0.0,3.0,maddy westbeld,0,api:espn_boxscore,,,,,,,maddy westbeld,no_projection_for_player_team_date
 2026-06-21,2026,Kiana Williams,LAS,NYL,H,7.0,2.0,0.0,1.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,0.0,0.0,0.0,-6.0,kiana williams,1,api:espn_boxscore,,,,,,,kiana williams,no_projection_for_player_team_date
 2026-06-22,2026,Amy Okonkwo,ATL,TOR,H,,,,,,,,,,,,,,,,amy okonkwo,1,api:espn_boxscore,,,,,,,amy okonkwo,no_projection_for_player_team_date
 2026-06-22,2026,Shay Ciezki,PHX,IND,A,2.0,3.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,0.0,0.0,0.0,0.0,6.0,shay ciezki,0,api:espn_boxscore,,,,,,,shay ciezki,no_projection_for_player_team_date
@@ -2362,3 +2362,8 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-07-18,2026,Holly Winterburn,POR,MIN,A,,,,,,,,,,,,,,,,holly winterburn,0,api:espn_boxscore,,,,,,,holly winterburn,no_projection_for_player_team_date
 2026-07-18,2026,Napheesa Collier,MIN,POR,H,,,,,,,,,,,,,,,,napheesa collier,1,api:espn_boxscore,,,,,,,napheesa collier,no_projection_for_player_team_date
 2026-07-18,2026,Emma Cechova,MIN,POR,H,,,,,,,,,,,,,,,,emma cechova,1,api:espn_boxscore,,,,,,,emma cechova,no_projection_for_player_team_date
+2026-07-19,2026,Paige Bueckers,DAL,LAS,H,32.0,25.0,4.0,5.0,2.0,0.0,0.0,4.0,18.0,10.0,3.0,3.0,3.0,1.0,11.0,paige bueckers,1,api:espn_boxscore,,,,,,,paige bueckers,no_projection_for_player_team_date
+2026-07-19,2026,Aneesah Morrow,CON,PHX,A,,,,,,,,,,,,,,,,aneesah morrow,0,api:espn_boxscore,,,,,,,aneesah morrow,no_projection_for_player_team_date
+2026-07-19,2026,Saniya Rivers,CON,PHX,A,,,,,,,,,,,,,,,,saniya rivers,0,api:espn_boxscore,,,,,,,saniya rivers,no_projection_for_player_team_date
+2026-07-19,2026,Natasha Mack,PHX,CON,H,20.0,4.0,5.0,0.0,0.0,1.0,1.0,1.0,4.0,2.0,0.0,0.0,1.0,4.0,11.0,natasha mack,1,api:espn_boxscore,,,,,,,natasha mack,no_projection_for_player_team_date
+2026-07-19,2026,Jovana Nogic,PHX,CON,H,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,jovana nogic,1,api:espn_boxscore,,,,,,,jovana nogic,no_projection_for_player_team_date
