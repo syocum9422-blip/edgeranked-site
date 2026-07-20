@@ -43,7 +43,7 @@
       ],
       "exists": true,
       "latest_date": "2026-07-19",
-      "modified_at_et": "2026-07-20T07:31:14.876886129-04:00",
+      "modified_at_et": "2026-07-20T14:00:11.477797747-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_player_games.csv",
       "rows": 19433
     },
@@ -62,9 +62,9 @@
       ],
       "exists": true,
       "latest_date": null,
-      "modified_at_et": "2026-07-20T07:31:16.066891432-04:00",
+      "modified_at_et": "2026-07-20T14:00:12.879807234-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_player_status.csv",
-      "rows": 41
+      "rows": 38
     },
     "schedule": {
       "columns": [
@@ -80,7 +80,7 @@
       ],
       "exists": true,
       "latest_date": "2026-07-20",
-      "modified_at_et": "2026-07-20T07:31:16.673893929-04:00",
+      "modified_at_et": "2026-07-20T14:00:13.732813120-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_schedule_today.csv",
       "rows": 4
     },
@@ -103,9 +103,9 @@
       ],
       "exists": true,
       "latest_date": null,
-      "modified_at_et": "2026-07-20T07:31:15.836890221-04:00",
+      "modified_at_et": "2026-07-20T14:00:12.687806129-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_sportsbook_lines.csv",
-      "rows": 273
+      "rows": 252
     },
     "team_context": {
       "columns": [
@@ -129,7 +129,7 @@
       ],
       "exists": true,
       "latest_date": "2026-07-19",
-      "modified_at_et": "2026-07-20T07:31:15.302887917-04:00",
+      "modified_at_et": "2026-07-20T14:00:12.142802238-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/raw/wnba_team_context.csv",
       "rows": 1678
     },
@@ -283,10 +283,10 @@
       ],
       "exists": true,
       "latest_date": "2026-07-20",
-      "modified_at_et": "2026-07-20T07:31:59.343087673-04:00",
+      "modified_at_et": "2026-07-20T14:00:59.640125036-04:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/data/processed/wnba_today_features.csv",
-      "rows": 94
+      "rows": 98
     }
   },
-  "generated_at": "2026-07-20T07:32:13.825979-04:00"
+  "generated_at": "2026-07-20T14:01:15.458911-04:00"
 }
