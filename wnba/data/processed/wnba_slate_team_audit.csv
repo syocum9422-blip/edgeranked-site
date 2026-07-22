@@ -3,11 +3,11 @@ CHI,True,True,True,scheduled_and_live_prizepicks
 CON,True,True,True,scheduled_and_live_prizepicks
 DAL,True,True,True,scheduled_and_live_prizepicks
 IND,True,True,True,scheduled_and_live_prizepicks
-LAS,True,True,True,scheduled_and_live_prizepicks
+LAS,True,False,True,scheduled
 LVA,True,True,True,scheduled_and_live_prizepicks
-MIN,True,True,True,scheduled_and_live_prizepicks
+MIN,True,False,True,scheduled
 NYL,True,True,True,scheduled_and_live_prizepicks
-PHX,True,True,True,scheduled_and_live_prizepicks
+PHX,True,False,True,scheduled
 POR,True,True,True,scheduled_and_live_prizepicks
-SEA,True,True,True,scheduled_and_live_prizepicks
+SEA,True,False,True,scheduled
 WAS,True,True,True,scheduled_and_live_prizepicks
