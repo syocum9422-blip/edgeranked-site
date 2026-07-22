@@ -31,8 +31,9 @@ Jewell Loyd,LVA,WAS,True,True,last_good_canonical,True,included
 NaLyssa Smith,LVA,WAS,True,True,last_good_canonical,True,included
 Courtney Williams,MIN,SEA,True,True,last_good_canonical,True,included
 Kayla McBride,MIN,SEA,True,True,last_good_canonical,True,included
-Napheesa Collier,MIN,SEA,True,True,last_good_canonical,False,excluded_by_status_or_filter
+Napheesa Collier,MIN,SEA,True,True,last_good_canonical,True,included
 Natasha Howard,MIN,SEA,True,True,last_good_canonical,True,included
+Nia Coffey,MIN,SEA,True,True,last_good_canonical,True,included
 Olivia Miles,MIN,SEA,True,True,last_good_canonical,True,included
 Breanna Stewart,NYL,CHI,True,True,last_good_canonical,True,included
 Jonquel Jones,NYL,CHI,True,True,last_good_canonical,True,included
@@ -47,7 +48,7 @@ Noemie Brochant,PHX,LAS,True,True,last_good_canonical,True,included
 Bridget Carleton,POR,DAL,True,True,last_good_canonical,True,included
 Carla Leite,POR,DAL,True,True,last_good_canonical,True,included
 Emily Engstler,POR,DAL,True,True,last_good_canonical,True,included
-Megan DiLeo,POR,DAL,True,False,,False,no_history_found
+Megan DiLeo,POR,DAL,True,True,api:espn:wnba:gamelog,False,excluded_by_status_or_filter
 Sarah Ashlee Barker,POR,DAL,True,True,last_good_canonical,True,included
 Awa Fam,SEA,MIN,True,True,last_good_canonical,True,included
 Dominique Malonga,SEA,MIN,True,True,last_good_canonical,True,included
