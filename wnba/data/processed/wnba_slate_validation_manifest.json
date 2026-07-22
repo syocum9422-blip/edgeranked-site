@@ -1,61 +1,85 @@
 {
   "duplicate_games": [],
-  "expected_game_count": 4,
-  "generated_at": "2026-07-20T18:30:12.349531-04:00",
-  "generated_game_count": 4,
+  "expected_game_count": 6,
+  "generated_at": "2026-07-22T07:31:59.794466-04:00",
+  "generated_game_count": 6,
   "generated_games": [
     {
-      "away_team": "LVA",
-      "game_id": "401857083",
-      "home_team": "TOR",
-      "start_time_utc": "2026-07-21T00:00Z"
-    },
-    {
-      "away_team": "NYL",
-      "game_id": "401892393",
-      "home_team": "DAL",
-      "start_time_utc": "2026-07-21T00:00Z"
-    },
-    {
       "away_team": "MIN",
-      "game_id": "401857085",
+      "game_id": "401857087",
       "home_team": "SEA",
-      "start_time_utc": "2026-07-21T02:00Z"
+      "start_time_utc": "2026-07-22T19:00Z"
     },
     {
-      "away_team": "WAS",
-      "game_id": "401857084",
-      "home_team": "GSV",
-      "start_time_utc": "2026-07-21T02:00Z"
+      "away_team": "PHX",
+      "game_id": "401857086",
+      "home_team": "LAS",
+      "start_time_utc": "2026-07-22T19:00Z"
+    },
+    {
+      "away_team": "CHI",
+      "game_id": "401857088",
+      "home_team": "NYL",
+      "start_time_utc": "2026-07-22T23:00Z"
+    },
+    {
+      "away_team": "LVA",
+      "game_id": "401857089",
+      "home_team": "WAS",
+      "start_time_utc": "2026-07-22T23:30Z"
+    },
+    {
+      "away_team": "CON",
+      "game_id": "401857090",
+      "home_team": "IND",
+      "start_time_utc": "2026-07-23T00:00Z"
+    },
+    {
+      "away_team": "DAL",
+      "game_id": "401857091",
+      "home_team": "POR",
+      "start_time_utc": "2026-07-23T02:00Z"
     }
   ],
   "missing_games": [],
-  "slate_date": "2026-07-20",
+  "slate_date": "2026-07-22",
   "status": "PASS",
   "trusted_games": [
     {
-      "away_team": "LVA",
-      "game_id": "401857083",
-      "home_team": "TOR",
-      "start_time_utc": "2026-07-21T00:00Z"
-    },
-    {
-      "away_team": "NYL",
-      "game_id": "401892393",
-      "home_team": "DAL",
-      "start_time_utc": "2026-07-21T00:00Z"
-    },
-    {
       "away_team": "MIN",
-      "game_id": "401857085",
+      "game_id": "401857087",
       "home_team": "SEA",
-      "start_time_utc": "2026-07-21T02:00Z"
+      "start_time_utc": "2026-07-22T19:00Z"
     },
     {
-      "away_team": "WAS",
-      "game_id": "401857084",
-      "home_team": "GSV",
-      "start_time_utc": "2026-07-21T02:00Z"
+      "away_team": "PHX",
+      "game_id": "401857086",
+      "home_team": "LAS",
+      "start_time_utc": "2026-07-22T19:00Z"
+    },
+    {
+      "away_team": "CHI",
+      "game_id": "401857088",
+      "home_team": "NYL",
+      "start_time_utc": "2026-07-22T23:00Z"
+    },
+    {
+      "away_team": "LVA",
+      "game_id": "401857089",
+      "home_team": "WAS",
+      "start_time_utc": "2026-07-22T23:30Z"
+    },
+    {
+      "away_team": "CON",
+      "game_id": "401857090",
+      "home_team": "IND",
+      "start_time_utc": "2026-07-23T00:00Z"
+    },
+    {
+      "away_team": "DAL",
+      "game_id": "401857091",
+      "home_team": "POR",
+      "start_time_utc": "2026-07-23T02:00Z"
     }
   ],
   "trusted_source": "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard",

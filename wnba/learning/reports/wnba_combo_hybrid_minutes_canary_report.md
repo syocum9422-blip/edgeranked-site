@@ -1,8 +1,8 @@
 # WNBA Phase 12 Combo Hybrid Minutes Canary
 
-Generated: 2026-07-20T04:35:09Z
+Generated: 2026-07-22T04:35:09Z
 
-New rows processed this run: 33
+New rows processed this run: 20
 
 Shadow-only canary using Phase 11 combo-market blend recommendations only.
 
@@ -19,8 +19,8 @@ Shadow-only canary using Phase 11 combo-market blend recommendations only.
 - Promotion JSON: `/home/ubuntu/EdgeRanked/sports/wnba/data/processed/wnba_combo_hybrid_minutes_canary_promotion_recommendation.json`
 
 ## Current Aggregate
-- production: n=605, win rate 48.4%, MAE 7.305, RMSE 9.726, calibration error 0.167
-- hybrid: n=605, win rate 45.2%, MAE 6.898, RMSE 9.025, calibration error 0.203
+- production: n=653, win rate 49.2%, MAE 7.161, RMSE 9.543, calibration error 0.157
+- hybrid: n=653, win rate 45.7%, MAE 6.929, RMSE 8.989, calibration error 0.200
 
 ## Promotion Recommendation
 - Decision: **do_not_promote**

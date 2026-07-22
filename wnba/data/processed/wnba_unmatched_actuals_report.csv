@@ -108,6 +108,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-14,2026,Alyssa Thomas,PHX,LAS,H,41.0,10.0,7.0,12.0,0.0,0.0,1.0,2.0,10.0,4.0,3.0,2.0,3.0,4.0,,alyssa thomas,1,last_good_canonical,401856989.0,2529140.0,F,1.0,1.0,espn,alyssa thomas,no_projection_for_player_team_date
 2026-06-18,2026,Alyssa Thomas,PHX,LVA,H,35.0,10.0,5.0,11.0,0.0,0.0,0.0,6.0,10.0,4.0,2.0,2.0,1.0,4.0,,alyssa thomas,1,last_good_canonical,401857000.0,2529140.0,F,1.0,1.0,espn,alyssa thomas,no_projection_for_player_team_date
 2026-06-23,2026,Alyssa Thomas,PHX,IND,A,34.0,19.0,5.0,9.0,0.0,1.0,1.0,3.0,12.0,8.0,5.0,3.0,0.0,5.0,,alyssa thomas,0,last_good_canonical,401857014.0,2529140.0,F,1.0,1.0,espn,alyssa thomas,no_projection_for_player_team_date
+2026-06-22,2026,Amy Okonkwo,ATL,TOR,H,,,,,,,,,,,,,,,,amy okonkwo,1,last_good_canonical,,,,,,,amy okonkwo,no_projection_for_player_team_date
 2026-06-28,2026,Amy Okonkwo,ATL,SEA,A,1.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,2.0,1.0,0.0,1.0,,amy okonkwo,0,last_good_canonical,401857029.0,3142242.0,F,0.0,1.0,espn,amy okonkwo,no_projection_for_player_team_date
 2026-05-10,2026,Anastasiia Olairi Kosu,MIN,ATL,H,6.0,4.0,1.0,0.0,0.0,1.0,1.0,0.0,4.0,2.0,0.0,0.0,1.0,0.0,,anastasiia olairi kosu,1,last_good_canonical,401856899.0,5278237.0,F,0.0,1.0,espn,anastasiia olairi kosu,no_projection_for_player_team_date
 2026-05-13,2026,Anastasiia Olairi Kosu,MIN,PHX,A,9.0,2.0,2.0,2.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,0.0,1.0,1.0,,anastasiia olairi kosu,0,last_good_canonical,401856902.0,5278237.0,F,0.0,1.0,espn,anastasiia olairi kosu,no_projection_for_player_team_date
@@ -1215,6 +1216,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-05-24,2026,Kiana Williams,PHX,ATL,A,20.0,3.0,1.0,1.0,0.0,1.0,1.0,1.0,5.0,0.0,3.0,3.0,0.0,1.0,,kiana williams,0,last_good_canonical,401856933.0,4282168.0,G,0.0,1.0,espn,kiana williams,no_projection_for_player_team_date
 2026-05-27,2026,Kiana Williams,PHX,NYL,A,7.0,3.0,0.0,0.0,1.0,0.0,0.0,0.0,2.0,1.0,0.0,0.0,0.0,0.0,,kiana williams,0,last_good_canonical,401856938.0,4282168.0,G,0.0,1.0,espn,kiana williams,no_projection_for_player_team_date
 2026-05-29,2026,Kiana Williams,PHX,NYL,A,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,kiana williams,0,last_good_canonical,401856945.0,4282168.0,G,0.0,0.0,espn,kiana williams,no_projection_for_player_team_date
+2026-06-21,2026,Kiana Williams,LAS,NYL,H,7.0,2.0,0.0,1.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,0.0,0.0,0.0,-6.0,kiana williams,1,last_good_canonical,,,,,,,kiana williams,no_projection_for_player_team_date
 2026-06-22,2026,Kiana Williams,LAS,NYL,A,7.0,2.0,0.0,1.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,0.0,0.0,0.0,,kiana williams,0,last_good_canonical,401857011.0,4282168.0,G,0.0,1.0,espn,kiana williams,no_projection_for_player_team_date
 2026-06-28,2026,Kiana Williams,LAS,IND,A,19.0,4.0,1.0,0.0,0.0,0.0,0.0,0.0,7.0,2.0,0.0,0.0,0.0,1.0,,kiana williams,0,last_good_canonical,401857028.0,4282168.0,G,0.0,1.0,espn,kiana williams,no_projection_for_player_team_date
 2026-05-09,2026,Kierstan Bell,LVA,PHX,A,19.0,0.0,6.0,1.0,0.0,1.0,0.0,2.0,4.0,0.0,0.0,0.0,0.0,6.0,,kierstan bell,0,last_good_canonical,401856894.0,4433633.0,F,0.0,1.0,espn,kierstan bell,no_projection_for_player_team_date
@@ -2011,6 +2013,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-05-15,2026,Shatori Walker-Kimbrough,IND,WAS,H,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,shatori walker-kimbrough,1,last_good_canonical,401856911.0,3058893.0,G,0.0,0.0,espn,shatori walker-kimbrough,no_projection_for_player_team_date
 2026-05-17,2026,Shatori Walker-Kimbrough,IND,SEA,H,3.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,,shatori walker-kimbrough,1,last_good_canonical,401856916.0,3058893.0,G,0.0,1.0,espn,shatori walker-kimbrough,no_projection_for_player_team_date
 2026-05-20,2026,Shatori Walker-Kimbrough,IND,POR,H,3.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,shatori walker-kimbrough,1,last_good_canonical,401856921.0,3058893.0,G,0.0,1.0,espn,shatori walker-kimbrough,no_projection_for_player_team_date
+2026-06-22,2026,Shay Ciezki,PHX,IND,A,2.0,3.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,0.0,0.0,0.0,0.0,6.0,shay ciezki,0,last_good_canonical,,,,,,,shay ciezki,no_projection_for_player_team_date
 2026-06-23,2026,Shay Ciezki,PHX,IND,A,2.0,3.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,0.0,0.0,0.0,0.0,,shay ciezki,0,last_good_canonical,401857014.0,4688629.0,G,0.0,1.0,espn,shay ciezki,no_projection_for_player_team_date
 2026-05-08,2026,Shey Peddy,CON,NYL,A,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,shey peddy,0,last_good_canonical,401856890.0,1107.0,G,0.0,0.0,espn,shey peddy,no_projection_for_player_team_date
 2026-05-10,2026,Shey Peddy,CON,SEA,H,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,shey peddy,1,last_good_canonical,401856896.0,1107.0,G,0.0,0.0,espn,shey peddy,no_projection_for_player_team_date
@@ -2260,9 +2263,6 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-23,2026,Zia Cooke,SEA,DAL,H,30.0,18.0,2.0,2.0,2.0,0.0,0.0,1.0,12.0,6.0,4.0,4.0,1.0,1.0,,zia cooke,1,last_good_canonical,401857015.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
 2026-06-26,2026,Zia Cooke,SEA,NYL,H,13.0,3.0,4.0,0.0,1.0,1.0,0.0,1.0,6.0,1.0,0.0,0.0,1.0,3.0,,zia cooke,1,last_good_canonical,401857023.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
 2026-06-28,2026,Zia Cooke,SEA,ATL,H,11.0,6.0,1.0,2.0,1.0,0.0,0.0,1.0,2.0,2.0,3.0,1.0,0.0,1.0,,zia cooke,1,last_good_canonical,401857029.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
-2026-06-21,2026,Kiana Williams,LAS,NYL,H,7.0,2.0,0.0,1.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,0.0,0.0,0.0,-6.0,kiana williams,1,api:espn_boxscore,,,,,,,kiana williams,no_projection_for_player_team_date
-2026-06-22,2026,Amy Okonkwo,ATL,TOR,H,,,,,,,,,,,,,,,,amy okonkwo,1,api:espn_boxscore,,,,,,,amy okonkwo,no_projection_for_player_team_date
-2026-06-22,2026,Shay Ciezki,PHX,IND,A,2.0,3.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,0.0,0.0,0.0,0.0,6.0,shay ciezki,0,api:espn_boxscore,,,,,,,shay ciezki,no_projection_for_player_team_date
 2026-06-28,2026,Haley Jones,DAL,MIN,H,,,,,,,,,,,,,,,,haley jones,1,api:espn_boxscore,,,,,,,haley jones,no_projection_for_player_team_date
 2026-07-05,2026,Ornella Bankole,TOR,DAL,H,8.0,2.0,2.0,0.0,0.0,1.0,0.0,0.0,1.0,0.0,2.0,2.0,1.0,1.0,1.0,ornella bankole,1,api:espn_boxscore,,,,,,,ornella bankole,no_projection_for_player_team_date
 2026-07-05,2026,Temi Fagbenle,TOR,DAL,H,,,,,,,,,,,,,,,,temi fagbenle,1,api:espn_boxscore,,,,,,,temi fagbenle,no_projection_for_player_team_date
@@ -2367,3 +2367,11 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-07-19,2026,Saniya Rivers,CON,PHX,A,,,,,,,,,,,,,,,,saniya rivers,0,api:espn_boxscore,,,,,,,saniya rivers,no_projection_for_player_team_date
 2026-07-19,2026,Natasha Mack,PHX,CON,H,20.0,4.0,5.0,0.0,0.0,1.0,1.0,1.0,4.0,2.0,0.0,0.0,1.0,4.0,11.0,natasha mack,1,api:espn_boxscore,,,,,,,natasha mack,no_projection_for_player_team_date
 2026-07-19,2026,Jovana Nogic,PHX,CON,H,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,jovana nogic,1,api:espn_boxscore,,,,,,,jovana nogic,no_projection_for_player_team_date
+2026-07-20,2026,Kierstan Bell,LVA,TOR,A,,,,,,,,,,,,,,,,kierstan bell,0,api:espn_boxscore,,,,,,,kierstan bell,no_projection_for_player_team_date
+2026-07-20,2026,Mai Yamamoto,LVA,TOR,A,,,,,,,,,,,,,,,,mai yamamoto,0,api:espn_boxscore,,,,,,,mai yamamoto,no_projection_for_player_team_date
+2026-07-20,2026,Nyara Sabally,TOR,LVA,H,,,,,,,,,,,,,,,,nyara sabally,1,api:espn_boxscore,,,,,,,nyara sabally,no_projection_for_player_team_date
+2026-07-20,2026,Brittney Sykes,TOR,LVA,H,,,,,,,,,,,,,,,,brittney sykes,1,api:espn_boxscore,,,,,,,brittney sykes,no_projection_for_player_team_date
+2026-07-20,2026,Kiki Rice,TOR,LVA,H,,,,,,,,,,,,,,,,kiki rice,1,api:espn_boxscore,,,,,,,kiki rice,no_projection_for_player_team_date
+2026-07-20,2026,Napheesa Collier,MIN,SEA,A,,,,,,,,,,,,,,,,napheesa collier,0,api:espn_boxscore,,,,,,,napheesa collier,no_projection_for_player_team_date
+2026-07-20,2026,Emma Cechova,MIN,SEA,A,,,,,,,,,,,,,,,,emma cechova,0,api:espn_boxscore,,,,,,,emma cechova,no_projection_for_player_team_date
+2026-07-20,2026,Ezi Magbegor,SEA,MIN,H,,,,,,,,,,,,,,,,ezi magbegor,1,api:espn_boxscore,,,,,,,ezi magbegor,no_projection_for_player_team_date
