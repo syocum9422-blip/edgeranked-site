@@ -1,6 +1,6 @@
 # WNBA Nightly Learning Report
 
-Generated: 2026-07-28T04:25:08Z
+Generated: 2026-07-29T04:25:08Z
 Graded predictions in ledger: 2689
 
 ## Best-Performing Markets
