@@ -122,6 +122,7 @@ game_date,team,opponent,pace,off_rating,def_rating,team_points,opp_points,team_r
 2026-07-13,ATL,LAS,,,,101.0,92.0,35.0,22.0,9.0,last_good_canonical,,,,,
 2026-07-17,ATL,TOR,,,,111.0,92.0,28.0,28.0,9.0,last_good_canonical,,,,,
 2026-07-19,ATL,CHI,,,,93.0,91.0,39.0,24.0,8.0,last_good_canonical,,,,,
+2026-07-29,ATL,DAL,,,,82.0,81.0,37.0,22.0,1.0,last_good_canonical,,,,,
 2025-05-03,BRZL,CHI,85.08,73.28605200945627,104.02057035998128,62.0,89.0,31.0,13.0,6.0,last_good_canonical,2025.0,401761346.0,3.0,3.0,espn
 2025-05-04,BRZL,IND,76.75999999999999,57.68222338751966,139.82392542723977,44.0,108.0,36.0,12.0,5.0,last_good_canonical,2025.0,401761354.0,6.0,2.0,espn
 2024-05-04,CHI,MIN,81.74000000000001,100.0,111.54219204655674,81.0,92.0,33.0,12.0,5.0,last_good_canonical,2024.0,401649378.0,8.0,6.0,espn
@@ -493,6 +494,7 @@ game_date,team,opponent,pace,off_rating,def_rating,team_points,opp_points,team_r
 2026-07-19,DAL,LAS,,,,90.0,82.0,34.0,21.0,7.0,last_good_canonical,,,,,
 2026-07-20,DAL,NYL,,,,98.0,99.0,34.0,27.0,11.0,last_good_canonical,,,,,
 2026-07-22,DAL,POR,,,,101.0,97.0,35.0,28.0,12.0,last_good_canonical,,,,,
+2026-07-29,DAL,ATL,,,,81.0,82.0,32.0,19.0,4.0,last_good_canonical,,,,,
 2025-05-07,GSV,LAS,86.22,95.48206800186308,95.88724584103512,82.0,83.0,37.0,18.0,6.0,last_good_canonical,2025.0,401761351.0,7.0,2.0,espn
 2025-05-11,GSV,PHX,80.5,103.70370370370372,98.75,84.0,79.0,33.0,21.0,13.0,last_good_canonical,2025.0,401761352.0,10.0,3.0,espn
 2025-05-17,GSV,LAS,79.97999999999999,84.04415454089313,104.68594217347956,67.0,84.0,33.0,13.0,9.0,last_good_canonical,2025.0,401736114.0,8.0,2.0,espn
@@ -577,6 +579,7 @@ game_date,team,opponent,pace,off_rating,def_rating,team_points,opp_points,team_r
 2026-07-15,GSV,IND,,,,88.0,75.0,30.0,16.0,8.0,last_good_canonical,,,,,
 2026-07-18,GSV,WAS,,,,74.0,69.0,26.0,21.0,12.0,last_good_canonical,,,,,
 2026-07-20,GSV,WAS,,,,82.0,90.0,23.0,21.0,12.0,last_good_canonical,,,,,
+2026-07-29,GSV,PHX,,,,89.0,91.0,33.0,24.0,12.0,last_good_canonical,,,,,
 2024-05-04,IND,DAL,80.64,94.715852442672,97.48272458045408,76.0,79.0,33.0,14.0,7.0,last_good_canonical,2024.0,401653060.0,5.0,6.0,espn
 2024-05-09,IND,ATL,86.86,93.93390674513354,93.72071227741333,83.0,80.0,36.0,21.0,8.0,last_good_canonical,2024.0,401653633.0,9.0,11.0,espn
 2024-05-14,IND,CON,81.68,89.46572580645162,109.52380952380952,71.0,92.0,28.0,16.0,8.0,last_good_canonical,2024.0,401620219.0,6.0,5.0,espn
@@ -1393,6 +1396,7 @@ game_date,team,opponent,pace,off_rating,def_rating,team_points,opp_points,team_r
 2026-07-17,PHX,CON,,,,83.0,96.0,27.0,18.0,4.0,last_good_canonical,,,,,
 2026-07-19,PHX,CON,,,,72.0,63.0,32.0,19.0,2.0,last_good_canonical,,,,,
 2026-07-22,PHX,LAS,,,,86.0,82.0,33.0,28.0,7.0,last_good_canonical,,,,,
+2026-07-29,PHX,GSV,,,,91.0,89.0,34.0,19.0,5.0,last_good_canonical,,,,,
 2026-05-03,POR,LAS,86.64,88.0281690140845,96.50317892824704,75.0,85.0,30.0,15.0,4.0,last_good_canonical,2026.0,401866521.0,8.0,2.0,espn
 2026-05-10,POR,CHI,81.88,97.87735849056604,124.11347517730496,83.0,98.0,24.0,20.0,9.0,last_good_canonical,2026.0,401856895.0,6.0,7.0,espn
 2026-05-13,POR,NYL,79.75999999999999,123.11557788944724,120.12012012012012,98.0,96.0,26.0,15.0,15.0,last_good_canonical,2026.0,401856903.0,8.0,4.0,espn
