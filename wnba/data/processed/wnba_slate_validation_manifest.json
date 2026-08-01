@@ -1,49 +1,37 @@
 {
   "duplicate_games": [],
-  "expected_game_count": 3,
-  "generated_at": "2026-07-31T18:30:10.620228-04:00",
-  "generated_game_count": 3,
+  "expected_game_count": 2,
+  "generated_at": "2026-08-01T07:31:12.261127-04:00",
+  "generated_game_count": 2,
   "generated_games": [
     {
-      "away_team": "DAL",
-      "game_id": "401857103",
-      "home_team": "WAS",
-      "start_time_utc": "2026-07-31T23:30Z"
+      "away_team": "LVA",
+      "game_id": "401857105",
+      "home_team": "CHI",
+      "start_time_utc": "2026-08-01T17:00Z"
     },
     {
-      "away_team": "SEA",
-      "game_id": "401857102",
-      "home_team": "ATL",
-      "start_time_utc": "2026-07-31T23:30Z"
-    },
-    {
-      "away_team": "IND",
-      "game_id": "401857104",
-      "home_team": "POR",
-      "start_time_utc": "2026-08-01T02:00Z"
+      "away_team": "NYL",
+      "game_id": "401857106",
+      "home_team": "PHX",
+      "start_time_utc": "2026-08-01T19:00Z"
     }
   ],
   "missing_games": [],
-  "slate_date": "2026-07-31",
+  "slate_date": "2026-08-01",
   "status": "PASS",
   "trusted_games": [
     {
-      "away_team": "DAL",
-      "game_id": "401857103",
-      "home_team": "WAS",
-      "start_time_utc": "2026-07-31T23:30Z"
+      "away_team": "LVA",
+      "game_id": "401857105",
+      "home_team": "CHI",
+      "start_time_utc": "2026-08-01T17:00Z"
     },
     {
-      "away_team": "SEA",
-      "game_id": "401857102",
-      "home_team": "ATL",
-      "start_time_utc": "2026-07-31T23:30Z"
-    },
-    {
-      "away_team": "IND",
-      "game_id": "401857104",
-      "home_team": "POR",
-      "start_time_utc": "2026-08-01T02:00Z"
+      "away_team": "NYL",
+      "game_id": "401857106",
+      "home_team": "PHX",
+      "start_time_utc": "2026-08-01T19:00Z"
     }
   ],
   "trusted_source": "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard",
