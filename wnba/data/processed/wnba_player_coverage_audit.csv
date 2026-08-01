@@ -1,11 +1,6 @@
 player_name,team,opponent,has_live_line,has_history,history_source,included,reason
-Courtney Vandersloot,CHI,LVA,True,True,last_good_canonical,True,included
-DiJonai Carrington,CHI,LVA,True,True,last_good_canonical,True,included
-Elizabeth Williams,CHI,LVA,True,True,last_good_canonical,True,included
-Kamilla Cardoso,CHI,LVA,True,True,last_good_canonical,True,included
-Natasha Cloud,CHI,LVA,True,True,last_good_canonical,True,included
-Sydney Taylor,CHI,LVA,True,True,last_good_canonical,True,included
 Leila Lacan,CON,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
+Olivia Nelson-Ododa,CON,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Arike Ogunbowale,DAL,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Azzi Fudd,DAL,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Jessica Shepard,DAL,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
@@ -16,17 +11,14 @@ Veronica Burton,GSV,,True,True,last_good_canonical,False,excluded_not_on_canonic
 Aliyah Boston,IND,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Caitlin Clark,IND,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Kelsey Mitchell,IND,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
+Monique Billings,IND,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Sophie Cunningham,IND,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Ariel Atkins,LAS,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Dearica Hamby,LAS,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
+Erica Wheeler,LAS,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Kelsey Plum,LAS,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Nneka Ogwumike,LAS,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Rae Burrell,LAS,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
-A'ja Wilson,LVA,CHI,True,True,last_good_canonical,True,included
-Chelsea Gray,LVA,CHI,True,True,last_good_canonical,True,included
-Jackie Young,LVA,CHI,True,True,last_good_canonical,True,included
-Jewell Loyd,LVA,CHI,True,True,last_good_canonical,True,included
-NaLyssa Smith,LVA,CHI,True,True,last_good_canonical,True,included
 Courtney Williams,MIN,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Kayla McBride,MIN,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Napheesa Collier,MIN,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
@@ -44,5 +36,6 @@ Monique Akoa Makani,PHX,NYL,True,True,last_good_canonical,True,included
 Natasha Mack,PHX,NYL,True,True,last_good_canonical,True,included
 Bridget Carleton,POR,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Carla Leite,POR,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
+Emily Engstler,POR,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Megan DiLeo,POR,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
 Marina Mabrey,TOR,,True,True,last_good_canonical,False,excluded_not_on_canonical_slate
