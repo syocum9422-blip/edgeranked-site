@@ -1,33 +1,41 @@
 {
   "WNBA_PRODUCTION_STATUS": "PASS",
   "canonical_teams": [
-    "CHI",
-    "LVA",
-    "NYL",
-    "PHX"
+    "CON",
+    "DAL",
+    "GSV",
+    "IND",
+    "LAS",
+    "MIN",
+    "POR",
+    "TOR"
   ],
   "configured_serving_mode": "staged_v2_emergency",
   "emergency_v2_applied": false,
-  "emergency_v2_skip_details": "conserved projections latest_date=2026-07-31 expected_date=2026-08-01",
+  "emergency_v2_skip_details": "conserved projections latest_date=2026-08-01 expected_date=2026-08-02",
   "emergency_v2_skipped_reason": "stale_conserved_outputs",
   "error": "",
-  "excluded_players": 30,
+  "excluded_players": 22,
   "excluded_reasons": {
-    "excluded_not_on_canonical_slate": 30,
-    "projection_board_without_slate_live_lines": 46
+    "excluded_by_status_or_filter": 1,
+    "excluded_not_on_canonical_slate": 21
   },
-  "generated_at": "2026-08-01T18:31:05.028758-04:00",
-  "included_players": 46,
+  "generated_at": "2026-08-02T07:32:12.633181-04:00",
+  "included_players": 38,
   "message": "WNBA refresh passed.",
   "projected_teams": [
-    "CHI",
-    "LVA",
-    "NYL",
-    "PHX"
+    "CON",
+    "DAL",
+    "GSV",
+    "IND",
+    "LAS",
+    "MIN",
+    "POR",
+    "TOR"
   ],
   "published": "yes",
   "serving_mode": "production",
-  "slate_date": "2026-08-01",
+  "slate_date": "2026-08-02",
   "stale_output_blocked": "no",
   "status": "pass",
   "v2_rollback_force_production": false,
