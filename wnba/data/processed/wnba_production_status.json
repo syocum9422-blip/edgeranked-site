@@ -15,13 +15,12 @@
   "emergency_v2_skip_details": "conserved projections latest_date=2026-08-01 expected_date=2026-08-02",
   "emergency_v2_skipped_reason": "stale_conserved_outputs",
   "error": "",
-  "excluded_players": 22,
+  "excluded_players": 21,
   "excluded_reasons": {
-    "excluded_by_status_or_filter": 1,
     "excluded_not_on_canonical_slate": 21
   },
-  "generated_at": "2026-08-02T14:01:14.356281-04:00",
-  "included_players": 27,
+  "generated_at": "2026-08-02T18:31:07.054724-04:00",
+  "included_players": 15,
   "message": "WNBA refresh passed.",
   "projected_teams": [
     "CON",
