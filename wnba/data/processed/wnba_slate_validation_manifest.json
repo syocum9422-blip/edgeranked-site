@@ -1,61 +1,49 @@
 {
   "duplicate_games": [],
-  "expected_game_count": 4,
-  "generated_at": "2026-08-02T18:30:10.524742-04:00",
-  "generated_game_count": 4,
+  "expected_game_count": 3,
+  "generated_at": "2026-08-03T07:31:16.170964-04:00",
+  "generated_game_count": 3,
   "generated_games": [
     {
-      "away_team": "IND",
-      "game_id": "401857107",
-      "home_team": "MIN",
-      "start_time_utc": "2026-08-02T17:00Z"
+      "away_team": "LVA",
+      "game_id": "401857111",
+      "home_team": "ATL",
+      "start_time_utc": "2026-08-03T23:00Z"
     },
     {
-      "away_team": "LAS",
-      "game_id": "401857108",
-      "home_team": "POR",
-      "start_time_utc": "2026-08-02T19:30Z"
+      "away_team": "SEA",
+      "game_id": "401857112",
+      "home_team": "NYL",
+      "start_time_utc": "2026-08-03T23:00Z"
     },
     {
-      "away_team": "CON",
-      "game_id": "401857109",
-      "home_team": "DAL",
-      "start_time_utc": "2026-08-02T23:00Z"
-    },
-    {
-      "away_team": "TOR",
-      "game_id": "401857110",
-      "home_team": "GSV",
-      "start_time_utc": "2026-08-03T00:30Z"
+      "away_team": "PHX",
+      "game_id": "401857113",
+      "home_team": "CHI",
+      "start_time_utc": "2026-08-04T01:00Z"
     }
   ],
   "missing_games": [],
-  "slate_date": "2026-08-02",
+  "slate_date": "2026-08-03",
   "status": "PASS",
   "trusted_games": [
     {
-      "away_team": "IND",
-      "game_id": "401857107",
-      "home_team": "MIN",
-      "start_time_utc": "2026-08-02T17:00Z"
+      "away_team": "LVA",
+      "game_id": "401857111",
+      "home_team": "ATL",
+      "start_time_utc": "2026-08-03T23:00Z"
     },
     {
-      "away_team": "LAS",
-      "game_id": "401857108",
-      "home_team": "POR",
-      "start_time_utc": "2026-08-02T19:30Z"
+      "away_team": "SEA",
+      "game_id": "401857112",
+      "home_team": "NYL",
+      "start_time_utc": "2026-08-03T23:00Z"
     },
     {
-      "away_team": "CON",
-      "game_id": "401857109",
-      "home_team": "DAL",
-      "start_time_utc": "2026-08-02T23:00Z"
-    },
-    {
-      "away_team": "TOR",
-      "game_id": "401857110",
-      "home_team": "GSV",
-      "start_time_utc": "2026-08-03T00:30Z"
+      "away_team": "PHX",
+      "game_id": "401857113",
+      "home_team": "CHI",
+      "start_time_utc": "2026-08-04T01:00Z"
     }
   ],
   "trusted_source": "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard",
