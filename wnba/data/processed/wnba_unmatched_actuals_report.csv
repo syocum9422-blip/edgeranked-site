@@ -352,6 +352,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-05-20,2026,Brittney Sykes,TOR,PHX,A,35.0,31.0,7.0,6.0,4.0,0.0,0.0,0.0,19.0,10.0,8.0,7.0,2.0,5.0,,brittney sykes,0,last_good_canonical,401856920.0,2988756.0,G,1.0,1.0,espn,brittney sykes,no_projection_for_player_team_date
 2026-05-22,2026,Brittney Sykes,TOR,MIN,A,20.0,6.0,3.0,4.0,1.0,0.0,0.0,1.0,7.0,2.0,1.0,1.0,1.0,2.0,,brittney sykes,0,last_good_canonical,401856925.0,2988756.0,G,1.0,1.0,espn,brittney sykes,no_projection_for_player_team_date
 2026-05-28,2026,Brittney Sykes,TOR,CHI,A,35.0,20.0,6.0,2.0,1.0,0.0,1.0,0.0,14.0,6.0,8.0,7.0,1.0,5.0,,brittney sykes,0,last_good_canonical,401856939.0,2988756.0,G,1.0,1.0,espn,brittney sykes,no_projection_for_player_team_date
+2026-07-05,2026,Brittney Sykes,TOR,DAL,H,,,,,,,,,,,,,,,,brittney sykes,1,last_good_canonical,,,,,,,brittney sykes,no_projection_for_player_team_date
 2026-05-14,2026,Caitlin Clark,IND,LAS,A,31.0,24.0,4.0,9.0,1.0,2.0,1.0,6.0,17.0,9.0,5.0,5.0,0.0,4.0,,caitlin clark,0,last_good_canonical,401856907.0,4433403.0,G,1.0,1.0,espn,caitlin clark,no_projection_for_player_team_date
 2026-05-20,2026,Caitlin Clark,IND,POR,H,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,caitlin clark,1,last_good_canonical,401856921.0,4433403.0,G,0.0,0.0,espn,caitlin clark,no_projection_for_player_team_date
 2026-05-29,2026,Caitlin Clark,IND,GSV,A,29.0,16.0,4.0,6.0,2.0,3.0,1.0,5.0,12.0,3.0,8.0,8.0,0.0,4.0,,caitlin clark,0,last_good_canonical,401856944.0,4433403.0,G,1.0,1.0,espn,caitlin clark,no_projection_for_player_team_date
@@ -1024,6 +1025,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-05-28,2026,Julie Allemand,TOR,CHI,A,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,julie allemand,0,last_good_canonical,401856939.0,4001679.0,G,0.0,0.0,espn,julie allemand,no_projection_for_player_team_date
 2026-05-30,2026,Julie Allemand,TOR,SEA,H,17.0,6.0,4.0,4.0,0.0,1.0,0.0,2.0,4.0,2.0,2.0,2.0,0.0,4.0,,julie allemand,1,last_good_canonical,401856949.0,4001679.0,G,0.0,1.0,espn,julie allemand,no_projection_for_player_team_date
 2026-06-03,2026,Julie Allemand,TOR,NYL,A,23.0,7.0,1.0,2.0,1.0,2.0,1.0,0.0,6.0,3.0,0.0,0.0,0.0,1.0,-12.0,julie allemand,0,last_good_canonical,,,,,,,julie allemand,no_projection_for_player_team_date
+2026-07-05,2026,Julie Allemand,TOR,DAL,H,,,,,,,,,,,,,,,,julie allemand,1,last_good_canonical,,,,,,,julie allemand,no_projection_for_player_team_date
 2025-07-05,2025,Julie Vanloo,LAS,IND,A,10.0,3.0,0.0,2.0,1.0,0.0,0.0,0.0,2.0,1.0,0.0,0.0,0.0,0.0,,julie vanloo,0,last_good_canonical,401736225.0,2566110.0,G,0.0,1.0,espn,julie vanloo,no_projection_for_player_team_date
 2026-05-08,2026,Julie Vanloo,NYL,CON,A,22.0,12.0,7.0,11.0,2.0,1.0,0.0,3.0,4.0,3.0,4.0,4.0,1.0,6.0,,julie vanloo,0,last_good_canonical,401856890.0,2566110.0,G,0.0,1.0,espn,julie vanloo,no_projection_for_player_team_date
 2026-05-10,2026,Julie Vanloo,NYL,WAS,A,13.0,3.0,1.0,2.0,1.0,0.0,0.0,2.0,3.0,1.0,0.0,0.0,0.0,1.0,,julie vanloo,0,last_good_canonical,401856897.0,2566110.0,G,0.0,1.0,espn,julie vanloo,no_projection_for_player_team_date
@@ -1246,6 +1248,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-05-20,2026,Kiki Rice,TOR,PHX,A,34.0,15.0,7.0,3.0,2.0,2.0,0.0,2.0,7.0,5.0,5.0,3.0,2.0,5.0,,kiki rice,0,last_good_canonical,401856920.0,4565505.0,G,1.0,1.0,espn,kiki rice,no_projection_for_player_team_date
 2026-05-22,2026,Kiki Rice,TOR,MIN,A,23.0,11.0,6.0,4.0,2.0,0.0,0.0,0.0,7.0,3.0,4.0,3.0,1.0,5.0,,kiki rice,0,last_good_canonical,401856925.0,4565505.0,G,1.0,1.0,espn,kiki rice,no_projection_for_player_team_date
 2026-05-28,2026,Kiki Rice,TOR,CHI,A,34.0,14.0,8.0,7.0,0.0,2.0,0.0,3.0,7.0,3.0,9.0,8.0,1.0,7.0,,kiki rice,0,last_good_canonical,401856939.0,4565505.0,G,1.0,1.0,espn,kiki rice,no_projection_for_player_team_date
+2026-07-05,2026,Kiki Rice,TOR,DAL,H,,,,,,,,,,,,,,,,kiki rice,1,last_good_canonical,,,,,,,kiki rice,no_projection_for_player_team_date
 2026-05-09,2026,Kyara Linskens,PHX,LVA,A,14.0,2.0,2.0,1.0,0.0,2.0,0.0,0.0,4.0,1.0,0.0,0.0,1.0,1.0,,kyara linskens,0,last_good_canonical,401856894.0,4873359.0,C,0.0,1.0,espn,kyara linskens,no_projection_for_player_team_date
 2026-05-13,2026,Kyara Linskens,PHX,MIN,H,12.0,8.0,4.0,1.0,2.0,0.0,0.0,0.0,3.0,2.0,2.0,2.0,2.0,2.0,,kyara linskens,1,last_good_canonical,401856902.0,4873359.0,C,0.0,1.0,espn,kyara linskens,no_projection_for_player_team_date
 2026-05-20,2026,Kyara Linskens,PHX,TOR,H,3.0,2.0,2.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,2.0,2.0,2.0,0.0,,kyara linskens,1,last_good_canonical,401856920.0,4873359.0,C,0.0,1.0,espn,kyara linskens,no_projection_for_player_team_date
@@ -1769,6 +1772,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-05-28,2026,Olivia Nelson-Ododa,CON,POR,A,21.0,4.0,4.0,4.0,0.0,2.0,0.0,0.0,3.0,2.0,2.0,0.0,3.0,1.0,,olivia nelson-ododa,0,last_good_canonical,401856941.0,4398966.0,C,0.0,1.0,espn,olivia nelson-ododa,no_projection_for_player_team_date
 2026-05-30,2026,Olivia Nelson-Ododa,CON,LAS,H,17.0,4.0,4.0,1.0,0.0,1.0,1.0,0.0,1.0,0.0,4.0,4.0,1.0,3.0,,olivia nelson-ododa,1,last_good_canonical,401856950.0,4398966.0,C,0.0,1.0,espn,olivia nelson-ododa,no_projection_for_player_team_date
 2026-06-02,2026,Olivia Nelson-Ododa,CON,ATL,A,11.0,10.0,1.0,0.0,0.0,1.0,0.0,1.0,3.0,3.0,8.0,4.0,0.0,1.0,-4.0,olivia nelson-ododa,0,last_good_canonical,,,,,,,olivia nelson-ododa,no_projection_for_player_team_date
+2026-07-05,2026,Ornella Bankole,TOR,DAL,H,8.0,2.0,2.0,0.0,0.0,1.0,0.0,0.0,1.0,0.0,2.0,2.0,1.0,1.0,1.0,ornella bankole,1,last_good_canonical,,,,,,,ornella bankole,no_projection_for_player_team_date
 2026-05-13,2026,Paige Bueckers,DAL,ATL,H,32.0,15.0,2.0,3.0,2.0,0.0,1.0,0.0,12.0,5.0,3.0,3.0,0.0,2.0,,paige bueckers,1,last_good_canonical,401856901.0,4433730.0,G,1.0,1.0,espn,paige bueckers,no_projection_for_player_team_date
 2026-05-15,2026,Paige Bueckers,DAL,MIN,H,31.0,27.0,3.0,8.0,3.0,0.0,0.0,3.0,13.0,7.0,11.0,10.0,0.0,3.0,,paige bueckers,1,last_good_canonical,401856908.0,4433730.0,G,1.0,1.0,espn,paige bueckers,no_projection_for_player_team_date
 2026-05-19,2026,Paige Bueckers,DAL,WAS,H,33.0,18.0,3.0,7.0,4.0,0.0,0.0,1.0,12.0,7.0,0.0,0.0,0.0,3.0,,paige bueckers,1,last_good_canonical,401856918.0,4433730.0,G,1.0,1.0,espn,paige bueckers,no_projection_for_player_team_date
@@ -2185,6 +2189,7 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-05-28,2026,Temi Fagbenle,TOR,CHI,A,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,temi fagbenle,0,last_good_canonical,401856939.0,2569044.0,C,0.0,0.0,espn,temi fagbenle,no_projection_for_player_team_date
 2026-05-30,2026,Temi Fagbenle,TOR,SEA,H,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,temi fagbenle,1,last_good_canonical,401856949.0,2569044.0,C,0.0,0.0,espn,temi fagbenle,no_projection_for_player_team_date
 2026-06-03,2026,Temi Fagbenle,TOR,NYL,A,,,,,,,,,,,,,,,,temi fagbenle,0,last_good_canonical,,,,,,,temi fagbenle,no_projection_for_player_team_date
+2026-07-05,2026,Temi Fagbenle,TOR,DAL,H,,,,,,,,,,,,,,,,temi fagbenle,1,last_good_canonical,,,,,,,temi fagbenle,no_projection_for_player_team_date
 2026-05-08,2026,Teonni Key,TOR,WAS,H,9.0,0.0,3.0,1.0,0.0,0.0,1.0,1.0,1.0,0.0,2.0,0.0,1.0,2.0,,teonni key,1,last_good_canonical,401856891.0,4434020.0,F,0.0,1.0,espn,teonni key,no_projection_for_player_team_date
 2026-05-13,2026,Teonni Key,TOR,SEA,H,8.0,2.0,1.0,0.0,0.0,0.0,1.0,0.0,1.0,1.0,0.0,0.0,1.0,0.0,,teonni key,1,last_good_canonical,401856904.0,4434020.0,F,1.0,1.0,espn,teonni key,no_projection_for_player_team_date
 2026-05-17,2026,Teonni Key,TOR,LAS,A,20.0,6.0,7.0,0.0,0.0,1.0,1.0,0.0,6.0,2.0,2.0,2.0,3.0,4.0,,teonni key,0,last_good_canonical,401856917.0,4434020.0,F,0.0,1.0,espn,teonni key,no_projection_for_player_team_date
@@ -2269,11 +2274,6 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-06-23,2026,Zia Cooke,SEA,DAL,H,30.0,18.0,2.0,2.0,2.0,0.0,0.0,1.0,12.0,6.0,4.0,4.0,1.0,1.0,,zia cooke,1,last_good_canonical,401857015.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
 2026-06-26,2026,Zia Cooke,SEA,NYL,H,13.0,3.0,4.0,0.0,1.0,1.0,0.0,1.0,6.0,1.0,0.0,0.0,1.0,3.0,,zia cooke,1,last_good_canonical,401857023.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
 2026-06-28,2026,Zia Cooke,SEA,ATL,H,11.0,6.0,1.0,2.0,1.0,0.0,0.0,1.0,2.0,2.0,3.0,1.0,0.0,1.0,,zia cooke,1,last_good_canonical,401857029.0,4432832.0,G,0.0,1.0,espn,zia cooke,no_projection_for_player_team_date
-2026-07-05,2026,Ornella Bankole,TOR,DAL,H,8.0,2.0,2.0,0.0,0.0,1.0,0.0,0.0,1.0,0.0,2.0,2.0,1.0,1.0,1.0,ornella bankole,1,api:espn_boxscore,,,,,,,ornella bankole,no_projection_for_player_team_date
-2026-07-05,2026,Temi Fagbenle,TOR,DAL,H,,,,,,,,,,,,,,,,temi fagbenle,1,api:espn_boxscore,,,,,,,temi fagbenle,no_projection_for_player_team_date
-2026-07-05,2026,Brittney Sykes,TOR,DAL,H,,,,,,,,,,,,,,,,brittney sykes,1,api:espn_boxscore,,,,,,,brittney sykes,no_projection_for_player_team_date
-2026-07-05,2026,Julie Allemand,TOR,DAL,H,,,,,,,,,,,,,,,,julie allemand,1,api:espn_boxscore,,,,,,,julie allemand,no_projection_for_player_team_date
-2026-07-05,2026,Kiki Rice,TOR,DAL,H,,,,,,,,,,,,,,,,kiki rice,1,api:espn_boxscore,,,,,,,kiki rice,no_projection_for_player_team_date
 2026-07-06,2026,Aneesah Morrow,CON,MIN,A,,,,,,,,,,,,,,,,aneesah morrow,0,api:espn_boxscore,,,,,,,aneesah morrow,no_projection_for_player_team_date
 2026-07-06,2026,Dorka Juhasz,MIN,CON,H,25.0,3.0,4.0,3.0,1.0,0.0,1.0,1.0,7.0,1.0,0.0,0.0,0.0,4.0,-5.0,dorka juhasz,1,api:espn_boxscore,,,,,,,dorka juhasz,no_projection_for_player_team_date
 2026-07-06,2026,Eliska Joklova,MIN,CON,H,8.0,2.0,2.0,3.0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,2.0,1.0,1.0,6.0,eliska joklova,1,api:espn_boxscore,,,,,,,eliska joklova,no_projection_for_player_team_date
@@ -2433,3 +2433,8 @@ game_date,season,player_name,team,opponent,home_away,minutes,points,rebounds,ass
 2026-08-02,2026,Aneesah Morrow,TOR,GSV,A,,,,,,,,,,,,,,,,aneesah morrow,0,api:espn_boxscore,,,,,,,aneesah morrow,no_projection_for_player_team_date
 2026-08-02,2026,Brittney Sykes,TOR,GSV,A,,,,,,,,,,,,,,,,brittney sykes,0,api:espn_boxscore,,,,,,,brittney sykes,no_projection_for_player_team_date
 2026-08-02,2026,Marina Mabrey,TOR,GSV,A,,,,,,,,,,,,,,,,marina mabrey,0,api:espn_boxscore,,,,,,,marina mabrey,no_projection_for_player_team_date
+2026-08-03,2026,Cheyenne Parker-Tyus,LVA,ATL,A,,,,,,,,,,,,,,,,cheyenne parker-tyus,0,api:espn_boxscore,,,,,,,cheyenne parker-tyus,no_projection_for_player_team_date
+2026-08-03,2026,Te-Hina Paopao,ATL,LVA,H,,,,,,,,,,,,,,,,te-hina paopao,1,api:espn_boxscore,,,,,,,te-hina paopao,no_projection_for_player_team_date
+2026-08-03,2026,Kelsey Plum,PHX,CHI,A,21.0,20.0,1.0,4.0,3.0,0.0,0.0,3.0,10.0,6.0,5.0,5.0,0.0,1.0,12.0,kelsey plum,0,api:espn_boxscore,,,,,,,kelsey plum,no_projection_for_player_team_date
+2026-08-03,2026,Azura Stevens,CHI,PHX,H,,,,,,,,,,,,,,,,azura stevens,1,api:espn_boxscore,,,,,,,azura stevens,no_projection_for_player_team_date
+2026-08-03,2026,Skylar Diggins,CHI,PHX,H,,,,,,,,,,,,,,,,skylar diggins,1,api:espn_boxscore,,,,,,,skylar diggins,no_projection_for_player_team_date

@@ -1,49 +1,25 @@
 {
   "duplicate_games": [],
-  "expected_game_count": 3,
-  "generated_at": "2026-08-03T18:30:11.107189-04:00",
-  "generated_game_count": 3,
+  "expected_game_count": 1,
+  "generated_at": "2026-08-04T07:31:17.954692-04:00",
+  "generated_game_count": 1,
   "generated_games": [
     {
-      "away_team": "LVA",
-      "game_id": "401857111",
-      "home_team": "ATL",
-      "start_time_utc": "2026-08-03T23:00Z"
-    },
-    {
-      "away_team": "SEA",
-      "game_id": "401857112",
-      "home_team": "NYL",
-      "start_time_utc": "2026-08-03T23:00Z"
-    },
-    {
-      "away_team": "PHX",
-      "game_id": "401857113",
-      "home_team": "CHI",
-      "start_time_utc": "2026-08-04T01:00Z"
+      "away_team": "TOR",
+      "game_id": "401857114",
+      "home_team": "GSV",
+      "start_time_utc": "2026-08-05T02:00Z"
     }
   ],
   "missing_games": [],
-  "slate_date": "2026-08-03",
+  "slate_date": "2026-08-04",
   "status": "PASS",
   "trusted_games": [
     {
-      "away_team": "LVA",
-      "game_id": "401857111",
-      "home_team": "ATL",
-      "start_time_utc": "2026-08-03T23:00Z"
-    },
-    {
-      "away_team": "SEA",
-      "game_id": "401857112",
-      "home_team": "NYL",
-      "start_time_utc": "2026-08-03T23:00Z"
-    },
-    {
-      "away_team": "PHX",
-      "game_id": "401857113",
-      "home_team": "CHI",
-      "start_time_utc": "2026-08-04T01:00Z"
+      "away_team": "TOR",
+      "game_id": "401857114",
+      "home_team": "GSV",
+      "start_time_utc": "2026-08-05T02:00Z"
     }
   ],
   "trusted_source": "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard",
