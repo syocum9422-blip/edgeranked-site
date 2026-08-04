@@ -1,30 +1,30 @@
 {
-  "WNBA_PRODUCTION_STATUS": "PASS",
+  "WNBA_PRODUCTION_STATUS": "FAIL",
   "canonical_teams": [
     "GSV",
     "TOR"
   ],
   "configured_serving_mode": "staged_v2_emergency",
   "emergency_v2_applied": false,
-  "emergency_v2_skip_details": "conserved projections latest_date=2026-08-03 expected_date=2026-08-04",
-  "emergency_v2_skipped_reason": "stale_conserved_outputs",
-  "error": "",
+  "emergency_v2_skip_details": "",
+  "emergency_v2_skipped_reason": "",
+  "error": "HTTP Error 403: Forbidden",
   "excluded_players": 36,
   "excluded_reasons": {
     "excluded_not_on_canonical_slate": 36
   },
-  "generated_at": "2026-08-04T07:32:10.148354-04:00",
+  "generated_at": "2026-08-04T18:30:12.515055-04:00",
   "included_players": 12,
-  "message": "WNBA refresh passed.",
+  "message": "WNBA refresh failed; check back shortly.",
   "projected_teams": [
     "GSV",
     "TOR"
   ],
-  "published": "yes",
-  "serving_mode": "production",
+  "published": "no",
+  "serving_mode": "staged_v2_emergency",
   "slate_date": "2026-08-04",
-  "stale_output_blocked": "no",
-  "status": "pass",
+  "stale_output_blocked": "yes",
+  "status": "fail",
   "v2_rollback_force_production": false,
-  "v2_traffic_percent": 0
+  "v2_traffic_percent": 5
 }
