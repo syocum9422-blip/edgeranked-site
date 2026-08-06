@@ -360,14 +360,33 @@ def normalize_schedule_rows(schedule: pd.DataFrame, slate_date: object) -> list[
 
 def validate_slate_against_trusted_source(slate_date: object) -> dict:
     generated = normalize_schedule_rows(pd.read_csv(CANONICAL_SCHEDULE_TODAY_PATH), slate_date)
-    trusted = fetch_trusted_espn_slate(slate_date)
+
+    trusted_source = "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard"
+    degraded_validation = False
+    degraded_reason = ""
+
+    try:
+        trusted = fetch_trusted_espn_slate(slate_date)
+    except urllib.error.HTTPError as exc:
+        if exc.code != 403:
+            raise
+        if not generated:
+            raise RuntimeError("ESPN returned 403 and canonical WNBA slate is empty; refusing publication.") from exc
+
+        trusted = generated
+        trusted_source = "canonical_schedule_emergency_fallback"
+        degraded_validation = True
+        degraded_reason = "ESPN slate endpoint returned HTTP 403 (Akamai Access Denied)"
+
     generated_keys = [(row["away_team"], row["home_team"], row["start_time_utc"]) for row in generated]
     trusted_keys = [(row["away_team"], row["home_team"], row["start_time_utc"]) for row in trusted]
     duplicate_keys = [list(key) for key, count in Counter(generated_keys).items() if count > 1]
     payload = {
         "generated_at": pd.Timestamp.now(tz="America/New_York").isoformat(),
         "slate_date": str(slate_date),
-        "trusted_source": "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard",
+        "trusted_source": trusted_source,
+        "degraded_validation": degraded_validation,
+        "degraded_reason": degraded_reason,
         "expected_game_count": len(trusted),
         "generated_game_count": len(generated),
         "trusted_games": trusted,

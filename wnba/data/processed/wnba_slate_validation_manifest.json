@@ -1,27 +1,53 @@
 {
+  "degraded_reason": "ESPN slate endpoint returned HTTP 403 (Akamai Access Denied)",
+  "degraded_validation": true,
   "duplicate_games": [],
-  "expected_game_count": 1,
-  "generated_at": "2026-08-04T07:31:17.954692-04:00",
-  "generated_game_count": 1,
+  "expected_game_count": 3,
+  "generated_at": "2026-08-06T14:00:13.245419-04:00",
+  "generated_game_count": 3,
   "generated_games": [
     {
+      "away_team": "LVA",
+      "game_id": "401857119",
+      "home_team": "IND",
+      "start_time_utc": "2026-08-06T23:00Z"
+    },
+    {
+      "away_team": "LAS",
+      "game_id": "401857120",
+      "home_team": "MIN",
+      "start_time_utc": "2026-08-07T01:00Z"
+    },
+    {
       "away_team": "TOR",
-      "game_id": "401857114",
-      "home_team": "GSV",
-      "start_time_utc": "2026-08-05T02:00Z"
+      "game_id": "401857121",
+      "home_team": "POR",
+      "start_time_utc": "2026-08-07T02:00Z"
     }
   ],
   "missing_games": [],
-  "slate_date": "2026-08-04",
+  "slate_date": "2026-08-06",
   "status": "PASS",
   "trusted_games": [
     {
+      "away_team": "LVA",
+      "game_id": "401857119",
+      "home_team": "IND",
+      "start_time_utc": "2026-08-06T23:00Z"
+    },
+    {
+      "away_team": "LAS",
+      "game_id": "401857120",
+      "home_team": "MIN",
+      "start_time_utc": "2026-08-07T01:00Z"
+    },
+    {
       "away_team": "TOR",
-      "game_id": "401857114",
-      "home_team": "GSV",
-      "start_time_utc": "2026-08-05T02:00Z"
+      "game_id": "401857121",
+      "home_team": "POR",
+      "start_time_utc": "2026-08-07T02:00Z"
     }
   ],
-  "trusted_source": "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard",
+  "trusted_source": "canonical_schedule_emergency_fallback",
   "unexpected_games": []
 }
