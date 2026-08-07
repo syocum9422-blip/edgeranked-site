@@ -6,13 +6,25 @@ import os
 import shutil
 import subprocess
 import sys
-import urllib.request
 from collections import Counter
 from pathlib import Path
 
 import pandas as pd
 
 from wnba_v2.deployment.feature_flags import load_flags, require_v2_deploy_allowed
+from wnba_model.pipeline.publish_gate import (  # noqa: F401 - re-exported for compatibility
+    PublishBlocked,
+    SLATE_VALIDATION_MANIFEST_PATH,
+    describe as describe_slate_validation,
+    normalize_schedule_rows,
+    require_validated_slate,
+    resolve_slate_status,
+)
+from wnba_model.pipeline.slate_sources import (  # noqa: F401 - WNBA_TEAM_ALIASES re-exported for compatibility
+    STATUS_DEGRADED_PASS,
+    WNBA_TEAM_ALIASES,
+    normalize_team_code,
+)
 from wnba_model.settings import (
     APP_VIEW_PROJECTIONS_PATH,
     BASE_DIR,
@@ -56,19 +68,43 @@ MAX_UPCOMING_SLATE_DAYS = 3
 SLATE_TEAM_AUDIT_PATH = BASE_DIR / "data" / "processed" / "wnba_slate_team_audit.csv"
 PLAYER_COVERAGE_AUDIT_PATH = BASE_DIR / "data" / "processed" / "wnba_player_coverage_audit.csv"
 PRODUCTION_STATUS_PATH = BASE_DIR / "data" / "processed" / "wnba_production_status.json"
-SLATE_VALIDATION_MANIFEST_PATH = BASE_DIR / "data" / "processed" / "wnba_slate_validation_manifest.json"
+# Internal-only companions to the customer-visible status file. These carry the raw
+# upstream/exception detail that must never reach a subscriber-facing page or API.
+INTERNAL_STATUS_PATH = BASE_DIR / "data" / "processed" / "wnba_production_status_internal.json"
+PUBLISH_LEDGER_PATH = BASE_DIR / "data" / "processed" / "wnba_publish_ledger.json"
 INGESTION_MANIFEST_PATH = BASE_DIR / "data" / "processed" / "wnba_ingestion_manifest.json"
 LEARNING_MANIFEST_PATH = BASE_DIR / "data" / "processed" / "wnba_learning_manifest.json"
 BACKTEST_REPORT_PATH = BASE_DIR / "data" / "processed" / "wnba_backtest_report.csv"
 V2_PHASE54_DIR = BASE_DIR / "wnba_v2" / "outputs" / "phase54"
 V2_CONSERVED_PROJECTIONS_PATH = V2_PHASE54_DIR / "v2_conserved_projections.csv"
 V2_CONSERVED_APP_VIEW_PATH = V2_PHASE54_DIR / "v2_conserved_app_view.csv"
-WNBA_TEAM_ALIASES = {"GS": "GSV", "LV": "LVA", "NY": "NYL", "WSH": "WAS", "LA": "LAS"}
 EMERGENCY_V2_STATUS: dict[str, object] = {
     "applied": False,
     "skipped_reason": "",
     "skip_details": "",
 }
+
+# Slate-validation provenance for the current run (surfaced in the status artifact).
+SLATE_VALIDATION_STATE: dict[str, object] = {
+    "status": "NOT_RUN",
+    "validator_used": "none",
+    "public_label": "Not verified",
+}
+
+# Customer-facing copy. Raw upstream/infrastructure detail (HTTP codes, provider names,
+# stack traces, file paths) stays in the internal artifacts and cron logs only.
+PUBLIC_PASS_MESSAGE = "WNBA refresh passed."
+PUBLIC_FAILURE_MESSAGE = "WNBA projections are temporarily unavailable while today's slate is being verified."
+PUBLIC_FAILURE_DETAILS = {
+    "slate_validation_unavailable": "Today's slate could not be independently verified yet, so projections are being held back.",
+    "slate_mismatch": "Today's slate did not match the independent schedule check, so projections are being held back.",
+    "pipeline_error": "Today's WNBA refresh did not clear its safety checks, so projections are being held back.",
+}
+DEFAULT_FAILURE_CATEGORY = "pipeline_error"
+
+
+# One exception type for "a publish path must not proceed", owned by the gate module.
+SlateValidationError = PublishBlocked
 
 
 def env_flag(name: str) -> bool:
@@ -157,12 +193,65 @@ def player_audit_summary() -> tuple[int, int, dict[str, int]]:
     return included_count, int((~included).sum()), dict(sorted(reasons.items()))
 
 
+def public_failure_detail(category: str) -> str:
+    return PUBLIC_FAILURE_DETAILS.get(category, PUBLIC_FAILURE_DETAILS[DEFAULT_FAILURE_CATEGORY])
+
+
+def write_internal_status(payload: dict, internal_error: str, failure_category: str) -> None:
+    """Persist the full technical detail for operators, separate from the published file.
+
+    Deliberately written only under the source tree's data/processed directory (no route
+    reads it) so raw upstream errors cannot reach a customer-facing page or API.
+    """
+    internal_payload = dict(payload)
+    internal_payload.update(
+        {
+            "internal_error": internal_error,
+            "failure_category": failure_category,
+            "slate_validation": dict(SLATE_VALIDATION_STATE),
+        }
+    )
+    try:
+        INTERNAL_STATUS_PATH.parent.mkdir(parents=True, exist_ok=True)
+        INTERNAL_STATUS_PATH.write_text(json.dumps(internal_payload, indent=2, sort_keys=True, default=_json_default), encoding="utf-8")
+    except Exception as exc:
+        print(f"WARNING: could not write WNBA internal status to {INTERNAL_STATUS_PATH}: {exc}")
+
+
+def record_successful_publish(payload: dict) -> None:
+    """Append-only ledger of successful refreshes, used by the freshness monitor."""
+    ledger = {"history": []}
+    try:
+        if PUBLISH_LEDGER_PATH.exists():
+            existing = json.loads(PUBLISH_LEDGER_PATH.read_text(encoding="utf-8"))
+            if isinstance(existing, dict):
+                ledger = existing
+                ledger.setdefault("history", [])
+    except Exception:
+        ledger = {"history": []}
+    entry = {
+        "at": payload.get("generated_at"),
+        "slate_date": payload.get("slate_date"),
+        "validator_used": SLATE_VALIDATION_STATE.get("validator_used"),
+        "slate_validation_status": SLATE_VALIDATION_STATE.get("status"),
+    }
+    ledger["last_successful_publish_at"] = entry["at"]
+    ledger["last_successful_slate_date"] = entry["slate_date"]
+    ledger["history"] = ([*ledger.get("history", []), entry])[-60:]
+    try:
+        PUBLISH_LEDGER_PATH.parent.mkdir(parents=True, exist_ok=True)
+        PUBLISH_LEDGER_PATH.write_text(json.dumps(ledger, indent=2, sort_keys=True, default=_json_default), encoding="utf-8")
+    except Exception as exc:
+        print(f"WARNING: could not write WNBA publish ledger to {PUBLISH_LEDGER_PATH}: {exc}")
+
+
 def write_production_status(
     status: str,
     *,
     error: str = "",
     published: str = "no",
     stale_output_blocked: str = "yes",
+    failure_category: str = DEFAULT_FAILURE_CATEGORY,
 ) -> dict:
     flags = load_flags()
     included_players, excluded_players, excluded_reasons = player_audit_summary()
@@ -186,8 +275,14 @@ def write_production_status(
         "excluded_reasons": excluded_reasons,
         "published": published,
         "stale_output_blocked": stale_output_blocked,
-        "message": "WNBA refresh failed; check back shortly." if status == "FAIL" else "WNBA refresh passed.",
-        "error": error,
+        "message": PUBLIC_FAILURE_MESSAGE if status == "FAIL" else PUBLIC_PASS_MESSAGE,
+        # Public-safe only: derived from the failure category, never from raw exception
+        # text, so upstream HTTP/provider detail can never reach a subscriber.
+        "error": "" if status != "FAIL" else public_failure_detail(failure_category),
+        "failure_category": "" if status != "FAIL" else failure_category,
+        "slate_validation_status": SLATE_VALIDATION_STATE.get("status"),
+        "slate_validator_used": SLATE_VALIDATION_STATE.get("validator_used"),
+        "slate_verification_label": SLATE_VALIDATION_STATE.get("public_label"),
     }
     for path in [PRODUCTION_STATUS_PATH, live_site_status_path()]:
         try:
@@ -195,6 +290,9 @@ def write_production_status(
             path.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
         except Exception as exc:
             print(f"WARNING: could not write WNBA production status to {path}: {exc}")
+    write_internal_status(payload, error, failure_category if status == "FAIL" else "")
+    if status == "PASS":
+        record_successful_publish(payload)
     return payload
 
 
@@ -210,6 +308,8 @@ def print_production_summary(payload: dict) -> None:
         "serving_mode",
         "emergency_v2_applied",
         "emergency_v2_skipped_reason",
+        "slate_validation_status",
+        "slate_validator_used",
         "published",
         "stale_output_blocked",
     ]:
@@ -301,106 +401,49 @@ def _json_default(value):
     return str(value)
 
 
-def normalize_team_code(value: object) -> str:
-    text = str(value or "").strip().upper()
-    return WNBA_TEAM_ALIASES.get(text, text)
-
-
 def write_json(path: Path, payload: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, sort_keys=True, default=_json_default) + "\n", encoding="utf-8")
 
 
-def fetch_trusted_espn_slate(slate_date: object) -> list[dict]:
-    url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates={pd.Timestamp(slate_date).strftime('%Y%m%d')}"
-    request = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"})
-    with urllib.request.urlopen(request, timeout=20) as response:
-        payload = json.loads(response.read().decode("utf-8"))
-    rows = []
-    for event in payload.get("events", []) or []:
-        competition = (event.get("competitions") or [{}])[0]
-        competitors = competition.get("competitors", []) or []
-        home = next((item for item in competitors if item.get("homeAway") == "home"), None)
-        away = next((item for item in competitors if item.get("homeAway") == "away"), None)
-        if not home or not away:
-            continue
-        rows.append(
-            {
-                "game_id": str(event.get("id", "")),
-                "home_team": normalize_team_code((home.get("team") or {}).get("abbreviation", "")),
-                "away_team": normalize_team_code((away.get("team") or {}).get("abbreviation", "")),
-                "start_time_utc": pd.to_datetime(event.get("date", ""), utc=True, errors="coerce").strftime("%Y-%m-%dT%H:%MZ"),
-            }
-        )
-    return sorted(rows, key=lambda item: (item["start_time_utc"], item["away_team"], item["home_team"]))
+def validate_slate_against_trusted_source(slate_date: object, *, context: str = "pipeline") -> dict:
+    """Thin wrapper over the authoritative publish gate.
 
-
-def normalize_schedule_rows(schedule: pd.DataFrame, slate_date: object) -> list[dict]:
-    if schedule.empty:
-        return []
-    date_col = next((col for col in schedule.columns if str(col).lower() in {"game_date", "date"}), None)
-    frame = schedule.copy()
-    if date_col:
-        parsed = pd.to_datetime(frame[date_col], errors="coerce")
-        frame = frame[parsed.dt.date == pd.Timestamp(slate_date).date()].copy()
-    rows = []
-    for _, row in frame.iterrows():
-        start_raw = row.get("start_time_utc", row.get("start_time", ""))
-        start = pd.to_datetime(start_raw, utc=True, errors="coerce")
-        rows.append(
-            {
-                "game_id": str(row.get("game_id", "")),
-                "home_team": normalize_team_code(row.get("home_team", "")),
-                "away_team": normalize_team_code(row.get("away_team", "")),
-                "start_time_utc": "" if pd.isna(start) else start.strftime("%Y-%m-%dT%H:%MZ"),
-            }
-        )
-    return sorted(rows, key=lambda item: (item["start_time_utc"], item["away_team"], item["home_team"]))
-
-
-def validate_slate_against_trusted_source(slate_date: object) -> dict:
-    generated = normalize_schedule_rows(pd.read_csv(CANONICAL_SCHEDULE_TODAY_PATH), slate_date)
-
-    trusted_source = "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard"
-    degraded_validation = False
-    degraded_reason = ""
-
+    All publish paths (this pipeline, the late board refresh, manual wrappers) share the
+    one policy implementation in wnba_model.pipeline.publish_gate — this function only
+    records run-local provenance and prints the operator summary.
+    """
     try:
-        trusted = fetch_trusted_espn_slate(slate_date)
-    except urllib.error.HTTPError as exc:
-        if exc.code != 403:
-            raise
-        if not generated:
-            raise RuntimeError("ESPN returned 403 and canonical WNBA slate is empty; refusing publication.") from exc
+        payload = require_validated_slate(slate_date, context=context)
+    except PublishBlocked as exc:
+        manifest = exc.manifest or {}
+        SLATE_VALIDATION_STATE.update(
+            {
+                "status": manifest.get("status", "FAIL"),
+                "validator_used": manifest.get("validator_used", "none"),
+                "public_label": manifest.get("public_label", "Not verified"),
+            }
+        )
+        print("\n===== WNBA Slate Validation =====")
+        print(describe_slate_validation(manifest))
+        raise
 
-        trusted = generated
-        trusted_source = "canonical_schedule_emergency_fallback"
-        degraded_validation = True
-        degraded_reason = "ESPN slate endpoint returned HTTP 403 (Akamai Access Denied)"
-
-    generated_keys = [(row["away_team"], row["home_team"], row["start_time_utc"]) for row in generated]
-    trusted_keys = [(row["away_team"], row["home_team"], row["start_time_utc"]) for row in trusted]
-    duplicate_keys = [list(key) for key, count in Counter(generated_keys).items() if count > 1]
-    payload = {
-        "generated_at": pd.Timestamp.now(tz="America/New_York").isoformat(),
-        "slate_date": str(slate_date),
-        "trusted_source": trusted_source,
-        "degraded_validation": degraded_validation,
-        "degraded_reason": degraded_reason,
-        "expected_game_count": len(trusted),
-        "generated_game_count": len(generated),
-        "trusted_games": trusted,
-        "generated_games": generated,
-        "missing_games": [list(key) for key in sorted(set(trusted_keys) - set(generated_keys))],
-        "unexpected_games": [list(key) for key in sorted(set(generated_keys) - set(trusted_keys))],
-        "duplicate_games": duplicate_keys,
-        "status": "PASS",
-    }
-    if payload["expected_game_count"] != payload["generated_game_count"] or payload["missing_games"] or payload["unexpected_games"] or payload["duplicate_games"]:
-        payload["status"] = "FAIL"
-    write_json(SLATE_VALIDATION_MANIFEST_PATH, payload)
-    if payload["status"] != "PASS":
-        raise RuntimeError(f"WNBA slate validation failed: {payload}")
+    SLATE_VALIDATION_STATE.update(
+        {
+            "status": payload.get("status"),
+            "validator_used": payload.get("validator_used"),
+            "public_label": payload.get("public_label"),
+        }
+    )
+    print("\n===== WNBA Slate Validation =====")
+    print(describe_slate_validation(payload))
+    if payload.get("internal_detail"):
+        print(f"validator_detail={payload['internal_detail']}")
+    if payload.get("status") == STATUS_DEGRADED_PASS:
+        print(
+            "WNBA slate validation: DEGRADED_PASS — "
+            f"{payload.get('degraded_reason')}. Publication allowed on reduced-strength evidence."
+        )
     return payload
 
 
@@ -536,61 +579,8 @@ def write_backtest_report() -> pd.DataFrame:
     return report
 
 def current_slate_status() -> tuple[object, str]:
-    if not CANONICAL_SCHEDULE_TODAY_PATH.exists():
-        return None, f"Missing schedule file: {CANONICAL_SCHEDULE_TODAY_PATH}"
-
-    try:
-        schedule = pd.read_csv(CANONICAL_SCHEDULE_TODAY_PATH)
-    except Exception as exc:
-        return None, f"Could not read schedule file: {exc}"
-
-    if schedule.empty:
-        return None, "Schedule file is empty. Treating as no WNBA slate."
-
-    date_col = next((col for col in schedule.columns if str(col).lower() in {"game_date", "date"}), None)
-    if not date_col:
-        return None, f"Schedule has no game_date/date column. Found: {list(schedule.columns)}"
-
-    dates = pd.to_datetime(schedule[date_col], errors="coerce").dropna()
-    if dates.empty:
-        return None, "Schedule has no valid game dates."
-
-    today = today_et_date()
-    date_values = pd.to_datetime(schedule[date_col], errors="coerce")
-    today_rows = schedule[date_values.dt.date == today]
-    selected_date = today
-    selected_rows = today_rows
-    reason = "today"
-
-    if today_rows.empty:
-        max_date = (pd.Timestamp(today) + pd.Timedelta(days=MAX_UPCOMING_SLATE_DAYS)).date()
-        upcoming_dates = sorted(
-            {
-                value.date()
-                for value in date_values.dropna()
-                if today < value.date() <= max_date
-            }
-        )
-        if not upcoming_dates:
-            latest = dates.max().date()
-            return None, f"No WNBA games found for {today}. Latest schedule date is {latest}."
-        selected_date = upcoming_dates[0]
-        selected_rows = schedule[date_values.dt.date == selected_date]
-        reason = "no_games_next_available"
-
-    team_cols = [col for col in ["home_team", "away_team"] if col in schedule.columns]
-    if team_cols:
-        teams = set()
-        for col in team_cols:
-            teams.update(str(team).strip().upper() for team in selected_rows[col].dropna().tolist() if str(team).strip())
-        if len(teams) < 2:
-            return None, f"Selected WNBA slate has only {len(teams)} teams."
-
-    return selected_date, (
-        f"selected_slate_date={selected_date}\n"
-        f"reason={reason}\n"
-        f"WNBA slate rows: {len(selected_rows)}"
-    )
+    """Slate-date selection lives in the publish gate so every path picks the same slate."""
+    return resolve_slate_status()
 
 
 def filter_schedule_to_slate_date(slate_date: object) -> None:
@@ -994,7 +984,16 @@ def main() -> None:
         write_learning_manifest()
         write_backtest_report()
         restore_last_good_snapshot()
-        payload = write_production_status("FAIL", error=str(exc), published="no", stale_output_blocked="yes")
+        failure_category = getattr(exc, "category", DEFAULT_FAILURE_CATEGORY)
+        # Raw text goes to the cron log and the internal status artifact only.
+        print(f"WNBA pipeline failure ({failure_category}): {exc}")
+        payload = write_production_status(
+            "FAIL",
+            error=str(exc),
+            published="no",
+            stale_output_blocked="yes",
+            failure_category=failure_category,
+        )
         print_production_summary(payload)
         raise
 

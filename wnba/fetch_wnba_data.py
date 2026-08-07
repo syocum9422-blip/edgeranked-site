@@ -41,9 +41,25 @@ from wnba_model_utils import (
     today_timestamp,
 )
 from wnba_v2.data.espn_canonical import build as build_espn_canonical
+from wnba_model.pipeline.slate_sources import (
+    SOURCE_OK,
+    UNAVAILABLE_STATUSES,
+    fetch_espn_slate,
+    fetch_yahoo_slate,
+)
+from wnba_model.settings import PROCESSED_DIR
 
 
 EASTERN = ZoneInfo("America/New_York")
+
+# Provenance for canonical slate acquisition — consumed by the publish gate (so the
+# validator can stay independent of whichever provider produced the slate) and by
+# operators diagnosing a degraded fetch.
+CANONICAL_SCHEDULE_PROVENANCE_PATH = PROCESSED_DIR / "wnba_canonical_schedule_provenance.json"
+
+
+class CanonicalScheduleUnavailable(RuntimeError):
+    """No live schedule source answered; stale local data must not stand in for today."""
 
 
 # Source mode:
@@ -286,68 +302,87 @@ def fetch_api_schedule_today(logger) -> pd.DataFrame:
     return _filter_schedule_to_et_day(schedule, target_date, logger, "stats.wnba.com")
 
 
-def fetch_espn_schedule(logger) -> pd.DataFrame:
-    """Fetch WNBA schedule from ESPN API as fallback."""
-    import requests as req
-
-    target_date = schedule_target_date_et()
-    url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates={target_date.strftime('%Y%m%d')}"
-    try:
-        resp = req.get(url, timeout=REQUEST_TIMEOUT_SECONDS)
-        resp.raise_for_status()
-        data = resp.json()
-    except Exception as exc:
-        logger.warning("ESPN schedule fetch failed: %s", exc)
-        return pd.DataFrame()
-
-    events = data.get("events", [])
-    if not events:
-        logger.warning("ESPN returned no WNBA events for %s", target_date.date())
-        return pd.DataFrame()
-
-    rows = []
-    for event in events:
-        event_id = str(event.get("id", ""))
-        date_raw = event.get("date", "")
-
-        competitions = event.get("competitions", [])
-        if not competitions:
-            continue
-
-        comp = competitions[0]
-        competitors = comp.get("competitors", [])
-        if len(competitors) < 2:
-            continue
-
-        home_abbrev = ""
-        away_abbrev = ""
-        for c in competitors:
-            home_away = c.get("homeAway", "")
-            team = c.get("team", {})
-            abbrev = team.get("abbreviation", "")
-            if home_away == "home":
-                home_abbrev = abbrev
-            elif home_away == "away":
-                away_abbrev = abbrev
-
-        if not home_abbrev or not away_abbrev:
-            continue
-
-        rows.append({
-            "home_team": home_abbrev,
-            "away_team": away_abbrev,
-            "game_id": event_id,
-            "start_time_utc": _format_utc_iso(_event_timestamp_utc(date_raw)),
-            "start_time": date_raw,
-        })
-
+def _frame_from_slate_rows(rows: list, target_date: pd.Timestamp, logger, source_label: str) -> pd.DataFrame:
+    """Shared normalized-row -> canonical-schedule-frame shape (identical for every source)."""
     if not rows:
-        logger.warning("ESPN returned WNBA events but could not parse them")
-        return pd.DataFrame()
+        return pd.DataFrame(
+            columns=["home_team", "away_team", "game_id", "start_time_utc", "start_time", "game_date_et", "included_reason", "game_date"]
+        )
+    frame = pd.DataFrame(
+        [
+            {
+                "home_team": row["home_team"],
+                "away_team": row["away_team"],
+                "game_id": row["game_id"],
+                "start_time_utc": row["start_time_utc"],
+                "start_time": row["start_time_utc"],
+            }
+            for row in rows
+        ]
+    )
+    return _filter_schedule_to_et_day(frame, target_date, logger, source_label)
 
-    filtered = _filter_schedule_to_et_day(pd.DataFrame(rows), target_date, logger, "espn")
-    logger.info("Fetched %d ET-day WNBA games from ESPN API", len(filtered))
-    return filtered
+
+def fetch_espn_schedule(logger) -> pd.DataFrame:
+    """ESPN slate as a canonical-schedule frame (HTTP + parsing shared with the validator)."""
+    frame, _ = fetch_espn_schedule_result(logger)
+    return frame
+
+
+def fetch_espn_schedule_result(logger):
+    """Returns (frame, SlateFetchResult) so callers can act on the classified status."""
+    target_date = schedule_target_date_et()
+    result = fetch_espn_slate(target_date.date())
+    if not result.ok:
+        logger.warning("ESPN schedule fetch unavailable (%s): %s", result.status, result.detail)
+        return pd.DataFrame(), result
+    frame = _frame_from_slate_rows(result.rows, target_date, logger, "espn")
+    logger.info("Fetched %d ET-day WNBA games from ESPN API", len(frame))
+    return frame, result
+
+
+def fetch_yahoo_schedule_result(logger):
+    """Independent secondary acquisition source, same parser the validator uses."""
+    target_date = schedule_target_date_et()
+    result = fetch_yahoo_slate(target_date.date())
+    if not result.ok:
+        logger.warning("Yahoo schedule fetch unavailable (%s): %s", result.status, result.detail)
+        return pd.DataFrame(), result
+    frame = _frame_from_slate_rows(result.rows, target_date, logger, "yahoo")
+    logger.info("Fetched %d ET-day WNBA games from Yahoo API", len(frame))
+    return frame, result
+
+
+def write_canonical_schedule_provenance(
+    *,
+    canonical_source: str,
+    primary_source_status: str,
+    secondary_source_status: str,
+    slate_date: object,
+    game_count: int,
+    degraded: bool,
+    failure_reason: str = "",
+    stale_retained: bool = False,
+    detail: str = "",
+) -> dict:
+    payload = {
+        "canonical_source": canonical_source,
+        "primary_source_status": primary_source_status,
+        "secondary_source_status": secondary_source_status,
+        "slate_date": str(slate_date),
+        "game_count": int(game_count),
+        "fetched_at": pd.Timestamp.now(tz=EASTERN).isoformat(),
+        "degraded": bool(degraded),
+        "failure_reason": failure_reason,
+        "stale_retained": bool(stale_retained),
+        "internal_detail": detail,
+    }
+    try:
+        CANONICAL_SCHEDULE_PROVENANCE_PATH.parent.mkdir(parents=True, exist_ok=True)
+        CANONICAL_SCHEDULE_PROVENANCE_PATH.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+    except Exception as exc:
+        print(f"WARNING: could not write canonical schedule provenance: {exc}")
+    return payload
 
 
 ESPN_INJURIES_URL = "https://www.espn.com/wnba/injuries"
@@ -578,40 +613,150 @@ def resolve_team_context(logger) -> tuple[pd.DataFrame, str]:
 
 
 def resolve_schedule_today(logger) -> tuple[pd.DataFrame, str]:
-    """Return ESPN-first schedule; stats.wnba.com is optional fallback only."""
+    """Acquire today's canonical slate with an independent fallback.
+
+    Policy (auto/api modes):
+      1. ESPN answers -> use it, even when it answers "no games today" (authoritative empty).
+      2. ESPN unavailable (403/429/timeout/network/5xx/parse) -> Yahoo, the same independent
+         source the validator uses. Recorded as canonical_source=api:yahoo, degraded=true.
+      3. Yahoo unavailable -> optional stats.wnba.com.
+      4. Nothing live answered -> raise. A stale local CSV is explicitly NOT promoted to
+         "today's slate"; it is left in place, marked stale in provenance, and the run fails
+         closed so the publish gate and stale-output protection stay in control.
+
+    ESPN is never second-guessed here: if it returns a valid slate we keep it, and genuine
+    disagreement between providers is the publish gate's job, not the fetcher's.
+    """
+    target_date = schedule_target_date_et()
+    primary_status = "NOT_ATTEMPTED"
+    secondary_status = "NOT_ATTEMPTED"
+    details = []
+
     if SOURCE_MODE in {"auto", "api"}:
-        try:
-            frame = fetch_espn_schedule(logger)
-            if not frame.empty:
-                logger.info("Schedule today: fetched %d rows from ESPN API", len(frame))
-                return frame, "api:espn"
-        except Exception as exc:
-            logger.warning("ESPN schedule fetch failed: %s", exc)
-            if SOURCE_MODE == "api":
-                raise ConnectionError(
-                    f"WNBA_SOURCE_MODE=api but ESPN schedule fetch failed: {exc}. "
-                    "Check network connectivity or use WNBA_SOURCE_MODE=csv for offline mode."
+        frame, result = fetch_espn_schedule_result(logger)
+        primary_status = result.status
+        if result.detail:
+            details.append(f"espn: {result.detail}")
+        if result.status == SOURCE_OK and not frame.empty:
+            logger.info("Schedule today: %d rows from ESPN API", len(frame))
+            write_canonical_schedule_provenance(
+                canonical_source="api:espn",
+                primary_source_status=primary_status,
+                secondary_source_status=secondary_status,
+                slate_date=target_date.date(),
+                game_count=len(frame),
+                degraded=False,
+            )
+            return frame, "api:espn"
+
+        if result.status == SOURCE_OK:
+            # "No games today" is a claim, not a slate. Confirm it against the independent
+            # source before accepting an off day, so a soft empty response cannot silently
+            # freeze the board for a real slate.
+            check_frame, check = fetch_yahoo_schedule_result(logger)
+            secondary_status = check.status
+            if check.status == SOURCE_OK and check_frame.empty:
+                logger.info("Schedule today: ESPN and Yahoo both report no WNBA games for %s", target_date.date())
+                write_canonical_schedule_provenance(
+                    canonical_source="api:espn",
+                    primary_source_status=primary_status,
+                    secondary_source_status=secondary_status,
+                    slate_date=target_date.date(),
+                    game_count=0,
+                    degraded=False,
+                    failure_reason="",
+                    detail="confirmed_no_games_by_secondary",
                 )
+                return frame, "api:espn"
+            write_canonical_schedule_provenance(
+                canonical_source="none",
+                primary_source_status=primary_status,
+                secondary_source_status=secondary_status,
+                slate_date=target_date.date(),
+                game_count=0,
+                degraded=True,
+                failure_reason="primary_reported_no_games_unconfirmed",
+                stale_retained=CANONICAL_SCHEDULE_TODAY_PATH.exists(),
+                detail=f"secondary_game_count={len(check_frame)}",
+            )
+            raise CanonicalScheduleUnavailable(
+                f"ESPN reported no WNBA games for {target_date.date()} but the independent source did not "
+                f"confirm it (secondary status={check.status}, games={len(check_frame)}); refusing to record an "
+                "unverified off day."
+            )
+
+        if SOURCE_MODE == "api" and result.status not in UNAVAILABLE_STATUSES:
+            raise ConnectionError(f"WNBA_SOURCE_MODE=api but ESPN schedule fetch failed: {result.status}")
+
+        frame, result = fetch_yahoo_schedule_result(logger)
+        secondary_status = result.status
+        if result.detail:
+            details.append(f"yahoo: {result.detail}")
+        if result.status == SOURCE_OK:
+            logger.warning(
+                "Schedule today: ESPN unavailable (%s); using independent Yahoo slate (%d rows)",
+                primary_status,
+                len(frame),
+            )
+            write_canonical_schedule_provenance(
+                canonical_source="api:yahoo",
+                primary_source_status=primary_status,
+                secondary_source_status=secondary_status,
+                slate_date=target_date.date(),
+                game_count=len(frame),
+                degraded=True,
+                failure_reason=f"primary_source_unavailable:{primary_status}",
+                detail="; ".join(details),
+            )
+            return frame, "api:yahoo"
 
         if _check_api_reachable(logger):
             try:
                 frame = fetch_api_schedule_today(logger)
                 if not frame.empty:
                     logger.info("Schedule today: fetched %d rows from optional stats.wnba.com API", len(frame))
+                    write_canonical_schedule_provenance(
+                        canonical_source="api:stats_wnba",
+                        primary_source_status=primary_status,
+                        secondary_source_status=secondary_status,
+                        slate_date=target_date.date(),
+                        game_count=len(frame),
+                        degraded=True,
+                        failure_reason="espn_and_yahoo_unavailable",
+                        detail="; ".join(details),
+                    )
                     return frame, "api:stats_wnba"
             except Exception as exc:
                 logger.warning("Optional stats.wnba.com schedule fetch failed: %s", exc)
-                if SOURCE_MODE == "api":
-                    raise
+                details.append(f"stats_wnba: {exc}")
         else:
             logger.warning("stats.wnba.com is not reachable; skipping optional schedule fallback")
+            details.append("stats_wnba: unreachable")
+
+        # Nothing live answered. Refuse to present local data as today's slate.
+        write_canonical_schedule_provenance(
+            canonical_source="none",
+            primary_source_status=primary_status,
+            secondary_source_status=secondary_status,
+            slate_date=target_date.date(),
+            game_count=0,
+            degraded=True,
+            failure_reason="all_live_schedule_sources_unavailable",
+            stale_retained=CANONICAL_SCHEDULE_TODAY_PATH.exists(),
+            detail="; ".join(details),
+        )
+        raise CanonicalScheduleUnavailable(
+            "No live WNBA schedule source answered "
+            f"(espn={primary_status}, yahoo={secondary_status}). Refusing to treat local schedule data as "
+            "today's canonical slate; the existing file is retained for diagnostics only."
+        )
 
     frame = load_csv_or_url(RAW_SCHEDULE_TODAY_PATH, SCHEDULE_TODAY_URL, logger)
     source = "csv"
     if not frame.empty:
         try:
             with open(RAW_SCHEDULE_TODAY_PATH) as f:
-                first_data_line = f.readline()
+                f.readline()
                 for line in f:
                     if "2025-07-05" in line:
                         source = "csv:test_date"
@@ -620,6 +765,15 @@ def resolve_schedule_today(logger) -> tuple[pd.DataFrame, str]:
         except Exception:
             pass
     logger.info("Schedule today: loaded %d rows from CSV (%s)", len(frame), source)
+    write_canonical_schedule_provenance(
+        canonical_source=source,
+        primary_source_status=primary_status,
+        secondary_source_status=secondary_status,
+        slate_date=target_date.date(),
+        game_count=len(frame),
+        degraded=source != "csv",
+        failure_reason="" if source == "csv" else "csv_test_date",
+    )
     return frame, source
 
 

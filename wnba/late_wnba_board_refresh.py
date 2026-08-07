@@ -15,11 +15,19 @@ started. Bet history is not rewritten — removals are recorded in
 Best_Bets/wnba_late_refresh_audit.csv (a removed bet that was already recorded grades
 normally; an OUT player's bet voids at the book anyway).
 
+Every publish path goes through the one authoritative slate gate first
+(wnba_model.pipeline.publish_gate): if today's canonical slate cannot be independently
+validated, this script changes nothing and exits non-zero so the last verified board stays
+up untouched.
+
 Prints LATE_REFRESH_CHANGES=<n> so the cron wrapper knows whether to republish.
 """
 from __future__ import annotations
 
+import argparse
+import sys
 from datetime import datetime, timezone
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -36,6 +44,13 @@ from wnba_model_utils import canonicalize_name, normalize_player_status, setup_l
 import fetch_wnba_data as fwd
 import fetch_wnba_lines as fwl
 
+from wnba_model.pipeline.publish_gate import (
+    GATE_STATUS_PATH,
+    PublishBlocked,
+    require_validated_slate,
+    resolve_slate_status,
+)
+
 AUDIT_PATH = BEST_BETS_PATH.parent / "wnba_late_refresh_audit.csv"
 OUT_LIKE_STATUSES = {"out", "inactive", "suspended", "doubtful"}
 LINE_MOVE_REMOVE_THRESHOLD = {
@@ -45,8 +60,13 @@ LINE_MOVE_REMOVE_THRESHOLD = {
 }
 
 
-def refresh_lines(logger) -> pd.DataFrame:
+def refresh_lines(logger, dry_run: bool = False) -> pd.DataFrame:
     """Re-fetch PrizePicks lines; on failure keep the existing file (stale but usable)."""
+    if dry_run:
+        try:
+            return pd.read_csv(RAW_SPORTSBOOK_LINES_PATH)
+        except Exception:
+            return pd.DataFrame()
     try:
         payload, is_off_season = fwl.fetch_prizepicks_payload()
         if is_off_season:
@@ -64,8 +84,13 @@ def refresh_lines(logger) -> pd.DataFrame:
         return pd.DataFrame()
 
 
-def refresh_status(logger) -> pd.DataFrame:
+def refresh_status(logger, dry_run: bool = False) -> pd.DataFrame:
     """Re-fetch ESPN injuries; on failure keep the existing canonical status file."""
+    if dry_run:
+        try:
+            return pd.read_csv(CANONICAL_PLAYER_STATUS_PATH)
+        except Exception:
+            return pd.DataFrame()
     try:
         raw, source = fwd.resolve_player_status(logger)
         status = normalize_player_status(raw)
@@ -105,20 +130,72 @@ def team_start_times() -> dict[str, pd.Timestamp]:
     return starts
 
 
-def main() -> None:
+def gate_or_block(logger) -> bool:
+    """Central slate gate. Returns True when this run may touch the published board."""
+    slate_date, message = resolve_slate_status()
+    if not slate_date:
+        logger.info("Late refresh: no current WNBA slate (%s); nothing to refresh.", message.replace("\n", " "))
+        return False
+    try:
+        payload = require_validated_slate(slate_date, context="late_refresh")
+    except PublishBlocked as exc:
+        manifest = exc.manifest or {}
+        logger.error(
+            "Late refresh BLOCKED by slate gate: status=%s reason=%s validator=%s independence=%s",
+            manifest.get("status"),
+            manifest.get("failure_reason"),
+            manifest.get("validator_source"),
+            manifest.get("validation_independence"),
+        )
+        logger.error("Late refresh gate detail: %s", exc)
+        print("LATE_REFRESH_CHANGES=0")
+        print(f"LATE_REFRESH_BLOCKED=1 reason={manifest.get('failure_reason') or 'slate_validation_failed'}")
+        print(f"Internal gate status written to {GATE_STATUS_PATH}")
+        notify_freshness_monitor(logger)
+        return False
+    logger.info(
+        "Late refresh slate gate: status=%s validator=%s independence=%s",
+        payload.get("status"),
+        payload.get("validator_source"),
+        payload.get("validation_independence"),
+    )
+    return True
+
+
+def notify_freshness_monitor(logger) -> None:
+    """Reuse the existing freshness/alert mechanism instead of adding a second one."""
+    try:
+        import subprocess
+        import sys as _sys
+
+        subprocess.run([_sys.executable, str(Path(__file__).resolve().parent / "wnba_freshness_monitor.py")], timeout=120)
+    except Exception as exc:
+        logger.warning("Could not trigger WNBA freshness monitor after gate block: %s", exc)
+
+
+def main(argv: list | None = None) -> int:
+    parser = argparse.ArgumentParser(description="WNBA late pregame board refresh")
+    parser.add_argument("--dry-run", action="store_true", help="run the gate and compute removals without writing anything")
+    args = parser.parse_args(argv)
+
     logger = setup_logging("late_wnba_board_refresh")
     now = pd.Timestamp.now(tz="UTC")
+
+    if not gate_or_block(logger):
+        return 3
+    if args.dry_run:
+        logger.info("Late refresh DRY RUN: slate gate cleared; computing removals without writing.")
 
     try:
         board = pd.read_csv(BEST_BETS_PATH)
     except Exception as exc:
         logger.warning("No best-bets board to refresh (%s).", exc)
         print("LATE_REFRESH_CHANGES=0")
-        return
+        return 0
     if board.empty or "player_name" not in board.columns:
         logger.info("Board empty; nothing to refresh.")
         print("LATE_REFRESH_CHANGES=0")
-        return
+        return 0
 
     # Slate dates are ET dates: a 00:45 UTC late run is still the previous ET evening.
     today = pd.Timestamp.now(tz="America/New_York").strftime("%Y-%m-%d")
@@ -126,16 +203,16 @@ def main() -> None:
     if board_dates and today not in board_dates:
         logger.info("Board is for %s, not today ET (%s); refusing to modify.", sorted(board_dates), today)
         print("LATE_REFRESH_CHANGES=0")
-        return
+        return 0
 
     real = board[board["player_name"].fillna("").astype(str).str.strip() != ""]
     if real.empty:
         logger.info("Board has no player rows (empty-state); nothing to refresh.")
         print("LATE_REFRESH_CHANGES=0")
-        return
+        return 0
 
-    lines = refresh_lines(logger)
-    status = refresh_status(logger)
+    lines = refresh_lines(logger, dry_run=args.dry_run)
+    status = refresh_status(logger, dry_run=args.dry_run)
     starts = team_start_times()
 
     out_keys = set()
@@ -216,6 +293,12 @@ def main() -> None:
         keep_mask.append(True)
 
     removed = int(len(board) - sum(keep_mask))
+    if args.dry_run:
+        print(f"LATE_REFRESH_DRY_RUN_CHANGES={removed}")
+        print("LATE_REFRESH_CHANGES=0")
+        logger.info("Late refresh DRY RUN complete: %d bet(s) would be removed, %d annotation(s). Nothing written.", removed, len(audit_rows))
+        return 0
+
     if audit_rows:
         audit = pd.DataFrame(audit_rows)
         audit.to_csv(AUDIT_PATH, mode="a", header=not AUDIT_PATH.exists(), index=False)
@@ -229,7 +312,8 @@ def main() -> None:
         logger.info("Late refresh: no removals needed (%d annotations).", len(audit_rows))
 
     print(f"LATE_REFRESH_CHANGES={removed}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 
 import pandas as pd
-import requests
 
 from wnba_model_config import DATASET_PATH, RAW_SPORTSBOOK_LINES_PATH, TODAY_FEATURES_PATH
 from wnba_model_utils import canonicalize_name, load_inputs_for_pipeline, setup_logging, standardize_team_abbrev, today_timestamp
@@ -34,51 +33,46 @@ def build_today_team_map(schedule_today: pd.DataFrame) -> pd.DataFrame:
     return pd.concat([home, away], ignore_index=True)[["game_date", "game_id", "team", "opponent", "is_home", "home_away"]]
 
 
-def fetch_espn_scoreboard_team_map(game_date: pd.Timestamp, logger) -> pd.DataFrame:
-    url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates={game_date.strftime('%Y%m%d')}"
-    try:
-        response = requests.get(url, timeout=20)
-        response.raise_for_status()
-        payload = response.json()
-    except Exception as exc:
-        logger.warning("Could not fetch ESPN date scoreboard for WNBA slate expansion: %s", exc)
-        return pd.DataFrame(columns=["game_date", "game_id", "team", "opponent", "is_home", "home_away"])
+def fetch_external_scoreboard_team_map(game_date: pd.Timestamp, logger) -> pd.DataFrame:
+    """Last-resort slate expansion when the canonical schedule map is empty.
 
-    rows = []
-    for event in payload.get("events", []) or []:
-        competition = (event.get("competitions") or [{}])[0]
-        competitors = competition.get("competitors", []) or []
-        home = next((item for item in competitors if item.get("homeAway") == "home"), None)
-        away = next((item for item in competitors if item.get("homeAway") == "away"), None)
-        if not home or not away:
+    Uses the same source layer as the publish gate (ESPN first, independent Yahoo on any
+    ESPN unavailability) so this path cannot become a second ESPN single point of failure.
+    """
+    from wnba_model.pipeline.slate_sources import fetch_espn_slate, fetch_yahoo_slate
+
+    columns = ["game_date", "game_id", "team", "opponent", "is_home", "home_away"]
+    rows_out = []
+    for fetcher in (fetch_espn_slate, fetch_yahoo_slate):
+        result = fetcher(game_date.date())
+        if not result.ok:
+            logger.warning(
+                "Could not fetch %s scoreboard for WNBA slate expansion: %s (%s)",
+                result.source,
+                result.status,
+                result.detail,
+            )
             continue
+        for row in result.rows:
+            home_team = standardize_team_abbrev(row.get("home_team"))
+            away_team = standardize_team_abbrev(row.get("away_team"))
+            if not home_team or not away_team:
+                continue
+            game_id = row.get("game_id") or f"{game_date.strftime('%Y%m%d')}_{away_team}_{home_team}"
+            rows_out.extend(
+                [
+                    {"game_date": game_date, "game_id": game_id, "team": home_team, "opponent": away_team, "is_home": 1, "home_away": "H"},
+                    {"game_date": game_date, "game_id": game_id, "team": away_team, "opponent": home_team, "is_home": 0, "home_away": "A"},
+                ]
+            )
+        if rows_out:
+            logger.info("Slate expansion used %s scoreboard (%d team rows)", result.source, len(rows_out))
+            break
+    return pd.DataFrame(rows_out, columns=columns)
 
-        home_team = standardize_team_abbrev((home.get("team") or {}).get("abbreviation"))
-        away_team = standardize_team_abbrev((away.get("team") or {}).get("abbreviation"))
-        if not home_team or not away_team:
-            continue
 
-        rows.extend(
-            [
-                {
-                    "game_date": game_date,
-                    "game_id": event.get("id", f"{game_date.strftime('%Y%m%d')}_{away_team}_{home_team}"),
-                    "team": home_team,
-                    "opponent": away_team,
-                    "is_home": 1,
-                    "home_away": "H",
-                },
-                {
-                    "game_date": game_date,
-                    "game_id": event.get("id", f"{game_date.strftime('%Y%m%d')}_{away_team}_{home_team}"),
-                    "team": away_team,
-                    "opponent": home_team,
-                    "is_home": 0,
-                    "home_away": "A",
-                },
-            ]
-        )
-    return pd.DataFrame(rows, columns=["game_date", "game_id", "team", "opponent", "is_home", "home_away"])
+# Backwards-compatible alias: the expansion path is no longer ESPN-only.
+fetch_espn_scoreboard_team_map = fetch_external_scoreboard_team_map
 
 
 def load_prizepicks_lines_raw(logger) -> pd.DataFrame:
