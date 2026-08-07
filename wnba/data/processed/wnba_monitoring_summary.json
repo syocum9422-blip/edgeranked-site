@@ -6,22 +6,22 @@
     "source": "api:espn_boxscore",
     "team_rows_total": 1744
   },
-  "generated_at_utc": "2026-08-07T11:30:19+00:00",
-  "healthy": true,
+  "generated_at_utc": "2026-08-07T11:31:53+00:00",
+  "healthy": false,
   "learning": {
     "accuracy": 0.5269852182880715,
     "backtest_window_days": 30,
-    "brier": 0.2675086501780623,
+    "brier": 0.2637719528362295,
     "games_graded": 74,
     "last_graded_date": "2026-08-03",
-    "log_loss": 0.7302055927327934,
+    "log_loss": 0.7223674247895644,
     "minutes_error_rows": 3070,
     "predictions_graded": 2909,
     "projection_error_rows": 18420
   },
   "published": {
     "published_flag": "yes",
-    "source_output_modified_at_utc": "2026-08-06T23:15:10.773627+00:00",
+    "source_output_modified_at_utc": "2026-08-07T11:31:21.950359+00:00",
     "stale_output_blocked": "no"
   },
   "slate_status": {
@@ -29,31 +29,33 @@
     "expected_game_count": 3,
     "generated_game_count": 3,
     "missing_games": [],
-    "slate_date": "2026-08-06",
-    "status": "PASS"
+    "slate_date": "2026-08-07",
+    "status": "DEGRADED_PASS"
   },
   "source_freshness": {
     "app_view": {
       "exists": true,
-      "modified_at_utc": "2026-08-06T22:31:04.532539+00:00",
+      "modified_at_utc": "2026-08-07T11:31:19.050339+00:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/Projections_app_view.csv",
-      "size": 101377
+      "size": 108380
     },
     "best_bets": {
       "exists": true,
-      "modified_at_utc": "2026-08-06T23:15:10.773627+00:00",
+      "modified_at_utc": "2026-08-07T11:31:21.950359+00:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/wnba_best_bets_today.csv",
-      "size": 10093
+      "size": 11179
     },
     "production_status": "PASS",
     "projections": {
       "exists": true,
-      "modified_at_utc": "2026-08-06T22:31:04.460539+00:00",
+      "modified_at_utc": "2026-08-07T11:31:18.980339+00:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/projections.csv",
-      "size": 38311
+      "size": 40816
     },
     "promotion_scope": "confidence_calibration_only",
     "public_schema_changes": false
   },
-  "warning_flags": []
+  "warning_flags": [
+    "slate_validation_not_pass"
+  ]
 }
