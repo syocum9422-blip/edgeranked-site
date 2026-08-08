@@ -6,22 +6,22 @@
     "source": "api:espn_boxscore",
     "team_rows_total": 1744
   },
-  "generated_at_utc": "2026-08-08T11:30:20+00:00",
+  "generated_at_utc": "2026-08-08T11:31:58+00:00",
   "healthy": false,
   "learning": {
     "accuracy": 0.5269852182880715,
     "backtest_window_days": 30,
-    "brier": 0.2637719528362295,
+    "brier": 0.2646603962393921,
     "games_graded": 74,
     "last_graded_date": "2026-08-03",
-    "log_loss": 0.7223674247895644,
+    "log_loss": 0.7242451703432734,
     "minutes_error_rows": 3070,
     "predictions_graded": 2909,
     "projection_error_rows": 18420
   },
   "published": {
     "published_flag": "yes",
-    "source_output_modified_at_utc": "2026-08-07T23:15:09.959275+00:00",
+    "source_output_modified_at_utc": "2026-08-08T11:31:26.504725+00:00",
     "stale_output_blocked": "no"
   },
   "slate_status": {
@@ -29,28 +29,28 @@
     "expected_game_count": 3,
     "generated_game_count": 3,
     "missing_games": [],
-    "slate_date": "2026-08-07",
+    "slate_date": "2026-08-08",
     "status": "DEGRADED_PASS"
   },
   "source_freshness": {
     "app_view": {
       "exists": true,
-      "modified_at_utc": "2026-08-07T22:31:08.360559+00:00",
+      "modified_at_utc": "2026-08-08T11:31:23.175702+00:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/Projections_app_view.csv",
-      "size": 108415
+      "size": 101185
     },
     "best_bets": {
       "exists": true,
-      "modified_at_utc": "2026-08-07T23:15:09.959275+00:00",
+      "modified_at_utc": "2026-08-08T11:31:26.504725+00:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/wnba_best_bets_today.csv",
-      "size": 10067
+      "size": 10611
     },
     "production_status": "PASS",
     "projections": {
       "exists": true,
-      "modified_at_utc": "2026-08-07T22:31:08.288558+00:00",
+      "modified_at_utc": "2026-08-08T11:31:23.105702+00:00",
       "path": "/home/ubuntu/EdgeRanked/sports/wnba/projections.csv",
-      "size": 40817
+      "size": 38049
     },
     "promotion_scope": "confidence_calibration_only",
     "public_schema_changes": false

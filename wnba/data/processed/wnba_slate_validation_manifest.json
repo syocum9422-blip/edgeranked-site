@@ -15,12 +15,12 @@
         "verdict": "CONFIRMED"
       },
       {
-        "confirmed_games": 6,
+        "confirmed_games": 4,
         "contradictions": [],
-        "detail": "all slate teams have live lines",
+        "detail": "slate_teams_without_lines=['LVA', 'MIN']",
         "name": "sportsbook_lines",
         "status": "OK",
-        "verdict": "CONFIRMED"
+        "verdict": "INCONCLUSIVE"
       }
     ]
   },
@@ -29,7 +29,7 @@
   "duplicate_games": [],
   "expected_game_count": 3,
   "failure_reason": "",
-  "generated_at": "2026-08-08T07:30:28.712319-04:00",
+  "generated_at": "2026-08-08T14:00:17.531796-04:00",
   "generated_game_count": 3,
   "generated_games": [
     {
