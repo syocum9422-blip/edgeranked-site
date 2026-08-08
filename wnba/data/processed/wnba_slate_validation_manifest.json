@@ -1,13 +1,13 @@
 {
   "canonical_source": "api:yahoo",
   "canonical_source_family": "yahoo",
-  "context": "late_refresh",
+  "context": "pipeline",
   "corroboration": {
     "confirmed": true,
     "contradicted": false,
     "sources": [
       {
-        "confirmed_games": 3,
+        "confirmed_games": 2,
         "contradictions": [],
         "detail": "",
         "name": "thesportsdb",
@@ -29,26 +29,26 @@
   "duplicate_games": [],
   "expected_game_count": 3,
   "failure_reason": "",
-  "generated_at": "2026-08-07T19:15:06.595220-04:00",
+  "generated_at": "2026-08-08T07:30:28.712319-04:00",
   "generated_game_count": 3,
   "generated_games": [
     {
-      "away_team": "ATL",
-      "game_id": "wnba.g.20260807009",
-      "home_team": "WAS",
-      "start_time_utc": "2026-08-07T23:30Z"
+      "away_team": "LVA",
+      "game_id": "wnba.g.20260808011",
+      "home_team": "MIN",
+      "start_time_utc": "2026-08-08T17:00Z"
     },
     {
-      "away_team": "PHX",
-      "game_id": "wnba.g.20260807012",
-      "home_team": "CON",
-      "start_time_utc": "2026-08-07T23:30Z"
+      "away_team": "IND",
+      "game_id": "wnba.g.20260808017",
+      "home_team": "CHI",
+      "start_time_utc": "2026-08-08T19:30Z"
     },
     {
-      "away_team": "GSV",
-      "game_id": "wnba.g.20260807010",
-      "home_team": "DAL",
-      "start_time_utc": "2026-08-08T01:30Z"
+      "away_team": "SEA",
+      "game_id": "wnba.g.20260808015",
+      "home_team": "POR",
+      "start_time_utc": "2026-08-09T00:30Z"
     }
   ],
   "internal_detail": "espn: attempt 2/2: HTTPError: HTTP Error 403: Forbidden",
@@ -65,31 +65,31 @@
   "secondary_source": "yahoo_sports",
   "secondary_source_status": "OK",
   "secondary_source_url": "https://api-secure.sports.yahoo.com/v1/editorial/s/scoreboard",
-  "slate_date": "2026-08-07",
+  "slate_date": "2026-08-08",
   "status": "DEGRADED_PASS",
   "time_discrepancies": [],
   "time_tolerance_minutes": 15.0,
   "trusted_games": [
     {
-      "away_team": "ATL",
-      "game_id": "wnba.g.20260807009",
-      "home_team": "WAS",
-      "start_time_utc": "2026-08-07T23:30Z"
+      "away_team": "LVA",
+      "game_id": "wnba.g.20260808011",
+      "home_team": "MIN",
+      "start_time_utc": "2026-08-08T17:00Z"
     },
     {
-      "away_team": "PHX",
-      "game_id": "wnba.g.20260807012",
-      "home_team": "CON",
-      "start_time_utc": "2026-08-07T23:30Z"
+      "away_team": "IND",
+      "game_id": "wnba.g.20260808017",
+      "home_team": "CHI",
+      "start_time_utc": "2026-08-08T19:30Z"
     },
     {
-      "away_team": "GSV",
-      "game_id": "wnba.g.20260807010",
-      "home_team": "DAL",
-      "start_time_utc": "2026-08-08T01:30Z"
+      "away_team": "SEA",
+      "game_id": "wnba.g.20260808015",
+      "home_team": "POR",
+      "start_time_utc": "2026-08-09T00:30Z"
     }
   ],
-  "trusted_source": "https://api-secure.sports.yahoo.com/v1/editorial/s/scoreboard?leagues=wnba&date=2026-08-07",
+  "trusted_source": "https://api-secure.sports.yahoo.com/v1/editorial/s/scoreboard?leagues=wnba&date=2026-08-08",
   "unexpected_games": [],
   "validation_independence": "same_source_refetch",
   "validator_order": [
